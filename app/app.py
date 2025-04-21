@@ -1,10 +1,12 @@
+import os
 from flask import Flask, render_template_string, request
 import json
 
 app = Flask(__name__)
 
 # Load the crits and fumbles JSON data
-with open("crits_and_fumbles_v2.json") as f:
+json_path = os.path.join(os.path.dirname(__file__), "crits_and_fumbles_v2.json")
+with open(json_path) as f:
     DATA = json.load(f)
 
 HTML_TEMPLATE = """
