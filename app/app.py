@@ -10,6 +10,7 @@ with open("crits_and_fumbles_v2.json") as f:
 HTML_TEMPLATE = """
 <!doctype html>
 <title>Crits & Fumbles</title>
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
 <style>
   .result-box {
     border: 1px solid #ccc;
