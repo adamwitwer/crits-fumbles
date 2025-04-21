@@ -1,7 +1,7 @@
 services:
   - type: web
     name: crits-and-fumbles
-    env: python
+    runtime: python
     buildCommand: ""
     startCommand: "gunicorn app.app:app"
     envVars:
