@@ -1,0 +1,74 @@
+body {
+    font-family: 'Cinzel', serif;
+    background: #fdf6e3 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+    color: #333;
+    padding: 2em;
+    line-height: 1.6;
+  }
+  
+  h1 {
+    text-align: center;
+    font-size: 2.5em;
+    margin-bottom: 0.5em;
+    color: #4a2c2a;
+  }
+  
+  form {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fffaf0;
+    padding: 1.5em;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: 2px solid #d9b38c;
+  }
+  
+  label {
+    font-weight: bold;
+    display: block;
+    margin-top: 1em;
+  }
+  
+  select, button {
+    padding: 0.5em;
+    font-size: 1em;
+    margin-top: 0.5em;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  button {
+    background: #c19a6b;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  button:hover {
+    background: #a67b5b;
+  }
+  
+  .result-box {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1em;
+    margin-top: 1.5em;
+    background: #fdfdfd;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+  }
+  
+  .result-box h2 {
+    margin-top: 0;
+  }
+  
+  .result-box.primary {
+    border-color: #6c9;
+    background: #f0fff5;
+    margin-bottom: 2em;
+  }
+  
+  .result-box.secondary {
+    border-color: #c96;
+    background: #fff8f0;
+  }  

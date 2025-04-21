@@ -11,32 +11,13 @@ HTML_TEMPLATE = """
 <!doctype html>
 <title>Crits & Fumbles</title>
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
-<style>
-  .result-box {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 1em;
-    margin-top: 1.5em;
-    background: #fdfdfd;
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
-  }
-  .result-box h2 {
-    margin-top: 0;
-  }
-  .result-box.primary {
-    border-color: #6c9;
-    background: #f0fff5;
-  }
-  .result-box.secondary {
-    border-color: #c96;
-    background: #fff8f0;
-  }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <h1>Crits & Fumbles</h1>
 <form method="post" id="main-form">
   <label>Roll Type:</label>
   <select name="roll_type" id="roll_type" onchange="toggleFields()">
-    <option value="crit" {% if selected_roll_type == 'crit' %}selected{% endif %}>Crit</option>
+    <option value="crit" {% if selected_roll_type == 'crit' %}selected{% endif %}>Critical</option>
     <option value="fumble" {% if selected_roll_type == 'fumble' %}selected{% endif %}>Fumble</option>
   </select><br><br>
 
