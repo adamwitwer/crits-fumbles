@@ -1,0 +1,7 @@
+roll,minor_injury,major_injury
+1-3,Injured leg! The creature’s movement speed is reduced by 10 ft.,Crippled leg! The creature’s movement speed is reduced by 10 feet and it has disadvantage on Dexterity saving throws.
+4-8,Injured arm! Randomly determine one of the creature’s arms.  That arm cannot be used to hold a shield and the creature has disadvantage on any rolls involving the use of that arm.,Crippled arm! Randomly determine one of the creature’s arms.  That arm cannot be used to hold an item and any ability check requiring that arm automatically fails or has disadvantage (DM’s choice).
+9-11,Multiple injuries! The creature’s maximum hit points are reduced by an amount equivalent to half of the damage dealt by the attack.,Severely wounded! The creature’s maximum hit points are reduced by an amount equivalent to the damage dealt by the attack.
+12-16,Badly beaten! The creature has disadvantage on Constitution saving throws.,Edge of death!  The creature has disadvantage on Constitution and death saving throws.
+17-19,Ringing blow! The creature is stunned until the end of its next turn and deafened until it completes a the recuperate downtime activity.,My eyes! The creature is blinded.
+20,Blow to the head! The creature is unconscious.,Decapitated! The creature is dead.

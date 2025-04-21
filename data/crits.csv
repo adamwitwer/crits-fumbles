@@ -1,0 +1,131 @@
+roll,damage_type,effect
+1,bludgeoning,You call that a crit? Roll damage as normal.
+2-3,bludgeoning,Smashed off balance! Roll damage as normal and the next attack against the creature has advantage.
+4-6,bludgeoning,"Good hit! Do not roll your damage dice, instead deal the maximum result possible with those dice."
+7-8,bludgeoning,"Sent reeling! Do not roll your damage dice, instead deal the maximum result possible with those dice and push the creature up to 15 feet in any direction."
+9-11,bludgeoning,Great hit! Roll your damage dice twice and add them together.
+12-13,bludgeoning,Take a seat! Roll damage dice twice and add them together and the creature is knocked prone.
+14-16,bludgeoning,"Rocked and rolled! Roll damage dice twice and add them together, push the creature up to 15 feet away, and the creature is knocked prone."
+17-18,bludgeoning,Grievous injury! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add the result. Then roll on the Minor Injury chart. If the creature is wearing heavy armor roll on the Major Injury chart instead.
+19,bludgeoning,Crushed! Deal the twice maximum result of your damage dice and roll on the major injury chart.
+20,bludgeoning,"Splat! Deal the maximum result of your damage dice twice, the creature is stunned until the end of your next turn, and roll on the major injury chart."
+1,piercing,You call that a crit? Roll damage as normal.
+2-3,piercing,Lunge and thrust! Roll damage dice twice and use the higher result.
+4-6,piercing,"Good hit! Do not roll your damage dice, instead deal the maximum result possible with those dice."
+7-8,piercing,Stabbed! Roll your damage dice twice and add them together.
+9-11,piercing,Great hit! Roll your damage dice twice and add them together.
+12-13,piercing,Swiss cheese! Roll twice as many damage dice as normal. Then roll twice on the minor injury chart and use the lower result.
+14-16,piercing,Punctured! Roll your damage dice twice and add them together and roll on the minor injury chart.
+17-18,piercing,Cruel prick! Roll your damage dice twice and add them together and roll on the major injury chart.
+19,piercing,Run through! Deal twice the maximum result of your damage dice and roll on the major injury chart.
+20,piercing,"Pierce! Deal the maximum result of your damage dice twice, roll on the minor injury chart, and roll on the major injury chart."
+1,slashing,You call that a crit? Roll damage as normal.
+2-3,slashing,Sliced and diced! Roll damage as normal and the creature loses 1d6 hit points at the start of its next turn.
+4-6,slashing,"Good hit! Do not roll your damage dice, instead deal the maximum result possible with those dice."
+7-8,slashing,Open gash! Roll your damage dice as normal and the creature is bleeding. For the next minute the creature loses 1d4 damage at the start of each of its turns until it uses an action to staunch this wound.
+9-11,slashing,Great hit! Roll your damage dice twice and add them together
+12-13,slashing,Deep slice! Roll your damage dice twice and add them together and the creature is bleeding. For the next minute the creature loses 1d8 hit points at the start of each of its turns until it uses an action to staunch this wound.
+14-16,slashing,Lacerated! Roll your damage dice twice and add them together and the creature is bleeding. For the next minute the creature loses 1d12 hit points at the start of each of its turns until it uses an action to staunch this wound.
+17-18,slashing,Severed! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add the result. Then roll on the Minor Injury chart. If the creature is wearing light or no armor roll on the Major Injury chart instead.
+19,slashing,Dissected! Deal twice the maximum result of your damage dice and roll on the major injury chart.
+20,slashing,"Slash! Deal the maximum result of your damage dice twice, roll on the major injury chart, and the creature is bleeding. For the next minute the creature loses 2d8 hit points at the start of each of its turns until it uses an action to staunch this wound."
+1,magic:acid,You call that a crit? Roll damage as normal.
+2-3,magic:acid,Scalding bile! Roll damage as normal and the creature is scarred. While scarred the creature has disadvantage on all Charisma ability checks except Charisma (Intimidation). Being scarred can be healed in the same way as a minor injury.
+4-6,magic:acid,"Good hit! Do not roll your damage dice, instead deal the maximum result possible with those dice."
+7-8,magic:acid,Melted flesh! Roll your damage as normal and the creature is disfigured. While disfigured the creature has disadvantage on all Charisma ability checks except Charisma (Intimidation). Being disfigured can be removed with the spell greater restoration.
+9-11,magic:acid,Great hit! Roll your damage dice twice and add them together.
+12-13,magic:acid,"Boiling flesh! Roll twice as many damage dice as normal and if the creature is wearing armor its AC modifier is reduced by 1 until it can be repaired (for 1/4th the price of new armor of the same type) or cleaned (if the armor is magical). If the creature is not wearing armor, roll on the minor injury chart."
+14-16,magic:acid,"Horrific mutilation! Roll twice as many damage dice as normal and roll on the minor injury chart. Additionally, the creature is disfigured.  While disfigured the creature has disadvantage on all Charisma ability checks except Charisma (Intimidation). Being disfigured can be removed with the spell greater restoration."
+17-18,magic:acid,"Caustic trauma! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add that result. If the creature is wearing armor, roll on the minor injury chart and its AC modifier is reduced by 2 until it can be repaired (for half the price of new armor of the same type) or cleaned (if the armor is magical). If the creature is not wearing armor, roll on the major injury chart."
+19,magic:acid,Vitriolic! Deal twice the maximum result of your damage dice and roll on the major injury chart.
+20,magic:acid,"Acid bath! Deal twice the maximum result of your damage dice. If the creature is wearing armor, the armor is destroyed (if non-magical) or rendered useless until cleaned during a long rest (if magical) and roll on the major injury chart.  If the creature is not wearing armor, roll on the major injury chart and the creature is disfigured.  While disfigured the creature has disadvantage on all Charisma ability checks except Charisma (Intimidation). Being disfigured can be removed with the spell greater restoration."
+1,magic:cold,You call that a crit? Roll damage as normal.
+2-3,magic:cold,Chills! Roll damage as normal and the creature may only move half its movement speed on its next turn.
+4-6,magic:cold,"Good hit! Do not roll your damage dice, instead deal the maximum result possible with those dice."
+7-8,magic:cold,Frosty! Roll your damage as normal and the creature’s movement speed is 0 until the end of its next turn.
+9-11,magic:cold,Great hit! Roll twice as many damage dice as normal.
+12-13,magic:cold,Freezing! Roll twice as many damage dice as normal and the creature is paralyzed until the end of its next turn.
+14-16,magic:cold,"Frozen! Roll twice as many damage dice as normal and the creature is paralyzed until the end of its next turn. If the creature takes damage before the end of its next turn, roll on the minor injury chart."
+17-18,magic:cold,Ice block! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add that result. The creature is paralyzed until the end of its next turn and rolls on the minor injury chart.
+19,magic:cold,Glacial! Deal twice the maximum result of your damage dice and roll on the major injury chart.
+20,magic:cold,"Subzero! Deal twice the maximum result of your damage dice, roll on the major injury chart, and the creature is paralyzed for the next minute. The creature may attempt a saving throw at the end of each of its turns (DC 16) to end this effect. If it fails this saving throw three times it is frozen solid and becomes a petrified but frozen solid in a block of ice rather than turned to stone."
+1,magic:fire,You call that a crit? Roll damage as normal.
+2-3,magic:fire,Heat wave! Roll damage as normal and attack rolls for attacks that deal fire damage have advantage when made against the creature until the end of its next turn.
+4-6,magic:fire,"Good hit! Do not roll your damage dice, instead deal the maximum result possible with those dice."
+7-8,magic:fire,Hot flash! Roll your damage as normal and the creature is on fire. While the creature is on fire it takes 2d4 fire damage at the start of each of its turns. The creature can end this condition by dropping prone and using 5 feet of movement to roll on the ground.
+9-11,magic:fire,Great hit! Roll twice as many damage dice as normal.
+12-13,magic:fire,Ablaze! Roll twice as many damage dice as normal and the creature is on fire. While the creature is on fire it takes 2d6 fire damage at the start of each of its turns. The creature can end this condition by dropping prone and using 5 feet of movement to roll on the ground.
+14-16,magic:fire,"Burnt to a crisp! Roll twice as many damage dice as normal and the creature is charred. If the creature has resistance to fire, it loses that resistance. If the creature does not have resistance to fire, it gains vulnerability to fire. Both of these effects can be ended the same as a minor injury."
+17-18,magic:fire,"Hellfire! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add that result then roll on the minor injury chart. Additionally, the creature is on fire. While the creature is on fire it takes 2d6 fire damage at the start of each of its turns. The creature can end this condition by dropping prone and using 5 feet of movement to roll on the ground."
+19,magic:fire,Combustion! Deal twice the maximum result of your damage dice and roll on the major injury chart.
+20,magic:fire,"Inferno! Deal twice the maximum result of your damage dice and roll on the major injury chart.  Additionally, the creature is on fire. While the creature is on fire it takes 2d8 fire damage at the start of each of its turns. The creature can end this condition by dropping prone and using 5 feet of movement to roll on the ground."
+1,magic:force,You call that a crit? Roll damage as normal.
+2-3,magic:force,Spellstruck! Roll damage as normal and the creature has disadvantage on saving throws against spells until the end of its next turn.
+4-6,magic:force,"Good hit! Do not roll your damage dice, instead deal the maximum result possible with those dice."
+7-8,magic:force,Eldritch incandescence! Roll your damage as normal and spell attack rolls against the creature have advantage until the end of its next turn.
+9-11,magic:force,Great hit! Roll twice as many damage dice as normal.
+12-13,magic:force,Bewitching blow! Roll twice as many damage dice as normal and the creature is spellbound until the end of its next turn. While spellbound it makes saving throws against spells with disadvantage and spell attack rolls against it have advantage.
+14-16,magic:force,Mystic magnet! Roll twice as many damage dice as normal and the creature is spellbound for the next minute. While spellbound it makes saving throws against spells with disadvantage and spell attack rolls against it have advantage. At the end of each of the creature’s turns it can make an Intelligence saving throw (DC 14) to end this effect.
+17-18,magic:force,"Ensorcelled! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add that result then roll on the minor injury chart. Additionally, the creature is spellbound for the next minute. While spellbound it makes saving throws against spells with disadvantage and spell attack rolls against it have advantage. At the end of each of the creature’s turns it can make an Intelligence saving throw (DC 16) to end this effect."
+19,magic:force,Arcane injury! Deal twice the maximum result of your damage dice and roll on the major injury chart.
+20,magic:force,"Magically mauled! Deal twice the maximum result of your damage dice and roll on the major injury chart. Additionally, the creature is spellbound for the next minute. While spellbound it makes saving throws against spells with disadvantage and spell attack rolls against it have advantage. At the end of each of the creature’s turns it can make an Intelligence saving throw (DC 18) to end this effect."
+1,magic:lightning,You call that a crit? Roll damage as normal.
+2-3,magic:lightning,Shocking! Roll damage as normal and the creature cannot use reactions until the end of its next turn.
+4-6,magic:lightning,"Good hit! Do not roll your damage dice, instead deal the maximum result possible with those dice."
+7-8,magic:lightning,Sparks fly! Roll your damage as normal and you may choose one other creature within 15 ft. of the victim. That creature must succeed on a Dexterity saving throw (DC 14) or take half as much damage.
+9-11,magic:lightning,Great hit! Roll twice as many damage dice as normal.
+12-13,magic:lightning,Electric arc! Roll twice as many damage dice as normal and you may choose one other creature within 15 ft. of the victim. That creature must succeed on a Dexterity saving throw (DC 18) or take half as much damage.
+14-16,magic:lightning,Fulminate! Roll twice as many damage dice as normal and roll on the minor injury chart. If the creature is wearing metal armor roll on the major injury chart instead.
+17-18,magic:lightning,Lit up! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add that result. The creature and each creature you choose within 15 ft. of it cannot take reactions until the end of their next turn. Then roll on the minor injury chart.
+19,magic:lightning,Electrocuted! Deal twice the maximum result of your damage dice and roll on the major injury chart.
+20,magic:lightning,Lightning rod! Deal twice the maximum result of your damage dice and you may choose one other creature within 15 ft. of the victim. That creature must succeed on a Dexterity saving throw (DC 20) or take half as much damage. Then roll on the major injury chart.
+1,magic:necrotic,You call that a crit? Roll damage as normal.
+2-3,magic:necrotic,Spoil! Roll damage as normal and the creature cannot regain hit points until the end of its next turn.
+4-6,magic:necrotic,"Good hit! Do not roll your damage dice, instead deal the maximum result possible with those dice."
+7-8,magic:necrotic,Fester! Roll your damage as normal and the creature’s maximum hit points are reduced by the same amount.
+9-11,magic:necrotic,Great hit! Roll twice as many damage dice as normal.
+12-13,magic:necrotic,Decay! Roll twice as many damage dice as normal and the creature’s maximum hit points are reduced by the same amount.
+14-16,magic:necrotic,Rot! Roll twice as many damage dice as normal and the creature cannot regain hit points for the next minute. It may make a saving throw (DC 16) at the end of each of its turns to end this effect.
+17-18,magic:necrotic,Blight! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add that result. The creature’s maximum hit points are reduced by the same amount. Then roll on the minor injury chart.
+19,magic:necrotic,Atrophy! Deal twice the maximum result of your damage dice and roll on the major injury chart.
+20,magic:necrotic,"Putrefy! Deal twice the maximum result of your damage dice, the creature’s maximum hit points are reduced by the same amount, and the creature cannot regain hit points until the end of its next turn. Then roll on the major injury chart."
+1,magic:poison,You call that a crit? Roll damage as normal.
+2-3,magic:poison,"Nauseous! Roll damage as normal and the creature has disadvantage on its next ability check, attack roll, or saving throw."
+4-6,magic:poison,"Good hit! Do not roll your damage dice, instead deal the maximum result possible with those dice."
+7-8,magic:poison,"Sickened! Roll your damage as normal and the creature has disadvantage on all ability checks, attack rolls, and saving throws until the end of its next turn."
+9-11,magic:poison,Great hit! Roll twice as many damage dice as normal.
+12-13,magic:poison,Poisoned! Roll twice as many damage dice as normal and the creature is poisoned for the next minute. The creature may attempt a saving throw at the end of each of its turns (DC 12) to end this effect.
+14-16,magic:poison,Contaminated! Roll twice as many damage dice as normal and the creature is poisoned for the next minute. The creature may attempt a saving throw at the end of each of its turns (DC 16) to end this effect.
+17-18,magic:poison,Toxic shock! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add that result. Then roll on the minor injury chart and the creature is poisoned for the next minute. The creature may attempt a saving throw at the end of each of its turns (DC 12) to end this effect.
+19,magic:poison,System failure! Deal twice the maximum result of your damage dice and roll on the major injury chart.
+20,magic:poison,"Biological breakdown! Deal twice the maximum result of your damage dice, roll on the major injury chart, and the creature is poisoned for the next minute. The creature may attempt a saving throw at the end of each of its turns (DC 16) to end this effect."
+1,magic:psychic,You call that a crit? Roll damage as normal.
+2-3,magic:psychic,Disoriented! Roll your damage dice as normal and you control the creature’s movement on its next turn.
+4-6,magic:psychic,Confused! Roll your damage dice as normal and the creature cannot differentiate friend from foe until the end of its next turn.
+7-8,magic:psychic,"Good hit! Do not roll your damage dice, instead deal the maximum result possible with those dice."
+9-11,magic:psychic,Great hit! Roll twice as many damage dice as normal.
+12-13,magic:psychic,Dominated! Roll twice as many damage dice as normal and you control the creature’s action on its next turn.
+14-16,magic:psychic,Psychological fracture! Roll twice as many damage dice as normal and roll on the Insanity chart with disadvantage.
+17-18,magic:psychic,Psychological break! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add that result. Then roll on the Insanity chart.
+19,magic:psychic,Madness! Deal twice the maximum result of your damage dice and roll on the Insanity chart.
+20,magic:psychic,Mind melt! Deal twice the maximum result of your damage dice and roll on the Insanity chart with advantage.
+1,magic:radiant,You call that a crit? Roll damage as normal.
+2-3,magic:radiant,Dazzled! Roll damage as normal and the creature cannot willingly move closer to you until the end of its next turn.
+4-6,magic:radiant,"Good hit! Do not roll your damage dice, instead deal the maximum result possible with those dice."
+7-8,magic:radiant,Disheartening blast! Roll your damage as normal and the creature is frightened until the end of its next turn.
+9-11,magic:radiant,Great hit! Roll twice as many damage dice as normal.
+12-13,magic:radiant,Awed! Roll twice as many damage dice as normal and the creature is frightened until the end of its next turn.
+14-16,magic:radiant,"Holy terror! Roll twice as many damage dice as normal and roll on the minor injury chart.  Additionally, the creature is frightened for the next minute. It can make a Wisdom saving throw (DC 16) at the end of each of its turns to end this effect."
+17-18,magic:radiant,"Righteous mark! Deal the maximum amount of damage for your normal damage dice then roll your damage dice and add that result, then roll on the minor injury chart. Additionally, the creature glows for the next minute. While glowing it produces bright light up 10 feet and dim light up to 30 feet and all successful attacks against the creature deal an additional 1d4 radiant damage."
+19,magic:radiant,Wrath of the gods! Deal twice the maximum result of your damage dice and roll on the major injury chart.
+20,magic:radiant,"Smote! Deal twice the maximum result of your damage dice and roll on the major injury chart.  Additionally, the creature glows for the next minute. While glowing it produces bright light up 10 feet and dim light up to 30 feet and all successful attacks against the creature deal an additional 1d6 radiant damage."
+1,magic:thunder,You call that a crit? Roll damage as normal.
+2-3,magic:thunder,Boom! Roll damage as normal and the creature is deafened until the end of its next turn.
+4-6,magic:thunder,"Good hit! Do not roll your damage dice, instead deal the maximum result possible with those dice."
+7-8,magic:thunder,Ka-boom! Roll your damage as normal and the creature is deafened for one minute.
+9-11,magic:thunder,Great hit! Roll twice as many damage dice as normal.
+12-13,magic:thunder,Thunder clap! Roll twice as many damage dice as normal and the creature is stunned until the start of its next turn and deafened for one minute.
+14-16,magic:thunder,Burst ear drums! Roll twice as many damage dice as normal and the creature is deafened permanently. Then roll on the minor injury chart.
+17-18,magic:thunder,Concussive blast! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add that result. The creature stunned until the end of its next turn and deafened permanently. Then roll on the minor injury chart.
+19,magic:thunder,Wall of sound! Deal twice the maximum result of your damage dice and roll on the major injury chart.
+20,magic:thunder,"Sonic salvo! Deal twice the maximum result of your damage dice, the creature is deafened permanently, and stunned until the end of its next round. Then roll on the major injury chart."
