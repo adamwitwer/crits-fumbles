@@ -5,6 +5,7 @@ body {
   padding: 2em;
   line-height: 1.6;
   margin: 0;
+  font-size: 1.25em;
 }
 
 h1 {
@@ -15,16 +16,16 @@ h1 {
 }
 
 form {
-  max-width: 600px;
+  max-width: 70%;
   margin: 0 auto;
   background: #fffaf0;
   padding: 1.5em;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   border: 2px solid #d9b38c;
-  display: flex;
-  flex-direction: column;
   gap: 1em;
+  display: flex;
+  flex-direction: column;  
 }
 
 label {
@@ -33,7 +34,7 @@ label {
 }
 
 select, button {
-  padding: 0.75em;
+  padding: 0.25em;
   font-size: 1em;
   border-radius: 8px;
   border: 1px solid #bbb;
@@ -49,6 +50,10 @@ button {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+div#magic-subtype {
+  margin-top: 0.5em;
+}
+
 button:hover {
   background: #a67b5b;
   transform: translateY(-1px);
@@ -56,14 +61,13 @@ button:hover {
 }
 
 .result-box {
+  max-width: 70%;
+  margin: 2em auto;
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 1.25em;
-  margin-top: 2em;
-  background: #fdfdfd;
   box-shadow: 2px 4px 12px rgba(0,0,0,0.08);
   animation: fadeInUp 0.5s ease-out;
-  opacity: 0;
   animation-fill-mode: forwards;
 }
 
@@ -72,14 +76,19 @@ button:hover {
   color: #5a3d2b;
 }
 
-.result-box.primary {
+.result-box.result {
   border-color: #6c9;
   background: #f0fff5;
 }
 
+.result-box.fumble {
+  border-color: rgb(156, 55, 69);
+  background: #e8bec3;
+}
+
 .result-box.secondary {
-  border-color: #c96;
-  background: #fff8f0;
+  border-color: rgb(192, 204, 102);
+  background: #f8f9c6;
 }
 
 /* Responsive tweaks */
@@ -94,6 +103,10 @@ button:hover {
 
   form {
     padding: 1em;
+  }
+
+  form, .result-box {
+    max-width: 90%;
   }
 }
 

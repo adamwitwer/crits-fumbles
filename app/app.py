@@ -21,7 +21,7 @@ HTML_TEMPLATE = """
   <select name="roll_type" id="roll_type" onchange="toggleFields()">
     <option value="crit" {% if selected_roll_type == 'crit' %}selected{% endif %}>Critical</option>
     <option value="fumble" {% if selected_roll_type == 'fumble' %}selected{% endif %}>Fumble</option>
-  </select><br><br>
+  </select><br>
 
   <div id="crit-fields">
     <label>Damage Type:</label>
@@ -47,7 +47,7 @@ HTML_TEMPLATE = """
 </form>
 
 {% if result and not secondary_prompt and not secondary_result %}
-  <div class="result-box primary">
+  <div class="result-box {% if selected_roll_type == 'fumble' %}fumble{% else %}result{% endif %}">
     <h2>{% if selected_roll_type == 'fumble' %}☠️ Fumble{% else %}🎯 Result{% endif %}</h2>
     <p><strong>You rolled: {{ roll_value }}</strong></p>
     <p>{{ result }}</p>
@@ -55,8 +55,7 @@ HTML_TEMPLATE = """
 {% endif %}
 
 {% if secondary_prompt %}
-  <!-- Show primary result before bonus roll -->
-  <div class="result-box primary">
+  <div class="result-box {% if selected_roll_type == 'fumble' %}fumble{% else %}result{% endif %}">
     <h2>{% if selected_roll_type == 'fumble' %}☠️ Fumble{% else %}🎯 Result{% endif %}</h2>
     <p><strong>You rolled: {{ roll_value }}</strong></p>
     <p>{{ result }}</p>
@@ -73,7 +72,7 @@ HTML_TEMPLATE = """
 
 {% if secondary_result %}
   {% if result %}
-  <div class="result-box primary">
+  <div class="result-box {% if selected_roll_type == 'fumble' %}fumble{% else %}result{% endif %}">
     <h2>{% if selected_roll_type == 'fumble' %}☠️ Fumble{% else %}🎯 Result{% endif %}</h2>
     <p><strong>You rolled: {{ previous_roll_value }}</strong></p>
     <p>{{ result }}</p>
@@ -114,6 +113,13 @@ function toggleMagicDropdown() {
 window.onload = function() {
   toggleFields();
   toggleMagicDropdown();
+
+  // find the bonus box first, otherwise the primary result
+  const el = document.querySelector('.result-box.secondary')
+          || document.querySelector('.result-box');
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 }
 </script>
 """
