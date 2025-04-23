@@ -61,6 +61,7 @@ HTML_TEMPLATE = """
     <h2>{% if selected_roll_type == 'fumble' %}☠️ Fumble{% else %}🎯 Result{% endif %}</h2>
     <p><strong>You rolled: {{ roll_value }}</strong></p>
     <p>{{ result }}</p>
+    <p class="scroll-note">👇 Bonus effect!!! 👇</p>
   </div>
   <form method="post" id="secondary-form">
     <input type="hidden" name="roll_type" value="{{ secondary_type }}">
