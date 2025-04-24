@@ -19,14 +19,14 @@ HTML_TEMPLATE = """
 
 <h1>Crits & Fumbles</h1>
 <form method="post" id="main-form">
-  <label>Roll Type:</label>
+  <label>Roll Type</label>
   <select name="roll_type" id="roll_type" onchange="toggleFields()">
     <option value="crit" {% if selected_roll_type == 'crit' %}selected{% endif %}>Critical</option>
     <option value="fumble" {% if selected_roll_type == 'fumble' %}selected{% endif %}>Fumble</option>
   </select><br>
 
   <div id="crit-fields">
-    <label>Damage Type:</label>
+    <label>Damage Type</label>
     <select name="damage_type" id="damage_type" onchange="toggleMagicDropdown()">
       {% for dt in damage_types if not dt.startswith('magic:') %}
       <option value="{{ dt }}" {% if selected_damage_type == dt %}selected{% endif %}>{{ dt.title() }}</option>
@@ -35,7 +35,7 @@ HTML_TEMPLATE = """
     </select><br>
 
     <div id="magic-subtype" style="display: none;">
-      <label>Type of Magic:</label>
+      <label>Type of Magic</label>
       <select name="magic_subtype">
         {% for dt in damage_types if dt.startswith('magic:') %}
         <option value="{{ dt }}" {% if selected_damage_type == dt %}selected{% endif %}>{{ dt.split(':')[1].title() }}</option>
@@ -87,6 +87,18 @@ HTML_TEMPLATE = """
     <p>{{ secondary_result }}</p>
   </div>
 {% endif %}
+
+<footer class="app-footer">
+  <p>
+    Made with 🎲 by Adam |
+    <a href="https://github.com/adamwitwer/crits-fumbles" target="_blank" rel="noopener" aria-label="GitHub Repository">
+      <svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path fill="currentColor"
+          d="M12 0C5.37 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.17c-3.338.726-4.033-1.416-4.033-1.416-.546-1.386-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.776.42-1.304.762-1.603-2.665-.305-5.466-1.334-5.466-5.933 0-1.31.47-2.38 1.235-3.22-.124-.303-.535-1.527.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.98-.399 3-.404 1.02.005 2.043.138 3 .404 2.29-1.552 3.296-1.23 3.296-1.23.653 1.649.242 2.873.118 3.176.767.84 1.233 1.91 1.233 3.22 0 4.61-2.804 5.625-5.475 5.922.43.37.823 1.103.823 2.222v3.293c0 .322.218.694.825.576C20.565 21.796 24 17.298 24 12c0-6.627-5.373-12-12-12z" />
+      </svg>
+    </a>
+  </p>
+</footer>
 
 <script>
 function rollDice() {
