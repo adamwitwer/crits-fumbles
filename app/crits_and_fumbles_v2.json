@@ -163,7 +163,7 @@
     "9-11": "Multiple injuries! The creature\u2019s maximum hit points are reduced by an amount equivalent to half of the damage dealt by the attack.",
     "12-16": "Badly beaten! The creature has disadvantage on Constitution saving throws.",
     "17-19": "Ringing blow! The creature is stunned until the end of its next turn and deafened until it completes a recuperate downtime activity.",
-    "20": "Blow to the head! The creature is unconscious."
+    "20": "Blow to the head! The creature is unconscious for 2d12 hours."
   },
   "major_injuries": {
     "1-3": "Crippled leg! The creature\u2019s movement speed is reduced by 10 feet and it has disadvantage on Dexterity saving throws.",

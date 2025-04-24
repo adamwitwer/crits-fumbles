@@ -14,7 +14,7 @@ HTML_TEMPLATE = """
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Crits & Fumbles</title>
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Merriweather&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
 <h1>Crits & Fumbles</h1>
@@ -45,7 +45,7 @@ HTML_TEMPLATE = """
   </div>
 
   <input type="hidden" name="roll" id="roll-input">
-  <button type="button" onclick="rollDice()">🎲 Roll</button>
+  <button type="button" onclick="rollDice()" aria-label="Roll dice for result">🎲 Roll</button>
 </form>
 
 {% if result and not secondary_prompt and not secondary_result %}
@@ -61,15 +61,15 @@ HTML_TEMPLATE = """
     <h2>{% if selected_roll_type == 'fumble' %}☠️ Fumble{% else %}🎯 Result{% endif %}</h2>
     <p><strong>You rolled: {{ roll_value }}</strong></p>
     <p>{{ result }}</p>
-    <p class="scroll-note">👇 Bonus effect!!! 👇</p>
+    <p class="scroll-note">👇 Bonus Effect!!! 👇</p>
   </div>
   <form method="post" id="secondary-form">
     <input type="hidden" name="roll_type" value="{{ secondary_type }}">
     <input type="hidden" name="primary_result" value="{{ result }}">
     <input type="hidden" name="primary_roll" value="{{ roll_value }}">
     <input type="hidden" name="roll" id="secondary-roll-input">
-    <label>{{ secondary_prompt }}</label><br><br>
-    <button type="button" onclick="rollSecondary()">🎲 Roll for Bonus Effect</button>
+    <label>{{ secondary_prompt }}</label><br>
+    <button type="button" onclick="rollSecondary()" aria-label="Roll dice for bonus effect">🎲 Roll for Bonus Effect</button>
   </form>
 {% endif %}
 
@@ -168,13 +168,13 @@ def index():
             if table:
                 result = resolve_roll(roll_value, table)
                 if "minor injury" in result.lower():
-                    secondary_prompt = "Roll a d20 for Minor Injury:"
+                    secondary_prompt = "Minor Injury!"
                     secondary_type = "minor"
                 elif "major injury" in result.lower():
-                    secondary_prompt = "Roll a d20 for Major Injury:"
+                    secondary_prompt = "Major Injury!"
                     secondary_type = "major"
                 elif "insanity" in result.lower():
-                    secondary_prompt = "Roll a d20 for Insanity:"
+                    secondary_prompt = "Insanity!"
                     secondary_type = "insanity"
             else:
                 result = "Invalid damage type."
