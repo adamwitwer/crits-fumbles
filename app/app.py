@@ -19,28 +19,32 @@ HTML_TEMPLATE = """
 
 <h1>Crits & Fumbles</h1>
 <form method="post" id="main-form">
-  <label>Roll Type</label>
-  <select name="roll_type" id="roll_type" onchange="toggleFields()">
-    <option value="crit" {% if selected_roll_type == 'crit' %}selected{% endif %}>Critical</option>
-    <option value="fumble" {% if selected_roll_type == 'fumble' %}selected{% endif %}>Fumble</option>
-  </select><br>
+  <div>
+    <label for="roll_type">Roll Type</label>
+    <select name="roll_type" id="roll_type" onchange="toggleFields()">
+      <option value="crit" {% if selected_roll_type == 'crit' %}selected{% endif %}>Critical</option>
+      <option value="fumble" {% if selected_roll_type == 'fumble' %}selected{% endif %}>Fumble</option>
+    </select>
+  </div>
 
   <div id="crit-fields">
-    <label>Damage Type</label>
-    <select name="damage_type" id="damage_type" onchange="toggleMagicDropdown()">
-      {% for dt in damage_types if not dt.startswith('magic:') %}
-      <option value="{{ dt }}" {% if selected_damage_type == dt %}selected{% endif %}>{{ dt.title() }}</option>
-      {% endfor %}
-      <option value="magic" {% if selected_damage_type.startswith('magic:') %}selected{% endif %}>Magic</option>
-    </select><br>
+    <div>
+      <label for="damage_type">Damage Type</label>
+      <select name="damage_type" id="damage_type" onchange="toggleMagicDropdown()">
+        {% for dt in damage_types if not dt.startswith('magic:') %}
+        <option value="{{ dt }}" {% if selected_damage_type == dt %}selected{% endif %}>{{ dt.title() }}</option>
+        {% endfor %}
+        <option value="magic" {% if selected_damage_type.startswith('magic:') %}selected{% endif %}>Magic</option>
+      </select>
+    </div>
 
     <div id="magic-subtype" style="display: none;">
-      <label>Type of Magic</label>
-      <select name="magic_subtype">
+      <label for="magic_subtype">Type of Magic</label>
+      <select name="magic_subtype" id="magic_subtype">
         {% for dt in damage_types if dt.startswith('magic:') %}
         <option value="{{ dt }}" {% if selected_damage_type == dt %}selected{% endif %}>{{ dt.split(':')[1].title() }}</option>
         {% endfor %}
-      </select><br>
+      </select>
     </div>
   </div>
 
@@ -63,12 +67,12 @@ HTML_TEMPLATE = """
     <p>{{ result }}</p>
     <p class="scroll-note">👇 Bonus Effect!!! 👇</p>
   </div>
-  <form method="post" id="secondary-form">
+  <form method="post" id="secondary-form" class="bonus-alert">
     <input type="hidden" name="roll_type" value="{{ secondary_type }}">
     <input type="hidden" name="primary_result" value="{{ result }}">
     <input type="hidden" name="primary_roll" value="{{ roll_value }}">
     <input type="hidden" name="roll" id="secondary-roll-input">
-    <label>{{ secondary_prompt }}</label><br>
+    <h2>{{ secondary_prompt }}</h2>
     <button type="button" onclick="rollSecondary()" aria-label="Roll dice for bonus effect">🎲 Bonus Effect</button>
   </form>
 {% endif %}

@@ -31,18 +31,28 @@ form {
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   border: 2px solid #d9b38c;
-  gap: 1em;
   display: flex;
-  flex-direction: column;  
+  flex-direction: column;
+  gap: 1.25em;
 }
 
 label {
   font-weight: bold;
-  margin-bottom: -0.9em;
+  margin-bottom: 0.4em;
+  display: block;
 }
 
-div#crit-fields label, div#magic-subtype label {
-  margin-bottom: 0.3em;
+select, button {
+  width: 100%;
+  padding: 0.6em;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+#magic-subtype {
+  margin-top: 1em;
 }
 
 select, button {
@@ -93,6 +103,10 @@ div#magic-subtype {
 .result-box h2 {
   margin-top: 0;
   color: #5a3d2b;
+}
+
+form.bonus-alert h2 {
+  text-align: center;
 }
 
 .result-box.result {
@@ -206,16 +220,17 @@ div#magic-subtype {
   padding: 2em 1em;
 }
 
+.app-footer a {
+  color: inherit;
+}
+
 .github-icon {
   width: 1.25em;
   height: 1.25em;
   vertical-align: middle;
   margin-left: 0.4em;
   transition: fill 0.2s ease;
-}
-
-.app-footer a:hover .github-icon {
-  fill: #000; /* or white in dark mode */
+  fill: #000 !important;
 }
 
 /* dark mode */
