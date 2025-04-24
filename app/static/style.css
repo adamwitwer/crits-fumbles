@@ -41,6 +41,10 @@ label {
   margin-bottom: -0.9em;
 }
 
+div#crit-fields label, div#magic-subtype label {
+  margin-bottom: 0.3em;
+}
+
 select, button {
   padding: 0.25em;
   font-size: 1em;
@@ -74,10 +78,6 @@ button:active {
 
 div#magic-subtype {
   margin-top: 0.5em;
-}
-
-div#crit-fields label, div#magic-subtype label {
-  margin-right: 0.5em;
 }
 
 .result-box {
@@ -134,6 +134,10 @@ div#crit-fields label, div#magic-subtype label {
 @media (max-width: 480px) {
   .result-box h2 {
     font-size: 1.1em;
+  }
+
+  div#crit-fields label, div#magic-subtype label {
+    margin-right: 0.5em;
   }
 }
 
