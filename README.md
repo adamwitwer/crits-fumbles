@@ -4,12 +4,13 @@ A Flask-based web app for generating critical hit and fumble results in Dungeons
 
 ## To Run Locally
 
-\`\`\`bash
+```
+bash
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 flask run
-\`\`\`
+```
 
 ## Notes on the Sources
 
@@ -25,7 +26,7 @@ The fumbles table we’ve been using in our campaign is not a fumble table at al
 
 A more likely source of the “Smack Down Table” is found in [issue 128 of “Knights of the Dinner Table”](https://kenzerco.com/product/knights-of-the-dinner-table-128/), which includes “The EXPANDED Smart Ass Smack Down Table” on page forty-one, created for DMs to dish out punishment to disruptive players:
 
-> “Guaranteed to make your players wet themselves in fright, or at least make you feel more like an evil over-lord punishing insubordinates.”
+> Guaranteed to make your players wet themselves in fright, or at least make you feel more like an evil over-lord punishing insubordinates.
 
 The “Smack Down Table” from PandaBarBear uses some but not all of the same player punishments.
 
