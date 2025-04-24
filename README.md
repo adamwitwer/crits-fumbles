@@ -23,7 +23,7 @@ The fumbles table we’ve been using in our campaign is not a fumble table at al
 
 [Issue 31 of “HackJournal”](https://kenzerco.com/product/hackjournal-31-pdf/?add-to-cart=4805) has a “Fumbles & Mishaps” table, which is more serious in nature and includes unfortunate fumble events like increased hypertension and muscle pulls. In any case, it’s nothing at all like the table we’ve been using.
 
-A more likely source of the “Smack Down Table” is found in [issue 128 of “Knights of the Dinner Table”](https://kenzerco.com/product/knights-of-the-dinner-table-128/), which includes “The EXPANDED Smart Ass Smack Down Table” on page forty-one, created for DMs to dish out punishment to disruptive players:
+A more likely source of the “Smack Down Table” is found in [issue 128 of “Knights of the Dinner Table,”](https://kenzerco.com/product/knights-of-the-dinner-table-128/) which includes “The EXPANDED Smart Ass Smack Down Table” on page forty-one, created for DMs to dish out punishment to disruptive players:
 
 > Guaranteed to make your players wet themselves in fright, or at least make you feel more like an evil over-lord punishing insubordinates.
 
