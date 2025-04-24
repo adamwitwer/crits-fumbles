@@ -69,7 +69,7 @@ HTML_TEMPLATE = """
     <input type="hidden" name="primary_roll" value="{{ roll_value }}">
     <input type="hidden" name="roll" id="secondary-roll-input">
     <label>{{ secondary_prompt }}</label><br>
-    <button type="button" onclick="rollSecondary()" aria-label="Roll dice for bonus effect">🎲 Roll for Bonus Effect</button>
+    <button type="button" onclick="rollSecondary()" aria-label="Roll dice for bonus effect">🎲 Bonus Effect</button>
   </form>
 {% endif %}
 
