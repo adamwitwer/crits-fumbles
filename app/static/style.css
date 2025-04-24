@@ -21,11 +21,10 @@ h1 {
 }
 
 form, .result-box {
-  max-width: 95%;
+  max-width: 90%;
 }
 
 form {
-  max-width: 70%;
   margin: 0 auto;
   background: #fffaf0;
   padding: 1.5em;
@@ -78,7 +77,6 @@ div#magic-subtype {
 }
 
 .result-box {
-  max-width: 70%;
   margin: 2em auto;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -130,7 +128,7 @@ div#magic-subtype {
 }
 
 @media (max-width: 480px) {
-  .result-box.secondary h2 {
+  .result-box h2 {
     font-size: 1.1em;
   }
 }
