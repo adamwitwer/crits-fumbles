@@ -5,7 +5,6 @@ A Flask-based web app for generating critical hit and fumble results in Dungeons
 ## To Run Locally
 
 ```
-bash
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
