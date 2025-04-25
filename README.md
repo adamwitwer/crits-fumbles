@@ -21,7 +21,7 @@ flask run
 
 The fumbles table we’ve been using in our campaign is not a fumble table at all. Instead, it’s the so-called “Smack Down Table or the ‘shit happens’ list,” which (as far as I can tell) can only be found on [DeviantArt](https://www.deviantart.com/pandabarbear/art/The-New-Smack-Down-Table-518745000). PandaBarBear (the user who posted the table) notes that it’s “based on Hack Masters Expanded smart ass smack down table,” which doesn’t exist (as far as I can tell).
 
-[Issue 31 of “HackJournal”](https://kenzerco.com/product/hackjournal-31-pdf/?add-to-cart=4805) has a “Fumbles & Mishaps” table, which is more serious in nature and includes unfortunate fumble events like increased hypertension and muscle pulls. In any case, it’s nothing at all like the table we’ve been using.
+[Issue 31 of “HackJournal”](https://kenzerco.com/product/hackjournal-31-pdf/?add-to-cart=4805) has a “Fumbles & Mishaps” table, which is more serious in nature and includes unfortunate fumble events like increased hypertension and muscle pulls. It’s nothing at all like the table we’ve been using.
 
 A more likely source of the “Smack Down Table” is found in [issue 128 of “Knights of the Dinner Table,”](https://kenzerco.com/product/knights-of-the-dinner-table-128/) which includes “The EXPANDED Smart Ass Smack Down Table” on page forty-one, created for DMs to dish out punishment to disruptive players:
 
