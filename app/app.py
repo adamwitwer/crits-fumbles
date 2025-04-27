@@ -36,17 +36,17 @@ HTML_TEMPLATE = """
   <div id="fumble-type-container" style="display:none;">
     <label for="fumbleType">Fumble Type:</label>
     <select id="fumbleType" name="fumbleType" onchange="toggleAttackType()">
-      <option value="Smack Down" selected>Smack Down</option>
-      <option value="Questionable Arcana">Questionable Arcana</option>
+      <option value="Smack Down" {% if selected_fumble_type == 'Smack Down' %}selected{% endif %}>Smack Down</option>
+      <option value="Questionable Arcana" {% if selected_fumble_type == 'Questionable Arcana' %}selected{% endif %}>Questionable Arcana</option>
     </select>
   </div>
 
   <div id="attack-type-container" style="display:none;">
     <label for="attackType">Attack Type:</label>
     <select id="attackType" name="attackType">
-      <option value="Weapon" selected>Weapon</option>
-      <option value="Magic">Magic</option>
-    </select>
+      <option value="Weapon" {% if selected_attack_type == 'Weapon' %}selected{% endif %}>Weapon</option>
+      <option value="Magic" {% if selected_attack_type == 'Magic' %}selected{% endif %}>Magic</option>
+  </select>
   </div>
 
   <div id="crit-fields">
@@ -75,12 +75,29 @@ HTML_TEMPLATE = """
 </form>
 
 {% if result and not secondary_prompt and not secondary_result %}
-  <div class="result-box {% if selected_roll_type == 'fumble' %}fumble{% else %}result{% endif %}">
-    <h2>{% if selected_roll_type == 'fumble' %}☠️ Fumble{% else %}🎯 Result{% endif %}</h2>
-    <p><strong>You rolled: {{ roll_value }}</strong></p>
-    <p>{{ result }}</p>
-  </div>
+  {% if description and effect %}
+    <div class="result-box {% if selected_roll_type == 'fumble' %}fumble{% else %}result{% endif %}">
+      <h2>{% if selected_roll_type == 'fumble' %}☠️ Fumble{% else %}🎯 Result{% endif %}</h2>
+      <p><strong>You rolled: {{ roll_value }}</strong></p>
+      <div class="description-box">
+        <h3>Description</h3>
+        <p>{{ description }}</p>
+      </div>
+    </div>
+
+    <div class="result-box secondary">
+      <h2>✨ Effect</h2>
+      <p>{{ effect }}</p>
+    </div>
+  {% else %}
+    <div class="result-box {% if selected_roll_type == 'fumble' %}fumble{% else %}result{% endif %}">
+      <h2>{% if selected_roll_type == 'fumble' %}☠️ Fumble{% else %}🎯 Result{% endif %}</h2>
+      <p><strong>You rolled: {{ roll_value }}</strong></p>
+      <p>{{ result }}</p>
+    </div>
+  {% endif %}
 {% endif %}
+
 
 {% if secondary_prompt %}
   <div class="result-box {% if selected_roll_type == 'fumble' %}fumble{% else %}result{% endif %}">
@@ -136,10 +153,11 @@ function rollDice() {
 }
 
 function toggleAttackType() {
+  const rollType = document.getElementById('roll_type').value;
   const fumbleType = document.getElementById('fumbleType').value;
   const attackTypeContainer = document.getElementById('attack-type-container');
 
-  if (fumbleType === 'Questionable Arcana') {
+  if (rollType === 'fumble' && fumbleType === 'Questionable Arcana') {
     attackTypeContainer.style.display = 'block';
   } else {
     attackTypeContainer.style.display = 'none';
@@ -164,6 +182,8 @@ function toggleFields() {
     critFields.style.display = 'block';
     fumbleTypeContainer.style.display = 'none';   // <--- NEW
   }
+
+  toggleAttackType();
 }
 
 function toggleMagicDropdown() {
@@ -174,6 +194,7 @@ function toggleMagicDropdown() {
 window.onload = function() {
   toggleFields();
   toggleMagicDropdown();
+  toggleAttackType();
 
   // find the bonus box first, otherwise the primary result
   const el = document.querySelector('.result-box.secondary')
@@ -209,6 +230,11 @@ def index():
     selected_roll_type = "crit"
     roll_value = None
     previous_roll_value = None
+    selected_fumble_type = "Smack Down"  # Default if not submitted
+    attack_type = "Weapon"
+    selected_attack_type = attack_type
+    description = None
+    effect = None
 
     if request.method == 'POST':
         selected_roll_type = request.form.get('roll_type')
@@ -238,22 +264,63 @@ def index():
                 result = "Invalid damage type."
 
         elif selected_roll_type == 'fumble' and not result:
-            result = resolve_roll(roll_value, DATA['fumbles'])
+            selected_fumble_type = request.form.get('fumbleType', 'Smack Down')
+            attack_type = request.form.get('attackType', 'Weapon')
+
+            roll_value_int = int(roll_value)
+            
+            if selected_fumble_type == 'Questionable Arcana':
+                # Lookup Questionable Arcana
+                attack_type = attack_type or 'Weapon'
+                attack_type_map = {
+                    "Weapon": "Weapon Attack",
+                    "Magic": "Spell Attack"
+                }
+                attack_key = attack_type_map.get(attack_type, "Weapon Attack")  # default to Weapon Attack if weird
+                fumble_list = ARCANA.get(attack_key, [])
+
+                for entry in fumble_list:
+                    roll_entry = entry['roll']
+                    if '-' in roll_entry:
+                        low, high = map(int, roll_entry.split('-'))
+                        if low <= roll_value_int <= high:
+                            description = entry['description']
+                            effect = entry['effect']
+                            result = f"Description: {description}\nEffect: {effect}"
+                            break
+                    else:
+                        if int(roll_entry) == roll_value_int:
+                            description = entry['description']
+                            effect = entry['effect']
+                            result = f"Description: {description}\nEffect: {effect}"
+                            break
+
+                else:
+                    description = "No matching fumble found."
+                    effect = "No additional effect."
+                    result = "No matching fumble found."
+            else:
+                # Normal Smack Down
+                result = resolve_roll(roll_value, DATA['fumbles'])
 
         elif selected_roll_type in ['minor', 'major', 'insanity']:
             secondary_table = DATA[f"{selected_roll_type}_injuries"] if selected_roll_type != 'insanity' else DATA['insanities']
             secondary_result = resolve_roll(roll_value, secondary_table)
 
     return render_template_string(HTML_TEMPLATE,
-                                  result=result,
-                                  secondary_prompt=secondary_prompt,
-                                  secondary_type=secondary_type,
-                                  secondary_result=secondary_result,
-                                  damage_types=sorted(DATA['crit_tables'].keys()),
-                                  selected_damage_type=selected_damage_type,
-                                  selected_roll_type=selected_roll_type,
-                                  roll_value=roll_value,
-                                  previous_roll_value=previous_roll_value)
+                              result=result,
+                              secondary_prompt=secondary_prompt,
+                              secondary_type=secondary_type,
+                              secondary_result=secondary_result,
+                              damage_types=sorted(DATA['crit_tables'].keys()),
+                              selected_damage_type=selected_damage_type,
+                              selected_roll_type=selected_roll_type,
+                              selected_fumble_type=selected_fumble_type,
+                              selected_attack_type=attack_type,
+                              roll_value=roll_value,
+                              previous_roll_value=previous_roll_value,
+                              description=description,
+                              effect=effect)
 
 if __name__ == '__main__':
     app.run(debug=True)
