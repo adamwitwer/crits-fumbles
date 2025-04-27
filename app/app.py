@@ -33,6 +33,22 @@ HTML_TEMPLATE = """
     </select>
   </div>
 
+  <div id="fumble-type-container" style="display:none;">
+    <label for="fumbleType">Fumble Type:</label>
+    <select id="fumbleType" name="fumbleType" onchange="toggleAttackType()">
+      <option value="Smack Down" selected>Smack Down</option>
+      <option value="Questionable Arcana">Questionable Arcana</option>
+    </select>
+  </div>
+
+  <div id="attack-type-container" style="display:none;">
+    <label for="attackType">Attack Type:</label>
+    <select id="attackType" name="attackType">
+      <option value="Weapon" selected>Weapon</option>
+      <option value="Magic">Magic</option>
+    </select>
+  </div>
+
   <div id="crit-fields">
     <div>
       <label for="damage_type">Damage Type</label>
@@ -119,6 +135,17 @@ function rollDice() {
   document.getElementById('main-form').submit();
 }
 
+function toggleAttackType() {
+  const fumbleType = document.getElementById('fumbleType').value;
+  const attackTypeContainer = document.getElementById('attack-type-container');
+
+  if (fumbleType === 'Questionable Arcana') {
+    attackTypeContainer.style.display = 'block';
+  } else {
+    attackTypeContainer.style.display = 'none';
+  }
+}
+
 function rollSecondary() {
   const roll = Math.floor(Math.random() * 20) + 1;
   document.getElementById('secondary-roll-input').value = roll;
@@ -127,7 +154,16 @@ function rollSecondary() {
 
 function toggleFields() {
   const rollType = document.getElementById('roll_type').value;
-  document.getElementById('crit-fields').style.display = rollType === 'fumble' ? 'none' : 'block';
+  const critFields = document.getElementById('crit-fields');
+  const fumbleTypeContainer = document.getElementById('fumble-type-container');  // <--- NEW
+
+  if (rollType === 'fumble') {
+    critFields.style.display = 'none';
+    fumbleTypeContainer.style.display = 'block';  // <--- NEW
+  } else {
+    critFields.style.display = 'block';
+    fumbleTypeContainer.style.display = 'none';   // <--- NEW
+  }
 }
 
 function toggleMagicDropdown() {
