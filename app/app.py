@@ -9,6 +9,12 @@ json_path = os.path.join(os.path.dirname(__file__), "crits_and_fumbles_v2.json")
 with open(json_path) as f:
     DATA = json.load(f)
 
+# Load the Questionable Arcana fumbles JSON data
+arcana_path = os.path.join(os.path.dirname(__file__), "fumbles_arcana.json")
+with open(arcana_path) as f:
+    ARCANA = json.load(f)
+
+
 HTML_TEMPLATE = """
 <!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
