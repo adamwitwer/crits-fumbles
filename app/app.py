@@ -78,31 +78,29 @@ HTML_TEMPLATE = """
   {% if description and effect %}
     <div class="result-box {% if selected_roll_type == 'fumble' %}fumble{% else %}result{% endif %}">
       <h2>{% if selected_roll_type == 'fumble' %}☠️ Fumble{% else %}🎯 Result{% endif %}</h2>
-      <p><strong>You rolled: {{ roll_value }}</strong></p>
+      <p>You rolled: {{ roll_value }}</p>
       <div class="description-box">
-        <h3>Description</h3>
         <p>{{ description }}</p>
       </div>
     </div>
 
     <div class="result-box secondary">
-      <h2>✨ Effect</h2>
+      <h2>Effect</h2>
       <p>{{ effect }}</p>
     </div>
   {% else %}
     <div class="result-box {% if selected_roll_type == 'fumble' %}fumble{% else %}result{% endif %}">
       <h2>{% if selected_roll_type == 'fumble' %}☠️ Fumble{% else %}🎯 Result{% endif %}</h2>
-      <p><strong>You rolled: {{ roll_value }}</strong></p>
+      <p>You rolled: {{ roll_value }}</p>
       <p>{{ result }}</p>
     </div>
   {% endif %}
 {% endif %}
 
-
 {% if secondary_prompt %}
   <div class="result-box {% if selected_roll_type == 'fumble' %}fumble{% else %}result{% endif %}">
     <h2>{% if selected_roll_type == 'fumble' %}☠️ Fumble{% else %}🎯 Result{% endif %}</h2>
-    <p><strong>You rolled: {{ roll_value }}</strong></p>
+    <p>You rolled: {{ roll_value }}</p>
     <p>{{ result }}</p>
     <p class="scroll-note">👇 Bonus Effect!!! 👇</p>
   </div>
@@ -111,8 +109,14 @@ HTML_TEMPLATE = """
     <input type="hidden" name="primary_result" value="{{ result }}">
     <input type="hidden" name="primary_roll" value="{{ roll_value }}">
     <input type="hidden" name="roll" id="secondary-roll-input">
+      <input type="hidden" name="damage_type" value="{{ selected_damage_type }}">
+      {% if selected_damage_type.startswith('magic:') %}
+        <input type="hidden" name="magic_subtype" value="{{ selected_damage_type }}">
+      {% endif %}
     <h2>{{ secondary_prompt }}</h2>
-    <button type="button" onclick="rollSecondary()" aria-label="Roll dice for bonus effect">🎲 Bonus Effect</button>
+      <button type="button" onclick="rollSecondary()" aria-label="Roll dice for bonus effect">
+        🎲 Roll {{ secondary_prompt }}
+      </button>
   </form>
 {% endif %}
 
@@ -120,13 +124,13 @@ HTML_TEMPLATE = """
   {% if result %}
   <div class="result-box {% if selected_roll_type == 'fumble' %}fumble{% else %}result{% endif %}">
     <h2>{% if selected_roll_type == 'fumble' %}☠️ Fumble{% else %}🎯 Result{% endif %}</h2>
-    <p><strong>You rolled: {{ previous_roll_value }}</strong></p>
+    <p>You rolled: {{ previous_roll_value }}</p>
     <p>{{ result }}</p>
   </div>
   {% endif %}
   <div class="result-box secondary">
     <h2>✨ Bonus Effect</h2>
-    <p><strong>You rolled: {{ roll_value }}</strong></p>
+    <p>You rolled: {{ roll_value }}</p>
     <p>{{ secondary_result }}</p>
   </div>
 {% endif %}
@@ -304,9 +308,15 @@ def index():
                 result = resolve_roll(roll_value, DATA['fumbles'])
 
         elif selected_roll_type in ['minor', 'major', 'insanity']:
+            base_type = request.form.get('damage_type')
+            if base_type:
+                damage_type = request.form.get('magic_subtype') if base_type == 'magic' else base_type
+                damage_type = damage_type.lower().strip()
+                selected_damage_type = damage_type
+
             secondary_table = DATA[f"{selected_roll_type}_injuries"] if selected_roll_type != 'insanity' else DATA['insanities']
             secondary_result = resolve_roll(roll_value, secondary_table)
-
+            
     return render_template_string(HTML_TEMPLATE,
                               result=result,
                               secondary_prompt=secondary_prompt,
