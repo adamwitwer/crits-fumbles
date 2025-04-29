@@ -233,87 +233,6 @@ form.bonus-alert h2 {
   fill: #000 !important;
 }
 
-/* dark mode */
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #1e1e1e;
-    color: #eee;
-  }
-
-  h1, h2 {
-    color: #f9d77e;
-  }
-
-  form {
-    background: #2c2c2c;
-    border-color: #555;
-  }
-
-  .result-box {
-    background: #2a2a2a;
-    border-color: #444;
-  }
-
-  .result-box.result {
-    border-color: #4caf50;
-    background: #1f3a2e;
-  }
-
-  .result-box.fumble {
-    border-color: #a12d2f;
-    background: #3a1f1f;
-  }
-
-  .result-box.secondary {
-    border-color: #bb86fc;
-    background: #2f2545;
-    box-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
-  }
-
-  .result-box h2 {
-    color: #f1f1f1; /* fallback for all h2s in dark mode */
-  }
-  
-  .result-box.result h2 {
-    color: #8ff0a4; /* soft mint green for crit success */
-  }
-  
-  .result-box.fumble h2 {
-    color: #ff7a7a; /* warm danger red for fumbles */
-  }
-  
-  .result-box.secondary h2 {
-    color: #cfa9ff; /* magic violet for bonuses */
-  }  
-
-  .scroll-note {
-    color: #ddd;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-  }
-
-  button {
-    background: #444;
-    color: #eee;
-    border: 1px solid #666;
-  }
-
-  button:hover {
-    background: #555;
-  }
-
-  .github-icon {
-    fill: #ccc !important; /* override inherited link blue */
-  }
-
-  .app-footer a:hover .github-icon {
-    fill: #fff;
-  }
-
-  .app-footer a {
-    color: inherit; /* so it doesn’t force link blue */
-  }
-}
 
 /* dice */
 
@@ -426,5 +345,95 @@ form.bonus-alert h2 {
   100% {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+/* dark mode */
+
+@media (prefers-color-scheme: dark) {
+
+  /* --- Override root variables for dark mode --- */
+  :root {
+    --roll-color: #ff8a80; /* <<< Lighter, more visible red for dark mode roll text */
+    /* The default white shimmer highlight should still look good, */
+    /* but you could override --shimmer-highlight-color here too if desired */
+    /* e.g., --shimmer-highlight-color: rgba(230, 230, 230, 0.8); */
+  }
+
+  /* --- Your existing dark mode styles --- */
+  body {
+    background: #1e1e1e;
+    color: #eee;
+  }
+
+  h1, h2 {
+    color: #f9d77e;
+  }
+
+  form {
+    background: #2c2c2c;
+    border-color: #555;
+  }
+
+  .result-box {
+    background: #2a2a2a;
+    border-color: #444;
+  }
+
+  .result-box.result {
+    border-color: #4caf50;
+    background: #1f3a2e;
+  }
+
+  .result-box.fumble {
+    border-color: #a12d2f;
+    background: #3a1f1f;
+  }
+
+  .result-box.secondary {
+    border-color: #bb86fc;
+    background: #2f2545;
+    box-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
+  }
+
+  /* Applying specific h2 colors within result boxes */
+  .result-box h2 {
+    color: #f1f1f1; /* Fallback - consider if needed if base h2 is f9d77e */
+  }
+  .result-box.result h2 {
+    color: #8ff0a4; /* soft mint green for crit success */
+  }
+  .result-box.fumble h2 {
+    color: #ff7a7a; /* warm danger red for fumbles */
+  }
+  .result-box.secondary h2 {
+    color: #cfa9ff; /* magic violet for bonuses */
+  }
+
+  .scroll-note {
+    color: #ddd;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  }
+
+  button {
+    background: #444;
+    color: #eee;
+    border: 1px solid #666;
+  }
+
+  button:hover {
+    background: #555;
+  }
+
+  .github-icon {
+    fill: #ccc !important; /* Override inherited styles if needed */
+  }
+
+  .app-footer a:hover .github-icon {
+    fill: #fff;
+  }
+
+  .app-footer a {
+    color: inherit; /* Ensure link color doesn't override */
   }
 }
