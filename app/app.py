@@ -75,64 +75,126 @@ HTML_TEMPLATE = """
 </form>
 
 {% if result and not secondary_prompt and not secondary_result %}
-  {% if description and effect %}
-    <div class="result-box {% if selected_roll_type == 'fumble' %}fumble{% else %}result{% endif %}">
-      <h2>{% if selected_roll_type == 'fumble' %}☠️ Fumble{% else %}🎯 Result{% endif %}</h2>
-      <p>You rolled: {{ roll_value }}</p>
-      <div class="description-box">
-        <p>{{ description }}</p>
-      </div>
-    </div>
 
-    <div class="result-box secondary">
-      <h2>Effect</h2>
-      <p>{{ effect }}</p>
-    </div>
-  {% else %}
-    <div class="result-box {% if selected_roll_type == 'fumble' %}fumble{% else %}result{% endif %}">
-      <h2>{% if selected_roll_type == 'fumble' %}☠️ Fumble{% else %}🎯 Result{% endif %}</h2>
-      <p>You rolled: {{ roll_value }}</p>
-      <p>{{ result }}</p>
-    </div>
-  {% endif %}
+    {# Determine the common class and title ONCE #}
+    {% set result_class = 'fumble' if selected_roll_type == 'fumble' else 'result' %}
+    {% set result_title = '☠️ Fumble' if selected_roll_type == 'fumble' else '🎯 Result' %}
+
+    {# --- Determine die type and number based on context --- #}
+    {% set num_dice = 1 %}      {# Default: 1 die #}
+    {% set die_type = 'd20' %}  {# Default: d20 for crits #}
+
+    {% if selected_roll_type == 'fumble' %}
+        {# ALL Fumbles use two d10s #}
+        {% set num_dice = 2 %}
+        {% set die_type = 'd10' %}
+    {% endif %}
+    {# --- Set full image source and alt text based on die_type --- #}
+    {% set die_image_filename = die_type + '.png' %}
+    {% set die_image_src = url_for('static', filename='img/' + die_image_filename) %}
+    {% set die_alt_text = die_type %}
+
+
+    {# --- Now render the appropriate result box structure --- #}
+    {% if description and effect %}
+        {# --- Case 1: Questionable Arcana Fumble --- #}
+        {# This will now correctly use two d10s #}
+        <div class="result-box {{ result_class }}">
+          <div class="roll-result">
+            {# Show the first d10 #}
+            <img src="{{ die_image_src }}" alt="{{ die_alt_text }}" class="inline-die" />
+            <span class="roll-value">{{ roll_value }}</span>
+            {# Show the second d10 (since num_dice = 2 for fumbles) #}
+            <img src="{{ die_image_src }}" alt="{{ die_alt_text }}" class="inline-die" />
+          </div>
+          <div class="description-box">
+            <p>{{ description }}</p>
+          </div>
+        </div>
+
+        <div class="result-box secondary">
+          <h2>Effect</h2>
+          <p>{{ effect }}</p>
+        </div>
+
+    {% else %}
+        {# --- Case 2: Crit (1 x d20) or Smack Down Fumble (2 x d10) --- #}
+        <div class="result-box {{ result_class }}">
+          <div class="roll-result">
+            {# Show the first die (d20 for crit, d10 for fumble) #}
+            <img src="{{ die_image_src }}" alt="{{ die_alt_text }}" class="inline-die" />
+            <span class="roll-value">{{ roll_value }}</span>
+            {# Conditionally show the second die ONLY if num_dice is 2 (i.e., for fumbles) #}
+            {% if num_dice == 2 %}
+               <img src="{{ die_image_src }}" alt="{{ die_alt_text }}" class="inline-die" />
+            {% endif %}
+          </div>
+          <p>{{ result }}</p>
+        </div>
+    {% endif %}
+
 {% endif %}
 
 {% if secondary_prompt %}
-  <div class="result-box {% if selected_roll_type == 'fumble' %}fumble{% else %}result{% endif %}">
-    <h2>{% if selected_roll_type == 'fumble' %}☠️ Fumble{% else %}🎯 Result{% endif %}</h2>
-    <p>You rolled: {{ roll_value }}</p>
-    <p>{{ result }}</p>
-    <p class="scroll-note">👇 Bonus Effect!!! 👇</p>
-  </div>
-  <form method="post" id="secondary-form" class="bonus-alert">
-    <input type="hidden" name="roll_type" value="{{ secondary_type }}">
-    <input type="hidden" name="primary_result" value="{{ result }}">
-    <input type="hidden" name="primary_roll" value="{{ roll_value }}">
-    <input type="hidden" name="roll" id="secondary-roll-input">
+
+    {# Determine the common class and title ONCE for this block #}
+    {% set result_class = 'fumble' if selected_roll_type == 'fumble' else 'result' %}
+    {% set result_title = '☠️ Fumble' if selected_roll_type == 'fumble' else '🎯 Result' %}
+
+    <div class="result-box {{ result_class }}"> {# Use the variable #}
+      <div class="roll-result">
+            <img src="{{ url_for('static', filename='img/d20.png') }}" alt="d20" class="inline-die" />
+            <span class="roll-value">{{ roll_value }}</span>
+      </div>
+      <p>{{ result }}</p>
+      <p class="scroll-note">👇 Bonus Effect!!! 👇</p>
+    </div>
+
+    <form method="post" id="secondary-form" class="bonus-alert">
+      <input type="hidden" name="roll_type" value="{{ secondary_type }}">
+      <input type="hidden" name="primary_result" value="{{ result }}">
+      <input type="hidden" name="primary_roll" value="{{ roll_value }}">
+      <input type="hidden" name="roll" id="secondary-roll-input">
       <input type="hidden" name="damage_type" value="{{ selected_damage_type }}">
       {% if selected_damage_type.startswith('magic:') %}
         <input type="hidden" name="magic_subtype" value="{{ selected_damage_type }}">
       {% endif %}
-    <h2>{{ secondary_prompt }}</h2>
+      <h2>{{ secondary_prompt }}</h2>
       <button type="button" onclick="rollSecondary()" aria-label="Roll dice for bonus effect">
-        🎲 Roll {{ secondary_prompt }}
+        🎲 Roll
       </button>
-  </form>
+    </form>
+
 {% endif %}
 
 {% if secondary_result %}
+
+  {# --- Conditionally display the Primary Result --- #}
   {% if result %}
-  <div class="result-box {% if selected_roll_type == 'fumble' %}fumble{% else %}result{% endif %}">
-    <h2>{% if selected_roll_type == 'fumble' %}☠️ Fumble{% else %}🎯 Result{% endif %}</h2>
-    <p>You rolled: {{ previous_roll_value }}</p>
-    <p>{{ result }}</p>
-  </div>
+    {# Determine class and title for the primary result ONCE #}
+    {% set primary_result_class = 'fumble' if selected_roll_type == 'fumble' else 'result' %}
+    {% set primary_result_title = '☠️ Fumble' if selected_roll_type == 'fumble' else '🎯 Result' %}
+
+    <div class="result-box {{ primary_result_class }}">  {# Use variable #}
+      
+      <div class="roll-result">
+            <img src="{{ url_for('static', filename='img/d20.png') }}" alt="d20" class="inline-die" />
+            <span class="roll-value">{{ previous_roll_value }}</span>
+      </div>
+      <p>{{ result }}</p>
+    </div>
   {% endif %}
+
+  {# --- Always display the Secondary Result --- #}
   <div class="result-box secondary">
     <h2>✨ Bonus Effect</h2>
-    <p>You rolled: {{ roll_value }}</p>
+    <div class="roll-result">
+      <img src="{{ url_for('static', filename='img/d20.png') }}" alt="d20" class="inline-die" />
+      <span class="roll-value">{{ roll_value }}</span>
+    </div>
     <p>{{ secondary_result }}</p>
   </div>
+
 {% endif %}
 
 <footer class="app-footer">

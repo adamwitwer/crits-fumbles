@@ -314,3 +314,117 @@ form.bonus-alert h2 {
     color: inherit; /* so it doesn’t force link blue */
   }
 }
+
+/* dice */
+
+/* --- Add or Update Variables --- */
+:root {
+  --roll-color: #7b241c;
+  --shimmer-highlight-color: rgba(255, 255, 255, 0.7); /* Slightly brighter/opaque white */
+  --shimmer-width-percent: 15%; /* How wide the bright part of shimmer is */
+
+  /* --- Animation Timings (Adjust as needed) --- */
+  --pop-in-duration: 0.5s;
+  --pop-in-delay: 0.3s;
+  --pop-in-easing: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Ease-out quad */
+
+  --shimmer-duration: 1.0s; /* Made shimmer slightly faster */
+  --shimmer-delay: 0.7s;   /* Shimmer starts near end of pop-in */
+  --shimmer-easing: ease-in-out;
+}
+
+/* --- Base Styles (Mostly Unchanged) --- */
+.inline-die {
+  height: 3.5em;
+  vertical-align: middle;
+  margin-right: 0;
+}
+
+.roll-result {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0;
+  gap: 0.3em;
+}
+
+/* --- Roll Value with Background Clip --- */
+.roll-value {
+  display: inline-block; /* Or block, depending on layout needs */
+  position: relative; /* Good practice, though not strictly needed for this effect */
+  font-size: 2.8rem;
+  font-weight: bold;
+  margin: 1rem 0;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.4); /* Kept for depth */
+  /* overflow: hidden; --- REMOVE OR SET TO visible --- */
+  /* overflow: hidden conflicts with showing the animated background clip */
+
+  /* --- Background Clipping --- */
+  color: transparent; /* Essential: Make text transparent */
+  background-color: var(--roll-color); /* Use background for base color */
+  -webkit-background-clip: text; /* Safari/Chrome */
+  background-clip: text;
+
+  /* --- Shimmer Gradient Background --- */
+  background-image: linear-gradient(
+    100deg, /* Angle of the shimmer */
+    transparent 0%,
+    transparent calc(50% - var(--shimmer-width-percent)/2), /* Start fading in */
+    var(--shimmer-highlight-color) 50%, /* Center bright color */
+    transparent calc(50% + var(--shimmer-width-percent)/2), /* Start fading out */
+    transparent 100%
+  );
+  background-size: 300% 100%; /* Make gradient much wider than element */
+  background-repeat: no-repeat;
+  /* Start position (gradient centered off-screen to the right) */
+  background-position: 150% 0;
+
+  /* --- Animations --- */
+  /* Apply pop-in first, then the background shimmer */
+  animation:
+    pop-in-smooth var(--pop-in-duration) var(--pop-in-easing) forwards,
+    shimmer-bg var(--shimmer-duration) var(--shimmer-easing) forwards;
+
+  /* Define delays for each animation */
+  animation-delay:
+    var(--pop-in-delay),  /* Pop-in delay */
+    var(--shimmer-delay); /* Shimmer delay */
+
+  /* Initial state for pop-in */
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+/* --- REMOVE THE ::after rule entirely --- */
+/*
+.roll-value::after {
+   ... (this is no longer needed for the shimmer) ...
+}
+*/
+
+/* --- Keyframes --- */
+
+/* New keyframes for background position animation */
+@keyframes shimmer-bg {
+  0% {
+    /* Start position (gradient centered off-screen right) */
+    background-position: 150% 0;
+  }
+  100% {
+    /* End position (gradient centered off-screen left) */
+    background-position: -50% 0;
+  }
+}
+
+/* Pop-in keyframes (using the smoother version) */
+@keyframes pop-in-smooth {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
