@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Crits & Fumbles</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Merriweather&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h1>Crits & Fumbles</h1>
+
+<form id="main-form"> {# No method or action needed now #}
+  <div>
+    <label for="roll_type">Roll Type</label>
+    <select name="roll_type" id="roll_type" onchange="toggleFields()">
+      <option value="crit">Critical</option>
+      <option value="fumble">Fumble</option>
+    </select>
+  </div>
+
+  <div id="fumble-type-container" style="display:none;">
+    <label for="fumbleType">Fumble Type:</label>
+    <select id="fumbleType" name="fumbleType" onchange="toggleAttackType()">
+      <option value="Smack Down">Smack Down</option>
+      <option value="Questionable Arcana">Questionable Arcana</option>
+    </select>
+  </div>
+
+  <div id="attack-type-container" style="display:none;">
+    <label for="attackType">Attack Type:</label>
+    <select id="attackType" name="attackType">
+      <option value="Weapon">Weapon</option>
+      <option value="Magic">Magic</option>
+  </select>
+  </div>
+
+  <div id="crit-fields">
+    <div>
+      <label for="damage_type">Damage Type</label>
+      <select name="damage_type" id="damage_type" onchange="toggleMagicDropdown()">
+        {% for dt in damage_types if dt and not dt.startswith('magic:') %}
+        <option value="{{ dt }}" {% if selected_damage_type == dt %}selected{% endif %}>{{ dt.title() }}</option>
+        {% endfor %}
+        <option value="magic">Magic</option>
+      </select>
+    </div>
+
+    <div id="magic-subtype" style="display: none;">
+      <label for="magic_subtype">Type of Magic</label>
+      <select name="magic_subtype" id="magic_subtype">
+        {% for dt in damage_types if dt and dt.startswith('magic:') %}
+        <option value="{{ dt }}">{{ dt.split(':')[1].title() }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  {# This button now triggers the AJAX call via handleRoll #}
+  <button type="button" id="primary-roll-button" onclick="handleRoll('primary')" aria-label="Roll dice for result">🎲 Roll</button>
+</form>
+
+{# --- Area for Results --- #}
+<div id="loading-indicator" style="display: none; text-align: center; margin: 1rem 0;">Rolling...</div>
+<div id="error-message" style="display: none; color: red; text-align: center; margin: 1rem 0;"></div>
+
+{# --- Primary Result Display Area --- #}
+<div id="primary-result-area" style="display: none;">
+    {# Content will be injected by JavaScript #}
+</div>
+
+{# --- Secondary Prompt / Roll Button Area --- #}
+<div id="secondary-prompt-area" style="display: none;" class="bonus-alert">
+    <h2 id="secondary-prompt-text"></h2>
+    {# Store necessary data for the secondary roll #}
+    <input type="hidden" id="secondary-roll-type-hidden">
+    <input type="hidden" id="secondary-damage-type-hidden">
+    <input type="hidden" id="secondary-magic-subtype-hidden">
+    <input type="hidden" id="secondary-primary-result-hidden">
+    <input type="hidden" id="secondary-primary-roll-hidden">
+    <button type="button" id="secondary-roll-button" onclick="handleRoll('secondary')" aria-label="Roll dice for bonus effect">
+        🎲 Roll Bonus
+    </button>
+</div>
+
+{# --- Secondary Result Display Area --- #}
+<div id="secondary-result-area" style="display: none;">
+    {# Content will be injected by JavaScript #}
+</div>
+
+
+{# --- Audio Element --- #}
+<audio id="dice-sound" preload="auto">
+    <source src="{{ url_for('static', filename='sounds/dice-roll.mp3') }}" type="audio/mpeg">
+    {# Add .ogg or other formats here for broader compatibility if needed #}
+    Your browser does not support the audio element.
+</audio>
+
+<footer class="app-footer">
+  <p>
+    Made with 🎲 by Adam |
+    <a href="https://github.com/adamwitwer/crits-fumbles" target="_blank" rel="noopener" aria-label="GitHub Repository">
+      <svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path fill="currentColor"
+          d="M12 0C5.37 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.17c-3.338.726-4.033-1.416-4.033-1.416-.546-1.386-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.776.42-1.304.762-1.603-2.665-.305-5.466-1.334-5.466-5.933 0-1.31.47-2.38 1.235-3.22-.124-.303-.535-1.527.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.98-.399 3-.404 1.02.005 2.043.138 3 .404 2.29-1.552 3.296-1.23 3.296-1.23.653 1.649.242 2.873.118 3.176.767.84 1.233 1.91 1.233 3.22 0 4.61-2.804 5.625-5.475 5.922.43.37.823 1.103.823 2.222v3.293c0 .322.218.694.825.576C20.565 21.796 24 17.298 24 12c0-6.627-5.373-12-12-12z" />
+      </svg>
+    </a>
+  </p>
+</footer>
+
+<script>
+// --- Global Elements ---
+const diceAudio = document.getElementById('dice-sound');
+const primaryRollBtn = document.getElementById('primary-roll-button');
+const secondaryRollBtn = document.getElementById('secondary-roll-button');
+const loadingIndicator = document.getElementById('loading-indicator');
+const errorMessageDiv = document.getElementById('error-message');
+const primaryResultArea = document.getElementById('primary-result-area');
+const secondaryPromptArea = document.getElementById('secondary-prompt-area');
+const secondaryResultArea = document.getElementById('secondary-result-area');
+
+// --- Sound Function ---
+function playDiceSound() {
+  if (diceAudio) {
+    diceAudio.currentTime = 0; // Rewind
+    diceAudio.play().catch(error => console.error("Audio play failed:", error)); // Play, log errors
+  }
+}
+
+// --- UI Update Function ---
+function updateUI(data) {
+    // Clear previous results and errors
+    primaryResultArea.style.display = 'none';
+    primaryResultArea.innerHTML = '';
+    secondaryPromptArea.style.display = 'none';
+    secondaryResultArea.style.display = 'none';
+    secondaryResultArea.innerHTML = '';
+    errorMessageDiv.style.display = 'none';
+    errorMessageDiv.textContent = '';
+
+    // --- Display Roll Visualization ---
+    function createRollHTML(rollValue, numDice, dieType) {
+        let html = '<div class="roll-result">';
+        const dieImageFilename = (dieType || 'd20') + '.png'; // Default to d20 if undefined
+        const dieImageSrc = "{{ url_for('static', filename='img/') }}" + dieImageFilename;
+        const dieAltText = dieType || 'd20';
+
+        // Add first die image and the roll value span
+        html += `<img src="${dieImageSrc}" alt="${dieAltText}" class="inline-die" />`;
+        html += `<span class="roll-value">${rollValue || '?'}</span>`; // Show roll value
+
+        // Add second die image ONLY if numDice is 2
+        if (numDice === 2) {
+             html += `<img src="${dieImageSrc}" alt="${dieAltText}" class="inline-die" />`;
+        }
+        html += '</div>';
+        return html;
+    }
+
+    // Handle potential errors first
+    if (data.status === 'error') {
+        errorMessageDiv.textContent = 'Error: ' + (data.errorMessage || 'Unknown error occurred.');
+        errorMessageDiv.style.display = 'block';
+        return; // Stop processing
+    }
+
+    // --- Determine Result Box Class ---
+    const resultClass = data.selectedRollType === 'fumble' ? 'fumble' : 'result'; // Use appropriate class
+
+    // --- Primary Result Logic ---
+    let primaryHTML = '';
+    if (data.description && data.effect) {
+        // Case 1: Questionable Arcana Fumble
+        primaryHTML = `
+            <div class="result-box ${resultClass}">
+              ${createRollHTML(data.rollValue, data.numDice, data.dieType)}
+              <div class="description-box">
+                 <p>${data.description}</p>
+              </div>
+            </div>
+            <div class="result-box secondary">
+              <h2>Effect</h2>
+              <p>${data.effect}</p>
+            </div>`;
+    } else if (data.resultText) {
+         // Case 2: Crit or Smack Down Fumble OR Secondary Roll Primary Display
+         const rollValueToShow = data.primaryRollValueForSecondary || data.rollValue; // Show original roll if secondary
+         const resultTextToShow = data.primaryResultForSecondary || data.resultText; // Show original result if secondary
+         const dieTypeToShow = (data.selectedRollType === 'fumble' && !data.primaryRollValueForSecondary) ? 'd10' : 'd20'; // Primary fumbles show d10, crits/secondaries d20
+         const numDiceToShow = (data.selectedRollType === 'fumble' && !data.primaryRollValueForSecondary) ? 2 : 1;
+
+         primaryHTML = `
+            <div class="result-box ${resultClass}">
+              ${createRollHTML(rollValueToShow, numDiceToShow, dieTypeToShow)}
+              <p>${resultTextToShow}</p>
+              ${data.isSecondaryPrompt ? '<p class="scroll-note">👇 Bonus Effect!!! 👇</p>' : ''}
+            </div>`;
+    }
+
+    if (primaryHTML) {
+        primaryResultArea.innerHTML = primaryHTML;
+        primaryResultArea.style.display = 'block';
+    }
+
+
+    // --- Secondary Prompt Logic ---
+    if (data.isSecondaryPrompt && !data.secondaryResultText) { // Show prompt only if no secondary result yet
+        document.getElementById('secondary-prompt-text').textContent = data.secondaryPromptText || 'Bonus Effect!';
+        // Store data needed for the secondary roll
+        document.getElementById('secondary-roll-type-hidden').value = data.secondaryType;
+        document.getElementById('secondary-damage-type-hidden').value = document.getElementById('damage_type').value; // Get current selections
+        document.getElementById('secondary-magic-subtype-hidden').value = document.getElementById('magic_subtype').value;
+        document.getElementById('secondary-primary-result-hidden').value = data.resultText; // Store primary result
+        document.getElementById('secondary-primary-roll-hidden').value = data.rollValue; // Store primary roll
+
+        secondaryPromptArea.style.display = 'block';
+    } else {
+        secondaryPromptArea.style.display = 'none';
+    }
+
+     // --- Secondary Result Logic ---
+     if (data.secondaryResultText) {
+        // We already displayed the primary result above using primaryRollValueForSecondary etc.
+        // Now display the secondary box
+        const secondaryHTML = `
+            <div class="result-box secondary">
+              <h2>✨ Bonus Effect</h2>
+               ${createRollHTML(data.rollValue, 1, 'd20')} {# Secondary rolls use 1 d20 #}
+               <p>${data.secondaryResultText}</p>
+            </div>`;
+        secondaryResultArea.innerHTML = secondaryHTML;
+        secondaryResultArea.style.display = 'block';
+        secondaryPromptArea.style.display = 'none'; // Hide prompt once secondary result is shown
+    }
+
+    // Scroll to the first result box shown
+     const firstResult = primaryResultArea.style.display !== 'none' ? primaryResultArea
+                      : secondaryResultArea.style.display !== 'none' ? secondaryResultArea
+                      : null;
+     if (firstResult) {
+        firstResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+     }
+}
+
+
+// --- Main Roll Handler (AJAX) ---
+async function handleRoll(context) { // context is 'primary' or 'secondary'
+    playDiceSound();
+    loadingIndicator.style.display = 'block'; // Show loading
+    errorMessageDiv.style.display = 'none';   // Hide old errors
+    primaryRollBtn.disabled = true;       // Disable buttons
+    secondaryRollBtn.disabled = true;
+
+    // Clear previous results visually immediately
+    primaryResultArea.style.display = 'none';
+    secondaryPromptArea.style.display = 'none';
+    secondaryResultArea.style.display = 'none';
+
+
+    let payload = {
+        rollContext: context
+    };
+
+    if (context === 'primary') {
+        payload.rollType = document.getElementById('roll_type').value;
+        payload.fumbleType = document.getElementById('fumbleType').value;
+        payload.attackType = document.getElementById('attackType').value;
+        payload.damageType = document.getElementById('damage_type').value;
+        if (payload.damageType === 'magic') {
+             payload.magicSubtype = document.getElementById('magic_subtype').value;
+        }
+    } else { // context === 'secondary'
+        payload.rollType = document.getElementById('secondary-roll-type-hidden').value;
+        payload.damageType = document.getElementById('secondary-damage-type-hidden').value; // Pass along for context if needed
+        payload.magicSubtype = document.getElementById('secondary-magic-subtype-hidden').value;
+        payload.primaryResultText = document.getElementById('secondary-primary-result-hidden').value;
+        payload.primaryRollValue = document.getElementById('secondary-primary-roll-hidden').value;
+    }
+
+    try {
+        const response = await fetch("{{ url_for('roll_ajax') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            // Handle HTTP errors (like 404, 500)
+            throw new Error(data.errorMessage || `HTTP error! status: ${response.status}`);
+        }
+
+        updateUI(data); // Update the page content
+
+    } catch (error) {
+        console.error('Error during fetch:', error);
+        errorMessageDiv.textContent = 'Failed to get roll result: ' + error.message;
+        errorMessageDiv.style.display = 'block';
+         // Also update UI to show error clearly
+        updateUI({status: 'error', errorMessage: 'Failed to get roll result: ' + error.message});
+
+    } finally {
+        loadingIndicator.style.display = 'none'; // Hide loading
+        primaryRollBtn.disabled = false;      // Re-enable buttons
+        secondaryRollBtn.disabled = false;
+    }
+}
+
+// --- Existing UI Toggle Functions (Unchanged) ---
+function toggleAttackType() {
+  const rollType = document.getElementById('roll_type').value;
+  const fumbleType = document.getElementById('fumbleType').value;
+  const attackTypeContainer = document.getElementById('attack-type-container');
+
+  if (rollType === 'fumble' && fumbleType === 'Questionable Arcana') {
+    attackTypeContainer.style.display = 'block';
+  } else {
+    attackTypeContainer.style.display = 'none';
+  }
+}
+
+function toggleFields() {
+  const rollType = document.getElementById('roll_type').value;
+  const critFields = document.getElementById('crit-fields');
+  const fumbleTypeContainer = document.getElementById('fumble-type-container');
+  const attackTypeContainer = document.getElementById('attack-type-container'); // Ensure this hides too
+
+  if (rollType === 'fumble') {
+    critFields.style.display = 'none';
+    fumbleTypeContainer.style.display = 'block';
+    // Explicitly call toggleAttackType here in case default fumble type changes
+    toggleAttackType();
+  } else { // crit
+    critFields.style.display = 'block';
+    fumbleTypeContainer.style.display = 'none';
+    attackTypeContainer.style.display = 'none'; // Hide attack type when switching to crit
+    // Ensure magic dropdown is also potentially toggled if damage type is magic
+    toggleMagicDropdown();
+  }
+
+}
+
+function toggleMagicDropdown() {
+  const damageType = document.getElementById('damage_type').value;
+  document.getElementById('magic-subtype').style.display = damageType === 'magic' ? 'block' : 'none';
+}
+
+// --- Initial Setup on Load ---
+window.onload = function() {
+  // Set initial state of the form visibility
+  toggleFields();
+  // No need to scroll on initial load anymore
+}
+
+</script>
+
+</body>
+</html>

@@ -20,11 +20,11 @@ h1 {
   color: #4a2c2a;
 }
 
-form, .result-box {
+form, .result-box, div.bonus-alert {
   max-width: 90%;
 }
 
-form {
+form, div.bonus-alert {
   margin: 0 auto;
   background: #fffaf0;
   padding: 1.5em;
@@ -105,7 +105,7 @@ div#magic-subtype {
   color: #5a3d2b;
 }
 
-form.bonus-alert h2 {
+form.bonus-alert h2, div.bonus-alert h2 {
   text-align: center;
 }
 
@@ -135,7 +135,7 @@ form.bonus-alert h2 {
     font-size: 2.5em;
   }
 
-  form {
+  form, div.bonus-alert {
     max-width: 70%;
     padding: 1.5em;
   }
