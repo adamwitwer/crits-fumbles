@@ -52,7 +52,7 @@ h1 {
 }
 
 h2 {
-  font-size: 2rem; /* Relative to root */
+  font-size: 1.75rem; /* Relative to root */
   color: var(--heading-color); /* Default h2 color */
 }
 
@@ -129,6 +129,10 @@ button {
   cursor: pointer; /* Add pointer cursor */
 }
 
+button#secondary-roll-button {
+  font-size: 1.3rem;
+}
+
 button:hover,
 button:focus { /* Add focus style */
   background: #a67b5b;
@@ -164,6 +168,7 @@ button:active {
 .result-box.result {
   border-color: #4caf50;
   background: #e6ffec;
+  margin-bottom: 1.5em;
 }
 .result-box.result h2 { /* Specific h2 color */
   color: #1a5c2e; /* Darker green for better contrast? */
