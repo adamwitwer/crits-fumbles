@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Crits & Fumbles</title>
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Merriweather&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap&family=Merriweather&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -22,19 +22,18 @@
   </div>
 
   <div id="fumble-type-container" style="display:none;">
-    <label for="fumbleType">Fumble Type:</label>
+    <label for="fumbleType">Fumble Type</label>
     <select id="fumbleType" name="fumbleType" onchange="toggleAttackType()">
       <option value="Smack Down">Smack Down</option>
       <option value="Questionable Arcana">Questionable Arcana</option>
     </select>
-  </div>
-
-  <div id="attack-type-container" style="display:none;">
-    <label for="attackType">Attack Type:</label>
-    <select id="attackType" name="attackType">
-      <option value="Weapon">Weapon</option>
-      <option value="Magic">Magic</option>
-  </select>
+    <div id="attack-type-container" style="display:none;">
+        <label for="attackType">Attack Type</label>
+        <select id="attackType" name="attackType">
+          <option value="Weapon">Weapon</option>
+          <option value="Magic">Magic</option>
+        </select>
+    </div>
   </div>
 
   <div id="crit-fields">
@@ -49,7 +48,7 @@
     </div>
 
     <div id="magic-subtype" style="display: none;">
-      <label for="magic_subtype">Type of Magic</label>
+      <label for="magic_subtype">Magic Type</label>
       <select name="magic_subtype" id="magic_subtype">
         {% for dt in damage_types if dt and dt.startswith('magic:') %}
         <option value="{{ dt }}">{{ dt.split(':')[1].title() }}</option>
@@ -59,7 +58,7 @@
   </div>
 
   {# This button now triggers the AJAX call via handleRoll #}
-  <button type="button" id="primary-roll-button" onclick="handleRoll('primary')" aria-label="Roll dice for result">🎲 Roll</button>
+  <button type="button" id="primary-roll-button" onclick="handleRoll('primary')" aria-label="Roll dice for result">⚡️ Roll ⚡️</button>
 </form>
 
 {# --- Area for Results --- #}
@@ -81,7 +80,7 @@
     <input type="hidden" id="secondary-primary-result-hidden">
     <input type="hidden" id="secondary-primary-roll-hidden">
     <button type="button" id="secondary-roll-button" onclick="handleRoll('secondary')" aria-label="Roll dice for bonus effect">
-        🎲 Roll Bonus
+        ⚡️ Roll Bonus ⚡️
     </button>
 </div>
 

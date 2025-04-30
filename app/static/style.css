@@ -39,7 +39,7 @@ body {
 }
 
 h1, h2 {
-  font-family: 'Cinzel', serif;
+  font-family: "Uncial Antiqua", system-ui;
   line-height: 1.2; /* Slightly increased for readability */
   margin-top: 0; /* Common reset */
   margin-bottom: 0.6em; /* Consistent bottom margin */
@@ -47,12 +47,12 @@ h1, h2 {
 
 h1 {
   text-align: center;
-  font-size: 2rem; /* Relative to root */
+  font-size: 3rem; /* Relative to root */
   color: var(--heading-color);
 }
 
 h2 {
-  font-size: 1.5rem; /* Relative to root */
+  font-size: 2rem; /* Relative to root */
   color: var(--heading-color); /* Default h2 color */
 }
 
@@ -89,7 +89,6 @@ label {
 select,
 button {
   width: 100%;
-  font-size: 1rem; /* Use rem for independent scaling */
   padding: 0.75em 1em; /* Consistent padding */
   border-radius: 8px;
   border: 1px solid #bbb;
@@ -98,7 +97,8 @@ button {
 }
 
 select {
-   /* Specific select padding if needed, otherwise inherits above */
+  font-size: 1rem; /* Use rem for independent scaling */ 
+  /* Specific select padding if needed, otherwise inherits above */
    padding: 0.6em; /* Kept original select padding */
    /* Add appearance rule for better cross-browser select styling */
    appearance: none;
@@ -111,12 +111,13 @@ select {
    background-color: #fff; /* Ensure background for dropdown */
 }
 
-#magic-subtype { /* Use ID selector is enough */
+#magic-subtype, #attack-type-container { /* Use ID selector is enough */
   margin-top: 0.5em; /* Keep the final margin */
 }
 
 button {
   /* padding is set above */
+  font-size: 1.5rem;
   background: #c19a6b;
   color: white;
   font-weight: bold;
@@ -156,7 +157,6 @@ button:active {
 .bonus-alert h2 { /* Specificity for bonus alert heading */
   text-align: center;
   color: var(--heading-color); /* Ensure it uses default unless overridden */
-  font-size: 1.3rem; /* Slightly smaller than result h2? */
 }
 
 /* Modifier classes for result boxes */
