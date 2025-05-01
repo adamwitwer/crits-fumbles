@@ -369,7 +369,11 @@ button:active {
      /* Background already set by variables */
      border-top: none; /* Remove light mode footer border */
   }
-
+  
+  .roll-value {
+    text-shadow: none;
+  }
+  
   /* Update component backgrounds/borders */
   form,
   .bonus-alert {
