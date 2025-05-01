@@ -51,13 +51,13 @@
     {
       "roll": "50-59",
       "description": "You lose your grip as you attack.",
-      "effect": "Roll a DC 10 Dexterity Check, on failure you drop your weapon at your feet.",
+      "effect": "Roll a DC 10 Dexterity Check; on failure, you drop your weapon at your feet.",
       "lore": "Historians still tell the story of Apprentice Threx, who famously shouted the wrong incantation at a critical moment."
     },
     {
       "roll": "60-69",
       "description": "Melee: The weapon slips from your hand as you attack. Ranged: Your ammunition gets lodged in its container.",
-      "effect": "Melee: Roll a DC 10 Dexterity Check, on failure you throw your weapon into your enemy\u2019s space. DM determines where the item is thrown on large sized or greater creatures. Ranged: You must use an action to organize the ammunition in its case before you can make another ranged attack.",
+      "effect": "Melee: Roll a DC 10 Dexterity Check; on failure, you throw your weapon into your enemy\u2019s space. DM determines where the item is thrown on large sized or greater creatures. Ranged: You must use an action to organize the ammunition in its case before you can make another ranged attack.",
       "lore": "The archives of Stormwatch Keep record a similar blunder during the Festival of Lights."
     },
     {
@@ -81,13 +81,13 @@
     {
       "roll": "90-94",
       "description": "You lose your footing while attacking and fall to the ground bumping your head.",
-      "effect": "You fall prone. Roll a DC 10 constitution save, on failure you take 1d6 damage and are knocked unconscious for 1 minute or until you receive damage from any source. On success take half damage and you remain conscious.",
+      "effect": "You fall prone. Roll a DC 10 constitution save. On failure, you take 1d6 damage and are knocked unconscious for 1 minute or until you receive damage from any source. On success, take half damage and you remain conscious.",
       "lore": "It is said that during the the Siege of Broken Hill, Duelmaster Jorra froze mid-spell, overcome by sneezing."
     },
     {
       "roll": "95-99",
       "description": "You lose your footing while attacking and fall head first.",
-      "effect": "You fall prone. Roll a DC 15 constitution save, on failure you take 2d6 damage and are knocked unconscious for 1 minute or until you receive damage from any source. On success take half damage and you remain conscious.",
+      "effect": "You fall prone. Roll a DC 15 constitution save. On failure, you take 2d6 damage and are knocked unconscious for 1 minute or until you receive damage from any source. On success, take half damage and you remain conscious.",
       "lore": "Historians still tell the story of Duelmaster Jorra, who famously tripped over his own weapon."
     },
     {
