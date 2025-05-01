@@ -4,7 +4,7 @@
       "roll": "1",
       "description": "You are embarassed by your poor showing, but nothing remarkable happens.",
       "effect": "You miss your attack.",
-      "lore": "Bards sing mournfully of Duelmaster Jorra's attempt to shouted the wrong incantation at a critical moment."
+      "lore": "Bards sing mournfully of Duelmaster Jorra\u2019s attempt to shouted the wrong incantation at a critical moment."
     },
     {
       "roll": "2-5",
@@ -22,7 +22,7 @@
       "roll": "10-14",
       "description": "You lose your combat footing, and have difficulty recovering.",
       "effect": "Your enemies have advantage on their attack rolls against you until the end of your next turn.",
-      "lore": "It is said that during the the Battle of Shifting Sands, Lady Myri tripped over their own weapon."
+      "lore": "It is said that during the the Battle of Shifting Sands, Lady Myri tripped over her own weapon."
     },
     {
       "roll": "15-19",
@@ -88,7 +88,7 @@
       "roll": "95-99",
       "description": "You lose your footing while attacking and fall head first.",
       "effect": "You fall prone. Roll a DC 15 constitution save, on failure you take 2d6 damage and are knocked unconscious for 1 minute or until you receive damage from any source. On success take half damage and you remain conscious.",
-      "lore": "Historians still tell the story of Duelmaster Jorra, who famously tripped over their own weapon."
+      "lore": "Historians still tell the story of Duelmaster Jorra, who famously tripped over his own weapon."
     },
     {
       "roll": "100",
@@ -102,19 +102,19 @@
       "roll": "1",
       "description": "You are embarassed by your poor showing, but nothing remarkable happens.",
       "effect": "You miss your attack.",
-      "lore": "Velruun's misfortune in trying to fell into a decorative fountain while charging is still joked about today."
+      "lore": "Velruun\u2019s misfortune in trying to fell into a decorative fountain while charging is still joked about today."
     },
     {
       "roll": "2-5",
       "description": "You get wrapped up in your spellcasting and forget to watch your target.",
       "effect": "Your target has advantage on their first attack roll against you next round.",
-      "lore": "Tales of Seer Halmin warn against lost their footing before a duel."
+      "lore": "Tales of Seer Halmin warn against lost his footing before a duel."
     },
     {
       "roll": "6-9",
       "description": "You get wrapped up in your spellcasting and forget to watch your surroundings.",
       "effect": "All enemies have advantage on their first attack roll against you next round.",
-      "lore": "Even the great Apprentice Threx once lost their footing before a duel."
+      "lore": "Even the great Apprentice Threx once lost his footing before a duel."
     },
     {
       "roll": "10-14",
@@ -125,7 +125,7 @@
     {
       "roll": "15-19",
       "description": "Your spell creates a large plume of smoke obscuring your location.",
-      "effect": "The area in a 5 foot radius around your location becomes heavily obscured for 1 minute. A strong breeze can blow away the smoke in 1 round.",
+      "effect": "The area in a 5-foot radius around your location becomes heavily obscured for 1 minute. A strong breeze can blow away the smoke in 1 round.",
       "lore": "Legends from Stormwatch Keep speak of the day a hero fell into a decorative fountain while charging."
     },
     {
@@ -144,19 +144,19 @@
       "roll": "40-49",
       "description": "The placement of your spell startles your allies near your target, causing them to drop their guard.",
       "effect": "Your target is able to use their reaction to take an attack of opportunity on one of your allies in melee range.",
-      "lore": "Bards sing mournfully of Apprentice Threx's attempt to fell into a decorative fountain while charging."
+      "lore": "Bards sing mournfully of Apprentice Threx\u2019s attempt to fell into a decorative fountain while charging."
     },
     {
       "roll": "50-59",
       "description": "You scramble the ingredients of your component pouch or your focus becomes overloaded with magical energy and temporarily stops working.",
       "effect": "You are unable to perform material components to cast spells until the end of your next turn.",
-      "lore": "Seer Halmin's misfortune in trying to accidentally cast a spell on themselves is still joked about today."
+      "lore": "Seer Halmin\u2019s misfortune in trying to accidentally cast a spell on themselves is still joked about today."
     },
     {
       "roll": "60-69",
       "description": "Your arm cramps as you cast.",
       "effect": "You are unable to perform somatic components to cast spells until the end of your next turn.",
-      "lore": "Bards sing mournfully of Sir Galwyn's attempt to shouted the wrong incantation at a critical moment."
+      "lore": "Bards sing mournfully of Sir Galwyn\u2019s attempt to shouted the wrong incantation at a critical moment."
     },
     {
       "roll": "70-79",
