@@ -1,18 +1,85 @@
-/* === Global Settings & Base Styles === */
+/* === Variable Definitions === */
 :root {
-  /* Color & Theme Variables (Consider adding more for easier theming) */
-  --text-color: #333;
-  --bg-color: #fdf6e3;
-  --paper-texture: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-  --heading-color: #4a2c2a;
-  --link-color: inherit; /* Default link color */
-  --footer-text-color: #666;
-  --footer-icon-color: #000;
-  --footer-icon-hover-color: #555; /* Example hover */
+  /* --- Fonts --- */
+  --font-body: "Merriweather", serif;
+  --font-heading: "Uncial Antiqua", system-ui;
+  --font-size-base: 1.1rem;
+  --font-size-h1: 3rem;
+  --font-size-h2: 1.5rem;
+  --font-size-form-elements: 1rem;
+  --font-size-button-primary: 1.5rem;
+  --font-size-button-secondary: 1rem;
+  --font-size-roll-value: 2.8rem;
+  --font-size-scroll-note: 0.9rem;
+  --font-size-footer: 0.85rem;
 
-  /* Dice/Shimmer Variables */
+  /* --- Light Mode Colors --- */
+  /* Base */
+  --clr-bg: #fdf6e3;
+  --clr-text: #333;
+  --clr-heading: #4a2c2a;
+  --clr-link: inherit;
+  --clr-border-subtle: #eee;
+  /* Cards & Forms */
+  --clr-card-bg: #fffaf0;
+  --clr-card-border: #d9b38c;
+  --clr-form-border: #bbb;
+  /* Buttons */
+  --clr-button-bg: #c19a6b;
+  --clr-button-text: white;
+  --clr-button-hover-bg: #a67b5b;
+  --clr-button-outline: #a67b5b;
+  /* Result Boxes */
+  --clr-result-bg: #e6ffec;
+  --clr-result-border: #4caf50;
+  --clr-result-heading: #1a5c2e;
+  --clr-fumble-bg: #ffe5e5;
+  --clr-fumble-border: #a12d2f;
+  --clr-fumble-heading: #a12d2f;
+  --clr-bonus-bg: #f8f0ff;
+  --clr-bonus-border: #a36ecb;
+  --clr-bonus-heading: #6a1b9a;
+  --clr-bonus-shadow: rgba(163, 110, 203, 0.4);
+  /* Scroll Note */
+  --clr-scroll-note: #5a3d2b;
+  --clr-scroll-note-shadow: rgba(255, 228, 181, 0.6);
+  /* Footer */
+  --clr-footer-text: #666;
+  --clr-footer-icon: #000;
+  --clr-footer-icon-hover: #555;
+  /* Dice */
   --roll-color: #7b241c;
   --shimmer-highlight-color: rgba(255, 255, 255, 0.7);
+  --roll-value-shadow: rgba(0,0,0,0.4);
+  /* Select Arrow */
+  --clr-select-arrow: #007CB2; /* Default blueish */
+
+  /* --- Backgrounds & Textures --- */
+  --bg-texture: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+
+  /* --- Borders & Radius --- */
+  --border-radius-standard: 8px;
+  --border-radius-large: 12px;
+  --border-width-standard: 1px;
+  --border-width-card: 2px;
+
+  /* --- Shadows --- */
+  --shadow-card: 0 6px 20px rgba(0, 0, 0, 0.08);
+  --shadow-button: 0 2px 4px rgba(0,0,0,0.1);
+  --shadow-button-hover: 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-button-active: 0 1px 2px rgba(0,0,0,0.1);
+  --shadow-result-box: 2px 4px 12px rgba(0,0,0,0.08);
+  --shadow-bonus-glow: 0 0 10px var(--clr-bonus-shadow);
+
+  /* --- Spacing & Layout --- */
+  --spacing-unit: 1em; /* Base unit for padding/margins relative to element font-size */
+  --gap-form: 1.25em;
+  --gap-roll-result: 0.6em;
+  --container-max-width-mobile: 90%;
+  --container-max-width-desktop: 700px;
+
+  /* --- Animations & Transitions --- */
+  --transition-standard: all 0.2s ease;
   --shimmer-width-percent: 15%;
   --pop-in-duration: 0.5s;
   --pop-in-delay: 0.3s;
@@ -20,184 +87,189 @@
   --shimmer-duration: 1.0s;
   --shimmer-delay: 0.7s;
   --shimmer-easing: ease-in-out;
+  --fade-in-duration: 0.5s;
+  --sparkle-in-duration: 0.6s;
+  --bounce-glow-duration: 1.5s;
 }
 
+/* === Global Settings & Base Styles === */
 *,
 *::before,
 *::after {
-  box-sizing: border-box; /* Apply border-box universally */
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--bg-color) var(--paper-texture);
-  color: var(--text-color);
-  font-family: 'Merriweather', serif;
-  font-size: 1.1rem; /* Using rem for base font size */
+  background: var(--clr-bg) var(--bg-texture);
+  color: var(--clr-text);
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
   line-height: 1.6;
-  padding: 1em; /* Padding relative to body font size */
+  padding: var(--spacing-unit);
   margin: 0;
 }
 
 h1, h2 {
-  font-family: "Uncial Antiqua", system-ui;
-  line-height: 1.2; /* Slightly increased for readability */
-  margin-top: 0; /* Common reset */
-  margin-bottom: 0.6em; /* Consistent bottom margin */
+  font-family: var(--font-heading);
+  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: 0.6em;
 }
 
 h1 {
   text-align: center;
-  font-size: 3rem; /* Relative to root */
-  color: var(--heading-color);
+  font-size: var(--font-size-h1);
+  color: var(--clr-heading);
 }
 
 h2 {
-  font-size: 1.5rem; /* Relative to root */
-  color: var(--heading-color); /* Default h2 color */
+  font-size: var(--font-size-h2);
+  color: var(--clr-heading); /* Default h2 color */
 }
 
 /* === Layout Containers === */
 form,
 .result-box,
-.bonus-alert { /* Assuming bonus-alert is the container class */
-  max-width: 90%; /* Mobile first */
+.bonus-alert {
+  max-width: var(--container-max-width-mobile);
   margin-left: auto;
   margin-right: auto;
 }
 
 /* === Form Styles === */
 form,
-.bonus-alert { /* Style container for bonus prompt */
-  background: #fffaf0;
-  padding: 1.5em;
-  margin-top: 2em; /* Add some space above forms/alerts */
-  margin-bottom: 2em;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); /* Softened shadow */
-  border: 2px solid #d9b38c;
+.bonus-alert {
+  background: var(--clr-card-bg);
+  padding: calc(var(--spacing-unit) * 1.5);
+  margin-top: calc(var(--spacing-unit) * 2);
+  margin-bottom: calc(var(--spacing-unit) * 2);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-card);
+  border: var(--border-width-card) solid var(--clr-card-border);
   display: flex;
   flex-direction: column;
-  gap: 1.25em;
+  gap: var(--gap-form);
 }
 
 label {
-  font-weight: bold;
+  font-weight: 700;
   margin-bottom: 0.4em;
-  display: block; /* Good for spacing */
+  display: block;
 }
 
 select,
 button {
   width: 100%;
-  padding: 0.75em 1em; /* Consistent padding */
-  border-radius: 8px;
-  border: 1px solid #bbb;
-  transition: all 0.2s ease; /* Keep transition */
-  font-family: inherit; /* Inherit body font unless specified */
+  padding: 0.75em 1em;
+  border-radius: var(--border-radius-standard);
+  border: var(--border-width-standard) solid var(--clr-form-border);
+  transition: var(--transition-standard);
+  font-family: inherit;
 }
 
 select {
-  font-size: 1rem; /* Use rem for independent scaling */ 
-  /* Specific select padding if needed, otherwise inherits above */
-   padding: 0.6em; /* Kept original select padding */
-   /* Add appearance rule for better cross-browser select styling */
-   appearance: none;
-   -webkit-appearance: none;
-   -moz-appearance: none;
-   background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
-   background-repeat: no-repeat;
-   background-position: right .7em top 50%;
-   background-size: .65em auto;
-   background-color: #fff; /* Ensure background for dropdown */
+  font-size: var(--font-size-form-elements);
+  padding: 0.6em;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  /* Embed arrow color via variable if possible, fallback needed for complex SVG */
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22' + encodeURIComponent(getComputedStyle(document.documentElement).getPropertyValue('--clr-select-arrow').trim() || '#007CB2') + '%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+  background-repeat: no-repeat;
+  background-position: right .7em top 50%;
+  background-size: .65em auto;
+  background-color: #fff; /* Keep specific bg for select */
 }
 
-#magic-subtype, #attack-type-container { /* Use ID selector is enough */
-  margin-top: 0.5em; /* Keep the final margin */
+#magic-subtype, #attack-type-container {
+  margin-top: 0.5em;
 }
 
 button {
-  /* padding is set above */
-  font-size: 1.5rem;
-  font-family: "Uncial Antiqua", system-ui;
-  background: #c19a6b;
-  color: white;
-  font-weight: bold;
-  /* text-transform: uppercase; */
+  font-size: var(--font-size-button-primary);
+  font-family: var(--font-heading);
+  background: var(--clr-button-bg);
+  color: var(--clr-button-text);
+  font-weight: 700;
   letter-spacing: 0.05em;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  border: none; /* Explicitly none */
-  cursor: pointer; /* Add pointer cursor */
+  box-shadow: var(--shadow-button);
+  border: none;
+  cursor: pointer;
 }
 
 button#secondary-roll-button {
-  font-size: 1rem;
+  font-size: var(--font-size-button-secondary);
 }
 
 button:hover,
-button:focus { /* Add focus style */
-  background: #a67b5b;
+button:focus {
+  background: var(--clr-button-hover-bg);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  outline: 2px solid #a67b5b; /* Example focus outline */
+  box-shadow: var(--shadow-button-hover);
+  outline: 2px solid var(--clr-button-outline);
   outline-offset: 2px;
 }
 
 button:active {
   transform: scale(0.98);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1); /* Slightly reduce shadow */
+  box-shadow: var(--shadow-button-active);
 }
 
 /* === Result Box Styles === */
 .result-box {
-  margin-top: 2em; /* Consistent spacing */
-  margin-bottom: 2em;
-  border: 1px solid #ccc; /* Base border */
-  border-radius: 10px;
-  padding: 1.25em;
-  box-shadow: 2px 4px 12px rgba(0,0,0,0.08);
-  animation: fadeInUp 0.5s ease-out forwards; /* Keep animation */
-  overflow: hidden; /* Good practice if content might overflow padding */
+  margin-top: calc(var(--spacing-unit) * 2);
+  margin-bottom: calc(var(--spacing-unit) * 2);
+  border: var(--border-width-standard) solid var(--clr-form-border); /* Default border */
+  border-radius: var(--border-radius-large); /* Updated radius */
+  padding: calc(var(--spacing-unit) * 1.25);
+  box-shadow: var(--shadow-result-box);
+  animation: fadeInUp var(--fade-in-duration) ease-out forwards;
+  overflow: hidden;
 }
 
-.bonus-alert h2 { /* Specificity for bonus alert heading */
+.bonus-alert h2 {
   text-align: center;
-  color: var(--heading-color); /* Ensure it uses default unless overridden */
+  color: var(--clr-heading);
 }
 
 /* Modifier classes for result boxes */
 .result-box.result {
-  border-color: #4caf50;
-  background: #e6ffec;
-  margin-bottom: 1.5em;
+  border-color: var(--clr-result-border);
+  background: var(--clr-result-bg);
+  margin-bottom: calc(var(--spacing-unit) * 1.5);
 }
-.result-box.result h2 { /* Specific h2 color */
-  color: #1a5c2e; /* Darker green for better contrast? */
+.result-box.result h2 {
+  color: var(--clr-result-heading);
 }
 
 .result-box.fumble {
-  border-color: #a12d2f;
-  background: #ffe5e5;
+  border-color: var(--clr-fumble-border);
+  background: var(--clr-fumble-bg);
 }
-.result-box.fumble h2 { /* Specific h2 color */
-  color: #a12d2f;
+.result-box.fumble h2 {
+  color: var(--clr-fumble-heading);
 }
 
-/* Consolidated secondary styles */
 .result-box.secondary {
-  border-color: #a36ecb; /* Keep final purple color */
-  background: #f8f0ff;
-  box-shadow: 0 0 10px rgba(163, 110, 203, 0.4);
-  animation: sparkle-in 0.6s ease-out forwards; /* Use sparkle animation */
+  border-color: var(--clr-bonus-border);
+  background: var(--clr-bonus-bg);
+  box-shadow: var(--shadow-bonus-glow);
+  animation: sparkle-in var(--sparkle-in-duration) ease-out forwards;
 }
-.result-box.secondary h2 { /* Specific h2 color */
-  color: #6a1b9a; /* Darker purple for better contrast? */
+.result-box.secondary h2 {
+  color: var(--clr-bonus-heading);
+}
+
+/* === Keyword Formatting === */
+.keyword-prefix {
+  font-weight: 800;
 }
 
 /* === Dice & Shimmer Styles === */
 .inline-die {
-  height: 3.5em; /* Relative to parent (.roll-value) font-size */
+  height: 3.5em;
   vertical-align: middle;
-  margin-right: 0; /* Looks fine */
+  margin-right: 0;
 }
 
 .roll-result {
@@ -205,18 +277,17 @@ button:active {
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-bottom: 0.8em; /* Add some space below dice */
-  gap: 0.6em;
+  margin-bottom: 0.8em;
+  gap: var(--gap-roll-result);
 }
 
 .roll-value {
   display: inline-block;
   position: relative;
-  font-size: 2.8rem; /* Large roll value */
-  font-weight: bold;
-  margin: 0.1em 0; /* Reduced vertical margin */
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
-  /* overflow: visible; /* Needed for background-clip */
+  font-size: var(--font-size-roll-value);
+  font-weight: 700;
+  margin: 0.1em 0;
+  text-shadow: 1px 1px 2px var(--roll-value-shadow);
 
   color: transparent;
   background-color: var(--roll-color);
@@ -235,205 +306,178 @@ button:active {
   background-repeat: no-repeat;
   background-position: 150% 0;
 
-  /* Using animation shorthand */
   animation:
     pop-in-smooth var(--pop-in-duration) var(--pop-in-easing) var(--pop-in-delay) forwards,
     shimmer-bg var(--shimmer-duration) var(--shimmer-easing) var(--shimmer-delay) forwards;
 
-  /* Initial state for pop-in (redundant if using forwards animation fill mode?)*/
-  /* Consider removing if animation handles start state */
    opacity: 0;
    transform: scale(0.5);
 }
 
+/* To prevent flash on dice roll */
+#primary-result-area,
+#secondary-result-area {
+  min-height: 10em; /* Adjust this value, if necessary - try 10em, 150px, etc. */
+  /* Ensure display is block when visible, visibility handles show/hide */
+  display: block;
+  visibility: hidden; /* Start hidden */
+  /* Add transition if using opacity method later */
+  /* transition: opacity 0.2s ease-in-out; */
+}
 
 /* === Animations & Effects === */
 .scroll-note {
-  font-size: 0.9rem; /* Slightly smaller */
-  font-weight: bold;
-  color: #5a3d2b; /* Consider using a variable */
+  font-size: var(--font-size-scroll-note);
+  font-weight: 700;
+  color: var(--clr-scroll-note);
   text-align: center;
-  margin-top: 1em;
-  animation: bounce-glow 1.5s infinite ease-in-out; /* Added easing */
-  text-shadow: 0 0 5px rgba(255, 228, 181, 0.6);
+  margin-top: var(--spacing-unit);
+  animation: bounce-glow var(--bounce-glow-duration) infinite ease-in-out;
+  text-shadow: 0 0 5px var(--clr-scroll-note-shadow);
 }
 
-/* Keyframes */
-@keyframes fadeInUp {
-  from { transform: translateY(10px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes sparkle-in {
-  from { opacity: 0; transform: scale(0.95); box-shadow: none; }
-  to { opacity: 1; transform: scale(1); box-shadow: 0 0 10px rgba(163, 110, 203, 0.4); }
-}
-
-@keyframes bounce-glow {
-  0%, 100% { transform: translateY(0); opacity: 0.7; }
-  50% { transform: translateY(-5px); opacity: 1; }
-}
-
-/* Shimmer Keyframes */
-@keyframes shimmer-bg {
-  from { background-position: 150% 0; }
-  to { background-position: -50% 0; }
-}
-
-@keyframes pop-in-smooth {
-  from { transform: scale(0.5); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
+/* Keyframe definitions */
+@keyframes fadeInUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes sparkle-in { from { opacity: 0; transform: scale(0.95); box-shadow: none; } to { opacity: 1; transform: scale(1); box-shadow: var(--shadow-bonus-glow); } }
+@keyframes bounce-glow { 0%, 100% { transform: translateY(0); opacity: 0.7; } 50% { transform: translateY(-5px); opacity: 1; } }
+@keyframes shimmer-bg { from { background-position: 150% 0; } to { background-position: -50% 0; } }
+@keyframes pop-in-smooth { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
 /* === Footer Styles === */
 .app-footer {
   text-align: center;
-  font-size: 0.85rem; /* Use rem */
-  color: var(--footer-text-color);
-  margin-top: 4em;
-  padding: 2em 1em;
-  border-top: 1px solid #eee; /* Add subtle separator */
+  font-size: var(--font-size-footer);
+  color: var(--clr-footer-text);
+  margin-top: calc(var(--spacing-unit) * 4);
+  padding: calc(var(--spacing-unit) * 2) var(--spacing-unit);
+  border-top: var(--border-width-standard) solid var(--clr-border-subtle);
 }
 
 .app-footer a {
-  color: var(--link-color); /* Use variable */
-  text-decoration: none; /* Remove underline */
-  display: inline; /* Align icon better */
+  color: var(--clr-link);
+  text-decoration: none;
+  display: inline;
   align-items: center;
 }
 .app-footer a:hover {
-  text-decoration: underline; /* Underline on hover */
+  text-decoration: underline;
 }
 
 .github-icon {
-  width: 1.25em; /* Relative to footer font size */
+  width: 1.25em;
   height: 1.25em;
-  vertical-align: middle; /* Keep */
+  vertical-align: middle;
   margin-left: 0.4em;
   transition: fill 0.2s ease;
-  fill: var(--footer-icon-color) !important; /* Keep important if necessary for override */
+  fill: var(--clr-footer-icon) !important; /* Keep important if necessary */
 }
 
 .app-footer a:hover .github-icon {
-  fill: var(--footer-icon-hover-color) !important;
+  fill: var(--clr-footer-icon-hover) !important; /* Keep important */
 }
-
 
 /* === Responsive Adjustments === */
 @media (min-width: 768px) {
+  :root {
+      /* Adjust base font size slightly for desktop */
+      --font-size-base: 1.2rem;
+      /* Adjust H1 size */
+      --font-size-h1: 3.5rem; /* Example adjustment */
+  }
   body {
-    padding: 2em;
-    font-size: 1.2rem; /* Slightly larger base on desktop */
+    padding: calc(var(--spacing-unit) * 2);
+    /* font-size uses variable */
   }
 
-  h1 {
-    font-size: 2.5rem; /* Larger on desktop */
-  }
+  /* H1 already uses variable */
 
   form,
   .result-box,
   .bonus-alert {
-    max-width: 700px; /* Use a fixed max-width for better control */
-    /* max-width: 70%; Remove % based, use fixed */
+    max-width: var(--container-max-width-desktop);
   }
 
   form,
   .bonus-alert {
-     padding: 2em; /* Increase padding */
+     padding: calc(var(--spacing-unit) * 2);
   }
 }
-
-/* Removed max-width: 480px query - integrate necessary styles into base if needed */
-
 
 /* === Dark Mode Styles === */
 /* Ensure this is at the END of the stylesheet */
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Override variables */
-    --text-color: #eee;
-    --bg-color: #1e1e1e;
-    --paper-texture: none; /* Remove texture for dark mode? Optional */
-    --heading-color: #f9d77e;
-    --roll-color: #ff8a80; /* Lighter red for dark mode */
-    --footer-text-color: #aaa;
-    --footer-icon-color: #ccc;
-    --footer-icon-hover-color: #fff;
+    /* --- Dark Mode Color Overrides --- */
+    /* Base */
+    --clr-bg: #1e1e1e;
+    --clr-text: #eee;
+    --clr-heading: #f9d77e;
+    --clr-border-subtle: #333;
+    /* Cards & Forms */
+    --clr-card-bg: #2c2c2c;
+    --clr-card-border: #555;
+    --clr-form-border: #666;
+     /* Buttons */
+    --clr-button-bg: #5a5a5a;
+    --clr-button-text: #eee;
+    --clr-button-hover-bg: #6b6b6b;
+    --clr-button-outline: #888;
+    /* Result Boxes */
+    --clr-result-bg: #1f3a2e;
+    /* --clr-result-border: #4caf50; */ /* No change needed from light */
+    --clr-result-heading: #8ff0a4;
+    --clr-fumble-bg: #3a1f1f;
+    /* --clr-fumble-border: #a12d2f; */ /* No change needed */
+    --clr-fumble-heading: #ff7a7a;
+    --clr-bonus-bg: #2f2545;
+    --clr-bonus-border: #bb86fc;
+    --clr-bonus-heading: #cfa9ff;
+    --clr-bonus-shadow: rgba(187, 134, 252, 0.3);
+    /* Scroll Note */
+    --clr-scroll-note: #ddd;
+    --clr-scroll-note-shadow: rgba(255, 255, 255, 0.3);
+     /* Footer */
+    --clr-footer-text: #aaa;
+    --clr-footer-icon: #ccc;
+    --clr-footer-icon-hover: #fff;
+    /* Dice */
+    --roll-color: #ff8a80; /* User preference */
+    --roll-value-shadow: none; /* Remove shadow in dark mode */
+    /* Select Arrow */
+    --clr-select-arrow: #cccccc; /* Light arrow for dark bg */
 
-    /* Example: Darker shimmer highlight if desired */
-    /* --shimmer-highlight-color: rgba(200, 200, 200, 0.6); */
+    /* --- Backgrounds & Textures --- */
+    --bg-texture: none; /* Remove texture */
+
+    /* --- Shadows (Optional: Adjust if needed) --- */
+    --shadow-card: 0 6px 20px rgba(0, 0, 0, 0.2); /* Slightly stronger */
+    /* ... other shadow adjustments if desired */
   }
 
+  /* Specific overrides if variable isn't enough */
   body {
-     /* Background already set by variables */
-     border-top: none; /* Remove light mode footer border */
-  }
-  
-  .roll-value {
-    text-shadow: none;
-  }
-  
-  /* Update component backgrounds/borders */
-  form,
-  .bonus-alert {
-    background: #2c2c2c;
-    border-color: #555;
+     border-top: none; /* Override light mode footer border */
   }
 
   select {
-     background-color: #333; /* Darker dropdown */
-     color: var(--text-color);
-     border-color: #666;
-     /* Update SVG arrow color for dark mode if needed */
+     background-color: #333; /* Darker dropdown specific bg */
+     color: var(--clr-text);
+     border-color: var(--clr-form-border);
+     /* background-image will update via JS/CSS variable if structured correctly */
+     /* Note: Updating embedded SVG fill via CSS var is tricky. The dark mode SVG URL might need to be static or use JS */
      background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23cccccc%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+
   }
 
   button {
-    background: #5a5a5a; /* Dark mode button bg */
-    color: #eee;
-    border: 1px solid #777; /* Subtle border */
+    /* background/color uses variables */
+    border: var(--border-width-standard) solid #777; /* Specific subtle border for dark button */
   }
 
-  button:hover,
-  button:focus {
-    background: #6b6b6b;
-    outline-color: #888;
-  }
-
-  .result-box {
-    background: #2a2a2a;
-    border-color: #444;
-  }
-
-  /* Result box variants */
-  .result-box.result {
-    border-color: #4caf50;
-    background: #1f3a2e;
-  }
-  .result-box.result h2 { color: #8ff0a4; }
-
-  .result-box.fumble {
-    border-color: #a12d2f;
-    background: #3a1f1f;
-  }
-  .result-box.fumble h2 { color: #ff7a7a; }
-
-  .result-box.secondary {
-    border-color: #bb86fc;
-    background: #2f2545;
-    box-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
-  }
-  .result-box.secondary h2 { color: #cfa9ff; }
-
-  .scroll-note {
-    color: #ddd;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-  }
+  /* H2 colors already use variables, no need to repeat */
 
   .app-footer {
-      border-top-color: #333; /* Darker footer border */
+      border-top-color: var(--clr-border-subtle);
   }
-  /* Footer icon color already handled by variables */
 
 } /* End Dark Mode */

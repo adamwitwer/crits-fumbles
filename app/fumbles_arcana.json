@@ -27,7 +27,7 @@
     {
       "roll": "15-19",
       "description": "Melee: You get tangled with your enemy and fall over. Ranged: You spill your quiver.",
-      "effect": "Melee: You are knocked prone and your movement is reduced to 0. Your target must succeed a DC 10 dexterity check or they are also knocked prone. Ranged: You must pick up arrows individually from the ground using your \u201cenvironmental interaction\u201d, or the \u201cUse an Object\u201d action to nock your bow.",
+      "effect": "Melee: You are knocked prone and your movement is reduced to 0. Your target must succeed a DC 10 dexterity check or they are also knocked prone. Ranged: You must pick up arrows individually from the ground using your \u201cenvironmental interaction,\u201d or the \u201cUse an Object\u201d action to nock your bow.",
       "lore": "The archives of Stormwatch Keep record a similar blunder during the Great Summit."
     },
     {
