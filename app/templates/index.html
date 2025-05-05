@@ -90,6 +90,8 @@
     {# Content will be injected by JavaScript #}
 </div>
 
+<button type="button" id="share-discord-button" onclick="shareResultToDiscord()" style="display: none;">Share Result to Discord</button>
+
 
 {# --- Audio Element --- #}
 <audio id="dice-sound" preload="auto">
@@ -171,148 +173,34 @@
       return formattedText;
   }
 
-  // --- UI Update Function (Revised Logic) ---
-  function updateUI(data) {
-      let showPrimary = false;
-      let showPrompt = false;
-      let showSecondary = false;
-      let primaryContent = '';
-      let secondaryContent = '';
-      let elementToScrollTo = null;
-
-      // --- Clear Previous State Visually ---
-      errorMessageDiv.style.display = 'none'; // Hide error initially
-      errorMessageDiv.textContent = '';
-
-      // --- Process Data and Prepare Content ---
-      if (data.status === 'error') {
-          errorMessageDiv.textContent = 'Error: ' + (data.errorMessage || 'Unknown error occurred.');
-          errorMessageDiv.style.display = 'block'; // Show error
-          elementToScrollTo = errorMessageDiv;
-      } else {
-          // Determine result box class
-          const resultClass = data.selectedRollType === 'fumble' ? 'fumble' : 'result';
-
-          // --- Build Primary HTML (if needed) ---
-          let primaryResultExists = false;
-          // If it was a secondary roll OR a primary roll that yields standard text/Arcana
-          if (data.rollContext === 'secondary' || data.resultText || data.description) {
-              const rollValueToShow = data.primaryRollValueForSecondary || data.rollValue;
-              const resultTextToShow = data.primaryResultForSecondary || data.resultText || ''; // Use primary data if secondary, else current roll data
-              const dieTypeToShow = (data.selectedRollType === 'fumble' && !data.primaryRollValueForSecondary) ? 'd10' : 'd20';
-              const numDiceToShow = (data.selectedRollType === 'fumble' && !data.primaryRollValueForSecondary) ? 2 : 1;
-
-              // Handle Questionable Arcana separate display
-              if (data.description && data.effect && !data.secondaryResultText) {
-                   // *** CHANGE START: Apply formatting here too ***
-                   const formattedDescription = formatKeywords(data.description);
-                   const formattedEffect = formatKeywords(data.effect);
-                   // *** CHANGE END ***
-                  primaryContent = `
-                      <div class="result-box ${resultClass}">
-                        ${createRollHTML(rollValueToShow, numDiceToShow, dieTypeToShow)}
-                        <div class="description-box">
-                           <p>${formattedDescription}</p>
-                        </div>
-                      </div>
-                      <div class="result-box secondary"> {# Effect Box for Arcana #}
-                        <h2>Effect</h2>
-                        <p>${formattedEffect}</p>
-                      </div>`;
-              } else if (resultTextToShow) { // Handle standard Crit/Fumble/Secondary-Primary display
-                   const formattedResultText = formatKeywords(resultTextToShow);
-                   primaryContent = `
-                      <div class="result-box ${resultClass}">
-                        ${createRollHTML(rollValueToShow, numDiceToShow, dieTypeToShow)}
-                        <p>${formattedResultText}</p>
-                        ${data.isSecondaryPrompt ? '<p class="scroll-note">👇 Bonus Effect!!! 👇</p>' : ''}
-                      </div>`;
-              }
-              primaryResultExists = true; // Mark that primary content was generated
-          }
-
-
-          // --- Build Secondary Result HTML (if needed) ---
-          if (data.secondaryResultText) {
-              const formattedSecondaryText = formatKeywords(data.secondaryResultText);
-              secondaryContent = `
-                  <div class="result-box secondary">
-                    <h2>✨ Bonus Effect</h2>
-                     ${createRollHTML(data.rollValue, 1, 'd20')} {# Secondary rolls are 1 d20 #}
-                     <p>${formattedSecondaryText}</p>
-                  </div>`;
-              showSecondary = true;
-          }
-
-          // --- Determine Final Visibility States ---
-          showPrimary = primaryResultExists; // Show primary if content was generated for it
-          showPrompt = data.isSecondaryPrompt && !data.secondaryResultText; // Show prompt only if applicable and secondary *not* yet rolled
-
-          // --- Populate Prompt Area (if showing) ---
-          if (showPrompt) {
-              document.getElementById('secondary-prompt-text').textContent = data.secondaryPromptText || 'Bonus Effect!';
-              document.getElementById('secondary-roll-type-hidden').value = data.secondaryType;
-              document.getElementById('secondary-damage-type-hidden').value = document.getElementById('damage_type').value;
-              document.getElementById('secondary-magic-subtype-hidden').value = document.getElementById('magic_subtype').value;
-              document.getElementById('secondary-primary-result-hidden').value = data.resultText; // Use the primary result text from this response
-              document.getElementById('secondary-primary-roll-hidden').value = data.rollValue; // Use the primary roll value
-          }
-      }
-
-
-      // --- Update DOM & Set Final Display/Visibility ---
-
-      // Update Primary Area
-      primaryResultArea.innerHTML = primaryContent; // Set content (might be empty string)
-      primaryResultArea.style.display = showPrimary ? 'block' : 'none';
-      primaryResultArea.style.visibility = showPrimary ? 'visible' : 'hidden';
-
-      // Update Prompt Area
-      secondaryPromptArea.style.display = showPrompt ? 'block' : 'none';
-      secondaryPromptArea.style.visibility = showPrompt ? 'visible' : 'hidden';
-
-      // Update Secondary Area
-      secondaryResultArea.innerHTML = secondaryContent; // Set content (might be empty string)
-      secondaryResultArea.style.display = showSecondary ? 'block' : 'none';
-      secondaryResultArea.style.visibility = showSecondary ? 'visible' : 'hidden';
-
-      // --- Scrolling Logic ---
-      // Determine the main element to scroll to
-      if (showSecondary) {
-          elementToScrollTo = secondaryResultArea;
-      } else if (showPrompt) {
-          elementToScrollTo = secondaryPromptArea;
-      } else if (showPrimary) {
-          // Try scrolling to the container first, then the box inside if needed
-          elementToScrollTo = primaryResultArea.offsetParent ? primaryResultArea : primaryResultArea.querySelector('.result-box');
-      } else if (data.status === 'error'){
-          elementToScrollTo = errorMessageDiv;
-      }
-
-      if (elementToScrollTo) {
-          elementToScrollTo.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-  }
-
-  // --- Main Roll Handler (AJAX - with visibility fix) ---
+  // --- Main Roll Handler (AJAX) ---
   async function handleRoll(context) { // context is 'primary' or 'secondary'
       playDiceSound();
       errorMessageDiv.style.display = 'none';   // Hide old errors
       primaryRollBtn.disabled = true;       // Disable buttons
       secondaryRollBtn.disabled = true;
+      // Also disable share button if it exists/is visible
+      const shareButton = document.getElementById('share-discord-button');
+      if (shareButton) shareButton.disabled = true;
+
 
       // Hide previous results using visibility to reserve space, clear content AFTER hiding
       if (primaryResultArea.style.display !== 'none') {
           primaryResultArea.style.visibility = 'hidden';
-          primaryResultArea.innerHTML = ''; // Clear content now
+          // Don't clear innerHTML immediately, let updateUI handle replacing content
+          // primaryResultArea.innerHTML = '';
       }
       if (secondaryPromptArea.style.display !== 'none') {
           secondaryPromptArea.style.visibility = 'hidden';
       }
       if (secondaryResultArea.style.display !== 'none') {
           secondaryResultArea.style.visibility = 'hidden';
-          secondaryResultArea.innerHTML = ''; // Clear content now
+           // Don't clear innerHTML immediately
+          // secondaryResultArea.innerHTML = '';
       }
+      // Hide share button immediately on new roll using visibility
+       if (shareButton) shareButton.style.display = 'none';
+
 
       // Prepare payload
       let payload = { rollContext: context };
@@ -354,8 +242,238 @@
       } finally {
           primaryRollBtn.disabled = false;      // Re-enable buttons
           secondaryRollBtn.disabled = false;
+          // Re-enable share button ONLY if it was made visible by updateUI
+          if (shareButton && shareButton.style.display !== 'none') {
+              shareButton.disabled = false;
+          }
       }
   }
+  
+  // --- Share to Discord Function (Corrected Template Literals) ---
+  async function shareResultToDiscord() {
+    let resultText = '';
+    const primaryResultAreaDiv = document.getElementById('primary-result-area');
+    const secondaryResultAreaDiv = document.getElementById('secondary-result-area');
+
+    const primaryResultBoxDiv = primaryResultAreaDiv.querySelector('.result-box');
+    const secondaryResultBoxDiv = secondaryResultAreaDiv.querySelector('.result-box'); // Check element in secondary area
+
+    const primaryResultP = primaryResultAreaDiv.querySelector('.result-box > p');
+    const arcanaDescriptionP = primaryResultAreaDiv.querySelector('.description-box > p');
+    // Important: Find the secondary P tag within the secondaryResultAreaDiv
+    const secondaryResultP = secondaryResultAreaDiv.querySelector('.result-box > p');
+
+    const primaryRollValue = primaryResultBoxDiv?.dataset.rollValue;
+    const rollType = secondaryResultBoxDiv?.dataset.rollType || primaryResultBoxDiv?.dataset.rollType;
+    const secondaryRollValue = secondaryResultBoxDiv?.dataset.rollValue;
+
+    let messagePrefix = "";
+
+    if (rollType === 'crit') {
+        messagePrefix = "💥 **Critical Hit!** 💥\n";
+        if (secondaryResultP && secondaryResultP.textContent.trim() && secondaryRollValue) {
+            const primaryText = primaryResultP ? primaryResultP.textContent.trim() : "N/A";
+            const secondaryText = secondaryResultP.textContent.trim();
+            // CORRECTED LINE 1: Use backticks ` and clean ${} syntax
+            resultText = `${messagePrefix}Rolled: **${primaryRollValue ?? '?'}** -> Result: ${primaryText}\nBonus Roll: **${secondaryRollValue}** -> Effect: ${secondaryText}`;
+        } else if (primaryResultP && primaryResultP.textContent.trim() && primaryRollValue) {
+            // CORRECTED LINE 2: Use backticks ` and clean ${} syntax
+            resultText = `${messagePrefix}Rolled: **${primaryRollValue}**\nResult: ${primaryResultP.textContent.trim()}`;
+        }
+
+    } else if (rollType === 'fumble') {
+        messagePrefix = "😩 **Fumble!** 😩\n";
+        if (arcanaDescriptionP && arcanaDescriptionP.textContent.trim() && primaryRollValue) { // Arcana
+            const arcanaEffectBox = primaryResultAreaDiv.querySelectorAll('.result-box')[1];
+            const arcanaEffectP = arcanaEffectBox?.querySelector('p');
+            const arcanaEffectText = arcanaEffectP ? arcanaEffectP.textContent.trim() : "N/A";
+            const arcanaDescText = arcanaDescriptionP.textContent.trim();
+            // CORRECTED LINE 3: Use backticks ` and clean ${} syntax
+            resultText = `${messagePrefix}Rolled: **${primaryRollValue}**\nArcana: ${arcanaDescText}\nEffect: ${arcanaEffectText}`;
+        } else if (primaryResultP && primaryResultP.textContent.trim() && primaryRollValue) { // Smack Down Fumble
+             // CORRECTED LINE 4: Use backticks ` and clean ${} syntax
+            resultText = `${messagePrefix}Rolled: **${primaryRollValue}**\nResult: ${primaryResultP.textContent.trim()}`;
+        }
+    }
+
+    // --- Rest of the function remains the same ---
+    if (!resultText || resultText.trim() === '' || resultText.includes('N/A')) {
+        console.warn("shareResultToDiscord: No valid result text found to share.");
+        alert('Could not find a complete result to share!');
+        return;
+    }
+
+    const shareButton = document.getElementById('share-discord-button');
+    shareButton.disabled = true;
+    const originalButtonText = shareButton.textContent;
+    shareButton.textContent = "Sharing...";
+
+    try {
+        console.log("Sharing to Discord:", resultText);
+        const response = await fetch('/share_discord', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ message: resultText })
+        });
+        const responseData = await response.json();
+        if (response.ok) {
+            console.log('Shared to Discord successfully!', responseData);
+            shareButton.textContent = "Shared!";
+            setTimeout(() => {
+                shareButton.textContent = originalButtonText;
+                if (shareButton.style.display !== 'none') {
+                   shareButton.disabled = false;
+                }
+            }, 2000);
+        } else {
+            console.error(`Failed to share to Discord (${response.status}):`, responseData?.error || response.statusText);
+            alert(`Failed to share result: ${responseData?.error || response.statusText}`);
+            shareButton.textContent = originalButtonText;
+            shareButton.disabled = false;
+        }
+    } catch (error) {
+        console.error('Network error sharing to Discord:', error);
+        alert('Network error connecting to server to share result.');
+        shareButton.textContent = originalButtonText;
+        shareButton.disabled = false;
+    }
+  }
+  // --- End of Share to Discord Function ---
+
+  // --- UI Update Function (Revised Logic to store roll type) ---
+  function updateUI(data) {
+      const shareButton = document.getElementById('share-discord-button'); // Get button ref
+
+      let showPrimary = false;
+      let showPrompt = false;
+      let showSecondary = false;
+      let primaryContent = '';
+      let secondaryContent = '';
+      let elementToScrollTo = null;
+
+      // --- Clear Previous State Visually ---
+      errorMessageDiv.style.display = 'none';
+      errorMessageDiv.textContent = '';
+      if (shareButton) shareButton.style.display = 'none'; // Hide button by default
+
+      // --- Process Data and Prepare Content ---
+      if (data.status === 'error') {
+          errorMessageDiv.textContent = 'Error: ' + (data.errorMessage || 'Unknown error occurred.');
+          errorMessageDiv.style.display = 'block';
+          elementToScrollTo = errorMessageDiv;
+          if (shareButton) shareButton.style.display = 'none'; // Hide on error
+      } else {
+          const resultClass = data.selectedRollType === 'fumble' ? 'fumble' : 'result';
+          let primaryResultExists = false;
+
+          // --- Build Primary HTML (if needed) ---
+          // Handle Questionable Arcana separate display
+          if (data.description && data.effect && !data.secondaryResultText) { // Arcana (always a fumble)
+               const formattedDescription = formatKeywords(data.description);
+               const formattedEffect = formatKeywords(data.effect);
+               const rollValueToShow = data.rollValue;
+               const numDiceToShow = 2;
+               const dieTypeToShow = 'd10';
+               const rollType = 'fumble'; // Arcana is a type of fumble
+               primaryContent = `
+                  <div class="result-box ${resultClass}" data-roll-value="${rollValueToShow}" data-roll-type="${rollType}">
+                    ${createRollHTML(rollValueToShow, numDiceToShow, dieTypeToShow)}
+                    <div class="description-box">
+                       <p>${formattedDescription}</p>
+                    </div>
+                  </div>
+                  <div class="result-box secondary"> <h2>Effect</h2>
+                    <p>${formattedEffect}</p>
+                  </div>`;
+               primaryResultExists = true;
+          } else if (data.resultText || data.primaryResultForSecondary) { // Standard Crit/Fumble/Secondary-Primary
+              // Use primary result text from current data if secondary, or from primary roll data otherwise
+               const resultTextToShow = data.primaryResultForSecondary || data.resultText || '';
+               const formattedResultText = formatKeywords(resultTextToShow);
+               const rollValueToShow = data.primaryRollValueForSecondary || data.rollValue;
+               const numDiceToShow = (data.selectedRollType === 'fumble' && !data.primaryRollValueForSecondary) ? 2 : 1;
+               const dieTypeToShow = (data.selectedRollType === 'fumble' && !data.primaryRollValueForSecondary) ? 'd10' : 'd20';
+               // selectedRollType should be correct whether it's primary context or secondary context showing primary result
+               const rollType = data.selectedRollType;
+               primaryContent = `
+                  <div class="result-box ${resultClass}" data-roll-value="${rollValueToShow}" data-roll-type="${rollType}">
+                    ${createRollHTML(rollValueToShow, numDiceToShow, dieTypeToShow)}
+                    <p>${formattedResultText}</p>
+                    ${data.isSecondaryPrompt ? '<p class="scroll-note">👇 Bonus Effect!!! 👇</p>' : ''}
+                  </div>`;
+               primaryResultExists = true;
+          }
+
+          // --- Build Secondary Result HTML (if needed) ---
+          if (data.secondaryResultText) {
+               const formattedSecondaryText = formatKeywords(data.secondaryResultText);
+               const secondaryRollValue = data.rollValue;
+               // Secondary results stem from Crits, so we assume 'crit' here
+               const rollType = 'crit'; // Assuming secondary effects only come from crits
+               secondaryContent = `
+                  <div class="result-box secondary" data-roll-value="${secondaryRollValue}" data-roll-type="${rollType}">
+                    <h2>✨ Bonus Effect</h2>
+                     ${createRollHTML(secondaryRollValue, 1, 'd20')}
+                     <p>${formattedSecondaryText}</p>
+                  </div>`;
+               showSecondary = true;
+          }
+
+          // --- Determine Final Visibility States ---
+          showPrimary = primaryResultExists;
+          showPrompt = data.isSecondaryPrompt && !data.secondaryResultText;
+
+          // --- Populate Prompt Area (if showing) ---
+          if (showPrompt) {
+              document.getElementById('secondary-prompt-text').textContent = data.secondaryPromptText || 'Bonus Effect!';
+              document.getElementById('secondary-roll-type-hidden').value = data.secondaryType;
+              document.getElementById('secondary-damage-type-hidden').value = document.getElementById('damage_type').value;
+              document.getElementById('secondary-magic-subtype-hidden').value = document.getElementById('magic_subtype').value;
+              // Store the primary result text/roll that *caused* the prompt
+              document.getElementById('secondary-primary-result-hidden').value = data.resultText; // Primary text that prompted
+              document.getElementById('secondary-primary-roll-hidden').value = data.rollValue; // Primary roll that prompted
+          }
+
+          // --- Logic for Share Button Visibility ---
+          const isFinalResultShown = showSecondary || (showPrimary && !data.isSecondaryPrompt);
+          if (isFinalResultShown) {
+               if (shareButton) shareButton.style.display = 'inline-block'; // Or 'block'
+          } else {
+               if (shareButton) shareButton.style.display = 'none';
+          }
+      } // End of else block (status !== 'error')
+
+
+      // --- Update DOM & Set Final Display/Visibility ---
+      primaryResultArea.innerHTML = primaryContent;
+      primaryResultArea.style.display = showPrimary ? 'block' : 'none';
+      primaryResultArea.style.visibility = showPrimary ? 'visible' : 'hidden';
+
+      secondaryPromptArea.style.display = showPrompt ? 'block' : 'none';
+      secondaryPromptArea.style.visibility = showPrompt ? 'visible' : 'hidden';
+
+      secondaryResultArea.innerHTML = secondaryContent;
+      secondaryResultArea.style.display = showSecondary ? 'block' : 'none';
+      secondaryResultArea.style.visibility = showSecondary ? 'visible' : 'hidden';
+
+      // --- Scrolling Logic ---
+      if (showSecondary) {
+          elementToScrollTo = secondaryResultArea;
+      } else if (showPrompt) {
+          elementToScrollTo = secondaryPromptArea;
+      } else if (showPrimary && !data.isSecondaryPrompt) { // Scroll to primary only if it's the final result OR arcana
+          elementToScrollTo = primaryResultArea.offsetParent ? primaryResultArea : primaryResultArea.querySelector('.result-box');
+      } else if (data.status === 'error'){
+          elementToScrollTo = errorMessageDiv;
+      }
+
+      if (elementToScrollTo) {
+          elementToScrollTo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+  } // End of updateUI function
 
   // --- UI Toggle Functions (Unchanged from your version) ---
   function toggleAttackType() {

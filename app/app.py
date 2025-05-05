@@ -1,3 +1,4 @@
+import requests
 import os
 import json
 import random
@@ -207,6 +208,42 @@ def roll_ajax():
 
     result_data = get_roll_result(payload)
     return jsonify(result_data)
+
+@app.route('/share_discord', methods=['POST'])
+def share_discord():
+    webhook_url = os.environ.get('DISCORD_WEBHOOK_URL') # Get URL securely
+    if not webhook_url:
+        print("Error: DISCORD_WEBHOOK_URL not set.")
+        return jsonify({"status": "error", "error": "Discord webhook URL not configured on server."}), 500
+
+    payload = request.get_json()
+    message_content = payload.get('message')
+
+    if not message_content:
+        return jsonify({"status": "error", "error": "No message content provided."}), 400
+
+    # Prepare data for Discord webhook
+    discord_data = {
+        'content': message_content,
+        # 'username': 'Crit & Fumble Roller' # Optional: Customize bot name for this message
+        # 'avatar_url': 'URL_TO_AVATAR_IMAGE' # Optional: Customize avatar
+    }
+
+    try:
+        response = requests.post(webhook_url, json=discord_data)
+        response.raise_for_status() # Raise an exception for bad status codes (4xx or 5xx)
+
+        if response.status_code == 204: # Discord usually returns 204 No Content on success
+            print("Message sent to Discord successfully!")
+            return jsonify({"status": "success"})
+        else:
+             # This might not be reached due to raise_for_status, but good for clarity
+            print(f"Failed to send message to Discord, Status Code: {response.status_code}")
+            return jsonify({"status": "error", "error": f"Discord API returned status {response.status_code}"}), 500
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending message to Discord: {e}")
+        return jsonify({"status": "error", "error": f"Failed to send request to Discord: {e}"}), 500
 
 # --- HTML Template (String) ---
 # (Will be inserted below)
