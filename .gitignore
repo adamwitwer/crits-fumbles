@@ -26,6 +26,8 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+.env
+.env/
 
 # PyInstaller
 *.manifest
