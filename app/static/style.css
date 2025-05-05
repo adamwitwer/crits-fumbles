@@ -344,6 +344,95 @@ button:active {
 @keyframes shimmer-bg { from { background-position: 150% 0; } to { background-position: -50% 0; } }
 @keyframes pop-in-smooth { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
+/* --- Share Button Styling (Matches style.css) --- */
+
+.share-container {
+  text-align: center;
+  /* Match margin of other result/form boxes using your spacing unit */
+  margin-top: calc(var(--spacing-unit) * 2);
+  margin-bottom: calc(var(--spacing-unit) * 2);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#share-discord-button {
+  /* Layout & Alignment */
+  display: inline-flex; /* Aligns icon and text nicely */
+  align-items: center; /* Vertically centers icon and text */
+  justify-content: center; /* Horizontally centers content */
+
+  /* Sizing & Spacing */
+  /* Use a size relative to your base or secondary button */
+  padding: 0.75em 1.2em; /* Adjust padding as needed */
+  font-size: var(--font-size-button-secondary); /* Matches secondary button size */
+
+  /* Font & Text */
+  font-family: var(--font-body); /* Using body font like select elements */
+  color: var(--clr-button-text); /* Using your button text color variable */
+  text-decoration: none;
+  text-align: center;
+  white-space: nowrap; /* Prevent text wrapping */
+
+  /* Appearance */
+  background-color: #5865F2; /* Discord Blurple - kept specific for branding */
+  border: none; /* Consistent with your other buttons */
+  border-radius: var(--border-radius-standard); /* Using your standard radius */
+  box-shadow: var(--shadow-button); /* Using your standard button shadow */
+
+  /* Interaction */
+  cursor: pointer;
+  transition: var(--transition-standard); /* Using your standard transition */
+}
+
+/* Icon Styling */
+#share-discord-button .discord-icon {
+  /* SVG inherits color via fill="currentColor" from the button's text color */
+  /* Size relative to button font size */
+  width: 1.8em;
+  height: 1.8em;
+  margin-right: 0.5em; /* Space between icon and text */
+  vertical-align: middle; /* Helps alignment */
+}
+
+/* Hover Effect */
+#share-discord-button:hover:not(:disabled) {
+  background-color: #4752C4; /* Slightly darker blurple, adjust if needed */
+  transform: translateY(-1px); /* Lift effect */
+  box-shadow: var(--shadow-button-hover); /* Using your hover shadow */
+}
+
+/* Active Effect (matches your button active logic) */
+#share-discord-button:active:not(:disabled) {
+transform: scale(0.98);
+box-shadow: var(--shadow-button-active);
+}
+
+/* Disabled State */
+#share-discord-button:disabled {
+  background-color: #7a8499; /* Generic disabled grey */
+  /* You might want to define --clr-button-disabled-bg in :root */
+  color: #cccccc; /* Lighter text */
+  box-shadow: none; /* Remove shadow when disabled */
+  cursor: not-allowed;
+  opacity: 0.7; /* Slightly faded */
+}
+
+/* Specific visual states during/after sharing */
+#share-discord-button:disabled[textContent="Sharing..."] {
+   /* Keep blurple or use a distinct "in progress" style */
+   background-color: #5865F2;
+   color: var(--clr-button-text); /* Ensure text is visible */
+   opacity: 0.9;
+   cursor: default;
+}
+#share-discord-button[textContent="Shared!"] {
+   background-color: #3BA55D; /* Discord green for success feedback */
+   color: var(--clr-button-text);
+   cursor: default;
+   opacity: 1;
+   /* Inherits disabled styles like cursor, but overrides visual */
+}
+
 /* === Footer Styles === */
 .app-footer {
   text-align: center;
@@ -394,7 +483,8 @@ button:active {
 
   form,
   .result-box,
-  .bonus-alert {
+  .bonus-alert,
+  .share-container {
     max-width: var(--container-max-width-desktop);
   }
 
@@ -479,6 +569,28 @@ button:active {
 
   .app-footer {
       border-top-color: var(--clr-border-subtle);
+  }
+
+  #share-discord-button {
+    /* Blurple should have acceptable contrast on dark, but verify */
+    /* Text color uses --clr-button-text which should be handled by your dark mode */
+  }
+
+#share-discord-button:disabled {
+     /* Use a darker disabled background for dark mode */
+     background-color: #4f545c; /* Example dark disabled grey */
+     color: #7b7b7b; /* Darker disabled text */
+  }
+
+/* Keep specific styles for Sharing/Shared if they work well */
+#share-discord-button:disabled[textContent="Sharing..."] {
+     background-color: #5865F2;
+     opacity: 0.9;
+  }
+#share-discord-button[textContent="Shared!"] {
+     background-color: #3BA55D;
+     /* Ensure text color has contrast if needed */
+     /* color: #FFFFFF; */
   }
 
 } /* End Dark Mode */

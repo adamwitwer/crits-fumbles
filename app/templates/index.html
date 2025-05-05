@@ -90,8 +90,10 @@
     {# Content will be injected by JavaScript #}
 </div>
 
-<button type="button" id="share-discord-button" onclick="shareResultToDiscord()" style="display: none;">Share Result to Discord</button>
-
+<div class="share-container"><button type="button" id="share-discord-button" onclick="shareResultToDiscord()" style="display: none;">
+  <img src="{{ url_for('static', filename='img/discord-icon.svg') }}" alt="Discord Logo" class="discord-icon">
+  <span class="button-text">Share Result to Discord</span></button>
+</div>
 
 {# --- Audio Element --- #}
 <audio id="dice-sound" preload="auto">
@@ -249,38 +251,40 @@
       }
   }
   
-  // --- Share to Discord Function (Corrected Template Literals) ---
-  async function shareResultToDiscord() {
+// --- Share to Discord Function (Corrected Fetch + innerHTML reset) ---
+async function shareResultToDiscord() {
+    // --- Start: Code to get resultText and roll data ---
     let resultText = '';
     const primaryResultAreaDiv = document.getElementById('primary-result-area');
     const secondaryResultAreaDiv = document.getElementById('secondary-result-area');
 
     const primaryResultBoxDiv = primaryResultAreaDiv.querySelector('.result-box');
-    const secondaryResultBoxDiv = secondaryResultAreaDiv.querySelector('.result-box'); // Check element in secondary area
+    // Find the result box *specifically* within the secondary area
+    const secondaryResultBoxDiv = secondaryResultAreaDiv.querySelector('.result-box');
 
     const primaryResultP = primaryResultAreaDiv.querySelector('.result-box > p');
     const arcanaDescriptionP = primaryResultAreaDiv.querySelector('.description-box > p');
-    // Important: Find the secondary P tag within the secondaryResultAreaDiv
-    const secondaryResultP = secondaryResultAreaDiv.querySelector('.result-box > p');
+    // Find the p tag *specifically* within the secondary result box div
+    const secondaryResultP = secondaryResultBoxDiv?.querySelector('p'); // Use optional chaining
 
+    // Extract roll values AND type using dataset
     const primaryRollValue = primaryResultBoxDiv?.dataset.rollValue;
+    // Determine the definitive roll type for the *final* message context
+    // If secondary result box exists and has a type, use it; otherwise use primary's type
     const rollType = secondaryResultBoxDiv?.dataset.rollType || primaryResultBoxDiv?.dataset.rollType;
     const secondaryRollValue = secondaryResultBoxDiv?.dataset.rollValue;
-
     let messagePrefix = "";
 
+    // Construct the message based on roll type
     if (rollType === 'crit') {
         messagePrefix = "💥 **Critical Hit!** 💥\n";
         if (secondaryResultP && secondaryResultP.textContent.trim() && secondaryRollValue) {
             const primaryText = primaryResultP ? primaryResultP.textContent.trim() : "N/A";
             const secondaryText = secondaryResultP.textContent.trim();
-            // CORRECTED LINE 1: Use backticks ` and clean ${} syntax
             resultText = `${messagePrefix}Rolled: **${primaryRollValue ?? '?'}** -> Result: ${primaryText}\nBonus Roll: **${secondaryRollValue}** -> Effect: ${secondaryText}`;
         } else if (primaryResultP && primaryResultP.textContent.trim() && primaryRollValue) {
-            // CORRECTED LINE 2: Use backticks ` and clean ${} syntax
             resultText = `${messagePrefix}Rolled: **${primaryRollValue}**\nResult: ${primaryResultP.textContent.trim()}`;
         }
-
     } else if (rollType === 'fumble') {
         messagePrefix = "😩 **Fumble!** 😩\n";
         if (arcanaDescriptionP && arcanaDescriptionP.textContent.trim() && primaryRollValue) { // Arcana
@@ -288,57 +292,74 @@
             const arcanaEffectP = arcanaEffectBox?.querySelector('p');
             const arcanaEffectText = arcanaEffectP ? arcanaEffectP.textContent.trim() : "N/A";
             const arcanaDescText = arcanaDescriptionP.textContent.trim();
-            // CORRECTED LINE 3: Use backticks ` and clean ${} syntax
             resultText = `${messagePrefix}Rolled: **${primaryRollValue}**\nArcana: ${arcanaDescText}\nEffect: ${arcanaEffectText}`;
         } else if (primaryResultP && primaryResultP.textContent.trim() && primaryRollValue) { // Smack Down Fumble
-             // CORRECTED LINE 4: Use backticks ` and clean ${} syntax
             resultText = `${messagePrefix}Rolled: **${primaryRollValue}**\nResult: ${primaryResultP.textContent.trim()}`;
         }
     }
+    // --- End: Code to get resultText ---
 
-    // --- Rest of the function remains the same ---
+
+    // --- Validate result text before proceeding ---
     if (!resultText || resultText.trim() === '' || resultText.includes('N/A')) {
         console.warn("shareResultToDiscord: No valid result text found to share.");
         alert('Could not find a complete result to share!');
         return;
     }
 
+    // --- Handle Button State and Fetch ---
     const shareButton = document.getElementById('share-discord-button');
+    // Store the icon's HTML *before* changing textContent
+    // Ensure you have the img tag with class="discord-icon" inside the button in index.html
+    const discordIconHTML = shareButton.querySelector('.discord-icon')?.outerHTML || '';
+
     shareButton.disabled = true;
-    const originalButtonText = shareButton.textContent;
+    // Set temporary text (this WILL remove the icon temporarily)
     shareButton.textContent = "Sharing...";
 
     try {
         console.log("Sharing to Discord:", resultText);
+        // ** THE CORRECTED FETCH CALL **
         const response = await fetch('/share_discord', {
-            method: 'POST',
+            method: 'POST', // Specify the method!
             headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Content-Type': 'application/json', // Tell server we're sending JSON
+                'Accept': 'application/json' // Tell server we expect JSON back
             },
-            body: JSON.stringify({ message: resultText })
+            body: JSON.stringify({ message: resultText }) // Send the message in JSON format
         });
-        const responseData = await response.json();
+        // ** END OF CORRECTED FETCH CALL **
+
+        const responseData = await response.json(); // Try to parse response as JSON
+
         if (response.ok) {
             console.log('Shared to Discord successfully!', responseData);
+            // Set temporary success text (icon still removed)
             shareButton.textContent = "Shared!";
             setTimeout(() => {
-                shareButton.textContent = originalButtonText;
-                if (shareButton.style.display !== 'none') {
-                   shareButton.disabled = false;
-                }
-            }, 2000);
+                 // Reset button HTML to include icon and original text
+                 shareButton.innerHTML = `${discordIconHTML} Share Result to Discord`; // Rebuilds icon + text
+                 // Re-enable ONLY if it should still be visible (i.e., not hidden by a subsequent roll)
+                 if (shareButton.style.display !== 'none') {
+                    shareButton.disabled = false; // Re-enable
+                 }
+             }, 2000); // Reset after 2 seconds
+
         } else {
+            // Handle errors reported by the server (e.g., 400, 500)
             console.error(`Failed to share to Discord (${response.status}):`, responseData?.error || response.statusText);
             alert(`Failed to share result: ${responseData?.error || response.statusText}`);
-            shareButton.textContent = originalButtonText;
-            shareButton.disabled = false;
+             // Reset button HTML on error
+             shareButton.innerHTML = `${discordIconHTML} Share Result to Discord`; // Rebuilds icon + text
+            shareButton.disabled = false; // Re-enable
         }
     } catch (error) {
-        console.error('Network error sharing to Discord:', error);
-        alert('Network error connecting to server to share result.');
-        shareButton.textContent = originalButtonText;
-        shareButton.disabled = false;
+        // Handle network errors or issues parsing response.json()
+         console.error('Network or Parsing error sharing to Discord:', error);
+         alert('Error contacting server or processing response to share result.');
+          // Reset button HTML on error
+          shareButton.innerHTML = `${discordIconHTML} Share Result to Discord`; // Rebuilds icon + text
+         shareButton.disabled = false; // Re-enable
     }
   }
   // --- End of Share to Discord Function ---
