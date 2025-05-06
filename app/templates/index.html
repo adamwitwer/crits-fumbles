@@ -277,24 +277,24 @@ async function shareResultToDiscord() {
 
     // Construct the message based on roll type
     if (rollType === 'crit') {
-        messagePrefix = "💥 **Critical Hit!** 💥\n";
+        messagePrefix = "\n💥 **Critical Hit!** 💥\n\n";
         if (secondaryResultP && secondaryResultP.textContent.trim() && secondaryRollValue) {
             const primaryText = primaryResultP ? primaryResultP.textContent.trim() : "N/A";
             const secondaryText = secondaryResultP.textContent.trim();
-            resultText = `${messagePrefix}Rolled: **${primaryRollValue ?? '?'}** -> Result: ${primaryText}\nBonus Roll: **${secondaryRollValue}** -> Effect: ${secondaryText}`;
+            resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue ?? '?'}\n⚠️ **Result:** ${primaryText}\n\n🎲 **Bonus Roll:** ${secondaryRollValue}\n✨ **Effect:** ${secondaryText}`;
         } else if (primaryResultP && primaryResultP.textContent.trim() && primaryRollValue) {
-            resultText = `${messagePrefix}Rolled: **${primaryRollValue}**\nResult: ${primaryResultP.textContent.trim()}`;
+            resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue}\n⚠️ **Result:** ${primaryResultP.textContent.trim()}`;
         }
     } else if (rollType === 'fumble') {
-        messagePrefix = "😩 **Fumble!** 😩\n";
+        messagePrefix = "\n💀 **Fumble!** 💀\n\n";
         if (arcanaDescriptionP && arcanaDescriptionP.textContent.trim() && primaryRollValue) { // Arcana
             const arcanaEffectBox = primaryResultAreaDiv.querySelectorAll('.result-box')[1];
             const arcanaEffectP = arcanaEffectBox?.querySelector('p');
             const arcanaEffectText = arcanaEffectP ? arcanaEffectP.textContent.trim() : "N/A";
             const arcanaDescText = arcanaDescriptionP.textContent.trim();
-            resultText = `${messagePrefix}Rolled: **${primaryRollValue}**\nArcana: ${arcanaDescText}\nEffect: ${arcanaEffectText}`;
+            resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue}\n\n😩 **Result:** ${arcanaDescText}\n⚠️ **Effect:** ${arcanaEffectText}`;
         } else if (primaryResultP && primaryResultP.textContent.trim() && primaryRollValue) { // Smack Down Fumble
-            resultText = `${messagePrefix}Rolled: **${primaryRollValue}**\nResult: ${primaryResultP.textContent.trim()}`;
+            resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue}\n⚠️ **Result:** ${primaryResultP.textContent.trim()}`;
         }
     }
     // --- End: Code to get resultText ---

@@ -4,13 +4,22 @@ A Flask-based web app for generating critical hit and fumble results in Dungeons
 
 ## To Run Locally
 
-Clone the repository and navigate to the project folder.
+1. Clone the repository and navigate to the project folder.
+2. Create an `.env` file and add:
+
+```
+FLASK_APP=app.app
+DISCORD_WEBHOOK_URL='YOUR_SECRET_WEBHOOK'
+```
+
+If you want the Discord integration feature, you’ll need to create and add the webhook URL from your Discord server.
+3. Now to launch the app:
 
 ```
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-cd app && flask run
+flask run
 ```
 
 ## Notes on the Sources
