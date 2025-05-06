@@ -119,7 +119,6 @@
   const diceAudio = document.getElementById('dice-sound');
   const primaryRollBtn = document.getElementById('primary-roll-button');
   const secondaryRollBtn = document.getElementById('secondary-roll-button');
-  // const loadingIndicator = document.getElementById('loading-indicator'); // Removed
   const errorMessageDiv = document.getElementById('error-message');
   const primaryResultArea = document.getElementById('primary-result-area');
   const secondaryPromptArea = document.getElementById('secondary-prompt-area');
@@ -251,7 +250,7 @@
       }
   }
   
-// --- Share to Discord Function (Corrected Fetch + innerHTML reset) ---
+// --- Share to Discord Function ---
 async function shareResultToDiscord() {
     // --- Start: Code to get resultText and roll data ---
     let resultText = '';
@@ -309,8 +308,6 @@ async function shareResultToDiscord() {
 
     // --- Handle Button State and Fetch ---
     const shareButton = document.getElementById('share-discord-button');
-    // Store the icon's HTML *before* changing textContent
-    // Ensure you have the img tag with class="discord-icon" inside the button in index.html
     const discordIconHTML = shareButton.querySelector('.discord-icon')?.outerHTML || '';
 
     shareButton.disabled = true;
@@ -319,16 +316,14 @@ async function shareResultToDiscord() {
 
     try {
         console.log("Sharing to Discord:", resultText);
-        // ** THE CORRECTED FETCH CALL **
         const response = await fetch('/share_discord', {
-            method: 'POST', // Specify the method!
+            method: 'POST',
             headers: {
-                'Content-Type': 'application/json', // Tell server we're sending JSON
-                'Accept': 'application/json' // Tell server we expect JSON back
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify({ message: resultText }) // Send the message in JSON format
         });
-        // ** END OF CORRECTED FETCH CALL **
 
         const responseData = await response.json(); // Try to parse response as JSON
 
@@ -364,7 +359,7 @@ async function shareResultToDiscord() {
   }
   // --- End of Share to Discord Function ---
 
-  // --- UI Update Function (Revised Logic to store roll type) ---
+  // --- UI Update Function ---
   function updateUI(data) {
       const shareButton = document.getElementById('share-discord-button'); // Get button ref
 
@@ -496,7 +491,7 @@ async function shareResultToDiscord() {
       }
   } // End of updateUI function
 
-  // --- UI Toggle Functions (Unchanged from your version) ---
+  // --- UI Toggle Functions ---
   function toggleAttackType() {
     const rollType = document.getElementById('roll_type').value;
     const fumbleType = document.getElementById('fumbleType').value;
