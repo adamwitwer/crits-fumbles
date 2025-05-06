@@ -353,6 +353,7 @@ button:active {
   margin-bottom: calc(var(--spacing-unit) * 2);
   margin-left: auto;
   margin-right: auto;
+  padding: 0 var(--spacing-unit);
 }
 
 #share-discord-button {
@@ -486,6 +487,10 @@ box-shadow: var(--shadow-button-active);
   .bonus-alert,
   .share-container {
     max-width: var(--container-max-width-desktop);
+  }
+  
+  .share-container {
+    padding: 0;
   }
 
   form,
