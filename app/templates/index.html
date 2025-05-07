@@ -276,7 +276,7 @@ async function shareResultToDiscord() {
 
     // Construct the message based on roll type
     if (rollType === 'crit') {
-        messagePrefix = "\n💥 **Critical Hit!** 💥\n\n";
+        messagePrefix = "\n\u200b\n💥 **Critical Hit!** 💥\n\n";
         if (secondaryResultP && secondaryResultP.textContent.trim() && secondaryRollValue) {
             const primaryText = primaryResultP ? primaryResultP.textContent.trim() : "N/A";
             const secondaryText = secondaryResultP.textContent.trim();
@@ -285,7 +285,7 @@ async function shareResultToDiscord() {
             resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue}\n⚠️ **Result:** ${primaryResultP.textContent.trim()}`;
         }
     } else if (rollType === 'fumble') {
-        messagePrefix = "\n💀 **Fumble!** 💀\n\n";
+        messagePrefix = "\n\u200b\n💀 **Fumble!** 💀\n\n";
         if (arcanaDescriptionP && arcanaDescriptionP.textContent.trim() && primaryRollValue) { // Arcana
             const arcanaEffectBox = primaryResultAreaDiv.querySelectorAll('.result-box')[1];
             const arcanaEffectP = arcanaEffectBox?.querySelector('p');
