@@ -60,5 +60,8 @@ coverage.xml
 # macOS
 .DS_Store
 
+# logfiles
+narrative_dice_log.jsonl
+
 # Optional: if you generate any static files later
 staticfiles/
