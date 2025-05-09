@@ -1,15 +1,22 @@
-# Byte-compiled / optimized / DLL files
+# -------------------------------------------------------
+# Python bytecode and cache
+# -------------------------------------------------------
 __pycache__/
 *.py[cod]
 *$py.class
 
-# C extensions
+# Compiled extensions
 *.so
 
-# Virtual environment
+# -------------------------------------------------------
+# Virtual environments
+# -------------------------------------------------------
 venv/
+.env
 
-# Distribution / packaging
+# -------------------------------------------------------
+# Packaging and distribution
+# -------------------------------------------------------
 .Python
 build/
 develop-eggs/
@@ -26,45 +33,52 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-.env
-.env/
 
 # PyInstaller
 *.manifest
 *.spec
 
-# Flask cache files
+# -------------------------------------------------------
+# Logs and coverage reports
+# -------------------------------------------------------
 *.log
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
 .coverage
 .coverage.*
+*.cover
+coverage.xml
+htmlcov/
 .cache
 nosetests.xml
-coverage.xml
-*.cover
+.tox/
+.nox/
 .hypothesis/
 
+# -------------------------------------------------------
+# Flask environment
+# -------------------------------------------------------
+.flaskenv
+
+# -------------------------------------------------------
 # Jupyter Notebook
+# -------------------------------------------------------
 .ipynb_checkpoints
 
-# IDEs and editors
+# -------------------------------------------------------
+# Editor and IDE settings
+# -------------------------------------------------------
 .vscode/
 .idea/
 *.sublime-project
 *.sublime-workspace
 
-# macOS
+# -------------------------------------------------------
+# macOS system files
+# -------------------------------------------------------
 .DS_Store
 
-# logfiles
+# -------------------------------------------------------
+# Crits & Fumbles project-specific
+# -------------------------------------------------------
 narrative_dice_log.jsonl
-
-# local docs
 pi-notes
-
-# Optional: if you generate any static files later
 staticfiles/
