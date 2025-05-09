@@ -63,5 +63,8 @@ coverage.xml
 # logfiles
 narrative_dice_log.jsonl
 
+# local docs
+pi-notes
+
 # Optional: if you generate any static files later
 staticfiles/
