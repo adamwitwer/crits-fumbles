@@ -7,6 +7,7 @@ import json
 import random
 from flask import Flask, render_template, request, jsonify, url_for
 import datetime # For timestamps in logs
+import ipaddress
 
 app = Flask(__name__)
 
@@ -21,7 +22,6 @@ RANDOM_DESCRIPTORS = [
 
 # --- Load Data ---
 def load_json(filename):
-    # ... (your existing load_json function)
     json_path = os.path.join(os.path.dirname(__file__), filename)
     try:
         with open(json_path) as f:
@@ -40,15 +40,40 @@ if not DATA.get('crit_tables') or not DATA.get('fumbles'):
 if not ARCANA:
      print("Warning: Arcana data from fumbles_arcana.json might be missing.")
 
-# --- Geolocation Helper ---
+# --- Geolocation Helper (REVISED FUNCTION) ---
 def get_geolocation(ip_address):
-    """Fetches city and region for an IP address using ip-api.com."""
-    if not ip_address or ip_address == "127.0.0.1": # Handle localhost
-        return {"city": "their cozy terminal", "regionName": "the digital ether"}
+    """Fetches city and region for an IP address, with special handling for local/Tailscale IPs."""
+
+    if not ip_address: # Should ideally not happen if client_ip is always derived
+        return {"city": "an unknown void", "regionName": "the ether"}
+
     try:
-        # Request only necessary fields. Free tier allows 45 req/min.
+        ip_obj = ipaddress.ip_address(ip_address)
+
+        if ip_obj.is_loopback: # Covers 127.0.0.1 etc.
+            return {"city": "their cozy terminal", "regionName": "the local machine"}
+        if ip_obj.is_private: # Covers 192.168.x.x, 10.x.x.x, 172.16.x.x-172.31.x.x
+            return {"city": "their local sanctum", "regionName": "the home network"}
+
+        # Check for Tailscale's common CGNAT range (100.64.0.0/10)
+        # strict=False is important as ip_obj is a single address
+        tailscale_cgnat_network = ipaddress.ip_network('100.64.0.0/10', strict=False)
+        if ip_obj in tailscale_cgnat_network:
+            return {"city": "their secure Tailnet", "regionName": "a private dimension"}
+
+    except ValueError:
+        # If ip_address is not a valid IP string (e.g., "localhost" as a string, or malformed)
+        print(f"Invalid IP address format for geolocation: {ip_address}")
+        if isinstance(ip_address, str) and ip_address.lower() == "localhost":
+             return {"city": "their cozy terminal", "regionName": "the local machine"}
+        return {"city": "an unidentifiable nexus", "regionName": "a glitch in the matrix"}
+
+    # If none of the above special IP types, proceed to query ip-api.com
+    try:
+        # Using specific fields to minimize data transfer and processing
         url = f"http://ip-api.com/json/{ip_address}?fields=status,message,city,regionName,query"
-        response = requests.get(url, timeout=2) # 2-second timeout
+        # Increased timeout slightly just in case of slow network
+        response = requests.get(url, timeout=3)
         response.raise_for_status()  # Raises an exception for 4XX/5XX errors
         data = response.json()
 
@@ -58,7 +83,8 @@ def get_geolocation(ip_address):
                 "regionName": data.get("regionName", "an uncharted territory")
             }
         else:
-            print(f"Geolocation API error for IP {ip_address}: {data.get('message', 'Unknown error')}")
+            # API returned "fail" status (e.g. for other reserved ranges not caught above, or other API issues)
+            print(f"Geolocation API error for IP {ip_address}: {data.get('message', 'Unknown error from ip-api.com')}")
             return {"city": "parts unknown", "regionName": "a mysterious land"}
     except requests.exceptions.Timeout:
         print(f"Geolocation request timed out for IP {ip_address}")
@@ -66,13 +92,18 @@ def get_geolocation(ip_address):
     except requests.exceptions.RequestException as e:
         print(f"Error fetching geolocation for IP {ip_address}: {e}")
         return {"city": "a digital realm", "regionName": "the boundless interwebs"}
-    except Exception as e: # Catch other potential errors like JSONDecodeError
-        print(f"Generic error in get_geolocation for IP {ip_address}: {e}")
+    except json.JSONDecodeError: # Catching if ip-api.com returns non-JSON
+        print(f"Failed to decode JSON from geolocation API for IP {ip_address}")
+        return {"city": "a garbled signal", "regionName": "the static void"}
+    except Exception as e: # Catch-all for any other unexpected error during API call
+        print(f"Generic error in get_geolocation for IP {ip_address} during API call: {e}")
+        # Using app.logger for more detailed Flask error logging if configured
+        app.logger.error(f"Generic error in get_geolocation for IP {ip_address}: {e}", exc_info=True)
         return {"city": "a place beyond perception", "regionName": "the void"}
+
 
 # --- Helper Functions (resolve_roll remains the same) ---
 def resolve_roll(roll_value, table):
-    # ... (your existing resolve_roll function)
     if not isinstance(table, dict):
         print(f"Warning: Invalid table provided to resolve_roll: {type(table)}")
         return "Invalid table data."
@@ -93,9 +124,8 @@ def resolve_roll(roll_value, table):
 # --- Main Roll Logic & Narrative Logging ---
 def get_roll_result_and_log(payload, client_ip=None):
     """Processes roll request, generates result, and logs a narrative entry."""
-    geo_info = get_geolocation(client_ip) if client_ip else {"city": "an anonymous user", "regionName": "somewhere out there"}
+    geo_info = get_geolocation(client_ip) # geo_info will now use the revised function
 
-    # Initialize response structure (as in your original code)
     response = {
         "status": "success", "rollValue": None, "resultText": None, "description": None,
         "effect": None, "isSecondaryPrompt": False, "secondaryPromptText": None,
@@ -108,13 +138,12 @@ def get_roll_result_and_log(payload, client_ip=None):
     }
 
     roll_context = payload.get('rollContext', 'primary')
-    roll_type_from_payload = payload.get('rollType') # This is 'crit', 'fumble', or for secondary: 'minor', 'major', 'insanity'
+    roll_type_from_payload = payload.get('rollType')
     damage_type = payload.get('damageType')
     magic_subtype = payload.get('magicSubtype')
     fumble_type_from_payload = payload.get('fumbleType')
     attack_type = payload.get('attackType')
 
-    # --- Core Roll Logic (adapted from your original get_roll_result) ---
     try:
         if roll_context == 'primary':
             if roll_type_from_payload == 'crit':
@@ -122,9 +151,9 @@ def get_roll_result_and_log(payload, client_ip=None):
                 roll_value = random.randint(1, 20); response["rollValue"] = roll_value
                 crit_damage_type = magic_subtype if damage_type == 'magic' else damage_type
                 crit_damage_type = crit_damage_type.lower().strip() if crit_damage_type else 'slashing'
-                table = DATA.get('crit_tables', {}).get(crit_damage_type)
-                if table:
-                    result_text = resolve_roll(roll_value, table)
+                table_data = DATA.get('crit_tables', {}).get(crit_damage_type)
+                if table_data:
+                    result_text = resolve_roll(roll_value, table_data)
                     response["resultText"] = result_text
                     if isinstance(result_text, str):
                         if "minor injury" in result_text.lower():
@@ -145,10 +174,13 @@ def get_roll_result_and_log(payload, client_ip=None):
                     fumble_list = ARCANA.get(attack_key, [])
                     found_arcana = False
                     for entry in fumble_list:
-                        roll_entry = entry.get('roll')
-                        if not roll_entry: continue
-                        if '-' in roll_entry: low, high = map(int, roll_entry.split('-')); match = low <= roll_value <= high
-                        else: match = int(roll_entry) == roll_value
+                        roll_entry_str = entry.get('roll')
+                        if not roll_entry_str: continue
+                        if '-' in roll_entry_str:
+                            low, high = map(int, roll_entry_str.split('-'))
+                            match = low <= roll_value <= high
+                        else:
+                            match = int(roll_entry_str) == roll_value
                         if match:
                             response.update({"description": entry.get('description', 'N/A'), "effect": entry.get('effect', 'N/A')}); found_arcana = True; break
                     if not found_arcana: response.update({"description": "No matching Arcana fumble found.", "effect": "No additional effect."})
@@ -161,12 +193,11 @@ def get_roll_result_and_log(payload, client_ip=None):
         elif roll_context == 'secondary':
             response["dieType"] = "d20"; response["numDice"] = 1
             roll_value = random.randint(1, 20); response["rollValue"] = roll_value
-            # response["resultText"] already contains primary_result_text from payload via initialization
             secondary_table_key_map = {'minor': 'minor_injuries', 'major': 'major_injuries', 'insanity': 'insanities'}
             secondary_table_key = secondary_table_key_map.get(roll_type_from_payload)
             if secondary_table_key:
-                secondary_table = DATA.get(secondary_table_key, {})
-                response["secondaryResultText"] = resolve_roll(roll_value, secondary_table)
+                secondary_table_data = DATA.get(secondary_table_key, {})
+                response["secondaryResultText"] = resolve_roll(roll_value, secondary_table_data)
             else:
                 response.update({"status": "error", "errorMessage": f"Invalid secondary roll type: {roll_type_from_payload}"})
         else:
@@ -174,15 +205,13 @@ def get_roll_result_and_log(payload, client_ip=None):
 
     except Exception as e:
         print(f"Error processing roll: {e}")
-        app.logger.error(f"Error processing roll: {e}", exc_info=True) # More detailed server log
+        app.logger.error(f"Error processing roll: {e}", exc_info=True)
         response.update({"status": "error", "errorMessage": f"An internal error occurred processing the roll: {e}"})
-    # --- End Core Roll Logic ---
 
-    # --- Narrative Logging ---
     if response["status"] == "success":
         descriptor = random.choice(RANDOM_DESCRIPTORS)
-        city = geo_info.get("city", "an undisclosed city")
-        region = geo_info.get("regionName", "an unknown region")
+        city = geo_info.get("city", "an undisclosed city") # Use resolved geo_info
+        region = geo_info.get("regionName", "an unknown region") # Use resolved geo_info
         rolled_value = response.get("rollValue")
         
         table_name_for_log = "Unknown Table"
@@ -203,42 +232,33 @@ def get_roll_result_and_log(payload, client_ip=None):
                     table_name_for_log = "Smack Down Fumble"
                     result_for_log = response.get("resultText", "No specific result text.")
         elif roll_context == 'secondary':
-            table_name_for_log = f"{roll_type_from_payload.title()} Effect" # e.g., "Minor Effect"
+            table_name_for_log = f"{roll_type_from_payload.title()} Effect"
             result_for_log = response.get("secondaryResultText", "No specific secondary result.")
-            # Optional: add context about the primary roll that led to this
-            # primary_trigger = response.get("primaryResultForSecondary", "a previous event")
-            # narrative_log_entry = f"Following {primary_trigger}, a {descriptor} in {city}, {region} rolled {rolled_value} for a {table_name_for_log}, receiving: '{result_for_log}'."
-
 
         narrative_log_entry = f"A {descriptor} from {city}, {region} rolled a {rolled_value} on the {table_name_for_log} table, resulting in: '{result_for_log}'."
         if response.get("isSecondaryPrompt") and not response.get("secondaryResultText"):
             narrative_log_entry += " (Bonus roll pending...)"
 
-
-        # Log this narrative string
         try:
             log_data_to_store = {
-                "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(), # UTC timestamp
+                "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
                 "narrative": narrative_log_entry,
-                "geo_debug": {"ip": client_ip, "city_resolved": city, "region_resolved": region}, # For your debugging
-                "raw_payload": payload, # Optional: for detailed debugging
-                "raw_response": response # Optional: for detailed debugging
+                "geo_debug": {"ip": client_ip, "city_resolved": city, "region_resolved": region},
+                "raw_payload": payload,
+                "raw_response": response
             }
-            # Using JSON Lines format for the log file
             with open("narrative_dice_log.jsonl", "a", encoding="utf-8") as logfile:
                 logfile.write(json.dumps(log_data_to_store) + "\n")
-            print(f"NARRATIVE LOG: {narrative_log_entry}") # For live server console
+            print(f"NARRATIVE LOG: {narrative_log_entry}")
         except Exception as e:
             app.logger.error(f"Error writing narrative log: {e}", exc_info=True)
             print(f"Error writing narrative log: {e}")
 
     return response
 
-
 # --- Routes ---
 @app.route('/', methods=['GET'])
 def index():
-    # ... (your existing index route)
     initial_damage_type = "slashing"
     crit_tables = DATA.get('crit_tables', {})
     damage_types_list = sorted(crit_tables.keys()) if crit_tables else []
@@ -257,13 +277,14 @@ def roll_ajax():
         return jsonify({"status": "error", "errorMessage": "Invalid request data."}), 400
 
     client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-    # Call the combined function
+    # Added print statement for debugging IP, you can remove if not needed
+    # print(f"--- Attempting geolocation for IP address: {client_ip} ---")
+    
     result_data = get_roll_result_and_log(payload, client_ip=client_ip)
     return jsonify(result_data)
 
 @app.route('/share_discord', methods=['POST'])
 def share_discord():
-    # ... (your existing Discord sharing function)
     webhook_url = os.environ.get('DISCORD_WEBHOOK_URL')
     if not webhook_url:
         print("Error: DISCORD_WEBHOOK_URL not set.")
@@ -282,11 +303,14 @@ def share_discord():
         print(f"Error sending message to Discord: {e}")
         return jsonify({"status": "error", "error": f"Failed to send request to Discord: {e}"}), 500
 
-
 if __name__ == '__main__':
-    # For more detailed Flask logging, you can configure app.logger
+    # For more detailed Flask logging:
     # import logging
-    # handler = logging.FileHandler('flask_app_errors.log')
-    # handler.setLevel(logging.ERROR) # Log only ERROR and CRITICAL messages from Flask
-    # app.logger.addHandler(handler)
-    app.run(debug=True) # debug=False for production
+    # if not app.debug: # Only configure file logging if not in debug mode
+    #    file_handler = logging.FileHandler('flask_prod_errors.log')
+    #    file_handler.setLevel(logging.WARNING) # Log WARNING, ERROR, CRITICAL
+    #    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    #    file_handler.setFormatter(formatter)
+    #    app.logger.addHandler(file_handler)
+    #    app.logger.setLevel(logging.WARNING)
+    app.run(debug=True)
