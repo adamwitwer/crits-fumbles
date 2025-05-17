@@ -4,7 +4,7 @@
   --font-body: "Merriweather", serif;
   --font-heading: "Uncial Antiqua", system-ui;
   --font-size-base: 1.1rem;
-  --font-size-h1: 3rem;
+  --font-size-h1: 2.75rem;
   --font-size-h2: 1.5rem;
   --font-size-form-elements: 1rem;
   --font-size-button-primary: 1.5rem;
@@ -21,8 +21,7 @@
   --clr-link: inherit;
   --clr-border-subtle: #eee;
   /* Cards & Forms */
-  --clr-card-bg: #fffaf0;
-  --clr-card-border: #d9b38c;
+  --clr-card-bg: rgba(250, 245, 230, 0.8); /* changed for dragon */
   --clr-form-border: #bbb;
   /* Buttons */
   --clr-button-bg: #c19a6b;
@@ -30,13 +29,13 @@
   --clr-button-hover-bg: #a67b5b;
   --clr-button-outline: #a67b5b;
   /* Result Boxes */
-  --clr-result-bg: #e6ffec;
+  --clr-result-bg: rgba(220, 240, 210, 0.8); /* changed for dragon */
   --clr-result-border: #4caf50;
   --clr-result-heading: #1a5c2e;
-  --clr-fumble-bg: #ffe5e5;
+  --clr-fumble-bg: rgba(205, 195, 195, 0.8);
   --clr-fumble-border: #a12d2f;
   --clr-fumble-heading: #a12d2f;
-  --clr-bonus-bg: #f8f0ff;
+  --clr-bonus-bg: rgba(238, 225, 252, 0.8); /* changed for dragon */
   --clr-bonus-border: #a36ecb;
   --clr-bonus-heading: #6a1b9a;
   --clr-bonus-shadow: rgba(163, 110, 203, 0.4);
@@ -100,19 +99,40 @@
 }
 
 body {
-  background: var(--clr-bg) var(--bg-texture);
-  color: var(--clr-text);
-  font-family: var(--font-body);
-  font-size: var(--font-size-base);
-  line-height: 1.6;
-  padding: var(--spacing-unit);
-  margin: 0;
+    position: relative; /* Required for z-index of pseudo-element */
+    background-color: var(--clr-bg);
+    background-image: var(--bg-texture); /* Your texture remains directly on the body */
+    background-repeat: repeat;
+    background-attachment: scroll; /* Or fixed, as you prefer for the texture */
+
+    color: var(--clr-text);
+    font-family: var(--font-body);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    padding: var(--spacing-unit);
+    margin: 0;
+    z-index: 0; /* Explicitly set body stacking context */
+}
+
+body::before {
+    content: "";
+    position: fixed; /* Covers the entire viewport and stays fixed */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('img/red-dragon.png'); /* Your original dragon image */
+    background-repeat: no-repeat;
+    background-position: center 5%; /* Center the image */
+    background-size: cover; /* Or 'contain' */
+
+    opacity: 0.45;  /* << ADJUST THIS VALUE (0.0 to 1.0) for desired faintness */
+    z-index: -1;   /* Places the pseudo-element BEHIND the body's content and its direct background */
 }
 
 h1, h2 {
   font-family: var(--font-heading);
   line-height: 1.2;
-  margin-top: 0;
   margin-bottom: 0.6em;
 }
 
@@ -120,11 +140,16 @@ h1 {
   text-align: center;
   font-size: var(--font-size-h1);
   color: var(--clr-heading);
+  margin-top: 2.8em;
+  z-index: 1;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25), /* Main shadow */
+                 0 0 5px rgba(50, 30, 30, 0.15);  /* Softer, wider, very subtle diffusion */
 }
 
 h2 {
   font-size: var(--font-size-h2);
   color: var(--clr-heading);
+  margin-top: 0;
 }
 
 /* === Layout Containers === */
@@ -437,7 +462,6 @@ box-shadow: var(--shadow-button-active);
   color: var(--clr-footer-text);
   margin-top: calc(var(--spacing-unit) * 4);
   padding: calc(var(--spacing-unit) * 2) var(--spacing-unit);
-  border-top: var(--border-width-standard) solid var(--clr-border-subtle);
 }
 
 .app-footer a {
@@ -469,7 +493,7 @@ box-shadow: var(--shadow-button-active);
       /* Adjust base font size slightly for desktop */
       --font-size-base: 1.2rem;
       /* Adjust H1 size */
-      --font-size-h1: 3.5rem; /* Example adjustment */
+      --font-size-h1: 3.8rem; /* Example adjustment */
   }
   body {
     padding: calc(var(--spacing-unit) * 2);
@@ -503,7 +527,7 @@ box-shadow: var(--shadow-button-active);
     --clr-heading: #f9d77e;
     --clr-border-subtle: #333;
     /* Cards & Forms */
-    --clr-card-bg: #2c2c2c;
+    --clr-card-bg: rgba(44, 44, 44, 0.8);
     --clr-card-border: #555;
     --clr-form-border: #666;
      /* Buttons */
@@ -512,13 +536,13 @@ box-shadow: var(--shadow-button-active);
     --clr-button-hover-bg: #6b6b6b;
     --clr-button-outline: #888;
     /* Result Boxes */
-    --clr-result-bg: #1f3a2e;
+    --clr-result-bg: rgba(35, 60, 50, 0.8); /* changed for dragon */
     /* --clr-result-border: #4caf50; */ /* No change needed from light */
     --clr-result-heading: #8ff0a4;
-    --clr-fumble-bg: #3a1f1f;
+    --clr-fumble-bg: rgba(65, 50, 50, 0.8); /* changed for dragon */
     /* --clr-fumble-border: #a12d2f; */ /* No change needed */
     --clr-fumble-heading: #ff7a7a;
-    --clr-bonus-bg: #2f2545;
+    --clr-bonus-bg: rgba(50, 40, 70, 0.8); /* changed for dragon */
     --clr-bonus-border: #bb86fc;
     --clr-bonus-heading: #cfa9ff;
     --clr-bonus-shadow: rgba(187, 134, 252, 0.3);
@@ -546,6 +570,11 @@ box-shadow: var(--shadow-button-active);
   /* Specific overrides if variable isn't enough */
   body {
      border-top: none; /* Override light mode footer border */
+  }
+
+  h1 {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5), /* Main shadow */
+                 0 0 5px rgba(50, 30, 30, 0.25); /* Softer, wider, very subtle diffusion */
   }
 
   select {
