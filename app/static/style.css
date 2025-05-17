@@ -171,13 +171,6 @@ body::before {
     left: 56%;   /* EXAMPLE - Adjust */
 }
 
-/* Override for when running as a standalone homescreen app */
-@media all and (display-mode: standalone) {
-    h1 {
-        margin-top: 2.2em; /* Adjust for standalone mode */
-    }
-}
-
 /* Desktop Positioning (corresponds to your desktop body::before background-position) */
 @media (min-width: 768px) {
     .dragon-eye-glow.left-eye {
@@ -213,6 +206,23 @@ h2 {
   font-size: var(--font-size-h2);
   color: var(--clr-heading);
   margin-top: 0;
+}
+
+/* Overrides for when running as a standalone homescreen app 
+   More dragon stuff. Must be below h1 margin-top to override it.
+*/
+@media all and (display-mode: standalone) {
+    h1 {
+      margin-top: 2.7em !important; /* Adjust for standalone mode */
+    }
+    .dragon-eye-glow.left-eye {
+      top: 164px;  /* EXAMPLE - Adjust based on where the left eye appears */
+      left: 35%;   /* EXAMPLE - Adjust */
+    }
+    .dragon-eye-glow.right-eye {
+      top: 164px;  /* EXAMPLE - Adjust based on where the right eye appears */
+      left: 58%;   /* EXAMPLE - Adjust */
+    }
 }
 
 /* === Layout Containers === */
