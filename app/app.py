@@ -313,4 +313,4 @@ if __name__ == '__main__':
     #    file_handler.setFormatter(formatter)
     #    app.logger.addHandler(file_handler)
     #    app.logger.setLevel(logging.WARNING)
-    app.run(debug=True)
+    app.run()
