@@ -114,6 +114,9 @@ body {
     z-index: 0; /* Explicitly set body stacking context */
 }
 
+/* === Dragon Stuff === */
+
+/* === Background Image Overlay === */
 body::before {
     content: "";
     position: fixed; /* Covers the entire viewport and stays fixed */
@@ -130,6 +133,58 @@ body::before {
     z-index: -1;   /* Places the pseudo-element BEHIND the body's content and its direct background */
 }
 
+/* === Glowing Eyes === */
+.dragon-eye-glow {
+    position: fixed;
+    width: 35px; /* Adjust size of glow */
+    height: 35px; /* Adjust size of glow */
+    background: radial-gradient(ellipse at center,
+                                rgba(255, 80, 80, 0.8) 0%,  /* Inner glow color - e.g., fiery red */
+                                rgba(255, 80, 80, 0.5) 60%,
+                                rgba(255, 80, 80, 0) 70%); /* Fades to transparent */
+    border-radius: 50%;
+    z-index: -0.5; /* Above dragon bg, below content */
+    pointer-events: none; /* So they don't interfere with clicks */
+    opacity: 0.5; /* Base opacity */
+    animation: pulseGlow 2.5s infinite ease-in-out alternate;
+}
+
+@keyframes pulseGlow {
+    from {
+        transform: scale(0.9);
+        opacity: 0.6;
+    }
+    to {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+}
+
+/* --- Positioning - MUST BE MANUALLY ADJUSTED --- */
+/* Mobile First Positioning (corresponds to your body::before background-position: center -70px; etc.) */
+.dragon-eye-glow.left-eye {
+    top: 199px;  /* EXAMPLE - Adjust based on where the left eye appears */
+    left: 34%;   /* EXAMPLE - Adjust */
+}
+.dragon-eye-glow.right-eye {
+    top: 199px;  /* EXAMPLE - Adjust based on where the right eye appears */
+    left: 58%;   /* EXAMPLE - Adjust */
+}
+
+/* Desktop Positioning (corresponds to your desktop body::before background-position) */
+@media (min-width: 768px) {
+    .dragon-eye-glow.left-eye {
+        top: 199px;  /* EXAMPLE - Adjust for desktop */
+        left: 45%;   /* EXAMPLE - Adjust for desktop */
+    }
+    .dragon-eye-glow.right-eye {
+        top: 199px;  /* EXAMPLE - Adjust for desktop */
+        left: 52.5%; /* EXAMPLE - Adjust for desktop */
+    }
+}
+
+/* === End Dragon Stuff === */
+
 h1, h2 {
   font-family: var(--font-heading);
   line-height: 1.2;
@@ -142,8 +197,9 @@ h1 {
   color: var(--clr-heading);
   margin-top: 3em;
   z-index: 1;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25), /* Main shadow */
-                 0 0 5px rgba(50, 30, 30, 0.15);  /* Softer, wider, very subtle diffusion */
+  text-shadow: 
+        0 0 3px rgba(253, 246, 227, 0.75), /* Based on #fdf6e3, adjust opacity (0.75 is a starting point) */
+        0 0 5px rgba(253, 246, 227, 0.55);
 }
 
 h2 {
@@ -159,6 +215,11 @@ form,
   max-width: var(--container-max-width-mobile);
   margin-left: auto;
   margin-right: auto;
+}
+
+form#main-form {
+  z-index: 1;
+  position: relative; /* Ensure it stacks above the dragon's glowing eyes */
 }
 
 /* === Form Styles === */
@@ -462,6 +523,9 @@ box-shadow: var(--shadow-button-active);
   color: var(--clr-footer-text);
   margin-top: calc(var(--spacing-unit) * 4);
   padding: calc(var(--spacing-unit) * 2) var(--spacing-unit);
+  text-shadow: 
+        0 0 3px rgba(253, 246, 227, 0.75), /* Based on #fdf6e3, adjust opacity (0.75 is a starting point) */
+        0 0 5px rgba(253, 246, 227, 0.55);
 }
 
 .app-footer a {
