@@ -71,7 +71,7 @@
   --shadow-bonus-glow: 0 0 10px var(--clr-bonus-shadow);
 
   /* --- Spacing & Layout --- */
-  --spacing-unit: 1em; /* Base unit for padding/margins relative to element font-size */
+  --spacing-unit: 1em;
   --gap-form: 1.25em;
   --gap-roll-result: 0.6em;
   --container-max-width-mobile: 90%;
@@ -99,92 +99,37 @@
 }
 
 body {
-    position: relative; /* Required for z-index of pseudo-element */
+    position: relative;
     background-color: var(--clr-bg);
-    background-image: var(--bg-texture); /* Your texture remains directly on the body */
+    background-image: var(--bg-texture);
     background-repeat: repeat;
-    background-attachment: scroll; /* Or fixed, as you prefer for the texture */
-
+    background-attachment: fixed;
     color: var(--clr-text);
     font-family: var(--font-body);
     font-size: var(--font-size-base);
     line-height: 1.6;
     padding: var(--spacing-unit);
     margin: 0;
-    z-index: 0; /* Explicitly set body stacking context */
+    z-index: 0;
 }
 
-/* === Dragon Stuff === */
-
-/* === Background Image Overlay === */
+/* --- Background Dragon Image Overlay --- */
 body::before {
     content: "";
-    position: fixed; /* Covers the entire viewport and stays fixed */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('img/red-dragon.png'); /* Your original dragon image */
+    background-image: url('img/red-dragon.png');
     background-repeat: no-repeat;
-    background-position: center 5%; /* Center the image */
-    background-size: cover; /* Or 'contain' */
-
-    opacity: 0.45;  /* << ADJUST THIS VALUE (0.0 to 1.0) for desired faintness */
-    z-index: -1;   /* Places the pseudo-element BEHIND the body's content and its direct background */
+    background-position: center 5%;
+    background-size: cover;
+    opacity: 0.45;
+    z-index: -1;
 }
 
-/* === Glowing Eyes === */
-.dragon-eye-glow {
-    position: fixed;
-    width: 25px; /* Adjust size of glow */
-    height: 25px; /* Adjust size of glow */
-    background: radial-gradient(ellipse at center,
-                                rgba(255, 80, 80, 0.8) 0%,  /* Inner glow color - e.g., fiery red */
-                                rgba(255, 80, 80, 0.5) 60%,
-                                rgba(255, 80, 80, 0) 70%); /* Fades to transparent */
-    border-radius: 50%;
-    z-index: -0.5; /* Above dragon bg, below content */
-    pointer-events: none; /* So they don't interfere with clicks */
-    opacity: 0.5; /* Base opacity */
-    animation: pulseGlow 2.5s infinite ease-in-out alternate;
-}
-
-@keyframes pulseGlow {
-    from {
-        transform: scale(0.9);
-        opacity: 0.6;
-    }
-    to {
-        transform: scale(1.15);
-        opacity: 1;
-    }
-}
-
-/* --- Positioning --- */
-/* Mobile First Positioning (corresponds to body::before background-position: center -70px; etc.) */
-.dragon-eye-glow.left-eye {
-    top: 130px;  /* EXAMPLE - Adjust based on where the left eye appears */
-    left: 37%;   /* EXAMPLE - Adjust */
-}
-.dragon-eye-glow.right-eye {
-    top: 130px;  /* EXAMPLE - Adjust based on where the right eye appears */
-    left: 56%;   /* EXAMPLE - Adjust */
-}
-
-/* Desktop Positioning (corresponds to your desktop body::before background-position) */
-@media (min-width: 768px) {
-    .dragon-eye-glow.left-eye {
-        top: 199px;  /* EXAMPLE - Adjust for desktop */
-        left: 45%;   /* EXAMPLE - Adjust for desktop */
-    }
-    .dragon-eye-glow.right-eye {
-        top: 199px;  /* EXAMPLE - Adjust for desktop */
-        left: 52.5%; /* EXAMPLE - Adjust for desktop */
-    }
-}
-
-/* === End Dragon Stuff === */
-
+/* --- Headers --- */
 h1, h2 {
   font-family: var(--font-heading);
   line-height: 1.2;
@@ -198,7 +143,7 @@ h1 {
   margin-top: 1.9em;
   z-index: 1;
   text-shadow: 
-        0 0 3px rgba(253, 246, 227, 0.75), /* Based on #fdf6e3, adjust opacity (0.75 is a starting point) */
+        0 0 3px rgba(253, 246, 227, 0.75),
         0 0 5px rgba(253, 246, 227, 0.55);
 }
 
@@ -208,24 +153,8 @@ h2 {
   margin-top: 0;
 }
 
-/* Overrides for when running as a standalone homescreen app 
-   More dragon stuff. Must be below h1 margin-top to override it.
-*/
-@media all and (display-mode: standalone) {
-    h1 {
-      margin-top: 2.7em !important; /* Adjust for standalone mode */
-    }
-    .dragon-eye-glow.left-eye {
-      top: 164px;  /* EXAMPLE - Adjust based on where the left eye appears */
-      left: 35%;   /* EXAMPLE - Adjust */
-    }
-    .dragon-eye-glow.right-eye {
-      top: 164px;  /* EXAMPLE - Adjust based on where the right eye appears */
-      left: 58%;   /* EXAMPLE - Adjust */
-    }
-}
+/* === Layout Containers & Form Styles === */
 
-/* === Layout Containers === */
 form,
 .result-box,
 .bonus-alert {
@@ -234,12 +163,6 @@ form,
   margin-right: auto;
 }
 
-form#main-form {
-  z-index: 1;
-  position: relative; /* Ensure it stacks above the dragon's glowing eyes */
-}
-
-/* === Form Styles === */
 form,
 .bonus-alert {
   background: var(--clr-card-bg);
@@ -277,11 +200,11 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   /* Embed arrow color via variable if possible, fallback needed for complex SVG */
-  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22' + encodeURIComponent(getComputedStyle(document.documentElement).getPropertyValue('--clr-select-arrow').trim() || '#007CB2') + '%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='292.4' height='292.4'%3E%3Cpath fill='%23007CB2' d='M287 69.4a17.6 17.6 0 0 0-13-5.4H18.4c-5 0-9.3 1.8-12.9 5.4A17.6 17.6 0 0 0 0 82.2c0 5 1.8 9.3 5.4 12.9l128 127.9c3.6 3.6 7.8 5.4 12.8 5.4s9.2-1.8 12.8-5.4L287 95c3.5-3.5 5.4-7.8 5.4-12.8 0-5-1.9-9.2-5.5-12.8z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right .7em top 50%;
   background-size: .65em auto;
-  background-color: #fff; /* Keep specific bg for select */
+  background-color: #fff;
   color: var(--clr-text); /* Explicitly set text color using the variable; otherwise, the text is blue in iOS */
 }
 
@@ -320,11 +243,12 @@ button:active {
 }
 
 /* === Result Box Styles === */
+
 .result-box {
   margin-top: calc(var(--spacing-unit) * 2);
   margin-bottom: calc(var(--spacing-unit) * 2);
-  border: var(--border-width-standard) solid var(--clr-form-border); /* Default border */
-  border-radius: var(--border-radius-large); /* Updated radius */
+  border: var(--border-width-standard) solid var(--clr-form-border);
+  border-radius: var(--border-radius-large);
   padding: calc(var(--spacing-unit) * 1.25);
   box-shadow: var(--shadow-result-box);
   animation: fadeInUp var(--fade-in-duration) ease-out forwards;
@@ -364,12 +288,12 @@ button:active {
   color: var(--clr-bonus-heading);
 }
 
-/* === Keyword Formatting === */
 .keyword-prefix {
   font-weight: 800;
 }
 
 /* === Dice & Shimmer Styles === */
+
 .inline-die {
   height: 3.5em;
   vertical-align: middle;
@@ -418,18 +342,16 @@ button:active {
    transform: scale(0.5);
 }
 
-/* To prevent flash on dice roll */
+/* To prevent "flash" on dice roll */
 #primary-result-area,
 #secondary-result-area {
   min-height: 10em; /* Adjust this value, if necessary - try 10em, 150px, etc. */
-  /* Ensure display is block when visible, visibility handles show/hide */
   display: block;
-  visibility: hidden; /* Start hidden */
-  /* Add transition if using opacity method later */
-  /* transition: opacity 0.2s ease-in-out; */
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out;
 }
 
-/* === Animations & Effects === */
+/* --- Animations & Effects --- */
 .scroll-note {
   font-size: var(--font-size-scroll-note);
   font-weight: 700;
@@ -448,9 +370,9 @@ button:active {
 @keyframes pop-in-smooth { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
 /* === Share to Discord Button Styling === */
+
 .share-container {
   text-align: center;
-  /* Match margin of other result/form boxes using your spacing unit */
   margin-top: calc(var(--spacing-unit) * 2);
   margin-bottom: calc(var(--spacing-unit) * 2);
   margin-left: auto;
@@ -460,21 +382,20 @@ button:active {
 
 #share-discord-button {
   /* Layout & Alignment */
-  display: inline-flex; /* Aligns icon and text nicely */
-  align-items: center; /* Vertically centers icon and text */
-  justify-content: center; /* Horizontally centers content */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   /* Sizing & Spacing */
-  /* Use a size relative to base or secondary button */
-  padding: 0.75em 1.2em; /* Adjust padding as needed */
-  font-size: var(--font-size-button-secondary); /* Matches secondary button size */
+  padding: 0.75em 1.2em;
+  font-size: var(--font-size-button-secondary);
 
   /* Font & Text */
-  font-family: var(--font-body); /* Using body font like select elements */
-  color: var(--clr-button-text); /* Using your button text color variable */
+  font-family: var(--font-body);
+  color: var(--clr-button-text);
   text-decoration: none;
   text-align: center;
-  white-space: nowrap; /* Prevent text wrapping */
+  white-space: nowrap;
 
   /* Appearance */
   background-color: #5865F2; /* Discord Blurple */
@@ -489,17 +410,15 @@ button:active {
 
 /* Icon Styling */
 #share-discord-button .discord-icon {
-  /* SVG inherits color via fill="currentColor" from the button's text color */
-  /* Size relative to button font size */
   width: 1.8em;
   height: 1.8em;
-  margin-right: 0.5em; /* Space between icon and text */
-  vertical-align: middle; /* Helps alignment */
+  margin-right: 0.5em;
+  vertical-align: middle;
 }
 
 /* Hover Effect */
 #share-discord-button:hover:not(:disabled) {
-  background-color: #4752C4; /* Slightly darker blurple, adjust if needed */
+  background-color: #4752C4; /* Slightly darker Blurple */
   transform: translateY(-1px); /* Lift effect */
   box-shadow: var(--shadow-button-hover);
 }
@@ -514,7 +433,7 @@ box-shadow: var(--shadow-button-active);
 #share-discord-button:disabled {
   background-color: #7a8499;
   color: #cccccc;
-  box-shadow: none; /* Remove shadow when disabled */
+  box-shadow: none;
   cursor: not-allowed;
   opacity: 0.7;
 }
@@ -541,7 +460,7 @@ box-shadow: var(--shadow-button-active);
   margin-top: calc(var(--spacing-unit) * 4);
   padding: calc(var(--spacing-unit) * 2) var(--spacing-unit);
   text-shadow: 
-        0 0 3px rgba(253, 246, 227, 0.75), /* Based on #fdf6e3, adjust opacity (0.75 is a starting point) */
+        0 0 3px rgba(253, 246, 227, 0.75), /* matches h1 */
         0 0 5px rgba(253, 246, 227, 0.55);
 }
 
@@ -561,44 +480,44 @@ box-shadow: var(--shadow-button-active);
   vertical-align: middle;
   margin-left: 0.4em;
   transition: fill 0.2s ease;
-  fill: var(--clr-footer-icon) !important; /* necessary */
+  fill: var(--clr-footer-icon);
 }
 
 .app-footer a:hover .github-icon {
-  fill: var(--clr-footer-icon-hover) !important; /* Keep important */
+  fill: var(--clr-footer-icon-hover);
 }
 
 /* === Responsive Adjustments === */
 @media (min-width: 768px) {
   :root {
-      /* Adjust base font size slightly for desktop */
       --font-size-base: 1.2rem;
-      /* Adjust H1 size */
-      --font-size-h1: 3.8rem; /* Example adjustment */
+      --font-size-h1: 3.8rem;
   }
   body {
-    padding: 0; /* Adjust padding for desktop */
-    /* font-size uses variable */
+    padding: 0;
   }
   h1 {
     margin-top: 2.2em;
   }
-
   form,
   .result-box,
   .bonus-alert,
   .share-container {
     max-width: var(--container-max-width-desktop);
   }
-  
   .share-container {
     padding: 0;
   }
-
   form,
   .bonus-alert {
      padding: calc(var(--spacing-unit) * 2);
   }
+}
+
+@media all and (display-mode: standalone) {
+    h1 {
+      margin-top: 2.7em; /* Adjust for standalone mode */
+    }
 }
 
 /* === Dark Mode === */
@@ -621,10 +540,8 @@ box-shadow: var(--shadow-button-active);
     --clr-button-outline: #888;
     /* Result Boxes */
     --clr-result-bg: rgba(35, 60, 50, 0.8); /* changed for dragon */
-    /* --clr-result-border: #4caf50; */ /* No change needed from light */
     --clr-result-heading: #8ff0a4;
     --clr-fumble-bg: rgba(65, 50, 50, 0.8); /* changed for dragon */
-    /* --clr-fumble-border: #a12d2f; */ /* No change needed */
     --clr-fumble-heading: #ff7a7a;
     --clr-bonus-bg: rgba(50, 40, 70, 0.8); /* changed for dragon */
     --clr-bonus-border: #bb86fc;
@@ -638,7 +555,7 @@ box-shadow: var(--shadow-button-active);
     --clr-footer-icon: #ccc;
     --clr-footer-icon-hover: #fff;
     /* Dice */
-    --roll-color: #ff8a80; /* User preference */
+    --roll-color: #ff8a80;
     --roll-value-shadow: none; /* Remove shadow in dark mode */
     /* Select Arrow */
     --clr-select-arrow: #cccccc; /* Light arrow for dark bg */
@@ -646,16 +563,11 @@ box-shadow: var(--shadow-button-active);
     /* --- Backgrounds & Textures --- */
     --bg-texture: none; /* Remove texture */
 
-    /* --- Shadows (Optional: Adjust if needed) --- */
+    /* --- Shadows --- */
     --shadow-card: 0 6px 20px rgba(0, 0, 0, 0.2); /* Slightly stronger */
-    /* ... other shadow adjustments if desired */
   }
 
   /* Specific overrides if variable isn't enough */
-  body {
-     border-top: none; /* Override light mode footer border */
-  }
-
   h1 {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5), /* Main shadow */
                  0 0 5px rgba(50, 30, 30, 0.25); /* Softer, wider, very subtle diffusion */
@@ -665,10 +577,7 @@ box-shadow: var(--shadow-button-active);
      background-color: #333; /* Darker dropdown specific bg */
      color: var(--clr-text);
      border-color: var(--clr-form-border);
-     /* background-image will update via JS/CSS variable if structured correctly */
-     /* Note: Updating embedded SVG fill via CSS var is tricky. The dark mode SVG URL might need to be static or use JS */
      background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23cccccc%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
-
   }
 
   button {
@@ -680,14 +589,9 @@ box-shadow: var(--shadow-button-active);
       border-top-color: var(--clr-border-subtle);
   }
 
-  #share-discord-button {
-    /* Blurple should have acceptable contrast on dark, but verify */
-  }
-
 #share-discord-button:disabled {
-     /* Use a darker disabled background for dark mode */
-     background-color: #4f545c; /* Example dark disabled grey */
-     color: #7b7b7b; /* Darker disabled text */
+     background-color: #4f545c;
+     color: #7b7b7b;
   }
 
 #share-discord-button:disabled[textContent="Sharing..."] {
@@ -696,8 +600,6 @@ box-shadow: var(--shadow-button-active);
   }
 #share-discord-button[textContent="Shared!"] {
      background-color: #3BA55D;
-     /* Ensure text color has contrast if needed */
-     /* color: #FFFFFF; */
   }
 
 } /* End Dark Mode */
