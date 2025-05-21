@@ -2,29 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="description" content="A fantasy dice-rolling app for critical hits and fumbles."> 
+    <meta name="description" content="A fantasy dice-rolling app for critical hits and fumbles.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Crits & Fumbles</title>
-    <!-- favicon -->
+
     <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" sizes="any" type="image/svg+xml">
-    <!-- Fallback for Safari and IE -->
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" sizes="48x48">
-    <!-- Apple touch icon for iOS home screen -->
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+
+    <meta name="theme-color" content="#c19a6b"> 
+
+    <meta name="theme-color" content="#1e1e1e" media="(prefers-color-scheme: dark)">
+
     <meta name="apple-mobile-web-app-title" content="Crits & Fumbles">
-    <!-- Android / PWA manifest -->
     <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
-    <!-- fonts -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Uncial+Antiqua&display=swap" rel="stylesheet">
-    <!-- styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
-<div class="dragon-eye-glow left-eye"></div>
-<div class="dragon-eye-glow right-eye"></div>
 
 <h1>Crits & Fumbles</h1>
 
