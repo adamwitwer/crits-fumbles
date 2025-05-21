@@ -551,9 +551,7 @@ box-shadow: var(--shadow-button-active);
     --clr-scroll-note: #ddd;
     --clr-scroll-note-shadow: rgba(255, 255, 255, 0.3);
      /* Footer */
-    --clr-footer-text: #aaa;
-    --clr-footer-icon: #ccc;
-    --clr-footer-icon-hover: #fff;
+    --clr-footer-text: #f9d77e; /* Matches heading */
     /* Dice */
     --roll-color: #ff8a80;
     --roll-value-shadow: none; /* Remove shadow in dark mode */
@@ -561,14 +559,30 @@ box-shadow: var(--shadow-button-active);
     --clr-select-arrow: #cccccc; /* Light arrow for dark bg */
 
     /* --- Backgrounds & Textures --- */
-    --bg-texture: none; /* Remove texture */
-
+    --bg-texture: url('https://www.transparenttextures.com/patterns/dark-mosaic.png');
+    background-blend-mode: overlay;
+    
     /* --- Shadows --- */
     --shadow-card: 0 6px 20px rgba(0, 0, 0, 0.2); /* Slightly stronger */
   }
 
+  body::before {
+    background-image: url('img/red-dragon-dark.png');
+    opacity: 1;
+    background-blend-mode: luminosity;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
+    z-index: -1;
+    pointer-events: none;
+  }
+
   /* Specific overrides if variable isn't enough */
-  h1 {
+  h1, .app-footer {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5), /* Main shadow */
                  0 0 5px rgba(50, 30, 30, 0.25); /* Softer, wider, very subtle diffusion */
   }
@@ -601,5 +615,5 @@ box-shadow: var(--shadow-button-active);
 #share-discord-button[textContent="Shared!"] {
      background-color: #3BA55D;
   }
-
+  
 } /* End Dark Mode */
