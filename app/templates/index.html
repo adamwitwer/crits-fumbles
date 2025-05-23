@@ -10,7 +10,7 @@
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" sizes="48x48">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
 
-    <meta name="theme-color" content="#c19a6b"> 
+    <meta name="theme-color" content="#c19a6b">
 
     <meta name="theme-color" content="#1e1e1e" media="(prefers-color-scheme: dark)">
 
@@ -26,7 +26,7 @@
 
 <h1>Crits & Fumbles</h1>
 
-<form id="main-form"> {# No method or action needed now #}
+<form id="main-form">
   <div>
     <label for="roll_type">Roll Type</label>
     <select name="roll_type" id="roll_type" onchange="toggleFields()">
@@ -71,22 +71,17 @@
     </div>
   </div>
 
-  {# This button now triggers the AJAX call via handleRoll #}
   <button type="button" id="primary-roll-button" onclick="handleRoll('primary')" aria-label="Roll dice for result">⚡️ Roll ⚡️</button>
 </form>
 
-{# --- Area for Results --- #}
 <div id="error-message" style="display: none; color: red; text-align: center; margin: 1rem 0;"></div>
 
-{# --- Primary Result Display Area --- #}
 <div id="primary-result-area" style="display: none;">
-    {# Content will be injected by JavaScript #}
+    {# Content (animation or result) will be injected by JavaScript #}
 </div>
 
-{# --- Secondary Prompt / Roll Button Area --- #}
 <div id="secondary-prompt-area" style="display: none;" class="bonus-alert">
     <h2 id="secondary-prompt-text"></h2>
-    {# Store necessary data for the secondary roll #}
     <input type="hidden" id="secondary-roll-type-hidden">
     <input type="hidden" id="secondary-damage-type-hidden">
     <input type="hidden" id="secondary-magic-subtype-hidden">
@@ -97,9 +92,8 @@
     </button>
 </div>
 
-{# --- Secondary Result Display Area --- #}
 <div id="secondary-result-area" style="display: none;">
-    {# Content will be injected by JavaScript #}
+    {# Content (animation or result) will be injected by JavaScript #}
 </div>
 
 <div class="share-container"><button type="button" id="share-discord-button" onclick="shareResultToDiscord()" style="display: none;">
@@ -107,10 +101,8 @@
   <span class="button-text">Share Result to Discord</span></button>
 </div>
 
-{# --- Audio Element --- #}
 <audio id="dice-sound" preload="auto">
     <source src="{{ url_for('static', filename='sounds/dice-roll.mp3') }}" type="audio/mpeg">
-    {# Add .ogg or other formats here for broader compatibility if needed #}
     Your browser does not support the audio element.
 </audio>
 
@@ -139,22 +131,23 @@
   // --- Helper: Sound Function ---
   function playDiceSound() {
     if (diceAudio) {
-      diceAudio.currentTime = 0; // Rewind
+      diceAudio.currentTime = 0;
       diceAudio.play().catch(error => console.error("Audio play failed:", error));
     }
   }
 
-  // --- Helper: Create Roll HTML ---
+  // --- Helper: Create Final Roll HTML (with number) ---
   function createRollHTML(rollValue, numDice, dieType) {
       let html = '<div class="roll-result">';
-      const dieImageFilename = (dieType || 'd20') + '.png'; // Default to d20 if undefined
+      const dieImageFilename = (dieType || 'd20') + '.png';
       const dieImageSrc = "{{ url_for('static', filename='img/') }}" + dieImageFilename;
       const dieAltText = dieType || 'd20';
 
       html += `<img src="${dieImageSrc}" alt="${dieAltText}" class="inline-die" />`;
+      // The rollValue span will trigger its own CSS animations for pop-in/shimmer
       html += `<span class="roll-value">${rollValue || '?'}</span>`;
 
-      if (numDice === 2) {
+      if (numDice === 2 && dieType === 'd10') { // Specifically for 2d10 visuals (fumbles)
            html += `<img src="${dieImageSrc}" alt="${dieAltText}" class="inline-die" />`;
       }
       html += '</div>';
@@ -162,62 +155,76 @@
   }
 
   // --- Helper: Format Keywords ---
-  /**
-   * Formats specific keywords within a text string using span tags with a class,
-   * and adds a line break before "Ranged:".
-   * @param {string | null | undefined} text The input text.
-   * @returns {string} HTML string with keywords styled and formatted, or an empty string.
-   */
-   function formatKeywords(text) {
+  function formatKeywords(text) {
       if (!text) {
-          return ""; // Return empty string for null or undefined input
+          return "";
       }
-      const keywordClass = "keyword-prefix"; // Class name for styling
-      // Replace "Melee:" with a styled span
+      const keywordClass = "keyword-prefix";
       let formattedText = text.replaceAll(
           "Melee:",
           `<span class="${keywordClass}">Melee:</span>`
       );
-      // Replace "Ranged:" with a line break AND a styled span
       formattedText = formattedText.replaceAll(
           "Ranged:",
-          `<br><br><span class="${keywordClass}">Ranged:</span>` // Added <br> here
+          `<br><br><span class="${keywordClass}">Ranged:</span>`
       );
       return formattedText;
   }
 
+  // --- Helper: Display Rolling Animation ---
+  function displayRollingAnimation(targetAreaElement, dieType, numDice, rollContext) {
+      let animationContainerId = rollContext === 'primary' ? 'primary-rolling-anim-container' : 'secondary-rolling-anim-container';
+      let animContainer = document.getElementById(animationContainerId);
+
+      if (!animContainer) {
+          animContainer = document.createElement('div');
+          animContainer.id = animationContainerId;
+          animContainer.classList.add('rolling-animation-container');
+      } else {
+          animContainer.innerHTML = ''; // Clear previous animation
+      }
+
+      const dieImageFilename = (dieType || 'd20') + '.png';
+      const dieImageSrc = "{{ url_for('static', filename='img/') }}" + dieImageFilename;
+      const dieAltText = dieType || 'd20';
+
+      for (let i = 0; i < numDice; i++) {
+          const img = document.createElement('img');
+          img.src = dieImageSrc;
+          img.alt = dieAltText;
+          img.classList.add('inline-die');
+          img.classList.add('is-rolling'); // Apply animation class
+          animContainer.appendChild(img);
+      }
+      targetAreaElement.innerHTML = ''; // Clear the target area first
+      targetAreaElement.appendChild(animContainer);
+      targetAreaElement.style.display = 'block';
+      targetAreaElement.style.visibility = 'visible';
+  }
+
   // --- Main Roll Handler (AJAX) ---
-  async function handleRoll(context) { // context is 'primary' or 'secondary'
+  async function handleRoll(context) {
       playDiceSound();
-      errorMessageDiv.style.display = 'none';   // Hide old errors
-      primaryRollBtn.disabled = true;       // Disable buttons
+      errorMessageDiv.style.display = 'none';
+      primaryRollBtn.disabled = true;
       secondaryRollBtn.disabled = true;
-      // Also disable share button if it exists/is visible
       const shareButton = document.getElementById('share-discord-button');
       if (shareButton) shareButton.disabled = true;
 
+      // Clear previous actual results immediately, animation will play in these areas
+      primaryResultArea.innerHTML = '';
+      primaryResultArea.style.visibility = 'hidden';
+      secondaryResultArea.innerHTML = '';
+      secondaryResultArea.style.visibility = 'hidden';
+      if (secondaryPromptArea) secondaryPromptArea.style.display = 'none';
 
-      // Hide previous results using visibility to reserve space, clear content AFTER hiding
-      if (primaryResultArea.style.display !== 'none') {
-          primaryResultArea.style.visibility = 'hidden';
-          // Don't clear innerHTML immediately, let updateUI handle replacing content
-          // primaryResultArea.innerHTML = '';
-      }
-      if (secondaryPromptArea.style.display !== 'none') {
-          secondaryPromptArea.style.visibility = 'hidden';
-      }
-      if (secondaryResultArea.style.display !== 'none') {
-          secondaryResultArea.style.visibility = 'hidden';
-           // Don't clear innerHTML immediately
-          // secondaryResultArea.innerHTML = '';
-      }
-      // Hide share button immediately on new roll using visibility
-       if (shareButton) shareButton.style.display = 'none';
-
-
-      // Prepare payload
+      let areaForRollingAnim;
+      let dieTypeForAnim;
+      let numDiceForAnim;
       let payload = { rollContext: context };
+
       if (context === 'primary') {
+          areaForRollingAnim = primaryResultArea;
           payload.rollType = document.getElementById('roll_type').value;
           payload.fumbleType = document.getElementById('fumbleType').value;
           payload.attackType = document.getElementById('attackType').value;
@@ -225,68 +232,107 @@
           if (payload.damageType === 'magic') {
                payload.magicSubtype = document.getElementById('magic_subtype').value;
           }
+
+          if (payload.rollType === 'fumble') {
+              // Fumbles (Smack Down & Arcana) visually show 2 d10s
+              // even if the backend uses a single d100 roll.
+              // The backend response for 'numDice' and 'dieType' for fumbles will be 2 and 'd10'.
+              dieTypeForAnim = 'd10';
+              numDiceForAnim = 2;
+          } else { // Crit
+              dieTypeForAnim = 'd20';
+              numDiceForAnim = 1;
+          }
       } else { // context === 'secondary'
-          payload.rollType = document.getElementById('secondary-roll-type-hidden').value;
+          areaForRollingAnim = secondaryResultArea;
+          payload.rollType = document.getElementById('secondary-roll-type-hidden').value; // This is 'minor', 'major', or 'insanity'
           payload.damageType = document.getElementById('secondary-damage-type-hidden').value;
           payload.magicSubtype = document.getElementById('secondary-magic-subtype-hidden').value;
           payload.primaryResultText = document.getElementById('secondary-primary-result-hidden').value;
           payload.primaryRollValue = document.getElementById('secondary-primary-roll-hidden').value;
+          // Secondary rolls are always d20 based on backend logic.
+          dieTypeForAnim = 'd20';
+          numDiceForAnim = 1;
       }
 
-      // Fetch results
+      displayRollingAnimation(areaForRollingAnim, dieTypeForAnim, numDiceForAnim, context);
+
+      const animationDuration = 1000; // Should match CSS animation-duration
+
       try {
-          const response = await fetch("{{ url_for('roll_ajax') }}", { // Use correct Jinja syntax
+          const response = await fetch("{{ url_for('roll_ajax') }}", {
               method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json'
-              },
+              headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
               body: JSON.stringify(payload)
           });
-          const data = await response.json();
+
+          const data = await response.json(); // Parse JSON once
+
           if (!response.ok) {
               throw new Error(data.errorMessage || `HTTP error! status: ${response.status}`);
           }
-          updateUI(data); // Update the page content with results
+
+          setTimeout(() => {
+              const animContainerId = context === 'primary' ? 'primary-rolling-anim-container' : 'secondary-rolling-anim-container';
+              const animContainer = document.getElementById(animContainerId);
+              if (animContainer) animContainer.remove();
+              updateUI(data);
+          }, animationDuration);
+
       } catch (error) {
-          console.error('Error during fetch:', error);
-          // Update UI to show the error message
+          console.error('Error during fetch or processing:', error);
+          const animContainerId = context === 'primary' ? 'primary-rolling-anim-container' : 'secondary-rolling-anim-container';
+          const animContainer = document.getElementById(animContainerId);
+          if (animContainer) animContainer.remove(); // Remove animation on error
           updateUI({status: 'error', errorMessage: 'Failed to get roll result: ' + error.message});
-      } finally {
-          primaryRollBtn.disabled = false;      // Re-enable buttons
+          // Re-enable buttons immediately on error caught here.
+          primaryRollBtn.disabled = false;
           secondaryRollBtn.disabled = false;
-          // Re-enable share button ONLY if it was made visible by updateUI
-          if (shareButton && shareButton.style.display !== 'none') {
-              shareButton.disabled = false;
-          }
+          // Share button is handled by updateUI if an error message is displayed
+      } finally {
+          // Buttons are re-enabled after the timeout in the success path.
+          // If an error occurs before timeout, catch block handles it.
+          // This finally block is more for things that *always* happen if the try block completes (even if timeout is pending).
+          // Given the async nature and timeout, primary re-enablement is best after timeout or in catch.
+          // However, if an error occurred in .json() or before setTimeout, this might be needed.
+          // Safest to put primary/secondary button re-enablement after operations.
+          // Let's refine: re-enable buttons after the timeout OR in the catch block.
+          // The `setTimeout` in `try` will complete, then updateUI.
+          // The `finally` block here runs *before* the setTimeout callback finishes.
+          // So, button re-enabling is better placed in the setTimeout callback and the catch block.
+          // For now, only re-enable after a slight delay to cover most cases, but this is tricky.
+
+          // A better approach for finally:
+          // If the fetch was successful, re-enable AFTER the timeout completes processing.
+          // If fetch failed, re-enable in the CATCH block.
+          // This means this finally block might not be the best place for re-enabling primary/secondary roll buttons
+          // if we rely on the setTimeout.
+          // Let's ensure re-enabling happens within the setTimeout or catch.
+          // (Modified above to re-enable in CATCH and planning re-enable in setTimeout's success logic path for buttons)
+
+          // To ensure buttons are always re-enabled if no other path does:
+          setTimeout(() => {
+             if (!primaryRollBtn.disabled) primaryRollBtn.disabled = false; // If not already enabled by another path
+             if (!secondaryRollBtn.disabled) secondaryRollBtn.disabled = false;
+          }, animationDuration + 200); // A bit after animation and potential UI update
       }
   }
-  
-// --- Share to Discord Function ---
-async function shareResultToDiscord() {
-    // --- Start: Code to get resultText and roll data ---
+
+  // --- Share to Discord Function ---
+  async function shareResultToDiscord() {
     let resultText = '';
     const primaryResultAreaDiv = document.getElementById('primary-result-area');
     const secondaryResultAreaDiv = document.getElementById('secondary-result-area');
-
     const primaryResultBoxDiv = primaryResultAreaDiv.querySelector('.result-box');
-    // Find the result box *specifically* within the secondary area
-    const secondaryResultBoxDiv = secondaryResultAreaDiv.querySelector('.result-box');
-
+    const secondaryResultBoxDiv = secondaryResultAreaDiv.querySelector('.result-box'); // May be null
     const primaryResultP = primaryResultAreaDiv.querySelector('.result-box > p');
-    const arcanaDescriptionP = primaryResultAreaDiv.querySelector('.description-box > p');
-    // Find the p tag *specifically* within the secondary result box div
-    const secondaryResultP = secondaryResultBoxDiv?.querySelector('p'); // Use optional chaining
-
-    // Extract roll values AND type using dataset
+    const arcanaDescriptionP = primaryResultAreaDiv.querySelector('.description-box > p'); // For Arcana
+    const secondaryResultP = secondaryResultBoxDiv?.querySelector('p'); // Optional chaining
     const primaryRollValue = primaryResultBoxDiv?.dataset.rollValue;
-    // Determine the definitive roll type for the *final* message context
-    // If secondary result box exists and has a type, use it; otherwise use primary's type
     const rollType = secondaryResultBoxDiv?.dataset.rollType || primaryResultBoxDiv?.dataset.rollType;
     const secondaryRollValue = secondaryResultBoxDiv?.dataset.rollValue;
     let messagePrefix = "";
 
-    // Construct the message based on roll type
     if (rollType === 'crit') {
         messagePrefix = "\n\u200b\n💥 **Critical Hit!** 💥\n\n";
         if (secondaryResultP && secondaryResultP.textContent.trim() && secondaryRollValue) {
@@ -298,83 +344,62 @@ async function shareResultToDiscord() {
         }
     } else if (rollType === 'fumble') {
         messagePrefix = "\n\u200b\n💀 **Fumble!** 💀\n\n";
-        if (arcanaDescriptionP && arcanaDescriptionP.textContent.trim() && primaryRollValue) { // Arcana
-            const arcanaEffectBox = primaryResultAreaDiv.querySelectorAll('.result-box')[1];
-            const arcanaEffectP = arcanaEffectBox?.querySelector('p');
-            const arcanaEffectText = arcanaEffectP ? arcanaEffectP.textContent.trim() : "N/A";
-            const arcanaDescText = arcanaDescriptionP.textContent.trim();
+        const arcanaDescBox = primaryResultAreaDiv.querySelector('.description-box'); // Arcana has description-box
+        if (arcanaDescBox && primaryRollValue) { // Questionable Arcana
+            const arcanaDescText = arcanaDescBox.querySelector('p')?.textContent.trim() || "N/A";
+            // Arcana effect is in a second result-box classed 'secondary' by updateUI
+            const arcanaEffectBox = primaryResultAreaDiv.querySelector('.result-box.secondary'); // More specific
+            const arcanaEffectText = arcanaEffectBox?.querySelector('p')?.textContent.trim() || "N/A";
             resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue}\n\n😩 **Result:** ${arcanaDescText}\n⚠️ **Effect:** ${arcanaEffectText}`;
         } else if (primaryResultP && primaryResultP.textContent.trim() && primaryRollValue) { // Smack Down Fumble
             resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue}\n⚠️ **Result:** ${primaryResultP.textContent.trim()}`;
         }
     }
-    // --- End: Code to get resultText ---
 
-
-    // --- Validate result text before proceeding ---
     if (!resultText || resultText.trim() === '' || resultText.includes('N/A')) {
         console.warn("shareResultToDiscord: No valid result text found to share.");
         alert('Could not find a complete result to share!');
         return;
     }
 
-    // --- Handle Button State and Fetch ---
     const shareButton = document.getElementById('share-discord-button');
     const discordIconHTML = shareButton.querySelector('.discord-icon')?.outerHTML || '';
+    const originalButtonHTML = shareButton.innerHTML; // Save original for precise reset
 
     shareButton.disabled = true;
-    // Set temporary text (this WILL remove the icon temporarily)
-    shareButton.textContent = "Sharing...";
+    shareButton.innerHTML = `${discordIconHTML} <span class="button-text">Sharing...</span>`;
+
 
     try {
-        console.log("Sharing to Discord:", resultText);
         const response = await fetch('/share_discord', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({ message: resultText }) // Send the message in JSON format
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ message: resultText })
         });
-
-        const responseData = await response.json(); // Try to parse response as JSON
-
+        const responseData = await response.json();
         if (response.ok) {
-            console.log('Shared to Discord successfully!', responseData);
-            // Set temporary success text (icon still removed)
-            shareButton.textContent = "Shared!";
+            shareButton.innerHTML = `${discordIconHTML} <span class="button-text">Shared!</span>`;
             setTimeout(() => {
-                 // Reset button HTML to include icon and original text
-                 shareButton.innerHTML = `${discordIconHTML} Share Result to Discord`; // Rebuilds icon + text
-                 // Re-enable ONLY if it should still be visible (i.e., not hidden by a subsequent roll)
-                 if (shareButton.style.display !== 'none') {
-                    shareButton.disabled = false; // Re-enable
-                 }
-             }, 2000); // Reset after 2 seconds
-
+                if (shareButton.style.display !== 'none') { // Only reset if still visible
+                    shareButton.innerHTML = originalButtonHTML;
+                    shareButton.disabled = false;
+                }
+            }, 2000);
         } else {
-            // Handle errors reported by the server (e.g., 400, 500)
-            console.error(`Failed to share to Discord (${response.status}):`, responseData?.error || response.statusText);
             alert(`Failed to share result: ${responseData?.error || response.statusText}`);
-             // Reset button HTML on error
-             shareButton.innerHTML = `${discordIconHTML} Share Result to Discord`; // Rebuilds icon + text
-            shareButton.disabled = false; // Re-enable
+            shareButton.innerHTML = originalButtonHTML;
+            shareButton.disabled = false;
         }
     } catch (error) {
-        // Handle network errors or issues parsing response.json()
-         console.error('Network or Parsing error sharing to Discord:', error);
-         alert('Error contacting server or processing response to share result.');
-          // Reset button HTML on error
-          shareButton.innerHTML = `${discordIconHTML} Share Result to Discord`; // Rebuilds icon + text
-         shareButton.disabled = false; // Re-enable
+         alert('Error contacting server to share result.');
+         shareButton.innerHTML = originalButtonHTML;
+         shareButton.disabled = false;
     }
   }
-  // --- End of Share to Discord Function ---
 
   // --- UI Update Function ---
   function updateUI(data) {
-      const shareButton = document.getElementById('share-discord-button'); // Get button ref
-
+      const shareButton = document.getElementById('share-discord-button');
       let showPrimary = false;
       let showPrompt = false;
       let showSecondary = false;
@@ -382,31 +407,30 @@ async function shareResultToDiscord() {
       let secondaryContent = '';
       let elementToScrollTo = null;
 
-      // --- Clear Previous State Visually ---
       errorMessageDiv.style.display = 'none';
       errorMessageDiv.textContent = '';
-      if (shareButton) shareButton.style.display = 'none'; // Hide button by default
+      if (shareButton) shareButton.style.display = 'none';
 
-      // --- Process Data and Prepare Content ---
       if (data.status === 'error') {
           errorMessageDiv.textContent = 'Error: ' + (data.errorMessage || 'Unknown error occurred.');
           errorMessageDiv.style.display = 'block';
           elementToScrollTo = errorMessageDiv;
-          if (shareButton) shareButton.style.display = 'none'; // Hide on error
+          if (shareButton) shareButton.style.display = 'none';
+          // Ensure roll buttons are enabled if an error is processed by updateUI
+          primaryRollBtn.disabled = false;
+          secondaryRollBtn.disabled = false;
       } else {
           const resultClass = data.selectedRollType === 'fumble' ? 'fumble' : 'result';
           let primaryResultExists = false;
 
-          // --- Build Primary HTML (if needed) ---
-          // Handle Questionable Arcana separate display
-          if (data.description && data.effect && !data.secondaryResultText) { // Arcana (always a fumble)
-               const formattedDescription = formatKeywords(data.description);
-               const formattedEffect = formatKeywords(data.effect);
-               const rollValueToShow = data.rollValue;
-               const numDiceToShow = 2;
-               const dieTypeToShow = 'd10';
-               const rollType = 'fumble'; // Arcana is a type of fumble
-               primaryContent = `
+          if (data.description && data.effect && !data.secondaryResultText) { // Arcana
+              const formattedDescription = formatKeywords(data.description);
+              const formattedEffect = formatKeywords(data.effect);
+              const rollValueToShow = data.rollValue;
+              const numDiceToShow = 2; // data.numDice from backend for fumble
+              const dieTypeToShow = 'd10'; // data.dieType from backend for fumble
+              const rollType = 'fumble';
+              primaryContent = `
                   <div class="result-box ${resultClass}" data-roll-value="${rollValueToShow}" data-roll-type="${rollType}">
                     ${createRollHTML(rollValueToShow, numDiceToShow, dieTypeToShow)}
                     <div class="description-box">
@@ -416,66 +440,77 @@ async function shareResultToDiscord() {
                   <div class="result-box secondary"> <h2>Effect</h2>
                     <p>${formattedEffect}</p>
                   </div>`;
-               primaryResultExists = true;
-          } else if (data.resultText || data.primaryResultForSecondary) { // Standard Crit/Fumble/Secondary-Primary
-              // Use primary result text from current data if secondary, or from primary roll data otherwise
-               const resultTextToShow = data.primaryResultForSecondary || data.resultText || '';
-               const formattedResultText = formatKeywords(resultTextToShow);
-               const rollValueToShow = data.primaryRollValueForSecondary || data.rollValue;
-               const numDiceToShow = (data.selectedRollType === 'fumble' && !data.primaryRollValueForSecondary) ? 2 : 1;
-               const dieTypeToShow = (data.selectedRollType === 'fumble' && !data.primaryRollValueForSecondary) ? 'd10' : 'd20';
-               // selectedRollType should be correct whether it's primary context or secondary context showing primary result
-               const rollType = data.selectedRollType;
-               primaryContent = `
+              primaryResultExists = true;
+          } else if (data.resultText || data.primaryResultForSecondary) {
+              const resultTextToShow = data.primaryResultForSecondary || data.resultText || '';
+              const formattedResultText = formatKeywords(resultTextToShow);
+              const rollValueToShow = data.primaryRollValueForSecondary || data.rollValue;
+              // Use numDice and dieType from the backend response data for consistency
+              const numDiceToShow = data.numDice || 1;
+              const dieTypeToShow = data.dieType || 'd20';
+              const rollType = data.selectedRollType;
+
+              primaryContent = `
                   <div class="result-box ${resultClass}" data-roll-value="${rollValueToShow}" data-roll-type="${rollType}">
                     ${createRollHTML(rollValueToShow, numDiceToShow, dieTypeToShow)}
                     <p>${formattedResultText}</p>
                     ${data.isSecondaryPrompt ? '<p class="scroll-note">👇 Bonus Effect!!! 👇</p>' : ''}
                   </div>`;
-               primaryResultExists = true;
+              primaryResultExists = true;
           }
 
-          // --- Build Secondary Result HTML (if needed) ---
           if (data.secondaryResultText) {
-               const formattedSecondaryText = formatKeywords(data.secondaryResultText);
-               const secondaryRollValue = data.rollValue;
-               // Secondary results stem from Crits, so we assume 'crit' here
-               const rollType = 'crit'; // Assuming secondary effects only come from crits
-               secondaryContent = `
+              const formattedSecondaryText = formatKeywords(data.secondaryResultText);
+              const secondaryRollValue = data.rollValue;
+              const rollType = 'crit'; // Secondary effects are from crits
+              secondaryContent = `
                   <div class="result-box secondary" data-roll-value="${secondaryRollValue}" data-roll-type="${rollType}">
                     <h2>✨ Bonus Effect</h2>
                      ${createRollHTML(secondaryRollValue, 1, 'd20')}
                      <p>${formattedSecondaryText}</p>
                   </div>`;
-               showSecondary = true;
+              showSecondary = true;
           }
 
-          // --- Determine Final Visibility States ---
           showPrimary = primaryResultExists;
           showPrompt = data.isSecondaryPrompt && !data.secondaryResultText;
 
-          // --- Populate Prompt Area (if showing) ---
           if (showPrompt) {
               document.getElementById('secondary-prompt-text').textContent = data.secondaryPromptText || 'Bonus Effect!';
               document.getElementById('secondary-roll-type-hidden').value = data.secondaryType;
-              document.getElementById('secondary-damage-type-hidden').value = document.getElementById('damage_type').value;
-              document.getElementById('secondary-magic-subtype-hidden').value = document.getElementById('magic_subtype').value;
-              // Store the primary result text/roll that *caused* the prompt
-              document.getElementById('secondary-primary-result-hidden').value = data.resultText; // Primary text that prompted
-              document.getElementById('secondary-primary-roll-hidden').value = data.rollValue; // Primary roll that prompted
+              document.getElementById('secondary-damage-type-hidden').value = document.getElementById('damage_type').value; // Current form value
+              document.getElementById('secondary-magic-subtype-hidden').value = document.getElementById('magic_subtype').value; // Current form value
+              document.getElementById('secondary-primary-result-hidden').value = data.resultText;
+              document.getElementById('secondary-primary-roll-hidden').value = data.rollValue; // Primary roll that led to prompt
           }
 
-          // --- Logic for Share Button Visibility ---
           const isFinalResultShown = showSecondary || (showPrimary && !data.isSecondaryPrompt);
-          if (isFinalResultShown) {
-               if (shareButton) shareButton.style.display = 'inline-block'; // Or 'block'
+          if (isFinalResultShown && data.status !== 'error') {
+              if (shareButton) {
+                  shareButton.style.display = 'inline-block';
+                  shareButton.disabled = false;
+                  const buttonTextSpan = shareButton.querySelector('.button-text');
+                  const currentButtonText = buttonTextSpan ? buttonTextSpan.textContent : shareButton.textContent;
+                  if (currentButtonText === "Shared!" || currentButtonText === "Sharing...") {
+                      const discordIconHTML = '<img src="{{ url_for('static', filename='img/discord-icon.svg') }}" alt="Discord Logo" class="discord-icon">';
+                      shareButton.innerHTML = `${discordIconHTML} <span class="button-text">Share Result to Discord</span>`;
+                  }
+              }
           } else {
-               if (shareButton) shareButton.style.display = 'none';
+              if (shareButton) shareButton.style.display = 'none';
           }
-      } // End of else block (status !== 'error')
+          // Re-enable primary/secondary roll buttons after successful UI update
+          primaryRollBtn.disabled = false;
+          secondaryRollBtn.disabled = false; // Only enable if prompt is not shown or secondary result is shown
+          if (showPrompt) {
+            secondaryRollBtn.disabled = false; // Explicitly enable if prompt is shown
+          } else {
+            secondaryRollBtn.disabled = true; // Keep disabled if no prompt and not a secondary roll context
+          }
 
 
-      // --- Update DOM & Set Final Display/Visibility ---
+      }
+
       primaryResultArea.innerHTML = primaryContent;
       primaryResultArea.style.display = showPrimary ? 'block' : 'none';
       primaryResultArea.style.visibility = showPrimary ? 'visible' : 'hidden';
@@ -487,48 +522,41 @@ async function shareResultToDiscord() {
       secondaryResultArea.style.display = showSecondary ? 'block' : 'none';
       secondaryResultArea.style.visibility = showSecondary ? 'visible' : 'hidden';
 
-      // --- Scrolling Logic ---
-      if (showSecondary) {
-          elementToScrollTo = secondaryResultArea;
-      } else if (showPrompt) {
-          elementToScrollTo = secondaryPromptArea;
-      } else if (showPrimary && !data.isSecondaryPrompt) { // Scroll to primary only if it's the final result OR arcana
-          elementToScrollTo = primaryResultArea.offsetParent ? primaryResultArea : primaryResultArea.querySelector('.result-box');
-      } else if (data.status === 'error'){
-          elementToScrollTo = errorMessageDiv;
-      }
+      if (showSecondary) elementToScrollTo = secondaryResultArea;
+      else if (showPrompt) elementToScrollTo = secondaryPromptArea;
+      else if (showPrimary && !data.isSecondaryPrompt) elementToScrollTo = primaryResultArea.querySelector('.result-box') || primaryResultArea;
+      else if (data.status === 'error') elementToScrollTo = errorMessageDiv;
 
       if (elementToScrollTo) {
-          elementToScrollTo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const style = window.getComputedStyle(elementToScrollTo);
+          if (style.display !== 'none' && style.visibility !== 'hidden') {
+               elementToScrollTo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
       }
-  } // End of updateUI function
+  }
 
   // --- UI Toggle Functions ---
   function toggleAttackType() {
     const rollType = document.getElementById('roll_type').value;
     const fumbleType = document.getElementById('fumbleType').value;
     const attackTypeContainer = document.getElementById('attack-type-container');
-    if (rollType === 'fumble' && fumbleType === 'Questionable Arcana') {
-      attackTypeContainer.style.display = 'block';
-    } else {
-      attackTypeContainer.style.display = 'none';
-    }
+    attackTypeContainer.style.display = (rollType === 'fumble' && fumbleType === 'Questionable Arcana') ? 'block' : 'none';
   }
 
   function toggleFields() {
     const rollType = document.getElementById('roll_type').value;
     const critFields = document.getElementById('crit-fields');
     const fumbleTypeContainer = document.getElementById('fumble-type-container');
-    const attackTypeContainer = document.getElementById('attack-type-container');
+    const attackTypeContainer = document.getElementById('attack-type-container'); // Get ref
     if (rollType === 'fumble') {
       critFields.style.display = 'none';
       fumbleTypeContainer.style.display = 'block';
-      toggleAttackType(); // Ensure attack type visibility is correct
+      toggleAttackType(); // Ensure attack type visibility is correct for fumble
     } else { // crit
       critFields.style.display = 'block';
       fumbleTypeContainer.style.display = 'none';
-      attackTypeContainer.style.display = 'none';
-      toggleMagicDropdown(); // Ensure magic dropdown visibility is correct
+      attackTypeContainer.style.display = 'none'; // Hide attack type for crit
+      toggleMagicDropdown();
     }
   }
 
@@ -539,9 +567,8 @@ async function shareResultToDiscord() {
 
   // --- Initial Setup on Load ---
   window.onload = function() {
-    toggleFields(); // Set initial form state
+    toggleFields();
   }
-
 </script>
 
 </body>

@@ -292,6 +292,43 @@ button:active {
   font-weight: 800;
 }
 
+.inline-die.is-rolling {
+  /* Make die slightly larger and centered during animation if desired */
+  /* transform-origin: center center; */
+  animation: roll-animation 1s ease-out forwards; /* Adjust duration/timing */
+}
+
+@keyframes roll-animation {
+  0% {
+    transform: rotate(0deg) scale(2);
+    opacity: 0.8;
+  }
+  25% {
+    transform: rotate(180deg) scale(2.2);
+  }
+  50% {
+    transform: rotate(360deg) scale(2);
+  }
+  75% {
+    transform: rotate(540deg) scale(2.2);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(720deg) scale(2); /* Ends after two spins */
+    opacity: 1;
+  }
+}
+
+/* Container for the rolling animation to help with layout */
+.rolling-animation-container {
+  display: flex; /* Or inline-flex */
+  justify-content: center;
+  align-items: center;
+  gap: 4em; /* Space between dice if multiple */
+  padding: 1em 0; /* Some vertical spacing */
+  min-height: 5em; /* Ensure space is reserved during animation */
+}
+
 /* === Dice & Shimmer Styles === */
 
 .inline-die {
