@@ -120,7 +120,7 @@ body::before {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     background-image: url('img/red-dragon.png');
     background-repeat: no-repeat;
     background-position: center 5%;
@@ -140,7 +140,7 @@ h1 {
   text-align: center;
   font-size: var(--font-size-h1);
   color: var(--clr-heading);
-  margin-top: 1.9em;
+  margin-top: 2.4em;
   z-index: 1;
   text-shadow: 
         0 0 3px rgba(253, 246, 227, 0.75),
@@ -292,10 +292,10 @@ button:active {
   font-weight: 800;
 }
 
+/* === Dice Animation & Shimmer Styles === */
+
 .inline-die.is-rolling {
-  /* Make die slightly larger and centered during animation if desired */
-  /* transform-origin: center center; */
-  animation: roll-animation 1s ease-out forwards; /* Adjust duration/timing */
+  animation: roll-animation 1s ease-out forwards;
 }
 
 @keyframes roll-animation {
@@ -319,17 +319,28 @@ button:active {
   }
 }
 
-/* Container for the rolling animation to help with layout */
 .rolling-animation-container {
-  display: flex; /* Or inline-flex */
+  display: flex;
   justify-content: center;
   align-items: center;
   gap: 4em; /* Space between dice if multiple */
-  padding: 1em 0; /* Some vertical spacing */
+  padding: 1em 0;
   min-height: 5em; /* Ensure space is reserved during animation */
 }
 
-/* === Dice & Shimmer Styles === */
+#dice-animation-overlay {
+    display: none; /* Hidden by default */
+    position: fixed; /* Position relative to the viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(30, 30, 30, 0.65); /* Semi-transparent background */
+    z-index: 10000; /* Very high z-index to ensure it's on top */
+    justify-content: center; /* For flexbox centering of its child */
+    align-items: center;     /* For flexbox centering of its child */
+    /* display: flex; will be set by JavaScript when shown */
+}
 
 .inline-die {
   height: 3.5em;
@@ -382,13 +393,13 @@ button:active {
 /* To prevent "flash" on dice roll */
 #primary-result-area,
 #secondary-result-area {
-  min-height: 10em; /* Adjust this value, if necessary - try 10em, 150px, etc. */
+  min-height: 10em;
   display: block;
   visibility: hidden;
   transition: opacity 0.2s ease-in-out;
 }
 
-/* --- Animations & Effects --- */
+/* --- Animations & Shimmer Effects --- */
 .scroll-note {
   font-size: var(--font-size-scroll-note);
   font-weight: 700;

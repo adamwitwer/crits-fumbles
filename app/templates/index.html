@@ -106,6 +106,8 @@
     Your browser does not support the audio element.
 </audio>
 
+<div id="dice-animation-overlay"></div>
+
 <footer class="app-footer">
   <p>
     Made with 🎲 by Adam |
@@ -172,16 +174,17 @@
   }
 
   // --- Helper: Display Rolling Animation ---
-  function displayRollingAnimation(targetAreaElement, dieType, numDice, rollContext) {
-      let animationContainerId = rollContext === 'primary' ? 'primary-rolling-anim-container' : 'secondary-rolling-anim-container';
-      let animContainer = document.getElementById(animationContainerId);
+  function displayRollingAnimation(dieType, numDice) {
+      const overlay = document.getElementById('dice-animation-overlay');
+      // Find or create the animation container *inside* the overlay
+      let animContainer = overlay.querySelector('.rolling-animation-container');
 
       if (!animContainer) {
           animContainer = document.createElement('div');
-          animContainer.id = animationContainerId;
           animContainer.classList.add('rolling-animation-container');
+          overlay.appendChild(animContainer);
       } else {
-          animContainer.innerHTML = ''; // Clear previous animation
+          animContainer.innerHTML = ''; // Clear previous dice from the container
       }
 
       const dieImageFilename = (dieType || 'd20') + '.png';
@@ -192,51 +195,53 @@
           const img = document.createElement('img');
           img.src = dieImageSrc;
           img.alt = dieAltText;
-          img.classList.add('inline-die');
-          img.classList.add('is-rolling'); // Apply animation class
+          img.classList.add('inline-die'); // Applies existing size and rolling animation
+          img.classList.add('is-rolling');
           animContainer.appendChild(img);
       }
-      targetAreaElement.innerHTML = ''; // Clear the target area first
-      targetAreaElement.appendChild(animContainer);
-      targetAreaElement.style.display = 'block';
-      targetAreaElement.style.visibility = 'visible';
+      overlay.style.display = 'flex'; // Show the overlay (using flex to enable centering)
   }
 
   // --- Main Roll Handler (AJAX) ---
+  // Modify this function in your <script> tag
   async function handleRoll(context) {
       playDiceSound();
       errorMessageDiv.style.display = 'none';
       primaryRollBtn.disabled = true;
       secondaryRollBtn.disabled = true;
       const shareButton = document.getElementById('share-discord-button');
-      if (shareButton) shareButton.disabled = true;
+      if (shareButton) {
+          shareButton.disabled = true;
+          // If share button was in "Shared!" state, reset it now as a new roll is happening
+          const buttonTextSpan = shareButton.querySelector('.button-text');
+          if (buttonTextSpan && buttonTextSpan.textContent === "Shared!") {
+              const discordIconHTML = '<img src="{{ url_for('static', filename='img/discord-icon.svg') }}" alt="Discord Logo" class="discord-icon">';
+              shareButton.innerHTML = `${discordIconHTML} <span class="button-text">Share Result to Discord</span>`;
+          }
+      }
 
-      // Clear previous actual results immediately, animation will play in these areas
+
+      // Clear main result areas immediately, they will be populated after animation
       primaryResultArea.innerHTML = '';
       primaryResultArea.style.visibility = 'hidden';
       secondaryResultArea.innerHTML = '';
       secondaryResultArea.style.visibility = 'hidden';
       if (secondaryPromptArea) secondaryPromptArea.style.display = 'none';
 
-      let areaForRollingAnim;
       let dieTypeForAnim;
       let numDiceForAnim;
       let payload = { rollContext: context };
 
       if (context === 'primary') {
-          areaForRollingAnim = primaryResultArea;
           payload.rollType = document.getElementById('roll_type').value;
           payload.fumbleType = document.getElementById('fumbleType').value;
           payload.attackType = document.getElementById('attackType').value;
           payload.damageType = document.getElementById('damage_type').value;
           if (payload.damageType === 'magic') {
-               payload.magicSubtype = document.getElementById('magic_subtype').value;
+              payload.magicSubtype = document.getElementById('magic_subtype').value;
           }
 
           if (payload.rollType === 'fumble') {
-              // Fumbles (Smack Down & Arcana) visually show 2 d10s
-              // even if the backend uses a single d100 roll.
-              // The backend response for 'numDice' and 'dieType' for fumbles will be 2 and 'd10'.
               dieTypeForAnim = 'd10';
               numDiceForAnim = 2;
           } else { // Crit
@@ -244,20 +249,20 @@
               numDiceForAnim = 1;
           }
       } else { // context === 'secondary'
-          areaForRollingAnim = secondaryResultArea;
-          payload.rollType = document.getElementById('secondary-roll-type-hidden').value; // This is 'minor', 'major', or 'insanity'
+          payload.rollType = document.getElementById('secondary-roll-type-hidden').value;
           payload.damageType = document.getElementById('secondary-damage-type-hidden').value;
           payload.magicSubtype = document.getElementById('secondary-magic-subtype-hidden').value;
           payload.primaryResultText = document.getElementById('secondary-primary-result-hidden').value;
           payload.primaryRollValue = document.getElementById('secondary-primary-roll-hidden').value;
-          // Secondary rolls are always d20 based on backend logic.
           dieTypeForAnim = 'd20';
           numDiceForAnim = 1;
       }
 
-      displayRollingAnimation(areaForRollingAnim, dieTypeForAnim, numDiceForAnim, context);
+      // Call the modified animation function (no target area needed, it uses the overlay)
+      displayRollingAnimation(dieTypeForAnim, numDiceForAnim);
 
-      const animationDuration = 1000; // Should match CSS animation-duration
+      const animationDuration = 1000; // Should match the CSS animation duration
+      const overlay = document.getElementById('dice-animation-overlay');
 
       try {
           const response = await fetch("{{ url_for('roll_ajax') }}", {
@@ -265,56 +270,21 @@
               headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
               body: JSON.stringify(payload)
           });
-
-          const data = await response.json(); // Parse JSON once
+          const data = await response.json();
 
           if (!response.ok) {
               throw new Error(data.errorMessage || `HTTP error! status: ${response.status}`);
           }
 
           setTimeout(() => {
-              const animContainerId = context === 'primary' ? 'primary-rolling-anim-container' : 'secondary-rolling-anim-container';
-              const animContainer = document.getElementById(animContainerId);
-              if (animContainer) animContainer.remove();
-              updateUI(data);
+              if (overlay) overlay.style.display = 'none'; // Hide the animation overlay
+              updateUI(data); // updateUI will populate result areas and scroll
           }, animationDuration);
 
       } catch (error) {
           console.error('Error during fetch or processing:', error);
-          const animContainerId = context === 'primary' ? 'primary-rolling-anim-container' : 'secondary-rolling-anim-container';
-          const animContainer = document.getElementById(animContainerId);
-          if (animContainer) animContainer.remove(); // Remove animation on error
+          if (overlay) overlay.style.display = 'none'; // Hide overlay on error too
           updateUI({status: 'error', errorMessage: 'Failed to get roll result: ' + error.message});
-          // Re-enable buttons immediately on error caught here.
-          primaryRollBtn.disabled = false;
-          secondaryRollBtn.disabled = false;
-          // Share button is handled by updateUI if an error message is displayed
-      } finally {
-          // Buttons are re-enabled after the timeout in the success path.
-          // If an error occurs before timeout, catch block handles it.
-          // This finally block is more for things that *always* happen if the try block completes (even if timeout is pending).
-          // Given the async nature and timeout, primary re-enablement is best after timeout or in catch.
-          // However, if an error occurred in .json() or before setTimeout, this might be needed.
-          // Safest to put primary/secondary button re-enablement after operations.
-          // Let's refine: re-enable buttons after the timeout OR in the catch block.
-          // The `setTimeout` in `try` will complete, then updateUI.
-          // The `finally` block here runs *before* the setTimeout callback finishes.
-          // So, button re-enabling is better placed in the setTimeout callback and the catch block.
-          // For now, only re-enable after a slight delay to cover most cases, but this is tricky.
-
-          // A better approach for finally:
-          // If the fetch was successful, re-enable AFTER the timeout completes processing.
-          // If fetch failed, re-enable in the CATCH block.
-          // This means this finally block might not be the best place for re-enabling primary/secondary roll buttons
-          // if we rely on the setTimeout.
-          // Let's ensure re-enabling happens within the setTimeout or catch.
-          // (Modified above to re-enable in CATCH and planning re-enable in setTimeout's success logic path for buttons)
-
-          // To ensure buttons are always re-enabled if no other path does:
-          setTimeout(() => {
-             if (!primaryRollBtn.disabled) primaryRollBtn.disabled = false; // If not already enabled by another path
-             if (!secondaryRollBtn.disabled) secondaryRollBtn.disabled = false;
-          }, animationDuration + 200); // A bit after animation and potential UI update
       }
   }
 
