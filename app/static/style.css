@@ -500,6 +500,7 @@ box-shadow: var(--shadow-button-active);
    opacity: 1;
 }
 
+
 /* === Footer Styles === */
 .app-footer {
   text-align: center;
@@ -515,24 +516,136 @@ box-shadow: var(--shadow-button-active);
 .app-footer a {
   color: var(--clr-link);
   text-decoration: none;
+  padding: 0.2em 0.5em;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
   display: inline;
+  font-weight: normal;
   align-items: center;
 }
-.app-footer a:hover {
-  text-decoration: underline;
+
+.app-footer a:hover,
+.app-footer a:focus {
+    color: var(--clr-heading);
+    text-decoration: none;
 }
 
 .github-icon {
   width: 1.25em;
   height: 1.25em;
   vertical-align: middle;
-  margin-left: 0.4em;
-  transition: fill 0.2s ease;
-  fill: var(--clr-footer-icon);
 }
 
-.app-footer a:hover .github-icon {
-  fill: var(--clr-footer-icon-hover);
+/* --- Chronicles button --- */
+.app-footer p.history-button-container {
+   margin: 0.5em 0 1em 0;
+}
+
+/* --- Overlay for Chronicles --- */
+#history-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: none; /* Shown by JS */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top */
+    padding: 1em;
+}
+
+#history-modal {
+    background-color: var(--clr-card-bg);
+    padding: 1.5em 1.25em;
+    border-radius: var(--border-radius-large);
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    border: var(--border-width-card) solid var(--clr-card-border);
+    hyphens: auto;
+}
+
+#history-modal h2 {
+    color: var(--clr-heading);
+    text-align: center;
+}
+
+/* CSS-only close button */
+#close-history-modal {
+  position: absolute;
+  right: 10px;
+  top: 15px;
+  width: 32px;
+  height: 32px;
+  opacity: 0.3;
+  color: var(--clr-heading);
+  cursor: pointer;
+}
+
+#close-history-modal:hover {
+  opacity: 1;
+}
+
+#close-history-modal:before, #close-history-modal:after {
+  position: absolute;
+  left: 15px;
+  content: ' ';
+  height: 15px;
+  width: 2px;
+  background-color: var(--clr-heading);
+}
+
+#close-history-modal:before {
+  transform: rotate(45deg);
+}
+
+#close-history-modal:after {
+  transform: rotate(-45deg);
+}
+/* End close button */
+
+#history-content ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#history-content li {
+    padding: 0.75em 0;
+    border-bottom: 1px solid var(--clr-border-subtle);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+#history-content li:last-child {
+    border-bottom: none;
+}
+
+#history-content li strong {
+    color: var(--clr-heading);
+    display: block;
+    margin-bottom: 0.3em;
+}
+
+/* Dark mode for Chronicles modal – leaving this here */
+@media (prefers-color-scheme: dark) {
+   #history-modal {
+        background-color: var(--clr-card-bg);
+        border-color: var(--clr-card-border);
+    }
+    #history-content li {
+        border-bottom-color: var(--clr-border-subtle);
+    }
+    #close-history-modal {
+        color: var(--clr-text);
+    }
+    #close-history-modal:hover {
+        color: var(--clr-heading);
+    }
 }
 
 /* === Responsive Adjustments === */

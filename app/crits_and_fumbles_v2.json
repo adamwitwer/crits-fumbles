@@ -149,7 +149,7 @@
       "2-3": "Sliced and diced! Roll damage as normal and the creature loses 1d6 hit points at the start of its next turn.",
       "4-6": "Good hit! Do not roll your damage dice, instead deal the maximum result possible with those dice.",
       "7-8": "Open gash! Roll your damage dice as normal and the creature is bleeding. For the next minute the creature loses 1d4 damage at the start of each of its turns until it uses an action to staunch this wound.",
-      "9-11": "Great hit! Roll your damage dice twice and add them together",
+      "9-11": "Great hit! Roll your damage dice twice and add them together.",
       "12-13": "Deep slice! Roll your damage dice twice and add them together and the creature is bleeding. For the next minute the creature loses 1d8 hit points at the start of each of its turns until it uses an action to staunch this wound.",
       "14-16": "Lacerated! Roll your damage dice twice and add them together and the creature is bleeding. For the next minute the creature loses 1d12 hit points at the start of each of its turns until it uses an action to staunch this wound.",
       "17-18": "Severed! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add the result. Then roll on the Minor Injury chart. If the creature is wearing light or no armor roll on the Major Injury chart instead.",

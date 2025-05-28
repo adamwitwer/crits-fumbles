@@ -210,8 +210,8 @@ def get_roll_result_and_log(payload, client_ip=None):
 
     if response["status"] == "success":
         descriptor = random.choice(RANDOM_DESCRIPTORS)
-        city = geo_info.get("city", "an undisclosed city") # Use resolved geo_info
-        region = geo_info.get("regionName", "an unknown region") # Use resolved geo_info
+        city = geo_info.get("city", "an undisclosed city")
+        region = geo_info.get("regionName", "an unknown region") # Ensure this uses the resolved geo_info
         rolled_value = response.get("rollValue")
         
         table_name_for_log = "Unknown Table"
@@ -220,7 +220,8 @@ def get_roll_result_and_log(payload, client_ip=None):
         if roll_context == 'primary':
             if roll_type_from_payload == 'crit':
                 effective_damage_type = magic_subtype if damage_type == 'magic' else damage_type
-                table_name_for_log = f"Critical Hit ({effective_damage_type.title() if effective_damage_type else 'General'})"
+                crit_damage_type_for_log = effective_damage_type.lower().strip() if effective_damage_type else 'slashing'
+                table_name_for_log = f"Critical Hit ({crit_damage_type_for_log.title()})"
                 result_for_log = response.get("resultText", "No specific result text.")
             elif roll_type_from_payload == 'fumble':
                 if fumble_type_from_payload == 'Questionable Arcana':
@@ -228,16 +229,39 @@ def get_roll_result_and_log(payload, client_ip=None):
                     desc = response.get("description", "")
                     eff = response.get("effect", "")
                     result_for_log = f"{desc} Effect: {eff}".strip()
-                else: # Smack Down
+                else: # Smack Down Fumble
                     table_name_for_log = "Smack Down Fumble"
                     result_for_log = response.get("resultText", "No specific result text.")
         elif roll_context == 'secondary':
             table_name_for_log = f"{roll_type_from_payload.title()} Effect"
             result_for_log = response.get("secondaryResultText", "No specific secondary result.")
+        # At this point, 'descriptor', 'city', 'region', 'rolled_value', 
+        # 'table_name_for_log', and 'result_for_log' are all defined.
 
-        narrative_log_entry = f"A {descriptor} from {city}, {region} rolled a {rolled_value} on the {table_name_for_log} table, resulting in: '{result_for_log}'."
+        # Convert result_for_log to a string and strip whitespace for the narrative entry
+        result_for_log_str = str(result_for_log).strip()
+
+        # --- START: A/An Logic and new narrative_log_entry construction ---        
+        descriptor_words = descriptor.split(' ') #
+        if descriptor_words[0].lower() in ["a", "an"]: #
+            # If the descriptor itself starts with "a" or "an" (e.g., "an unfortunate soul")
+            article_for_narrative = descriptor_words[0].capitalize()
+            descriptor_noun_phrase = ' '.join(descriptor_words[1:])
+        else:
+            # If the descriptor is just the noun phrase (e.g., "wise wizard")
+            descriptor_noun_phrase = descriptor
+            # Determine "A" or "An" based on the first letter of the noun phrase
+            if descriptor_noun_phrase and descriptor_noun_phrase[0].lower() in 'aeiou':
+                article_for_narrative = "An"
+            else:
+                article_for_narrative = "A"
+        
+        # Construct the narrative log entry using A/An logic and curly double quotes
+        narrative_log_entry = f"{article_for_narrative} {descriptor_noun_phrase} from {city}, {region} rolled a {rolled_value} on the {table_name_for_log} table, resulting in: \u201c{result_for_log_str}\u201d" # Curly double quotes “ ”
+        
         if response.get("isSecondaryPrompt") and not response.get("secondaryResultText"):
             narrative_log_entry += " (Bonus roll pending...)"
+        # --- END: A/An Logic and new narrative_log_entry construction ---
 
         try:
             log_data_to_store = {
@@ -254,7 +278,7 @@ def get_roll_result_and_log(payload, client_ip=None):
             app.logger.error(f"Error writing narrative log: {e}", exc_info=True)
             print(f"Error writing narrative log: {e}")
 
-    return response
+    return response #
 
 # --- Routes ---
 @app.route('/', methods=['GET'])
@@ -302,6 +326,41 @@ def share_discord():
     except requests.exceptions.RequestException as e:
         print(f"Error sending message to Discord: {e}")
         return jsonify({"status": "error", "error": f"Failed to send request to Discord: {e}"}), 500
+    
+# --- Roll History Endpoint (using logs) ---
+@app.route('/get_roll_history', methods=['GET'])
+def get_roll_history():
+    try:
+        logs = []
+        max_logs_to_return = 50 # Capped at 50
+
+        log_file_path = "narrative_dice_log.jsonl"
+        if not os.path.exists(log_file_path):
+            return jsonify([]) # Return empty if no log file yet
+
+        with open(log_file_path, "r", encoding="utf-8") as logfile:
+            all_lines = logfile.readlines()
+
+        # Get the last 'max_logs_to_return' lines
+        recent_lines = all_lines[-max_logs_to_return:]
+
+        for line in recent_lines:
+            try:
+                log_entry = json.loads(line)
+                # Extract only the necessary, safe-to-display information
+                # The narrative already contains the anonymized location
+                logs.append({
+                    "timestamp": log_entry.get("timestamp"),
+                    "narrative": log_entry.get("narrative")
+                })
+            except json.JSONDecodeError:
+                print(f"Skipping malformed log line: {line.strip()}") # Or log this error
+
+        # The logs are read from oldest to newest among the recent_lines; reverse for chronological display (newest first)
+        return jsonify(list(reversed(logs))) 
+    except Exception as e:
+        app.logger.error(f"Error reading roll history: {e}", exc_info=True)
+        return jsonify({"status": "error", "errorMessage": "Could not retrieve roll history."}), 500
 
 if __name__ == '__main__':
     # For more detailed Flask logging:

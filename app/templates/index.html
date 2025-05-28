@@ -108,6 +108,14 @@
 
 <div id="dice-animation-overlay"></div>
 
+ <div id="history-overlay" style="display: none;">
+    <div id="history-modal">
+      <h2>Crits & Fumbles Chronicles</h2>
+      <div id="close-history-modal" aria-label="Close history"></div>
+      <div id="history-content"></div>
+    </div>
+ </div>
+
 <footer class="app-footer">
   <p>
     Made with 🎲 by Adam |
@@ -117,6 +125,10 @@
           d="M12 0C5.37 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.17c-3.338.726-4.033-1.416-4.033-1.416-.546-1.386-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.776.42-1.304.762-1.603-2.665-.305-5.466-1.334-5.466-5.933 0-1.31.47-2.38 1.235-3.22-.124-.303-.535-1.527.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.98-.399 3-.404 1.02.005 2.043.138 3 .404 2.29-1.552 3.296-1.23 3.296-1.23.653 1.649.242 2.873.118 3.176.767.84 1.233 1.91 1.233 3.22 0 4.61-2.804 5.625-5.475 5.922.43.37.823 1.103.823 2.222v3.293c0 .322.218.694.825.576C20.565 21.796 24 17.298 24 12c0-6.627-5.373-12-12-12z" />
       </svg>
     </a>
+  </p>
+  <!-- Roll Chronicle Container -->
+  <p class="history-button-container">
+    <a id="show-history-button" class="subtle-button">📜 C&F Chronicles</a>
   </p>
 </footer>
 
@@ -365,6 +377,61 @@
          shareButton.innerHTML = originalButtonHTML;
          shareButton.disabled = false;
     }
+  }
+  
+  // --- Roll History Elements ---
+  const showHistoryBtn = document.getElementById('show-history-button');
+  const historyOverlay = document.getElementById('history-overlay');
+  const closeHistoryBtn = document.getElementById('close-history-modal');
+  const historyContent = document.getElementById('history-content');
+
+  async function fetchAndDisplayHistory() {
+      try {
+          const response = await fetch("{{ url_for('get_roll_history') }}");
+          if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const logs = await response.json();
+
+          historyContent.innerHTML = ''; // Clear previous content
+
+          if (logs.length === 0) {
+              historyContent.innerHTML = '<p>No rolls recorded yet.</p>';
+          } else {
+              const ul = document.createElement('ul');
+              logs.forEach(log => {
+                  const li = document.createElement('li');
+                  const time = new Date(log.timestamp).toLocaleString();
+                  li.innerHTML = `<strong>${time}</strong> ${log.narrative}`;
+                  ul.appendChild(li);
+              });
+              historyContent.appendChild(ul);
+          }
+          historyOverlay.style.display = 'flex'; // Or 'block', depending on styling
+      } catch (error) {
+          console.error('Error fetching roll history:', error);
+          historyContent.innerHTML = '<p>Could not load roll history. Please try again later.</p>';
+          historyOverlay.style.display = 'flex'; // Show overlay even on error to display message
+      }
+  }
+
+  if (showHistoryBtn) {
+      showHistoryBtn.addEventListener('click', fetchAndDisplayHistory);
+  }
+
+  if (closeHistoryBtn) {
+      closeHistoryBtn.addEventListener('click', () => {
+          historyOverlay.style.display = 'none';
+      });
+  }
+
+  // Optional: Close overlay if user clicks outside the modal content
+  if (historyOverlay) {
+      historyOverlay.addEventListener('click', (event) => {
+          if (event.target === historyOverlay) { // Check if the click is on the overlay itself, not its children
+              historyOverlay.style.display = 'none';
+          }
+      });
   }
 
   // --- UI Update Function ---
