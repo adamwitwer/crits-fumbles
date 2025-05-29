@@ -536,9 +536,8 @@ box-shadow: var(--shadow-button-active);
   vertical-align: middle;
 }
 
-/* --- Chronicles button --- */
-.app-footer p.history-button-container {
-   margin: 0.5em 0 1em 0;
+.app-footer p {
+   margin: 0.2em 0;
 }
 
 /* === Overlay for Chronicles === */
