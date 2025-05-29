@@ -543,73 +543,86 @@ box-shadow: var(--shadow-button-active);
 
 /* === Overlay for Chronicles === */
 
+/* Overlay */
 #history-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: none; /* Shown by JS */
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Ensure it's on top */
-    padding: 1em;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none;     /* toggled by JS */
+  justify-content: center;
+  align-items: center;
+  padding: 1em;
+  z-index: 1000;
 }
 
+/* Modal wrapper */
 #history-modal {
-    background-color: var(--clr-card-bg);
-    padding: 1.5em 1.25em;
-    border-radius: var(--border-radius-large);
-    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
-    width: 90%;
-    max-width: 600px;
-    max-height: 80vh;
-    overflow-y: auto;
-    position: relative;
-    border: var(--border-width-card) solid var(--clr-card-border);
-    hyphens: auto;
+  background: var(--clr-card-bg);
+  width: 90%; max-width: 600px;
+  max-height: 80vh;
+  border-radius: var(--border-radius-large);
+  border: var(--border-width-card) solid var(--clr-card-border);
+  
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Pinned header */
+.history-header {
+  position: sticky;
+  background: var(--clr-card-bg);
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 10;
+}
 #history-modal h2 {
-    color: var(--clr-heading);
-    text-align: center;
+  color: var(--clr-heading);
+  text-align: center;
+  margin-top: 0.75em;
 }
 
-/* CSS-only close button */
+/* Scrollable body */
+#history-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 1em 1.25em 1.5em;
+  hyphens: auto;
+}
+
+/* Close X (relative to header) */
 #close-history-modal {
   position: absolute;
-  right: 10px;
-  top: 15px;
-  width: 32px;
-  height: 32px;
+  top: 0.5rem; right: 0.5rem;
+  width: 32px; height: 32px;
   opacity: 0.3;
-  color: var(--clr-heading);
   cursor: pointer;
+  z-index: 11; /* above the header block */
 }
 
 #close-history-modal:hover {
   opacity: 1;
 }
 
-#close-history-modal:before, #close-history-modal:after {
+#close-history-modal:before,
+#close-history-modal:after {
+  content: '';
   position: absolute;
-  left: 15px;
-  content: ' ';
-  height: 15px;
+  left: 50%;
+  top: 50%;
   width: 2px;
+  height: 15px;
   background-color: var(--clr-heading);
 }
-
 #close-history-modal:before {
-  transform: rotate(45deg);
+  transform: translate(-50%, -50%) rotate(45deg);
 }
-
 #close-history-modal:after {
-  transform: rotate(-45deg);
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
-/* End close button */
 
+/* Chronicle content */
 #history-content ul {
     list-style-type: none;
     padding: 0;
