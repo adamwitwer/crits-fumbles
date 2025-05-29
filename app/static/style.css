@@ -314,7 +314,7 @@ button:active {
     opacity: 1;
   }
   100% {
-    transform: rotate(720deg) scale(2); /* Ends after two spins */
+    transform: rotate(720deg) scale(2); /* two spins! */
     opacity: 1;
   }
 }
@@ -329,16 +329,16 @@ button:active {
 }
 
 #dice-animation-overlay {
-    display: none; /* Hidden by default */
-    position: fixed; /* Position relative to the viewport */
+    display: none;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(30, 30, 30, 0.65); /* Semi-transparent background */
-    z-index: 10000; /* Very high z-index to ensure it's on top */
-    justify-content: center; /* For flexbox centering of its child */
-    align-items: center;     /* For flexbox centering of its child */
+    background-color: rgba(30, 30, 30, 0.65);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center; 
     /* display: flex; will be set by JavaScript when shown */
 }
 
@@ -385,9 +385,8 @@ button:active {
   animation:
     pop-in-smooth var(--pop-in-duration) var(--pop-in-easing) var(--pop-in-delay) forwards,
     shimmer-bg var(--shimmer-duration) var(--shimmer-easing) var(--shimmer-delay) forwards;
-
-   opacity: 0;
-   transform: scale(0.5);
+  opacity: 0;
+  transform: scale(0.5);
 }
 
 /* To prevent "flash" on dice roll */
@@ -502,6 +501,7 @@ box-shadow: var(--shadow-button-active);
 
 
 /* === Footer Styles === */
+
 .app-footer {
   text-align: center;
   font-size: var(--font-size-footer);
@@ -541,7 +541,8 @@ box-shadow: var(--shadow-button-active);
    margin: 0.5em 0 1em 0;
 }
 
-/* --- Overlay for Chronicles --- */
+/* === Overlay for Chronicles === */
+
 #history-overlay {
     position: fixed;
     top: 0;
@@ -682,6 +683,7 @@ box-shadow: var(--shadow-button-active);
 }
 
 /* === Dark Mode === */
+
 @media (prefers-color-scheme: dark) {
   :root {
     /* --- Dark Mode Color Overrides --- */
@@ -726,7 +728,8 @@ box-shadow: var(--shadow-button-active);
     /* --- Shadows --- */
     --shadow-card: 0 6px 20px rgba(0, 0, 0, 0.2); /* Slightly stronger */
   }
-
+  
+  /* Grayscale dragon with yelloy eyes */
   body::before {
     background-image: url('img/red-dragon-dark.png');
     opacity: 1;
@@ -741,11 +744,11 @@ box-shadow: var(--shadow-button-active);
     z-index: -1;
     pointer-events: none;
   }
-
-  /* Specific overrides if variable isn't enough */
+  
+  /* Removes "glow effect" from h1 and footer */
   h1, .app-footer {
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5), /* Main shadow */
-                 0 0 5px rgba(50, 30, 30, 0.25); /* Softer, wider, very subtle diffusion */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5),
+                 0 0 5px rgba(50, 30, 30, 0.25);
   }
 
   select {
@@ -760,9 +763,10 @@ box-shadow: var(--shadow-button-active);
     border: var(--border-width-standard) solid #777; /* Specific subtle border for dark button */
   }
 
-  .app-footer {
-      border-top-color: var(--clr-border-subtle);
-  }
+  .app-footer a:hover,
+  .app-footer a:focus {
+    color: var(--clr-text);
+}
 
 #share-discord-button:disabled {
      background-color: #4f545c;
