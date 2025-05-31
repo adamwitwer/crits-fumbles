@@ -11,6 +11,29 @@ import ipaddress
 
 app = Flask(__name__)
 
+# --- Determine log file path ---
+# User will set LOG_STORAGE_DIR to their disk mount point (e.g., /var/data) on Render.
+# Defaults to current directory ('.') for local development if the env var is not set.
+LOG_STORAGE_DIR = os.environ.get('LOG_STORAGE_DIR', '.')
+LOG_FILENAME = "narrative_dice_log.jsonl"
+NARRATIVE_LOG_FILE_PATH = os.path.join(LOG_STORAGE_DIR, LOG_FILENAME)
+
+# --- Ensure the log directory exists ---
+# This block runs once when the application starts.
+try:
+    os.makedirs(LOG_STORAGE_DIR, exist_ok=True)
+    # Use app.logger for startup messages, as print might not be visible at this stage on some platforms.
+    app.logger.info(f"Log directory ensured/created: {LOG_STORAGE_DIR}")
+    app.logger.info(f"Application will use log file at: {NARRATIVE_LOG_FILE_PATH}")
+except OSError as e:
+    app.logger.error(f"CRITICAL: Error creating log directory {LOG_STORAGE_DIR}: {e}. Log persistence may fail.", exc_info=True)
+    # Fallback to current directory if disk path creation fails.
+    app.logger.warning(f"Falling back to using log file in current directory: '.' due to error with {LOG_STORAGE_DIR}.")
+    # Update NARRATIVE_LOG_FILE_PATH to the fallback path
+    NARRATIVE_LOG_FILE_PATH = os.path.join('.', LOG_FILENAME)
+    app.logger.info(f"Fallback log file path is now: {NARRATIVE_LOG_FILE_PATH}")
+
+
 # --- Lists for Narrative Logging ---
 RANDOM_DESCRIPTORS = [
     "an intrepid adventurer", "a curious scholar", "a daring rogue",
@@ -27,18 +50,18 @@ def load_json(filename):
         with open(json_path) as f:
             return json.load(f)
     except FileNotFoundError:
-        print(f"Error: JSON file not found at {json_path}")
+        app.logger.error(f"Error: JSON file not found at {json_path}")
         return {}
     except json.JSONDecodeError:
-        print(f"Error: Could not decode JSON from {json_path}")
+        app.logger.error(f"Error: Could not decode JSON from {json_path}")
         return {}
 
 DATA = load_json("crits_and_fumbles_v2.json")
 ARCANA = load_json("fumbles_arcana.json")
 if not DATA.get('crit_tables') or not DATA.get('fumbles'):
-    print("Warning: Core data from crits_and_fumbles_v2.json might be missing.")
+    app.logger.warning("Warning: Core data from crits_and_fumbles_v2.json might be missing.")
 if not ARCANA:
-     print("Warning: Arcana data from fumbles_arcana.json might be missing.")
+     app.logger.warning("Warning: Arcana data from fumbles_arcana.json might be missing.")
 
 # --- Geolocation Helper (REVISED FUNCTION) ---
 def get_geolocation(ip_address):
@@ -55,26 +78,20 @@ def get_geolocation(ip_address):
         if ip_obj.is_private: # Covers 192.168.x.x, 10.x.x.x, 172.16.x.x-172.31.x.x
             return {"city": "their local sanctum", "regionName": "the home network"}
 
-        # Check for Tailscale's common CGNAT range (100.64.0.0/10)
-        # strict=False is important as ip_obj is a single address
         tailscale_cgnat_network = ipaddress.ip_network('100.64.0.0/10', strict=False)
         if ip_obj in tailscale_cgnat_network:
             return {"city": "their secure Tailnet", "regionName": "a private dimension"}
 
     except ValueError:
-        # If ip_address is not a valid IP string (e.g., "localhost" as a string, or malformed)
-        print(f"Invalid IP address format for geolocation: {ip_address}")
+        app.logger.warning(f"Invalid IP address format for geolocation: {ip_address}")
         if isinstance(ip_address, str) and ip_address.lower() == "localhost":
              return {"city": "their cozy terminal", "regionName": "the local machine"}
         return {"city": "an unidentifiable nexus", "regionName": "a glitch in the matrix"}
 
-    # If none of the above special IP types, proceed to query ip-api.com
     try:
-        # Using specific fields to minimize data transfer and processing
         url = f"http://ip-api.com/json/{ip_address}?fields=status,message,city,regionName,query"
-        # Increased timeout slightly just in case of slow network
         response = requests.get(url, timeout=3)
-        response.raise_for_status()  # Raises an exception for 4XX/5XX errors
+        response.raise_for_status()
         data = response.json()
 
         if data.get("status") == "success":
@@ -83,29 +100,26 @@ def get_geolocation(ip_address):
                 "regionName": data.get("regionName", "an uncharted territory")
             }
         else:
-            # API returned "fail" status (e.g. for other reserved ranges not caught above, or other API issues)
-            print(f"Geolocation API error for IP {ip_address}: {data.get('message', 'Unknown error from ip-api.com')}")
+            app.logger.warning(f"Geolocation API error for IP {ip_address}: {data.get('message', 'Unknown error from ip-api.com')}")
             return {"city": "parts unknown", "regionName": "a mysterious land"}
     except requests.exceptions.Timeout:
-        print(f"Geolocation request timed out for IP {ip_address}")
+        app.logger.warning(f"Geolocation request timed out for IP {ip_address}")
         return {"city": "a realm beyond reach", "regionName": "the mists of time"}
     except requests.exceptions.RequestException as e:
-        print(f"Error fetching geolocation for IP {ip_address}: {e}")
+        app.logger.warning(f"Error fetching geolocation for IP {ip_address}: {e}")
         return {"city": "a digital realm", "regionName": "the boundless interwebs"}
-    except json.JSONDecodeError: # Catching if ip-api.com returns non-JSON
-        print(f"Failed to decode JSON from geolocation API for IP {ip_address}")
+    except json.JSONDecodeError:
+        app.logger.warning(f"Failed to decode JSON from geolocation API for IP {ip_address}")
         return {"city": "a garbled signal", "regionName": "the static void"}
-    except Exception as e: # Catch-all for any other unexpected error during API call
-        print(f"Generic error in get_geolocation for IP {ip_address} during API call: {e}")
-        # Using app.logger for more detailed Flask error logging if configured
-        app.logger.error(f"Generic error in get_geolocation for IP {ip_address}: {e}", exc_info=True)
+    except Exception as e:
+        app.logger.error(f"Generic error in get_geolocation for IP {ip_address} during API call: {e}", exc_info=True)
         return {"city": "a place beyond perception", "regionName": "the void"}
 
 
 # --- Helper Functions (resolve_roll remains the same) ---
 def resolve_roll(roll_value, table):
     if not isinstance(table, dict):
-        print(f"Warning: Invalid table provided to resolve_roll: {type(table)}")
+        app.logger.warning(f"Warning: Invalid table provided to resolve_roll: {type(table)}")
         return "Invalid table data."
     try:
         val = int(roll_value)
@@ -117,14 +131,14 @@ def resolve_roll(roll_value, table):
             elif str(val) == key:
                 return result_text
     except (ValueError, TypeError) as e:
-        print(f"Error resolving roll {roll_value}: {e}")
+        app.logger.error(f"Error resolving roll {roll_value}: {e}", exc_info=True)
         pass
     return "No result found."
 
 # --- Main Roll Logic & Narrative Logging ---
 def get_roll_result_and_log(payload, client_ip=None):
     """Processes roll request, generates result, and logs a narrative entry."""
-    geo_info = get_geolocation(client_ip) # geo_info will now use the revised function
+    geo_info = get_geolocation(client_ip)
 
     response = {
         "status": "success", "rollValue": None, "resultText": None, "description": None,
@@ -204,14 +218,13 @@ def get_roll_result_and_log(payload, client_ip=None):
             response.update({"status": "error", "errorMessage": f"Invalid roll context: {roll_context}"})
 
     except Exception as e:
-        print(f"Error processing roll: {e}")
         app.logger.error(f"Error processing roll: {e}", exc_info=True)
-        response.update({"status": "error", "errorMessage": f"An internal error occurred processing the roll: {e}"})
+        response.update({"status": "error", "errorMessage": f"An internal error occurred processing the roll: {str(e)}"})
 
     if response["status"] == "success":
         descriptor = random.choice(RANDOM_DESCRIPTORS)
         city = geo_info.get("city", "an undisclosed city")
-        region = geo_info.get("regionName", "an unknown region") # Ensure this uses the resolved geo_info
+        region = geo_info.get("regionName", "an unknown region")
         rolled_value = response.get("rollValue")
         
         table_name_for_log = "Unknown Table"
@@ -235,33 +248,24 @@ def get_roll_result_and_log(payload, client_ip=None):
         elif roll_context == 'secondary':
             table_name_for_log = f"{roll_type_from_payload.title()} Effect"
             result_for_log = response.get("secondaryResultText", "No specific secondary result.")
-        # At this point, 'descriptor', 'city', 'region', 'rolled_value', 
-        # 'table_name_for_log', and 'result_for_log' are all defined.
-
-        # Convert result_for_log to a string and strip whitespace for the narrative entry
+        
         result_for_log_str = str(result_for_log).strip()
-
-        # --- START: A/An Logic and new narrative_log_entry construction ---        
-        descriptor_words = descriptor.split(' ') #
-        if descriptor_words[0].lower() in ["a", "an"]: #
-            # If the descriptor itself starts with "a" or "an" (e.g., "an unfortunate soul")
+        
+        descriptor_words = descriptor.split(' ')
+        if descriptor_words[0].lower() in ["a", "an"]:
             article_for_narrative = descriptor_words[0].capitalize()
             descriptor_noun_phrase = ' '.join(descriptor_words[1:])
         else:
-            # If the descriptor is just the noun phrase (e.g., "wise wizard")
             descriptor_noun_phrase = descriptor
-            # Determine "A" or "An" based on the first letter of the noun phrase
             if descriptor_noun_phrase and descriptor_noun_phrase[0].lower() in 'aeiou':
                 article_for_narrative = "An"
             else:
                 article_for_narrative = "A"
         
-        # Construct the narrative log entry using A/An logic and curly double quotes
-        narrative_log_entry = f"{article_for_narrative} {descriptor_noun_phrase} from {city}, {region} rolled a {rolled_value} on the {table_name_for_log} table, resulting in: \u201c{result_for_log_str}\u201d" # Curly double quotes “ ”
+        narrative_log_entry = f"{article_for_narrative} {descriptor_noun_phrase} from {city}, {region} rolled a {rolled_value} on the {table_name_for_log} table, resulting in: \u201c{result_for_log_str}\u201d"
         
         if response.get("isSecondaryPrompt") and not response.get("secondaryResultText"):
             narrative_log_entry += " (Bonus roll pending...)"
-        # --- END: A/An Logic and new narrative_log_entry construction ---
 
         try:
             log_data_to_store = {
@@ -269,16 +273,20 @@ def get_roll_result_and_log(payload, client_ip=None):
                 "narrative": narrative_log_entry,
                 "geo_debug": {"ip": client_ip, "city_resolved": city, "region_resolved": region},
                 "raw_payload": payload,
-                "raw_response": response
+                "raw_response": response # Be mindful of what's in response; it could be large or sensitive
             }
-            with open("narrative_dice_log.jsonl", "a", encoding="utf-8") as logfile:
+            # Use NARRATIVE_LOG_FILE_PATH defined globally
+            with open(NARRATIVE_LOG_FILE_PATH, "a", encoding="utf-8") as logfile:
                 logfile.write(json.dumps(log_data_to_store) + "\n")
+            # This print will go to Render's standard log stream
             print(f"NARRATIVE LOG: {narrative_log_entry}")
         except Exception as e:
-            app.logger.error(f"Error writing narrative log: {e}", exc_info=True)
-            print(f"Error writing narrative log: {e}")
+            app.logger.error(f"Error writing narrative log to {NARRATIVE_LOG_FILE_PATH}: {e}", exc_info=True)
+            # Also print to Render's console for immediate visibility if logger isn't fully configured for stdout
+            print(f"CRITICAL: Failed to write to log file {NARRATIVE_LOG_FILE_PATH}. Error: {e}")
 
-    return response #
+
+    return response
 
 # --- Routes ---
 @app.route('/', methods=['GET'])
@@ -300,18 +308,14 @@ def roll_ajax():
     if not payload:
         return jsonify({"status": "error", "errorMessage": "Invalid request data."}), 400
 
-    # Get the client IP, considering X-Forwarded-For
     xff = request.headers.get('X-Forwarded-For')
     if xff:
-        # Take the first IP in the list if multiple exist
         client_ip = xff.split(',')[0].strip()
     else:
-        # Fallback if X-Forwarded-For is not present
         client_ip = request.remote_addr
 
-    # For debugging on Render, you can log what IP is being used:
     app.logger.info(f"Attempting geolocation for IP address: {client_ip} (XFF: {request.headers.get('X-Forwarded-For')}, Remote: {request.remote_addr})")
-
+    
     result_data = get_roll_result_and_log(payload, client_ip=client_ip)
     return jsonify(result_data)
 
@@ -319,7 +323,7 @@ def roll_ajax():
 def share_discord():
     webhook_url = os.environ.get('DISCORD_WEBHOOK_URL')
     if not webhook_url:
-        print("Error: DISCORD_WEBHOOK_URL not set.")
+        app.logger.error("Error: DISCORD_WEBHOOK_URL not set.")
         return jsonify({"status": "error", "error": "Discord webhook URL not configured on server."}), 500
     payload = request.get_json()
     message_content = payload.get('message')
@@ -329,55 +333,59 @@ def share_discord():
     try:
         response_discord = requests.post(webhook_url, json=discord_data)
         response_discord.raise_for_status()
-        print("Message sent to Discord successfully!")
+        app.logger.info("Message sent to Discord successfully!")
         return jsonify({"status": "success"})
     except requests.exceptions.RequestException as e:
-        print(f"Error sending message to Discord: {e}")
-        return jsonify({"status": "error", "error": f"Failed to send request to Discord: {e}"}), 500
+        app.logger.error(f"Error sending message to Discord: {e}", exc_info=True)
+        return jsonify({"status": "error", "error": f"Failed to send request to Discord: {str(e)}"}), 500
     
 # --- Roll History Endpoint (using logs) ---
 @app.route('/get_roll_history', methods=['GET'])
 def get_roll_history():
     try:
         logs = []
-        max_logs_to_return = 50 # Capped at 50
+        max_logs_to_return = 50
 
-        log_file_path = "narrative_dice_log.jsonl"
-        if not os.path.exists(log_file_path):
-            return jsonify([]) # Return empty if no log file yet
+        # Use NARRATIVE_LOG_FILE_PATH defined globally
+        if not os.path.exists(NARRATIVE_LOG_FILE_PATH):
+            app.logger.info(f"Log file not found at {NARRATIVE_LOG_FILE_PATH} for history retrieval.")
+            return jsonify([])
 
-        with open(log_file_path, "r", encoding="utf-8") as logfile:
+        # Use NARRATIVE_LOG_FILE_PATH defined globally
+        with open(NARRATIVE_LOG_FILE_PATH, "r", encoding="utf-8") as logfile:
             all_lines = logfile.readlines()
-
-        # Get the last 'max_logs_to_return' lines
+        
         recent_lines = all_lines[-max_logs_to_return:]
 
         for line in recent_lines:
             try:
                 log_entry = json.loads(line)
-                # Extract only the necessary, safe-to-display information
-                # The narrative already contains the anonymized location
                 logs.append({
                     "timestamp": log_entry.get("timestamp"),
                     "narrative": log_entry.get("narrative")
                 })
             except json.JSONDecodeError:
-                print(f"Skipping malformed log line: {line.strip()}") # Or log this error
+                app.logger.warning(f"Skipping malformed log line during history retrieval: {line.strip()}")
 
-        # The logs are read from oldest to newest among the recent_lines; reverse for chronological display (newest first)
         return jsonify(list(reversed(logs))) 
     except Exception as e:
-        app.logger.error(f"Error reading roll history: {e}", exc_info=True)
+        app.logger.error(f"Error reading roll history from {NARRATIVE_LOG_FILE_PATH}: {e}", exc_info=True)
         return jsonify({"status": "error", "errorMessage": "Could not retrieve roll history."}), 500
 
 if __name__ == '__main__':
-    # For more detailed Flask logging:
+    # For production, Gunicorn or another WSGI server is recommended.
+    # The app.run() is fine for local development.
+    # Flask's default logger is used. For more advanced logging configurations,
+    # you might set up handlers, formatters, and levels, especially for production.
+    # Example (can be expanded):
     # import logging
-    # if not app.debug: # Only configure file logging if not in debug mode
-    #    file_handler = logging.FileHandler('flask_prod_errors.log')
-    #    file_handler.setLevel(logging.WARNING) # Log WARNING, ERROR, CRITICAL
-    #    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    #    file_handler.setFormatter(formatter)
-    #    app.logger.addHandler(file_handler)
-    #    app.logger.setLevel(logging.WARNING)
+    # if not app.debug:
+    #     # Example: Log to stdout which Render captures
+    #     stream_handler = logging.StreamHandler()
+    #     stream_handler.setLevel(logging.INFO)
+    #     app.logger.addHandler(stream_handler)
+    #     app.logger.setLevel(logging.INFO)
+    # else:
+    #     app.logger.setLevel(logging.DEBUG)
+
     app.run()
