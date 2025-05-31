@@ -300,10 +300,18 @@ def roll_ajax():
     if not payload:
         return jsonify({"status": "error", "errorMessage": "Invalid request data."}), 400
 
-    client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-    # Added print statement for debugging IP, you can remove if not needed
-    # print(f"--- Attempting geolocation for IP address: {client_ip} ---")
-    
+    # Get the client IP, considering X-Forwarded-For
+    xff = request.headers.get('X-Forwarded-For')
+    if xff:
+        # Take the first IP in the list if multiple exist
+        client_ip = xff.split(',')[0].strip()
+    else:
+        # Fallback if X-Forwarded-For is not present
+        client_ip = request.remote_addr
+
+    # For debugging on Render, you can log what IP is being used:
+    app.logger.info(f"Attempting geolocation for IP address: {client_ip} (XFF: {request.headers.get('X-Forwarded-For')}, Remote: {request.remote_addr})")
+
     result_data = get_roll_result_and_log(payload, client_ip=client_ip)
     return jsonify(result_data)
 
