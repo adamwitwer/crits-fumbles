@@ -113,6 +113,36 @@ body {
     z-index: 0;
 }
 
+a {
+  color: var(--clr-heading);
+  text-decoration: none;
+  font-weight: bold;
+  position: relative;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--clr-heading);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+
+a:hover::after {
+  transform: scaleX(1);
+}
+
+a:hover {
+  transform: translateY(-1px);
+  color: var(--clr-button-hover-bg);
+}
+
 /* --- Background Dragon Image Overlay --- */
 body::before {
     content: "";
@@ -180,7 +210,7 @@ form,
 label {
   font-weight: 700;
   margin-bottom: 0.4em;
-  display: block;
+  display: inline-block;
 }
 
 select,
@@ -240,6 +270,18 @@ button:focus {
 button:active {
   transform: scale(0.98);
   box-shadow: var(--shadow-button-active);
+}
+
+.info-icon {
+  cursor: pointer;
+  margin-left: 8px;
+  font-weight: bold;
+  color: var(--clr-heading);
+  opacity: 0.3;
+  font-size: smaller;
+}
+.info-icon:hover {
+    opacity: 1;
 }
 
 /* === Result Box Styles === */
@@ -536,13 +578,49 @@ box-shadow: var(--shadow-button-active);
   vertical-align: middle;
 }
 
-.app-footer p {
-   margin: 0.2em 0;
+.app-footer p { margin: 0.2em 0; }
+
+/* === Modals === */
+
+/* Overlay for info */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
 }
 
-/* === Overlay for Chronicles === */
+/* Modal */
+.modal-content {
+  background-color: var(--clr-card-bg);
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  max-width: 500px;
+  width: 85%;
+  position: relative;
+  transform: translateY(-20px);
+  transition: transform 0.3s ease;
+}
+.modal-overlay.active .modal-content {
+  transform: translateY(0);
+}
+.modal-content h2 { text-align: center; }
 
-/* Overlay */
+/* Overlay for Chronicles */
 #history-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -555,7 +633,7 @@ box-shadow: var(--shadow-button-active);
   z-index: 1000;
 }
 
-/* Modal wrapper */
+/* Modal */
 #history-modal {
   background: var(--clr-card-bg);
   width: 90%; max-width: 600px;
@@ -591,7 +669,8 @@ box-shadow: var(--shadow-button-active);
 }
 
 /* Close X (relative to header) */
-#close-history-modal {
+#close-history-modal,
+#info-modal-close-button {
   position: absolute;
   top: 0.5rem; right: 0.5rem;
   width: 32px; height: 32px;
@@ -600,12 +679,15 @@ box-shadow: var(--shadow-button-active);
   z-index: 11; /* above the header block */
 }
 
-#close-history-modal:hover {
+#close-history-modal:hover,
+#info-modal-close-button:hover {
   opacity: 1;
 }
 
 #close-history-modal:before,
-#close-history-modal:after {
+#close-history-modal:after,
+#info-modal-close-button:before,
+#info-modal-close-button:after {
   content: '';
   position: absolute;
   left: 50%;
@@ -614,10 +696,12 @@ box-shadow: var(--shadow-button-active);
   height: 15px;
   background-color: var(--clr-heading);
 }
-#close-history-modal:before {
+#close-history-modal:before,
+#info-modal-close-button:before {
   transform: translate(-50%, -50%) rotate(45deg);
 }
-#close-history-modal:after {
+#close-history-modal:after,
+#info-modal-close-button:after {
   transform: translate(-50%, -50%) rotate(-45deg);
 }
 
@@ -762,12 +846,42 @@ box-shadow: var(--shadow-button-active);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5),
                  0 0 5px rgba(50, 30, 30, 0.25);
   }
-
+ 
   select {
      background-color: #333; /* Darker dropdown specific bg */
      color: var(--clr-text);
      border-color: var(--clr-form-border);
      background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23cccccc%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+  }
+  
+   a {
+    color: var(--clr-heading);
+    text-decoration: none;
+    font-weight: bold;
+    position: relative;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: var(--clr-heading);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+  }
+
+  a:hover::after {
+    transform: scaleX(1);
+  }
+
+  a:hover {
+    transform: translateY(-1px);
+    color: var(--clr-bonus-border); /* lavender-toned glow for a magical dark mode feel */
   }
 
   button {
