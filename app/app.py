@@ -114,7 +114,7 @@ def get_roll_result_and_log(payload, client_ip=None):
     damage_type = payload.get('damageType')
     magic_subtype = payload.get('magicSubtype')
     fumble_source_from_payload = payload.get('fumbleType')
-    attack_type = payload.get('attackType')
+    attack_type = payload.get('attackType') # This will be 'melee', 'ranged', 'magic' for BCoydog fumbles
 
     try:
         if roll_context == 'primary':
@@ -139,7 +139,7 @@ def get_roll_result_and_log(payload, client_ip=None):
                     table_data = source_tables.get(crit_damage_key)
                     if table_data:
                         res_text = resolve_roll(roll_value, table_data)
-                        text_for_injury_check = res_text # Original text for keyword checks
+                        text_for_injury_check = res_text 
 
                         if crit_source_from_payload == "Questionable Arcana" and isinstance(res_text, str):
                             parts = res_text.split(" Effect: ", 1)
@@ -163,26 +163,54 @@ def get_roll_result_and_log(payload, client_ip=None):
                 response["selectedFumbleType"] = fumble_source_from_payload
                 
                 fumble_src_tables = FUMBLE_DATA.get(fumble_source_from_payload, {})
-                if not fumble_src_tables: response.update({"status": "error", "errorMessage": f"Invalid fumble source: {fumble_source_from_payload}"})
-                else: # This 'else' is for when fumble_src_tables is successfully found
-                    key = ("Weapon Attack" if attack_type == 'Weapon' else "Spell Attack") if fumble_source_from_payload == 'Questionable Arcana' else \
-                          ('magic' if attack_type == 'Magic' else ('melee' if attack_type == 'Weapon' else 'general')) # <--- CORRECTED 'spell' to 'magic' here
-                    f_list = fumble_src_tables.get(key, [])
-                    if not f_list and fumble_source_from_payload == 'BCoydog' and 'general' in fumble_src_tables:
-                        f_list = fumble_src_tables.get('general', [])
-                    
-                    found = False
-                    if not f_list: response.update({"status": "error", "errorMessage": f"No fumble entries for {fumble_source_from_payload} - {key}."})
+                if not fumble_src_tables: 
+                    response.update({"status": "error", "errorMessage": f"Invalid fumble source: {fumble_source_from_payload}"})
+                else:
+                    # START BUG FIX MODIFICATION for fumble key selection
+                    key_to_use = None
+                    if fumble_source_from_payload == 'Questionable Arcana':
+                        # QA expects 'Weapon' or 'Magic' from frontend for attack_type
+                        key_to_use = "Weapon Attack" if attack_type == 'Weapon' else "Spell Attack"
+                    elif fumble_source_from_payload == 'BCoydog':
+                        # BCoydog will receive 'melee', 'ranged', or 'magic' (lowercase) from frontend for attack_type
+                        # These directly map to keys in fumbles_master.json for BCoydog
+                        key_to_use = attack_type.lower() if attack_type else None 
+                        if key_to_use not in ['melee', 'ranged', 'magic']: # Basic validation
+                            app.logger.warning(f"Received unexpected attack_type '{attack_type}' for BCoydog fumble. Defaulting to general or error.")
+                            # key_to_use might become None or rely on fallback logic if attack_type is invalid
+                            # For robustness, if it's invalid, perhaps force an error or a specific fallback.
+                            # For now, if it's not one of these, f_list might be empty and trigger error below.
+                            pass # Let the existing fallback or error handling catch invalid keys
                     else:
-                        for entry in f_list:
-                            rr_str = entry.get('roll'); match = False
-                            if not rr_str: continue
-                            try:
-                                if '-' in rr_str: l, h = map(int, rr_str.split('-')); match = l <= roll_value <= h
-                                else: match = int(rr_str) == roll_value
-                            except ValueError: app.logger.warning(f"Malformed roll '{rr_str}' in {fumble_source_from_payload}"); continue
-                            if match: response.update({"description": entry.get('description', 'N/A'), "effect": entry.get('effect', 'N/A')}); found = True; break
-                        if not found: response.update({"description": f"No matching {fumble_source_from_payload} fumble for {roll_value} in {key}.", "effect": "No additional effect."})
+                        response.update({"status": "error", "errorMessage": f"Fumble logic not defined for source: {fumble_source_from_payload}"})
+                    # END BUG FIX MODIFICATION for fumble key selection
+
+                    if key_to_use:
+                        f_list = fumble_src_tables.get(key_to_use, [])
+                        
+                        # Fallback logic for BCoydog if the specific key ('melee', 'ranged', 'magic') yields no list
+                        # or if key_to_use was invalid and resulted in empty f_list for BCoydog
+                        if not f_list and fumble_source_from_payload == 'BCoydog':
+                            general_fumbles = fumble_src_tables.get('general', [])
+                            if general_fumbles:
+                                app.logger.info(f"Fumble key '{key_to_use}' for BCoydog resulted in empty list or was invalid. Falling back to 'general' fumbles.")
+                                f_list = general_fumbles
+                                key_to_use = 'general' # Update key_to_use for error message consistency
+                            
+                        if not f_list: 
+                            response.update({"status": "error", "errorMessage": f"No fumble entries for {fumble_source_from_payload} - {key_to_use} (including fallback)." })
+                        else:
+                            found = False
+                            for entry in f_list:
+                                rr_str = entry.get('roll'); match = False
+                                if not rr_str: continue
+                                try:
+                                    if '-' in rr_str: l, h = map(int, rr_str.split('-')); match = l <= roll_value <= h
+                                    else: match = int(rr_str) == roll_value
+                                except ValueError: app.logger.warning(f"Malformed roll '{rr_str}' in {fumble_source_from_payload}"); continue
+                                if match: response.update({"description": entry.get('description', 'N/A'), "effect": entry.get('effect', 'N/A')}); found = True; break
+                            if not found: response.update({"description": f"No matching {fumble_source_from_payload} fumble for {roll_value} in {key_to_use}.", "effect": "No additional effect."})
+                    # If key_to_use was None (e.g. from undefined fumble source), error is already set.
             else: response.update({"status": "error", "errorMessage": f"Invalid primary roll type: {roll_type_from_payload}"})
 
         elif roll_context == 'secondary':
@@ -201,7 +229,6 @@ def get_roll_result_and_log(payload, client_ip=None):
         response.update({"status": "error", "errorMessage": f"An internal error occurred: {str(e)}"})
 
     if response["status"] == "success":
-        # Narrative Logging (condensed for brevity)
         desc = random.choice(RANDOM_DESCRIPTORS); city = geo_info.get("city", "city?"); region = geo_info.get("regionName", "region?")
         rval = response.get("rollValue"); t_name = "Unknown Table"; res_log = "N/A"
         if roll_context == 'primary':
@@ -213,8 +240,9 @@ def get_roll_result_and_log(payload, client_ip=None):
                 t_name = f"{src} Crit ({dmg_key.title()})"
                 res_log = response.get("description") + " Effect: " + response.get("effect") if response.get("description") and response.get("effect") else response.get("resultText", "N/A")
             elif roll_type_from_payload == 'fumble':
-                src = response.get("selectedFumbleType", "?"); atk = response.get("selectedAttackType", "?")
-                t_name = f"{src} Fumble ({atk})"; d, e = response.get("description", ""), response.get("effect", "")
+                src = response.get("selectedFumbleType", "?"); atk = response.get("selectedAttackType", "?") # atk will be 'melee', 'ranged', 'magic' for BCoydog
+                t_name = f"{src} Fumble ({atk.title() if atk else 'Unknown'})"; # .title() for display
+                d, e = response.get("description", ""), response.get("effect", "")
                 res_log = f"{d} Effect: {e}".strip() if e else d
         elif roll_context == 'secondary': t_name = f"{roll_type_from_payload.title()} Effect"; res_log = response.get("secondaryResultText", "N/A")
         
@@ -232,7 +260,6 @@ def get_roll_result_and_log(payload, client_ip=None):
 # --- Routes ---
 @app.route('/', methods=['GET'])
 def index():
-    # Data for initial template rendering (Sterling Vermin defaults for dropdowns)
     sv_tables = CRIT_DATA.get('Sterling Vermin', {})
     dmg_types = sorted([k for k in sv_tables.keys() if not k.startswith('magic:')])
     magic_subs = sorted([k for k in sv_tables.keys() if k.startswith('magic:')])
@@ -243,13 +270,13 @@ def index():
 
 @app.route('/roll', methods=['POST'])
 def roll_ajax():
-    p = request.get_json(); print(f"Roll payload: {p}") # Log payload for debugging
+    p = request.get_json(); print(f"Roll payload: {p}") 
     if not p: return jsonify({"status": "error", "errorMessage": "Invalid request data."}), 400
     xff = request.headers.get('X-Forwarded-For'); ip = xff.split(',')[0].strip() if xff else request.remote_addr
     return jsonify(get_roll_result_and_log(p, ip))
 
 @app.route('/share_discord', methods=['POST'])
-def share_discord(): # Simplified
+def share_discord(): 
     url = os.environ.get('DISCORD_WEBHOOK_URL')
     if not url: return jsonify({"status": "error", "error": "Webhook URL not configured."}), 500
     p = request.get_json(); msg = p.get('message')
@@ -258,14 +285,14 @@ def share_discord(): # Simplified
     except Exception as e: app.logger.error(f"Discord send error: {e}"); return jsonify({"status": "error", "error": str(e)}), 500
     
 @app.route('/get_roll_history', methods=['GET'])
-def get_roll_history(): # Simplified
+def get_roll_history(): 
     logs = []
     if not os.path.exists(NARRATIVE_LOG_FILE_PATH): return jsonify([])
     try:
         with open(NARRATIVE_LOG_FILE_PATH, "r", encoding="utf-8") as lf: lines = lf.readlines()
         for line in lines[-50:]:
             try: entry = json.loads(line); logs.append({"ts": entry.get("timestamp"), "nar": entry.get("narrative")})
-            except: pass # Skip malformed
+            except: pass 
         return jsonify(list(reversed([{"timestamp":l["ts"], "narrative":l["nar"]} for l in logs if l.get("nar")])))
     except Exception as e: app.logger.error(f"History read error: {e}"); return jsonify({"status":"error","msg":"History fail."}),500
 

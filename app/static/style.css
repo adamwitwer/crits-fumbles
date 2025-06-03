@@ -238,7 +238,7 @@ select {
   color: var(--clr-text); /* Explicitly set text color using the variable; otherwise, the text is blue in iOS */
 }
 
-#magic-subtype, #attack-type-container {
+#magic-subtype, #attack-type-container, #crit-fields {
   margin-top: 0.5em;
 }
 
