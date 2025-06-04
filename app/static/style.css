@@ -190,7 +190,7 @@ label {
 select,
 button {
   width: 100%;
-  padding: 0.75em 1em;
+  padding: 0.5em 1em;
   border-radius: var(--border-radius-standard);
   border: var(--border-width-standard) solid var(--clr-form-border);
   transition: var(--transition-standard);
@@ -204,8 +204,7 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   /* Embed arrow color via variable if possible, fallback needed for complex SVG */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='292.4' height='292.4'%3E%3Cpath fill='%23007CB2' d='M287 69.4a17.6 17.6 0 0 0-13-5.4H18.4c-5 0-9.3 1.8-12.9 5.4A17.6 17.6 0 0 0 0 82.2c0 5 1.8 9.3 5.4 12.9l128 127.9c3.6 3.6 7.8 5.4 12.8 5.4s9.2-1.8 12.8-5.4L287 95c3.5-3.5 5.4-7.8 5.4-12.8 0-5-1.9-9.2-5.5-12.8z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='292.4' height='292.4'%3E%3Cpath fill='%234a2c2a' d='M287 69.4a17.6 17.6 0 0 0-13-5.4H18.4c-5 0-9.3 1.8-12.9 5.4A17.6 17.6 0 0 0 0 82.2c0 5 1.8 9.3 5.4 12.9l128 127.9c3.6 3.6 7.8 5.4 12.8 5.4s9.2-1.8 12.8-5.4L287 95c3.5-3.5 5.4-7.8 5.4-12.8 0-5-1.9-9.2-5.5-12.8z'/%3E%3C/svg%3E");  background-repeat: no-repeat;
   background-position: right .7em top 50%;
   background-size: .65em auto;
   background-color: #fff;
@@ -512,25 +511,27 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
 /* === Footer Styles === */
 
 .app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0 0 0.75em 0;
+}
+
+.app-footer p {
   text-align: center;
   font-size: var(--font-size-footer);
   color: var(--clr-footer-text);
-  margin-top: calc(var(--spacing-unit) * 4);
-  padding: calc(var(--spacing-unit) * 2) var(--spacing-unit);
-  text-shadow: 
-        0 0 3px rgba(253, 246, 227, 0.75), /* matches h1 */
-        0 0 5px rgba(253, 246, 227, 0.55);
+  margin: 0;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6);
 }
 
 .app-footer a {
   color: var(--clr-link);
   text-decoration: none;
-  padding: 0.2em 0.5em;
   cursor: pointer;
   transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
-  display: inline;
-  font-weight: normal;
-  align-items: center;
 }
 
 .app-footer a:hover,
@@ -540,12 +541,11 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
 }
 
 .github-icon {
-  width: 1.25em;
-  height: 1.25em;
+  width: 1.4em;
+  height: 1.4em;
   vertical-align: middle;
+  padding-bottom: 0.2em;
 }
-
-.app-footer p { margin: 0.2em 0; }
 
 /* === Modals === */
 
@@ -913,12 +913,11 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
     pointer-events: none;
   }
   
-  /* Removes "glow effect" from h1 and footer */
-  h1, .app-footer {
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5),
-                 0 0 5px rgba(50, 30, 30, 0.25);
+  /* Modifies "glow effect" from h1 and footer */
+  h1, .app-footer p { text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5),
+                     0 0 5px rgba(50, 30, 30, 0.25);
   }
- 
+
   select {
      background-color: #333; /* darker dropdown specific bg */
      color: var(--clr-text);
