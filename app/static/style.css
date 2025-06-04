@@ -574,6 +574,8 @@ box-shadow: var(--shadow-button-active);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
 }
 .modal-overlay.active {
   opacity: 1;
@@ -583,18 +585,24 @@ box-shadow: var(--shadow-button-active);
 /* Modal */
 .modal-content {
   background-color: var(--clr-card-bg);
+  color: var(--clr-text);
   padding: 25px;
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
   max-width: 500px;
   width: 85%;
   position: relative;
+  opacity: 0;
   transform: translateY(-20px);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  box-shadow: 0 0 12px rgba(255, 248, 220, 0.1);
 }
+
 .modal-overlay.active .modal-content {
   transform: translateY(0);
+  opacity: 1;
 }
+
 .modal-content h2 { text-align: center; }
 
 /* hyperlinks */
@@ -622,6 +630,8 @@ box-shadow: var(--shadow-button-active);
   top: 0; left: 0;
   width: 100%; height: 100%;
   background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   display: none;     /* toggled by JS */
   justify-content: center;
   align-items: center;
@@ -662,6 +672,16 @@ box-shadow: var(--shadow-button-active);
   overflow-y: auto;
   padding: 1em 1.25em 1.5em;
   hyphens: auto;
+}
+#history-content::-webkit-scrollbar {
+  width: 8px;
+}
+#history-content::-webkit-scrollbar-thumb {
+  background-color: var(--clr-scroll-note-shadow);
+  border-radius: 4px;
+}
+#history-content::-webkit-scrollbar-track {
+  background-color: transparent;
 }
 
 /* Close X (relative to header) */
@@ -724,21 +744,54 @@ box-shadow: var(--shadow-button-active);
     margin-bottom: 0.3em;
 }
 
-/* Dark mode for Chronicles modal – leaving this here */
+/* Dark mode for modals – leaving this here */
 @media (prefers-color-scheme: dark) {
-   #history-modal {
-        background-color: var(--clr-card-bg);
-        border-color: var(--clr-card-border);
-    }
-    #history-content li {
-        border-bottom-color: var(--clr-border-subtle);
-    }
-    #close-history-modal {
-        color: var(--clr-text);
-    }
-    #close-history-modal:hover {
-        color: var(--clr-heading);
-    }
+  .modal-content,
+  #history-modal {
+    background-color: var(--clr-card-bg);
+    color: var(--clr-text);
+    border: var(--border-width-card) solid var(--clr-card-border);
+    box-shadow: var(--shadow-card);
+  }
+
+  .modal-content a {
+    color: var(--clr-heading);
+    background-image: linear-gradient(to right, var(--clr-bonus-border), var(--clr-bonus-border));
+  }
+
+  .modal-content a:hover,
+  .modal-content a:focus {
+    color: var(--clr-bonus-border);
+  }
+
+  .info-icon {
+    color: var(--clr-heading);
+    opacity: 0.5;
+  }
+
+  .info-icon:hover {
+    color: var(--clr-bonus-border);
+    opacity: 1;
+  }
+
+  .modal-close-button,
+  #close-history-modal,
+  #info-modal-close-button {
+    color: var(--clr-form-border);
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .modal-close-button:hover,
+  .modal-close-button:focus,
+  #close-history-modal:hover,
+  #info-modal-close-button:hover {
+    color: var(--clr-heading);
+    transform: scale(1.1);
+  }
+
+  #history-content li {
+    border-bottom: 1px solid var(--clr-border-subtle);
+  }
 }
 
 /* === Responsive Adjustments === */
@@ -848,44 +901,6 @@ box-shadow: var(--shadow-button-active);
      color: var(--clr-text);
      border-color: var(--clr-form-border);
      background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23cccccc%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
-  }
-  
-  .modal-content {
-    background-color: var(--clr-card-bg);
-    color: var(--clr-text);
-    border: var(--border-width-card) solid var(--clr-card-border);
-    box-shadow: var(--shadow-card);
-  }
-
-  .info-icon {
-    color: var(--clr-heading);
-    opacity: 0.5;
-  }
-
-  .info-icon:hover,
-  .info-icon:focus {
-    color: var(--clr-bonus-border); /* A subtle magical highlight */
-    opacity: 1;
-  }
-
-  .modal-close-button {
-    color: var(--clr-form-border);
-    transition: color 0.2s ease;
-  }
-
-  .modal-close-button:hover,
-  .modal-close-button:focus {
-    color: var(--clr-heading);
-  }
-
-   .modal-content a {
-    color: var(--clr-heading);
-    background-image: linear-gradient(to right, var(--clr-bonus-border), var(--clr-bonus-border));
-  }
-
-  .modal-content a:hover,
-  .modal-content a:focus {
-    color: var(--clr-bonus-border); /* lavender-toned glow for a magical dark mode feel */
   }
 
   button {
