@@ -511,12 +511,9 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
 /* === Footer Styles === */
 
 .app-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  margin: 0;
-  padding: 0 0 0.75em 0;
+  position: relative;
+  margin-top: calc(var(--spacing-unit) * 4);
+  padding: 0.75em 1em;
 }
 
 .app-footer p {
