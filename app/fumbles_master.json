@@ -201,7 +201,7 @@
     "melee": [
       {
         "roll": "01-02",
-        "description": "Sh-t…",
+        "description": "Shit…",
         "effect": "Your attack backfires and either through a parry, riposte, or defensive attack, the enemy reroutes your attack back at you, hitting a weak spot. The damage is doubled."
       },
       {
@@ -316,7 +316,7 @@
       },
       {
         "roll": "47-48",
-        "description": "A smashing idea!",
+        "description": "A Smashing Idea!",
         "effect": "Well that wasn’t supposed to happen! You slam your hand in between the handle of your weapon and a hard surface, maybe a wall or the enemy’s armor. Roll a DEX Save against the intended target’s AC, on a failure you take 1d4 bludgeoning damage and drop your weapon."
       },
       {

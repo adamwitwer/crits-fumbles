@@ -27,7 +27,6 @@ except OSError as e:
     NARRATIVE_LOG_FILE_PATH = os.path.join('.', LOG_FILENAME)
     app.logger.info(f"Fallback log file path is now: {NARRATIVE_LOG_FILE_PATH}")
 
-
 # --- Lists for Narrative Logging ---
 RANDOM_DESCRIPTORS = [
     "an intrepid adventurer", "a curious scholar", "a daring rogue",
@@ -50,7 +49,7 @@ def load_json(filename):
         app.logger.error(f"Error: Could not decode JSON from {json_path}")
         return {}
 
-# Load new master data files
+# Load data files
 CRIT_DATA = load_json("critical_hits_master.json")
 FUMBLE_DATA = load_json("fumbles_master.json")
 
@@ -61,6 +60,9 @@ if not FUMBLE_DATA: app.logger.warning("FUMBLE_DATA is empty or failed to load."
 
 # --- Geolocation Helper ---
 def get_geolocation(ip_address):
+    # Use a placeholder for IP addresses in log messages to avoid logging the actual IP.
+    ip_display_for_logs = "[IP REDACTED]"
+
     if not ip_address: return {"city": "an unknown void", "regionName": "the ether"}
     try:
         ip_obj = ipaddress.ip_address(ip_address)
@@ -68,18 +70,54 @@ def get_geolocation(ip_address):
         if ip_obj.is_private: return {"city": "their local sanctum", "regionName": "the home network"}
         if ip_obj in ipaddress.ip_network('100.64.0.0/10', strict=False): return {"city": "their secure Tailnet", "regionName": "a private dimension"}
     except ValueError:
-        if isinstance(ip_address, str) and ip_address.lower() == "localhost": return {"city": "their cozy terminal", "regionName": "the local machine"}
-        app.logger.warning(f"Invalid IP for geolocation: {ip_address}"); return {"city": "an unidentifiable nexus", "regionName": "a glitch in the matrix"}
+        # Handle cases like "localhost" string which is not a valid IP for ipaddress module
+        if isinstance(ip_address, str) and ip_address.lower() == "localhost":
+            return {"city": "their cozy terminal", "regionName": "the local machine"}
+        # Log with the placeholder instead of the actual potentially invalid IP string
+        app.logger.warning(f"Invalid IP format for geolocation: {ip_display_for_logs}")
+        return {"city": "an unidentifiable nexus", "regionName": "a glitch in the matrix"}
+    
+    # For external API calls, the actual ip_address is still used.
     try:
         url = f"http://ip-api.com/json/{ip_address}?fields=status,message,city,regionName,query"
         response_geo = requests.get(url, timeout=3)
-        response_geo.raise_for_status(); data = response_geo.json()
-        if data.get("status") == "success": return {"city": data.get("city", "unknown city"), "regionName": data.get("regionName", "uncharted territory")}
-        app.logger.warning(f"Geo API error for {ip_address}: {data.get('message', 'Unknown ip-api.com error')}"); return {"city": "parts unknown", "regionName": "mysterious land"}
-    except requests.exceptions.Timeout: app.logger.warning(f"Geo request timed out for {ip_address}"); return {"city": "realm beyond reach", "regionName": "mists of time"}
-    except requests.exceptions.RequestException as e: app.logger.warning(f"Error fetching geo for {ip_address}: {e}"); return {"city": "digital realm", "regionName": "boundless interwebs"}
-    except json.JSONDecodeError: app.logger.warning(f"Failed to decode geo JSON for {ip_address}"); return {"city": "garbled signal", "regionName": "static void"}
-    except Exception as e: app.logger.error(f"Generic geo error for {ip_address}: {e}", exc_info=True); return {"city": "place beyond perception", "regionName": "the void"}
+        response_geo.raise_for_status()
+        data = response_geo.json()
+        
+        api_message = data.get('message', 'Unknown ip-api.com error')
+        # Sanitize api_message if it might contain the IP (ip-api.com puts the IP in the 'query' field of its response)
+        # and sometimes in the 'message' field for errors.
+        if data.get("query") and isinstance(api_message, str) and data.get("query") in api_message:
+            api_message = api_message.replace(data.get("query"), ip_display_for_logs)
+
+        if data.get("status") == "success":
+            return {"city": data.get("city", "unknown city"), "regionName": data.get("regionName", "uncharted territory")}
+        
+        app.logger.warning(f"Geo API error for {ip_display_for_logs}: {api_message}")
+        return {"city": "parts unknown", "regionName": "mysterious land"}
+
+    except requests.exceptions.Timeout:
+        app.logger.warning(f"Geo request timed out for {ip_display_for_logs}")
+        return {"city": "realm beyond reach", "regionName": "mists of time"}
+    except requests.exceptions.RequestException as e:
+        # Sanitize exception string if it's likely to contain the URL with the IP
+        error_message = str(e)
+        if isinstance(ip_address, str) and ip_address in error_message: # Check if the original IP is in the error string
+            error_message = error_message.replace(ip_address, ip_display_for_logs)
+        app.logger.warning(f"Error fetching geo for {ip_display_for_logs}: {error_message}")
+        return {"city": "digital realm", "regionName": "boundless interwebs"}
+    except json.JSONDecodeError:
+        app.logger.warning(f"Failed to decode geo JSON for {ip_display_for_logs}")
+        return {"city": "garbled signal", "regionName": "static void"}
+    except Exception as e:
+        # Sanitize generic exception messages as well
+        error_message_generic = str(e)
+        if isinstance(ip_address, str) and ip_address in error_message_generic:
+             error_message_generic = error_message_generic.replace(ip_address, ip_display_for_logs)
+        # exc_info=True will log the stack trace. Standard tracebacks don't show all local variables by default,
+        # but the exception message itself (str(e)) is sanitized above.
+        app.logger.error(f"Generic geo error for {ip_display_for_logs}: {error_message_generic}", exc_info=True)
+        return {"city": "place beyond perception", "regionName": "the void"}
 
 # --- Helper Functions ---
 def resolve_roll(roll_value, table):
@@ -114,7 +152,7 @@ def get_roll_result_and_log(payload, client_ip=None):
     damage_type = payload.get('damageType')
     magic_subtype = payload.get('magicSubtype')
     fumble_source_from_payload = payload.get('fumbleType')
-    attack_type = payload.get('attackType') # This will be 'melee', 'ranged', 'magic' for BCoydog fumbles
+    attack_type = payload.get('attackType')
 
     try:
         if roll_context == 'primary':

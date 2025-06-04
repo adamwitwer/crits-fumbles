@@ -37,7 +37,7 @@
   <div id="crit-source-container" style="display:none;">
     <label for="crit_source">Crit Type</label><span class="info-icon" id="crit_source_info_icon" style="display:none;" title="About this crit source">ⓘ</span>
     <select name="crit_source" id="crit_source">
-      <option value="Sterling Vermin" {% if selected_crit_source == 'Sterling Vermin' %}selected{% endif %}>Sterling Vermin: Critical Hits Revisited</option>
+      <option value="Sterling Vermin" {% if selected_crit_source == 'Sterling Vermin' %}selected{% endif %}>Sterling Vermin</option>
       <option value="Questionable Arcana" {% if selected_crit_source == 'Questionable Arcana' %}selected{% endif %}>Questionable Arcana</option>
       <option value="BCoydog" {% if selected_crit_source == 'BCoydog' %}selected{% endif %}>u/BCoydog</option>
     </select>
@@ -64,11 +64,11 @@
       <option value="BCoydog" {% if selected_fumble_type == 'BCoydog' %}selected{% endif %}>u/BCoydog</option>
     </select>
     <div id="attack-type-container" style="display:none;">
-        <label for="attackType">Attack Type</label>
-        <select id="attackType" name="attackType">
-          <option value="Weapon" {% if selected_attack_type == 'Weapon' %}selected{% endif %}>Weapon</option>
-          <option value="Magic" {% if selected_attack_type == 'Magic' %}selected{% endif %}>Magic</option>
-        </select>
+      <label for="attackType">Attack Type</label>
+      <select id="attackType" name="attackType">
+        <option value="Weapon" {% if selected_attack_type == 'Weapon' %}selected{% endif %}>Weapon</option>
+        <option value="Magic" {% if selected_attack_type == 'Magic' %}selected{% endif %}>Magic</option>
+      </select>
     </div>
   </div>
 
@@ -165,9 +165,9 @@
 
   const sourceInfoTexts = {
       critSources: {
-          "Sterling Vermin": "Critical hit tables adapted from the <a target='_blank' rel='noopener noreferrer' href='https://sterlingvermin.wordpress.com/2016/09/27/critical-hits-revisited/'>Sterling Vermin Adventuring Co.</a>, offering d20 results based on many different damage types, including comprehensive coverage of magic.",
+          "Sterling Vermin": "<a target='_blank' rel='noopener noreferrer' href='https://sterlingvermin.wordpress.com/2016/09/27/critical-hits-revisited/'>Critical Hits Revisited</a> offers d20 results with comprehensive damage types, including magic subtypes and insanities.",
           "Questionable Arcana": "These d100 critical hit tables from <a target='_blank' rel='noopener noreferrer' href='https://growupandgame.com/dungeons-and-dragons/questionable-arcana/dnd-5e-crit-confirmed-critical-hit-charts-and-fumble-charts/'>Questionable Arcana</a> provide narrative and situational effects, often with a unique twist. They are broadly categorized (e.g., Weapon, Spell) and complemented by the QA fumble tables.",
-          "BCoydog": "Reddit user u/BCoydog d100 shared these critical hit tables in <a target='_blank' rel='noopener noreferrer' href'https://www.reddit.com/r/DnD/comments/1cuzgxf/critical_hit_fumble_d100_tables_with_51_results/'>the DnD subreddit</a>. Expect wild (but fair) outcomes for melee, ranged, and magic attacks, often with detailed descriptions and mechanical impacts. Accompanied by a fumble table."
+          "BCoydog": "Reddit user u/BCoydog shared these critical hit tables in <a target='_blank' rel='noopener noreferrer' href'https://www.reddit.com/r/DnD/comments/1cuzgxf/critical_hit_fumble_d100_tables_with_51_results/'>the DnD subreddit</a>. Expect wild (but fair) outcomes for melee, ranged, and magic attacks, often with detailed descriptions and mechanical impacts. Accompanied by a fumble table."
       },
       fumbleSources: {
           "Questionable Arcana": "The <a target='_blank' rel='noopener noreferrer' href='https://growupandgame.com/dungeons-and-dragons/questionable-arcana/dnd-5e-crit-confirmed-critical-hit-charts-and-fumble-charts/'>Questionable Arcana</a> d100 fumble tables focus on the story consequences of fumbled weapon or spell attacks.",
@@ -826,30 +826,37 @@
   const historyContent = document.getElementById('history-content');
 
   async function fetchAndDisplayHistory() {
-      try {
-          const response = await fetch("{{ url_for('get_roll_history') }}");
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const logs = await response.json();
-          historyContent.innerHTML = ''; 
-          if (logs.length === 0) {
-              historyContent.innerHTML = '<p>No rolls recorded yet.</p>';
-          } else {
-              const ul = document.createElement('ul');
-              logs.forEach(log => {
-                  const li = document.createElement('li');
-                  const time = log.timestamp ? new Date(log.timestamp).toLocaleString() : 'Timestamp unavailable';
-                  li.innerHTML = `<strong>${time}</strong> ${log.narrative || 'No narrative.'}`;
-                  ul.appendChild(li);
-              });
-              historyContent.appendChild(ul);
-          }
-          historyOverlay.style.display = 'flex';
-      } catch (error) {
-          console.error('Error fetching roll history:', error);
-          historyContent.innerHTML = '<p>Could not load roll history. Please try again later.</p>';
-          historyOverlay.style.display = 'flex';
-      }
-  }
+    try {
+        const response = await fetch("{{ url_for('get_roll_history') }}");
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const logs = await response.json();
+
+        historyContent.innerHTML = ''; 
+        if (logs.length === 0) {
+            historyContent.innerHTML = '<p>No rolls recorded yet.</p>';
+        } else {
+            const ul = document.createElement('ul');
+            logs.forEach(log => {
+                const li = document.createElement('li');
+                const time = log.timestamp ? new Date(log.timestamp).toLocaleString() : 'Timestamp unavailable';
+                li.innerHTML = `<strong>${time}</strong> ${log.narrative || 'No narrative.'}`;
+                ul.appendChild(li);
+            });
+            historyContent.appendChild(ul);
+        }
+
+        // Use class to trigger animated visibility
+        historyOverlay.classList.add('showing');
+        document.body.classList.add('modal-open');
+        
+
+    } catch (error) {
+        console.error('Error fetching roll history:', error);
+        historyContent.innerHTML = '<p>Could not load roll history. Please try again later.</p>';
+        historyOverlay.classList.add('showing');
+        document.body.classList.add('modal-open');
+    }
+ }
 
   // --- Initial Setup on Load ---
   window.onload = function() {
@@ -880,17 +887,32 @@
             }
         });
     }
-    // History listeners
-    if (showHistoryBtn) showHistoryBtn.addEventListener('click', fetchAndDisplayHistory);
-    if (closeHistoryBtn) closeHistoryBtn.addEventListener('click', () => {if (historyOverlay) historyOverlay.style.display = 'none'; });
+function closeHistoryOverlay() {
     if (historyOverlay) {
-        historyOverlay.addEventListener('click', (event) => {
-            if (event.target === historyOverlay) {if (historyOverlay) historyOverlay.style.display = 'none';}
-        });
+        historyOverlay.classList.remove('showing');
+        document.body.classList.remove('modal-open');
     }
+}
+
+// History listeners
+if (showHistoryBtn) {
+    showHistoryBtn.addEventListener('click', fetchAndDisplayHistory);
+}
+
+if (closeHistoryBtn) {
+    closeHistoryBtn.addEventListener('click', closeHistoryOverlay);
+}
+
+if (historyOverlay) {
+    historyOverlay.addEventListener('click', (event) => {
+        if (event.target === historyOverlay) {
+            closeHistoryOverlay();
+        }
+    });
+}
     
     toggleFields(); // Initial setup of visible fields and dropdowns
-  };
+};
 </script>
 
 </body>
