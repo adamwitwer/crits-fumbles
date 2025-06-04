@@ -20,29 +20,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        /* Basic styles for the modal - Add to your style.css and customize */
-
-        /* Dark mode styles for modal */
-        @media (prefers-color-scheme: dark) {
-            .modal-content {
-                background-color: #2b2b2b; /* Dark theme background */
-                color: #ddd;
-            }
-            .info-icon {
-                color: #c19a6b; /* Dark theme icon color */
-            }
-            .info-icon:hover {
-                color: #e1ba8b;
-            }
-            .modal-close-button {
-                color: #aaa;
-            }
-            .modal-close-button:hover {
-                color: #fff;
-            }
-        }
-    </style>
 </head>
 <body>
 
@@ -190,7 +167,7 @@
       critSources: {
           "Sterling Vermin": "Critical hit tables adapted from the <a target='_blank' rel='noopener noreferrer' href='https://sterlingvermin.wordpress.com/2016/09/27/critical-hits-revisited/'>Sterling Vermin Adventuring Co.</a>, offering d20 results based on many different damage types, including comprehensive coverage of magic.",
           "Questionable Arcana": "These d100 critical hit tables from <a target='_blank' rel='noopener noreferrer' href='https://growupandgame.com/dungeons-and-dragons/questionable-arcana/dnd-5e-crit-confirmed-critical-hit-charts-and-fumble-charts/'>Questionable Arcana</a> provide narrative and situational effects, often with a unique twist. They are broadly categorized (e.g., Weapon, Spell) and complemented by the QA fumble tables.",
-          "BCoydog": "Reddit user u/BCoydog d100 shared these critical hit tables in <a target='_blank' rel='noopener noreferrer' href'https://www.reddit.com/r/DnD/comments/1cuzgxf/critical_hit_fumble_d100_tables_with_51_results/'>the DnD subreddit</a>. Expect wild (but fair) outcomes for melee, ranged, and magic attacks, often with detailed descriptions and mechanical impacts."
+          "BCoydog": "Reddit user u/BCoydog d100 shared these critical hit tables in <a target='_blank' rel='noopener noreferrer' href'https://www.reddit.com/r/DnD/comments/1cuzgxf/critical_hit_fumble_d100_tables_with_51_results/'>the DnD subreddit</a>. Expect wild (but fair) outcomes for melee, ranged, and magic attacks, often with detailed descriptions and mechanical impacts. Accompanied by a fumble table."
       },
       fumbleSources: {
           "Questionable Arcana": "The <a target='_blank' rel='noopener noreferrer' href='https://growupandgame.com/dungeons-and-dragons/questionable-arcana/dnd-5e-crit-confirmed-critical-hit-charts-and-fumble-charts/'>Questionable Arcana</a> d100 fumble tables focus on the story consequences of fumbled weapon or spell attacks.",
@@ -577,17 +554,49 @@
                   </div>`;
               primaryResultExists = true;
           } 
-          else if (data.resultText || data.primaryResultForSecondary) { 
+          else if (data.resultText || data.primaryResultForSecondary) {
               const resultTextToShow = data.primaryResultForSecondary || data.resultText || '';
               const formattedResultText = formatKeywords(resultTextToShow);
               const rollValueToShow = data.primaryRollValueForSecondary || data.rollValue;
-              const rollTypeForDataAttr = data.selectedRollType; 
-              
+              // const rollTypeForDataAttr = data.selectedRollType; // Original line for data-roll-type
+
+              let critSourceForPrimaryBoxAtt = data.selectedCritSource; // Default to current response's crit source
+              let fumbleSourceForPrimaryBoxAtt = data.selectedFumbleType; // Default to current response's fumble type
+              let rollTypeForPrimaryBoxAtt = data.selectedRollType; // Default to current response's roll type
+
+              // If this UI update is for displaying the result of a secondary roll,
+              // the primary box's data attributes should reflect the original roll's context.
+              if (data.secondaryResultText) {
+                  const originalCritSourceFromStorage = document.getElementById('secondary-crit-source-hidden').value;
+                  // const originalFumbleSourceFromStorage = document.getElementById('secondary-fumble-source-hidden')?.value; // Assuming a similar field if fumbles had bonuses
+
+                  // If a valid original crit source was stored, use it.
+                  if (originalCritSourceFromStorage && originalCritSourceFromStorage !== "null" && originalCritSourceFromStorage !== "undefined" && originalCritSourceFromStorage.trim() !== "") {
+                      critSourceForPrimaryBoxAtt = originalCritSourceFromStorage;
+                      fumbleSourceForPrimaryBoxAtt = null; // Clear fumble if original was a crit
+                      // For consistency, the data-roll-type of the primary box should also reflect it was a 'crit'.
+                      // The original roll_type that initiated the crit sequence is what's desired here.
+                      // This might need to be stored similarly, or inferred.
+                      // For now, setting to 'crit' if originalCritSource is present.
+                      rollTypeForPrimaryBoxAtt = 'crit';
+                  }
+                  // Add similar logic for fumble if fumbles can have secondary rolls affecting the primary box display.
+                  // else if (originalFumbleSourceFromStorage && originalFumbleSourceFromStorage !== "null" && ...) {
+                  // fumbleSourceForPrimaryBoxAtt = originalFumbleSourceFromStorage;
+                  // critSourceForPrimaryBoxAtt = null;
+                  // rollTypeForPrimaryBoxAtt = 'fumble';
+                  // }
+              }
+
               primaryContent = `
-                  <div class="result-box ${resultClass}" data-roll-value="${rollValueToShow}" data-roll-type="${rollTypeForDataAttr}" data-crit-source="${data.selectedCritSource}">
+                  <div class="result-box ${resultClass}"
+                       data-roll-value="${rollValueToShow}"
+                       data-roll-type="${rollTypeForPrimaryBoxAtt}"
+                       data-crit-source="${critSourceForPrimaryBoxAtt !== null && critSourceForPrimaryBoxAtt !== undefined ? critSourceForPrimaryBoxAtt : ''}"
+                       data-fumble-source="${fumbleSourceForPrimaryBoxAtt !== null && fumbleSourceForPrimaryBoxAtt !== undefined ? fumbleSourceForPrimaryBoxAtt : ''}">
                     ${createRollHTML(rollValueToShow, actualNumDiceRolled, actualDieTypeRolled)}
                     <p>${formattedResultText}</p>
-                    ${data.isSecondaryPrompt ? '<p class="scroll-note">👇 Bonus Effect!!! 👇</p>' : ''}
+                    ${data.isSecondaryPrompt && !data.secondaryResultText ? '<p class="scroll-note">👇 Bonus Effect!!! 👇</p>' : ''}
                   </div>`;
               primaryResultExists = true;
           }

@@ -5,7 +5,7 @@
         "roll": "1",
         "description": "You are embarassed by your poor showing, but nothing remarkable happens.",
         "effect": "You miss your attack.",
-        "lore": "Bards sing mournfully of Duelmaster Jorra\u2019s attempt to shouted the wrong incantation at a critical moment."
+        "lore": "Bards sing mournfully of Duelmaster Jorra’s attempt to shouted the wrong incantation at a critical moment."
       },
       {
         "roll": "2-5",
@@ -28,7 +28,7 @@
       {
         "roll": "15-19",
         "description": "Melee: You get tangled with your enemy and fall over. Ranged: You spill your quiver.",
-        "effect": "Melee: You are knocked prone and your movement is reduced to 0. Your target must succeed a DC 10 dexterity check or they are also knocked prone. Ranged: You must pick up arrows individually from the ground using your \u201cenvironmental interaction,\u201d or the \u201cUse an Object\u201d action to nock your bow.",
+        "effect": "Melee: You are knocked prone and your movement is reduced to 0. Your target must succeed a DC 10 dexterity check or they are also knocked prone. Ranged: You must pick up arrows individually from the ground using your “environmental interaction,” or the “Use an Object” action to nock your bow.",
         "lore": "The archives of Stormwatch Keep record a similar blunder during the Great Summit."
       },
       {
@@ -58,7 +58,7 @@
       {
         "roll": "60-69",
         "description": "Melee: The weapon slips from your hand as you attack. Ranged: Your ammunition gets lodged in its container.",
-        "effect": "Melee: Roll a DC 10 Dexterity Check; on failure, you throw your weapon into your enemy\u2019s space. DM determines where the item is thrown on large sized or greater creatures. Ranged: You must use an action to organize the ammunition in its case before you can make another ranged attack.",
+        "effect": "Melee: Roll a DC 10 Dexterity Check; on failure, you throw your weapon into your enemy’s space. DM determines where the item is thrown on large sized or greater creatures. Ranged: You must use an action to organize the ammunition in its case before you can make another ranged attack.",
         "lore": "The archives of Stormwatch Keep record a similar blunder during the Festival of Lights."
       },
       {
@@ -103,7 +103,7 @@
         "roll": "1",
         "description": "You are embarassed by your poor showing, but nothing remarkable happens.",
         "effect": "You miss your attack.",
-        "lore": "Velruun\u2019s misfortune in trying to fell into a decorative fountain while charging is still joked about today."
+        "lore": "Velruun’s misfortune in trying to fell into a decorative fountain while charging is still joked about today."
       },
       {
         "roll": "2-5",
@@ -145,19 +145,19 @@
         "roll": "40-49",
         "description": "The placement of your spell startles your allies near your target, causing them to drop their guard.",
         "effect": "Your target is able to use their reaction to take an attack of opportunity on one of your allies in melee range.",
-        "lore": "Bards sing mournfully of Apprentice Threx\u2019s attempt to fell into a decorative fountain while charging."
+        "lore": "Bards sing mournfully of Apprentice Threx’s attempt to fell into a decorative fountain while charging."
       },
       {
         "roll": "50-59",
         "description": "You scramble the ingredients of your component pouch or your focus becomes overloaded with magical energy and temporarily stops working.",
         "effect": "You are unable to perform material components to cast spells until the end of your next turn.",
-        "lore": "Seer Halmin\u2019s misfortune in trying to accidentally cast a spell on themselves is still joked about today."
+        "lore": "Seer Halmin’s misfortune in trying to accidentally cast a spell on themselves is still joked about today."
       },
       {
         "roll": "60-69",
         "description": "Your arm cramps as you cast.",
         "effect": "You are unable to perform somatic components to cast spells until the end of your next turn.",
-        "lore": "Bards sing mournfully of Sir Galwyn\u2019s attempt to shouted the wrong incantation at a critical moment."
+        "lore": "Bards sing mournfully of Sir Galwyn’s attempt to shouted the wrong incantation at a critical moment."
       },
       {
         "roll": "70-79",
@@ -201,7 +201,7 @@
     "melee": [
       {
         "roll": "01-02",
-        "description": "Sh-t\u2026",
+        "description": "Sh-t…",
         "effect": "Your attack backfires and either through a parry, riposte, or defensive attack, the enemy reroutes your attack back at you, hitting a weak spot. The damage is doubled."
       },
       {
@@ -217,26 +217,26 @@
       {
         "roll": "07-08",
         "description": "Off-balance",
-        "effect": "Your bravado knows know bounds, you take a -2 to AC for 1d4 rounds"
+        "effect": "Your bravado knows know bounds, you take a -2 to AC for 1d4 rounds."
       },
       {
         "roll": "09-10",
         "description": "Woops!",
-        "effect": "You misstep, causing yourself to trip over your own feet. Roll a DEX Save against the intended Target's AC, on a failure you fall prone."
+        "effect": "You misstep, causing yourself to trip over your own feet. Roll a DEX Save against the intended target’s AC, on a failure you fall prone."
       },
       {
         "roll": "11-12",
         "description": "Showman Extraordinaire!",
-        "effect": "Your confidence and surety get the best of you, you take a -4 penalty to AC for one round"
+        "effect": "Your confidence and surety get the best of you, you take a -4 penalty to AC for one round."
       },
       {
         "roll": "13-14",
         "description": "Concussive Mistakes",
-        "effect": "A blunt strike makes a good connection with your head/helm, you are Stunned for one round"
+        "effect": "A blunt strike makes a good connection with your head/helm, you are Stunned for one round."
       },
       {
         "roll": "15-16",
-        "description": "I meant to do that\u2026",
+        "description": "I meant to do that…",
         "effect": "For one reason or another, you become the target of the attack. Roll normal damage."
       },
       {
@@ -251,47 +251,47 @@
       },
       {
         "roll": "21-22",
-        "description": "Give 'er all ya got, Scotty!",
-        "effect": "You gave it your all, and it still wasn't enough, you begin to feel extremely fatigued. Roll a CON Save against the intended Target's AC, on a failure you become exhausted until the end of your next turn."
+        "description": "Give ‘er all ya got, Scotty!",
+        "effect": "You gave it your all, and it still wasn’t enough, you begin to feel extremely fatigued. Roll a CON Save against the intended target’s AC, on a failure you become exhausted until the end of your next turn."
       },
       {
         "roll": "23-24",
-        "description": "Oh, sh-t\u2026",
+        "description": "Oh, sh-t…",
         "effect": "You swing with reckless abandon, striking your nearest ally. Target takes double damage and your next attack is with disadvantage."
       },
       {
         "roll": "25-26",
         "description": "Deadly Hubris",
-        "effect": "Your swing becomes entangled in the fray and quite possibly your own pride or poor judgment. Roll a CON Save against the intended Target's AC, on a failure you strike yourself, taking double damage."
+        "effect": "Your swing becomes entangled in the fray and quite possibly your own pride or poor judgment. Roll a CON Save against the intended target’s AC, on a failure you strike yourself, taking double damage."
       },
       {
         "roll": "27-28",
         "description": "Not the coin purse!",
-        "effect": "All's fair in love and war, right? Or not. The next melee attack against you strikes you in the groin, dealing an additional 1d6 damage. When/if this happens, roll a CON Save against the intended Target's AC, on a failure you are knocked prone."
+        "effect": "All’s fair in love and war, right? Or not. The next melee attack against you strikes you in the groin, dealing an additional 1d6 damage. When/if this happens, roll a CON Save against the intended target’s AC, on a failure you are knocked prone."
       },
       {
         "roll": "29-30",
         "description": "My shinies!",
-        "effect": "Should have stowed your shinies away better\u2026 you take 1d4 Slashing damage as your coin purse is damaged, spilling 10d4 coins onto the ground."
+        "effect": "Should have stowed your shinies away better… you take 1d4 Slashing damage as your coin purse is damaged, spilling 10d4 coins onto the ground."
       },
       {
         "roll": "31-32",
-        "description": "Not so Good Vibrations",
-        "effect": "Your weapon strikes a solid point of contact on the enemy, they take no damage and a rattling vibration racks your grip. Roll a DEX Save against the intended Target's AC, on a failure you drop your weapon."
+        "description": "Not So Good Vibrations",
+        "effect": "Your weapon strikes a solid point of contact on the enemy, they take no damage and a rattling vibration racks your grip. Roll a DEX Save against the intended target’s AC, on a failure you drop your weapon."
       },
       {
         "roll": "33-34",
-        "description": "Uh\u2026 sorry?",
+        "description": "Uh… sorry?",
         "effect": "You enrage your target, dealing half damage and providing them a free attack, at Disadvantage. They must have a reaction available and this cannot result in a Fumble for the attacker."
       },
       {
         "roll": "35-36",
-        "description": "Swing and A Miss",
-        "effect": "Your swing is forceful and lethal, you meant every bit of strength (or finesse) behind this strike. Alas, you miss wildly. Roll a DEX Save against the intended Target's AC, on a failure you move 10 ft and fall prone. On a success you move 10 ft. Both outcomes incur an Attack of Opportunity."
+        "description": "Swing and a Miss",
+        "effect": "Your swing is forceful and lethal, you meant every bit of strength (or finesse) behind this strike. Alas, you miss wildly. Roll a DEX Save against the intended target’s AC, on a failure you move 10 feet and fall prone. On a success you move 10 feet. Both outcomes incur an Attack of Opportunity."
       },
       {
         "roll": "37-38",
-        "description": "Thank Goodness\u2026 I think?",
+        "description": "Thank Goodness… I think?",
         "effect": "Nothing additional happens. You miss. Congratulations on your failure! Task failed successfully."
       },
       {
@@ -312,22 +312,22 @@
       {
         "roll": "45-46",
         "description": "Wah wah wah, wah wah wah!",
-        "effect": "It's the classroom of the Peanuts gang, allegedly. Everything is garbled, muffled, or otherwise just unrecognizable. You become Deafened for the next 1d4 rounds as a loud noise or object causes you to temporarily lose your hearing."
+        "effect": "It’s the classroom of the Peanuts gang, allegedly. Everything is garbled, muffled, or otherwise just unrecognizable. You become Deafened for the next 1d4 rounds as a loud noise or object causes you to temporarily lose your hearing."
       },
       {
         "roll": "47-48",
         "description": "A smashing idea!",
-        "effect": "Well that wasn't supposed to happen! You slam your hand in between the handle of your weapon and a hard surface, maybe a wall or the enemy's armor. Roll a DEX Save against the intended Target's AC, on a failure you take 1d4 bludgeoning damage and drop your weapon."
+        "effect": "Well that wasn’t supposed to happen! You slam your hand in between the handle of your weapon and a hard surface, maybe a wall or the enemy’s armor. Roll a DEX Save against the intended target’s AC, on a failure you take 1d4 bludgeoning damage and drop your weapon."
       },
       {
         "roll": "49-50",
-        "description": "My bad\u2026",
+        "description": "My bad…",
         "effect": "You lose your grip or footing and become easier to hit for 1d4 rounds, giving all melee attackers advantage against you."
       },
       {
         "roll": "51-52",
         "description": "Humor and Hubris",
-        "effect": "You're quite motivated by the flourish or technique you have just exhibited. Driven by this execution, you gain a +1 Bonus to all Attack rolls for the next 1d6 rounds."
+        "effect": "You’re quite motivated by the flourish or technique you have just exhibited. Driven by this execution, you gain a +1 Bonus to all Attack rolls for the next 1d6 rounds."
       },
       {
         "roll": "53-54",
@@ -337,7 +337,7 @@
       {
         "roll": "55-56",
         "description": "Shattering",
-        "effect": "Your grip becomes ineffective and so does your strike. Roll a CON Save against the intended Target's AC, on a failure you sustain a hairline fracture in your weapon hand and all attacks are made at Disadvantage until you have taken a Long Rest or undergo Magical Healing."
+        "effect": "Your grip becomes ineffective and so does your strike. Roll a CON Save against the intended target’s AC, on a failure you sustain a hairline fracture in your weapon hand and all attacks are made at Disadvantage until you have taken a Long Rest or undergo Magical Healing."
       },
       {
         "roll": "57-58",
@@ -346,28 +346,28 @@
       },
       {
         "roll": "59-60",
-        "description": "So-and-So on The 1's and 2's",
+        "description": "So-and-So on The 1’s and 2’s",
         "effect": "For the next 1d4 rounds, the intended target of this attack can re-roll any d20 rolls against you that result in a 1 or 2 on the die."
       },
       {
         "roll": "61-62",
         "description": "Free Lodging!",
-        "effect": "Hey! Free Room! No, wait\u2026 wrong lodging. Your weapon becomes lodged into the nearest object and as a result becomes stuck. You must pass a successful STR Check, DC equivalent to the intended Target's AC"
+        "effect": "Hey! Free Room! No, wait… wrong lodging. Your weapon becomes lodged into the nearest object and as a result becomes stuck. You must pass a successful STR Check, DC equivalent to the intended target’s AC."
       },
       {
         "roll": "63-64",
         "description": "Free Shots! On Me!",
-        "effect": "You open yourself up for an attack, a deadly one. If the intended Target of this attack has a Reaction available, they may make one Attack of Opportunity against you with Advantage"
+        "effect": "You open yourself up for an attack, a deadly one. If the intended target of this attack has a Reaction available, they may make one Attack of Opportunity against you with Advantage."
       },
       {
         "roll": "65-66",
-        "description": "F*ck\u2026",
-        "effect": "Worst case scenario plays out before your eyes, but you have a single last-second calculation you can make to avoid severe error. Make a DEX/WIS Saving Throw against the  intended Target's AC, on a failure if your weapon is non-magical, it breaks beyond repair."
+        "description": "F*ck…",
+        "effect": "Worst case scenario plays out before your eyes, but you have a single last-second calculation you can make to avoid severe error. Make a DEX/WIS Saving Throw against the  intended target’s AC, on a failure if your weapon is non-magical, it breaks beyond repair."
       },
       {
         "roll": "67-68",
         "description": "YEET!",
-        "effect": "Whoopsie. You heave your weapon with spectacular fashion as it leaves your hand and flies harmlessly through the air, 20 feet from your position in a random direction (DM's discretion)."
+        "effect": "Whoopsie. You heave your weapon with spectacular fashion as it leaves your hand and flies harmlessly through the air, 20 feet from your position in a random direction (DM’s discretion)."
       },
       {
         "roll": "69-69",
@@ -377,22 +377,22 @@
       {
         "roll": "70-71",
         "description": "Pity Party",
-        "effect": "Maybe it's something in the Target's eye, maybe they remind you of a pitiful person you read about, either way, there is a flicker of pity in you against the target. For the remainder of the encounter, all Attack Rolls against the Target are made with a -2 penalty."
+        "effect": "Maybe it’s something in the target’s eye, maybe they remind you of a pitiful person you read about, either way, there is a flicker of pity in you against the target. For the remainder of the encounter, all Attack Rolls against the target are made with a -2 penalty."
       },
       {
         "roll": "72-73",
         "description": "W-wait! Where Are You Going?!",
-        "effect": "If the intended Target of this attack has a Reaction available, they may take the Disengage Action"
+        "effect": "If the intended target of this attack has a Reaction available, they may take the Disengage Action"
       },
       {
         "roll": "74-75",
         "description": "Stop Being So Difficult!",
-        "effect": "If the intended Target of this attack has a Reaction available, they may take the Dodge Action"
+        "effect": "If the intended target of this attack has a Reaction available, they may take the Dodge Action."
       },
       {
         "roll": "76-77",
         "description": "Cut Me Some Slack",
-        "effect": "You become caught up in the melee, perhaps it's analysis paralysis, regardless of the reasoning\u2026 you forego your next turn"
+        "effect": "You become caught up in the melee, perhaps it’s analysis paralysis, regardless of the reasoning… you forego your next turn."
       },
       {
         "roll": "78-79",
@@ -402,22 +402,22 @@
       {
         "roll": "80-81",
         "description": "Need More Oomph!",
-        "effect": "Whether through sheer pity, fatigue, or just an inability to focus, your ability to deal regular damage becomes hampered. For the rest of the encounter, all damage done to the intended Target of this attack by you, is reduced by 2 points (minimum of 1)"
+        "effect": "Whether through sheer pity, fatigue, or just an inability to focus, your ability to deal regular damage becomes hampered. For the rest of the encounter, all damage done to the intended target of this attack by you, is reduced by 2 points (minimum of 1)."
       },
       {
         "roll": "82-83",
         "description": "Running on Fumes",
-        "effect": "The fight is taking its toll on you, or maybe you're just having a rough day. Roll a CON Save against the intended Target's AC, on a fail you become incapacitated for the next 1d4 rounds. You may make a CON Save on each of your turns to end this effect."
+        "effect": "The fight is taking its toll on you, or maybe you’re just having a rough day. Roll a CON Save against the intended target’s AC, on a fail you become incapacitated for the next 1d4 rounds. You may make a CON Save on each of your turns to end this effect."
       },
       {
         "roll": "84-85",
         "description": "Personal Space",
-        "effect": "If the intended Target of this attack has a Reaction available, they may use the Shove action against you, uncontested."
+        "effect": "If the intended target of this attack has a Reaction available, they may use the Shove action against you, uncontested."
       },
       {
         "roll": "86-87",
         "description": "Biggest of Whoopsies!",
-        "effect": "Your intended Target takes ire against you in this moment. If their next Attack Roll hits you, it becomes a Critical Hit. If the Attack Roll is a Natural 20, they deal Triple Damage."
+        "effect": "Your intended target takes ire against you in this moment. If their next Attack Roll hits you, it becomes a Critical Hit. If the Attack Roll is a Natural 20, they deal Triple Damage."
       },
       {
         "roll": "88-89",
@@ -432,59 +432,59 @@
       {
         "roll": "92-93",
         "description": "No Saving Me",
-        "effect": "Your ability to stay focused on what matters most becomes muddled as you try to concentrate on the fight in front of you. Roll a WIS Save against the intended Target's AC, on a fail you subtract 1d4 from all of your Saving Throws for the next 1d4 rounds."
+        "effect": "Your ability to stay focused on what matters most becomes muddled as you try to concentrate on the fight in front of you. Roll a WIS Save against the intended target’s AC, on a fail you subtract 1d4 from all of your Saving Throws for the next 1d4 rounds."
       },
       {
         "roll": "94-95",
         "description": "Feeble Fighter",
-        "effect": "You pull a muscle, succumb to cramping, or are otherwise hampered in your ability to carry through your focus and damage. Roll a CON Save against the intended Target's AC, on a fail your Strength Score is reduced by 2 until the end of the encounter."
+        "effect": "You pull a muscle, succumb to cramping, or are otherwise hampered in your ability to carry through your focus and damage. Roll a CON Save against the intended target’s AC, on a fail your Strength Score is reduced by 2 until the end of the encounter."
       },
       {
         "roll": "96-97",
         "description": "Stumble Bee",
-        "effect": "Your footing becomes clumsy, the environment is hazardous, or perhaps you are a bit fatigued. Roll a CON Save against the intended Target's AC, on a fail your Dexterity Score is reduced by 2 until the end of the encounter."
+        "effect": "Your footing becomes clumsy, the environment is hazardous, or perhaps you are a bit fatigued. Roll a CON Save against the intended target’s AC, on a fail your Dexterity Score is reduced by 2 until the end of the encounter."
       },
       {
         "roll": "98-99",
         "description": "Tunnel Vision",
-        "effect": "You're focused, maybe too focused, your perception of the world around you becomes a bit foggy, and your street smarts become hazy. Roll a CON Save against the intended Target's AC, on a fail your Wisdom Score is reduced by 2 until the end of the encounter."
+        "effect": "You’re focused, maybe too focused, your perception of the world around you becomes a bit foggy, and your street smarts become hazy. Roll a CON Save against the intended target’s AC, on a fail your Wisdom Score is reduced by 2 until the end of the encounter."
       },
       {
         "roll": "100-100",
         "description": "Maybe, Just Maybe?",
-        "effect": "The Natural 1 is treated as a regular roll. If the numerical value of the Attack Roll would hit the intended Target, it deals half damage."
+        "effect": "The Natural 1 is treated as a regular roll. If the numerical value of the Attack Roll would hit the intended target, it deals half damage."
       }
     ],
     "ranged": [
       {
         "roll": "01-02",
-        "description": "You've Gotta Be Kidding Me\u2026",
+        "description": "You’ve Gotta Be Kidding Me…",
         "effect": "Something with you bow/crossbow snaps, effectively rendering your weapon useless in a ranged capability. You can fix your weapon and restore it back to working order with 10 minutes of continuous and uninterrupted downtime."
       },
       {
         "roll": "03-04",
-        "description": "I used to be an Adventurer like you\u2026",
-        "effect": "Well\u2026 you know how it goes\u2026 you deal double damage to yourself and knock yourself Prone. Hopefully you aren't stuck doing guard duty while your cousin gets to go out fighting dragons."
+        "description": "I used to be an Adventurer like you…",
+        "effect": "Well… you know how it goes… you deal double damage to yourself and knock yourself Prone. Hopefully you aren’t stuck doing guard duty while your cousin gets to go out fighting dragons."
       },
       {
         "roll": "05-06",
-        "description": "Sorry! I think\u2026",
-        "effect": "You knock your arrow/bolt incorrectly, it goes wide, striking the furthest creature from where the projectile was fired (friend or foe) dealing normal damage"
+        "description": "Sorry! I think…",
+        "effect": "You knock your arrow/bolt incorrectly, it goes wide, striking the furthest creature from where the projectile was fired (friend or foe) dealing normal damage."
       },
       {
         "roll": "07-08",
         "description": "Where did it go?!",
-        "effect": "Your weapon fires! But where is the satisfying *thunk* of a well-placed shot? Well, that's the thing... it isn't a well-placed shot. No one knows where the projectile ended up. It's gone as Hell."
+        "effect": "Your weapon fires! But where is the satisfying *thunk* of a well-placed shot? Well, that’s the thing... it isn’t a well-placed shot. No one knows where the projectile ended up. It’s gone as Hell."
       },
       {
         "roll": "09-10",
         "description": "Diss Advantage",
-        "effect": "Either karma dislikes your last snarky remark, or you've tempted luck and taunted fate too far. For the next 1d4 rounds, all of your attacks must be made with Disadvantage."
+        "effect": "Either karma dislikes your last snarky remark, or you’ve tempted luck and taunted fate too far. For the next 1d4 rounds, all of your attacks must be made with Disadvantage."
       },
       {
         "roll": "11-12",
         "description": "Near-Sighted",
-        "effect": "Your projectile's trajectory goes awry and you strike the nearest friendly combatant to your current location, regardless of the weapon's range increments. The attack deals normal damage."
+        "effect": "Your projectile’s trajectory goes awry and you strike the nearest friendly combatant to your current location, regardless of the weapon’s range increments. The attack deals normal damage."
       },
       {
         "roll": "13-14",
@@ -494,12 +494,12 @@
       {
         "roll": "15-16",
         "description": "Cramps!",
-        "effect": "Either your water intake is too low, you're suffering from a potassium deficit, or you didn't warm up before the fight! In any case, you are unable to make any ranged attacks until you use an Action to resolve the cramping in your hand or arm."
+        "effect": "Either your water intake is too low, you’re suffering from a potassium deficit, or you didn’t warm up before the fight! In any case, you are unable to make any ranged attacks until you use an Action to resolve the cramping in your hand or arm."
       },
       {
         "roll": "17-18",
         "description": "Walk it off!",
-        "effect": "Well\u2026 at least you didn't shoot yourself in the knee! Your finger or hand slips and you strike yourself in the leg by accident. The attack deals normal damage and your movement speed is halved until you move the full extent of your normal movement cumulatively."
+        "effect": "Well… at least you didn’t shoot yourself in the knee! Your finger or hand slips and you strike yourself in the leg by accident. The attack deals normal damage and your movement speed is halved until you move the full extent of your normal movement cumulatively."
       },
       {
         "roll": "19-20",
@@ -509,7 +509,7 @@
       {
         "roll": "21-22",
         "description": "Tunnel Vision",
-        "effect": "Maybe it's because you missed, maybe it's personal, regardless\u2026 you are sighted in on a single target. For the next 1d4 rounds, you must make all your attacks against the target of this Fumble at Disadvantage."
+        "effect": "Maybe it’s because you missed, maybe it’s personal, regardless… you are sighted in on a single target. For the next 1d4 rounds, you must make all your attacks against the target of this Fumble at Disadvantage."
       },
       {
         "roll": "23-24",
@@ -519,12 +519,12 @@
       {
         "roll": "25-26",
         "description": "Agh!!",
-        "effect": "Maybe it's blood, maybe it's sweat, something springs back towards you off of your bowstring and gets into your eyes. You are Blinded for the next 1d4 rounds. Alternatively, you can use an Action to end this condition by clearing your eyes."
+        "effect": "Maybe it’s blood, maybe it’s sweat, something springs back towards you off of your bowstring and gets into your eyes. You are Blinded for the next 1d4 rounds. Alternatively, you can use an Action to end this condition by clearing your eyes."
       },
       {
         "roll": "27-28",
-        "description": "Mom's Spaghetti",
-        "effect": "Maybe it's the adrenaline coursing through your veins, maybe your palms are sweaty, knees weak, arms are heavy\u2026 Anyway\u2026 you fumble with your ammunition and are unable to make attacks with your ranged weapon until the end of your next turn."
+        "description": "Mom’s Spaghetti",
+        "effect": "Maybe it’s the adrenaline coursing through your veins, maybe your palms are sweaty, knees weak, arms are heavy… Anyway… you fumble with your ammunition and are unable to make attacks with your ranged weapon until the end of your next turn."
       },
       {
         "roll": "29-30",
@@ -534,62 +534,62 @@
       {
         "roll": "31-32",
         "description": "U fokking wot m8?",
-        "effect": "The target of your attack is not happy with you and is rather displeased with your poor performance... or maybe they just don't like you. Maybe it's both. Regardless, the next attack they make against you is done at Advantage."
+        "effect": "The target of your attack is not happy with you and is rather displeased with your poor performance... or maybe they just don’t like you. Maybe it’s both. Regardless, the next attack they make against you is done at Advantage."
       },
       {
         "roll": "33-34",
-        "description": "Uh\u2026 next one is on me!",
-        "effect": "Well\u2026 that wasn't supposed to happen\u2026 Your shot strikes a fellow friendly creature and shatters a consumable, destroying it. If they are carrying more than one, the targeted item of this fumble is determined at random. If they have none, this deals normal damage."
+        "description": "Uh… next one is on me!",
+        "effect": "Well… that wasn’t supposed to happen… Your shot strikes a fellow friendly creature and shatters a consumable, destroying it. If they are carrying more than one, the targeted item of this fumble is determined at random. If they have none, this deals normal damage."
       },
       {
         "roll": "35-36",
         "description": "Collateral Damage",
-        "effect": "Your shot misses so beautifully that you dislodge an object above you (if feasible). Roll a DEX Save against the intended Target's AC, on a fail you sustain 2d6 damage with a type of the DM's choosing (i.e., bludgeoning, piercing, slashing, fire, poison, etc.)"
+        "effect": "Your shot misses so beautifully that you dislodge an object above you (if feasible). Roll a DEX Save against the intended target’s AC, on a fail you sustain 2d6 damage with a type of the DM’s choosing (i.e., bludgeoning, piercing, slashing, fire, poison, etc.)."
       },
       {
         "roll": "37-38",
-        "description": "Oh for %@#*$ sake!",
-        "effect": "Nice and steady. You got this. Flawless execution\u2026 except this time. You fumble hard and knock all of your ammunition onto the ground at your feet. You must spend an Action to re-slot your ammunition before making another ranged attack."
+        "description": "Oh for fuck‘s sake!",
+        "effect": "Nice and steady. You got this. Flawless execution… except this time. You fumble hard and knock all of your ammunition onto the ground at your feet. You must spend an Action to re-slot your ammunition before making another ranged attack."
       },
       {
         "roll": "39-40",
         "description": "You shot them where?!",
-        "effect": "Your shot goes wild and you strike a fellow friendly creature right in the coin purse. The good news is, it isn't the one they had at birth. The bad news is they must spend one minute picking up all of their currency and another minute to repair their coin purse."
+        "effect": "Your shot goes wild and you strike a fellow friendly creature right in the coin purse. The good news is, it isn’t the one they had at birth. The bad news is they must spend one minute picking up all of their currency and another minute to repair their coin purse."
       },
       {
         "roll": "41-42",
-        "description": "I swear it was an accident\u2026",
+        "description": "I swear it was an accident…",
         "effect": "Your shot zips by a friendly combatants head and they take notice, eyeing you cautiously. Their next attack is made with Disadvantage."
       },
       {
         "roll": "43-44",
         "description": "Far-Sighted",
-        "effect": "Your projectile goes wide and strikes the furthest friendly combatant from your current location, regardless of the weapon's range increment. Whoops!"
+        "effect": "Your projectile goes wide and strikes the furthest friendly combatant from your current location, regardless of the weapon’s range increment. Whoops!"
       },
       {
         "roll": "45-46",
         "description": "Ricochet",
-        "effect": "Your shot misses the target entirely and strikes a creature of the DM's choosing. This can be done by choice or a dice roll. If the target is a hostile creature, deal normal damage. If the target is a friendly creature, deal double damage."
+        "effect": "Your shot misses the target entirely and strikes a creature of the DM’s choosing. This can be done by choice or a dice roll. If the target is a hostile creature, deal normal damage. If the target is a friendly creature, deal double damage."
       },
       {
         "roll": "47-48",
         "description": "Shame! Shame! Shame!",
-        "effect": "You're better than that\u2026 it wasn't your best moment and you feel foolish for it. All of your attacks must be made at Disadvantage until you land a successful hit on a target."
+        "effect": "You’re better than that… it wasn’t your best moment and you feel foolish for it. All of your attacks must be made at Disadvantage until you land a successful hit on a target."
       },
       {
         "roll": "49-50",
         "description": "Uffdah!",
-        "effect": "Your footing betrays you as you pay no mind to your environment in this moment and misstep. Luckily, you have not rolled your ankle, unluckily enough though\u2026 you have fallen prone."
+        "effect": "Your footing betrays you as you pay no mind to your environment in this moment and misstep. Luckily, you have not rolled your ankle, unluckily enough though… you have fallen prone."
       },
       {
         "roll": "51-52",
         "description": "Imposter!",
-        "effect": "You swear that's the target, right there, in the distance. Until the end of your next turn you are completely convinced that the furthest friendly combatant to your current location is an enemy target. This creature becomes the focus of your attacks."
+        "effect": "You swear that’s the target, right there, in the distance. Until the end of your next turn you are completely convinced that the furthest friendly combatant to your current location is an enemy target. This creature becomes the focus of your attacks."
       },
       {
         "roll": "53-54",
         "description": "My Digits!",
-        "effect": "Your footing or aim goes completely awry and you fire your arrow/bolt directly downward\u2026 into your foot and dealing normal damage. Roll a DEX Save against the intended Target's AC, on a failure your movement becomes 0 until you use an action to remove the projectile"
+        "effect": "Your footing or aim goes completely awry and you fire your arrow/bolt directly downward… into your foot and dealing normal damage. Roll a DEX Save against the intended target’s AC, on a failure your movement becomes 0 until you use an action to remove the projectile."
       },
       {
         "roll": "55-56",
@@ -599,17 +599,17 @@
       {
         "roll": "57-58",
         "description": "Breathe! You Need to Breathe!",
-        "effect": "Tunnel vision sets in. You are focused. You sight in. Your vision vignettes. But wait, that's not laser-focus, that's a lack of oxygen. Roll a CON Save against the intended Target's AC, on a failure you gain one level of Exhaustion."
+        "effect": "Tunnel vision sets in. You are focused. You sight in. Your vision vignettes. But wait, that’s not laser-focus, that’s a lack of oxygen. Roll a CON Save against the intended target’s AC, on a failure you gain one level of Exhaustion."
       },
       {
         "roll": "59-60",
         "description": "Spectacular Display of Failure!",
-        "effect": "Your inability to strike the foe is nigh hilarious, to the point where it is actually laughable, and even inspirational. All hostile creatures within 10 ft of the intended Target gains 1d4 to their Attack Rolls until the end of your next turn."
+        "effect": "Your inability to strike the foe is nigh hilarious, to the point where it is actually laughable, and even inspirational. All hostile creatures within 10 feet of the intended target gains 1d4 to their Attack Rolls until the end of your next turn."
       },
       {
         "roll": "61-62",
         "description": "Discombobulation",
-        "effect": "Wait\u2026 what, no. Hold on. You just, I\u2026 they\u2026 hold on. You sight in to the point of tunnel vision and become a tad bit caught up and disoriented. You are stunned until the end of your next turn."
+        "effect": "Wait… what, no. Hold on. You just, I… they… hold on. You sight in to the point of tunnel vision and become a tad bit caught up and disoriented. You are stunned until the end of your next turn."
       },
       {
         "roll": "63-64",
@@ -633,23 +633,23 @@
       },
       {
         "roll": "70-71",
-        "description": "Take That! No, Wait\u2026",
-        "effect": "You fire and\u2026 well, that\u2026 that's not an arrow/bolt, that is\u2026 that's your weapon. How? We don't know. No one does. It's a beautiful disaster. Hilariously poetic. You should be proud. How did you do that? Your weapon flies 10 ft towards the Target, dealing no damage."
+        "description": "Take That! No, Wait…",
+        "effect": "You fire and… well, that… that’s not an arrow/bolt, that is… that’s your weapon. How? We don’t know. No one does. It’s a beautiful disaster. Hilariously poetic. You should be proud. How did you do that? Your weapon flies 10 feet towards the target, dealing no damage."
       },
       {
         "roll": "72-73",
-        "description": "Yeah, That's Right\u2026 You Better Run!",
-        "effect": "If the intended Target of this attack has a Reaction available, they may take the Disengage Action (or Dash Action)"
+        "description": "Yeah, That’s Right… You Better Run!",
+        "effect": "If the intended target of this attack has a Reaction available, they may take the Disengage Action (or Dash Action)."
       },
       {
         "roll": "74-75",
         "description": "Stand Still, Dang It!",
-        "effect": "If the intended Target of this attack has a Reaction available, they may take the Dodge Action"
+        "effect": "If the intended target of this attack has a Reaction available, they may take the Dodge Action."
       },
       {
         "roll": "76-77",
         "description": "Buffering",
-        "effect": "You become caught up in the moment, perhaps it's analysis paralysis, regardless of the reasoning\u2026 you forego your next turn"
+        "effect": "You become caught up in the moment, perhaps it’s analysis paralysis, regardless of the reasoning… you forego your next turn."
       },
       {
         "roll": "78-79",
@@ -659,22 +659,22 @@
       {
         "roll": "80-81",
         "description": "Chambered for Lesser",
-        "effect": "Whether through sheer pity, fatigue, or just an inability to focus, your ability to deal regular damage becomes hampered. For the rest of the encounter, all damage done to the intended Target of this attack by you, is reduced by 2 points (minimum of 1)"
+        "effect": "Whether through sheer pity, fatigue, or just an inability to focus, your ability to deal regular damage becomes hampered. For the rest of the encounter, all damage done to the intended target of this attack by you, is reduced by 2 points (minimum of 1)."
       },
       {
         "roll": "82-83",
         "description": "Just Five More Minutes",
-        "effect": "The fight is taking its toll on you, or maybe you're just having a rough day. Roll a CON Save against the intended Target's AC, on a fail you become incapacitated for the next 1d4 rounds. You may make a CON Save on each of your turns to end this effect."
+        "effect": "The fight is taking its toll on you, or maybe you’re just having a rough day. Roll a CON Save against the intended target’s AC, on a fail you become incapacitated for the next 1d4 rounds. You may make a CON Save on each of your turns to end this effect."
       },
       {
         "roll": "84-85",
         "description": "The Bad Kind of Shiny",
-        "effect": "A glint of light off of the Target's armor or weapon reflects the light just right and it strikes you in the cornea long enough to have an effect. All of your Attack Rolls are made at disadvantage until the end of your next turn."
+        "effect": "A glint of light off of the target’s armor or weapon reflects the light just right and it strikes you in the cornea long enough to have an effect. All of your Attack Rolls are made at disadvantage until the end of your next turn."
       },
       {
         "roll": "86-87",
         "description": "Backfired",
-        "effect": "Your intended Target takes ire against you in this moment. If their next Attack Roll hits you, it becomes a Critical Hit. If the Attack Roll is a Natural 20, they deal Triple Damage."
+        "effect": "Your intended target takes ire against you in this moment. If their next Attack Roll hits you, it becomes a Critical Hit. If the Attack Roll is a Natural 20, they deal Triple Damage."
       },
       {
         "roll": "88-89",
@@ -684,54 +684,54 @@
       {
         "roll": "90-91",
         "description": "Losing Sight",
-        "effect": "Your ability to stay focused on what matters most becomes muddled as you try to concentrate on the fight in front of you. Roll a WIS Save against the intended Target's AC, on a fail you subtract 1d4 from all of your Saving Throws for the next 1d4 rounds."
+        "effect": "Your ability to stay focused on what matters most becomes muddled as you try to concentrate on the fight in front of you. Roll a WIS Save against the intended target’s AC, on a fail you subtract 1d4 from all of your Saving Throws for the next 1d4 rounds."
       },
       {
         "roll": "92-93",
-        "description": "You're an Animal!",
+        "description": "You’re an Animal!",
         "effect": "Your shot goes very awry and strikes a nearby animal (or a creature with the Beast type) and it immediately enters the fray. It then rolls its initiative and resumes its turns as normal."
       },
       {
         "roll": "94-95",
         "description": "Feeble Fighter",
-        "effect": "You pull a muscle, succumb to cramping, or are otherwise hampered in your ability to carry through your focus and damage. Roll a CON Save against the intended Target's AC, on a fail your Strength Score is reduced by 2 until the end of the encounter."
+        "effect": "You pull a muscle, succumb to cramping, or are otherwise hampered in your ability to carry through your focus and damage. Roll a CON Save against the intended target’s AC, on a fail your Strength Score is reduced by 2 until the end of the encounter."
       },
       {
         "roll": "96-97",
         "description": "Stumble Bee",
-        "effect": "Your footing becomes clumsy, the environment is hazardous, or perhaps you are a bit fatigued. Roll a CON Save against the intended Target's AC, on a fail your Dexterity Score is reduced by 2 until the end of the encounter."
+        "effect": "Your footing becomes clumsy, the environment is hazardous, or perhaps you are a bit fatigued. Roll a CON Save against the intended target’s AC, on a fail your Dexterity Score is reduced by 2 until the end of the encounter."
       },
       {
         "roll": "98-99",
         "description": "Tunnel Vision",
-        "effect": "You're focused, maybe too focused, your perception of the world around you becomes a bit foggy, and your street smarts become hazy. Roll a CON Save against the intended Target's AC, on a fail your Wisdom Score is reduced by 2 until the end of the encounter."
+        "effect": "You’re focused, maybe too focused, your perception of the world around you becomes a bit foggy, and your street smarts become hazy. Roll a CON Save against the intended target’s AC, on a fail your Wisdom Score is reduced by 2 until the end of the encounter."
       },
       {
         "roll": "100-100",
         "description": "Maybe, Just Maybe?",
-        "effect": "The Natural 1 is treated as a regular roll. If the numerical value of the Attack Roll would hit the intended Target, it deals half damage."
+        "effect": "The Natural 1 is treated as a regular roll. If the numerical value of the Attack Roll would hit the intended target, it deals half damage."
       }
     ],
     "magic": [
       {
         "roll": "01-02",
-        "description": "Um\u2026 Ta-da\u2026",
-        "effect": "Your intention to make use of the weave to cast magic has catastrophically backfired. An extraplanar creature with a CR equal to the spell's level or lower is brought forth into the fray. The creature is hostile toward all combatants and takes its turn after yours."
+        "description": "Um… Ta-da…",
+        "effect": "Your intention to make use of the weave to cast magic has catastrophically backfired. An extraplanar creature with a CR equal to the spell’s level or lower is brought forth into the fray. The creature is hostile toward all combatants and takes its turn after yours."
       },
       {
         "roll": "03-04",
-        "description": "Oh, sh-t\u2026",
+        "description": "Oh, shit…",
         "effect": "The weave backfires on you in this moment, causing arcane energy to explode. All creatures within 10 feet of you take Xd4 force damage, including yourself, as a wild magic surge erupts. X = Spell Level."
       },
       {
         "roll": "05-06",
         "description": "Brain Strain",
-        "effect": "Your connection to the magics that surround you have become taxing. In this moment, you succumb to the arcane powers that surround you. Roll a WIS Save (DC = Target's AC), on a fail, you take Xd6 Psychic damage. X = Level of the spell cast."
+        "effect": "Your connection to the magics that surround you have become taxing. In this moment, you succumb to the arcane powers that surround you. Roll a WIS Save (DC = Target’s AC), on a fail, you take Xd6 Psychic damage. X = Level of the spell cast."
       },
       {
         "roll": "07-08",
         "description": "Blgh.",
-        "effect": "Focusing your mental acuity on the magics around you can take its toll. Roll a WIS Save (DC = Target's AC), on a fail you become Stunned for 1d4 rounds."
+        "effect": "Focusing your mental acuity on the magics around you can take its toll. Roll a WIS Save (DC = Target’s AC), on a fail you become Stunned for 1d4 rounds."
       },
       {
         "roll": "09-10",
@@ -740,38 +740,38 @@
       },
       {
         "roll": "11-12",
-        "description": "Spell focus",
-        "effect": "You're heavily focused on what you are doing, which is great, what isn't great is that you have misplaced your footing and fallen prone. Whoops."
+        "description": "Spell Focus",
+        "effect": "You’re heavily focused on what you are doing, which is great, what isn’t great is that you have misplaced your footing and fallen prone. Whoops."
       },
       {
         "roll": "13-14",
-        "description": "I cast Fireball! No, wait\u2026 no I don't!",
-        "effect": "The clich\u00e9! The legend! The arson! Your magics betray you in this moment and an eruption of fire explodes, centered on your location, affecting all targets similarly as if you had casted Fireball on your square. Luckily, the damage is 4d6 as opposed to 8d6."
+        "description": "I cast Fireball! No, wait… no I don’t!",
+        "effect": "The cliché! The legend! The arson! Your magics betray you in this moment and an eruption of fire explodes, centered on your location, affecting all targets similarly as if you had casted Fireball on your square. Luckily, the damage is 4d6 as opposed to 8d6."
       },
       {
         "roll": "15-16",
         "description": "You get a missile! You get a missile!",
-        "effect": "Your ability to focus the powers of magic manifest themselves in the form of wild and uncontrollable motes of Force. Three Magic Missiles strike three target's at random, dealing 1d4 Force damage on a hit. DM's discretion."
+        "effect": "Your ability to focus the powers of magic manifest themselves in the form of wild and uncontrollable motes of Force. Three Magic Missiles strike three target’s at random, dealing 1d4 Force damage on a hit. DM’s discretion."
       },
       {
         "roll": "17-18",
         "description": "Strained",
-        "effect": "Channeling magic is hard, there's no question about it, it can exhaust one's mind and cause\u2026 side effects. Roll a WIS Save (DC = Target's AC). On a failure, you become Confused for the next 1d4 rounds. Consult the Confusion Spell table for details."
+        "effect": "Channeling magic is hard, there’s no question about it, it can exhaust one’s mind and cause… side effects. Roll a WIS Save (DC = Target’s AC). On a failure, you become Confused for the next 1d4 rounds. Consult the Confusion Spell table for details."
       },
       {
         "roll": "19-20",
         "description": "Death Incarnate",
-        "effect": "You're focus on downing the enemy manifests as pure hatred\u2026 hatred without aim\u2026 All targets within 15 ft of you (including yourself) take 1d12 necrotic damage as a pulse of dark energy emits from you in a flash of arcane bewilderment."
+        "effect": "You’re focus on downing the enemy manifests as pure hatred… hatred without aim… All targets within 15 feet of you (including yourself) take 1d12 necrotic damage as a pulse of dark energy emits from you in a flash of arcane bewilderment."
       },
       {
         "roll": "21-22",
-        "description": "Only you can prevent Force fires",
-        "effect": "Your spell sails wide and strikes a nearby object, possibly creating an environmental hazard at your expense. This is determined by the DM and can be anywhere from a raging forest fire to nothing at all. Hopefully they aren't out for blood!"
+        "description": "Only You Can Prevent Force Fires",
+        "effect": "Your spell sails wide and strikes a nearby object, possibly creating an environmental hazard at your expense. This is determined by the DM and can be anywhere from a raging forest fire to nothing at all. Hopefully they aren’t out for blood!"
       },
       {
         "roll": "23-24",
-        "description": "I swear that was an accident\u2026",
-        "effect": "Great news, the spell fires off without a hitch! Bad news, it strikes the wrong target\u2026 in fact, it strikes one of your party members! This is determined by the DM, either by choice or at random via a dice roll."
+        "description": "I swear that was an accident…",
+        "effect": "Great news, the spell fires off without a hitch! Bad news, it strikes the wrong target… in fact, it strikes one of your party members! This is determined by the DM, either by choice or at random via a dice roll."
       },
       {
         "roll": "25-26",
@@ -781,17 +781,17 @@
       {
         "roll": "27-28",
         "description": "False Advertising!",
-        "effect": "The spells you have become used to are\u2026 different. The elemental nature of what you have studied has shifted and becomes unreliable. For the next 1d4 rounds your spells may cause a different type of damage. DM's discretion."
+        "effect": "The spells you have become used to are… different. The elemental nature of what you have studied has shifted and becomes unreliable. For the next 1d4 rounds your spells may cause a different type of damage. DM’s discretion."
       },
       {
         "roll": "29-30",
-        "description": "So\u2026 yeah, that's something\u2026",
-        "effect": "Your ability to conjure up magic to do your bidding and apply it in the format you wished for does not work. Instead, a random object or small animal pops into existence 10 ft away from you. This object/creature is harmless and is not hostile to any combatant."
+        "description": "So… yeah, that’s something…",
+        "effect": "Your ability to conjure up magic to do your bidding and apply it in the format you wished for does not work. Instead, a random object or small animal pops into existence 10 feet away from you. This object/creature is harmless and is not hostile to any combatant."
       },
       {
         "roll": "31-32",
         "description": "Creative Imagination",
-        "effect": "Your spell does not do what you intended\u2026 at all. Instead, your DM modifies the spell's nature by changing a single letter of their choosing in the name of the Spell. If a result cannot be reached within a reasonable amount of time, nothing happens."
+        "effect": "Your spell does not do what you intended… at all. Instead, your DM modifies the spell’s nature by changing a single letter of their choosing in the name of the Spell. If a result cannot be reached within a reasonable amount of time, nothing happens."
       },
       {
         "roll": "33-34",
@@ -810,13 +810,13 @@
       },
       {
         "roll": "39-40",
-        "description": "W-wait, no\u2026 I\u2026",
+        "description": "W-wait, no… I…",
         "effect": "Your turn ends."
       },
       {
         "roll": "41-42",
         "description": "Analysis Paralysis",
-        "effect": "Get the big one, or the goons, maybe the furthest one, wait\u2026 isn't there only one target? You are overcome with analysis paralysis and with the arcane magics to boot, you are caught up in it. You become Paralyzed until the start of your next turn."
+        "effect": "Get the big one, or the goons, maybe the furthest one, wait… isn’t there only one target? You are overcome with analysis paralysis and with the arcane magics to boot, you are caught up in it. You become Paralyzed until the start of your next turn."
       },
       {
         "roll": "43-44",
@@ -826,27 +826,27 @@
       {
         "roll": "45-46",
         "description": "Sticks and Stones",
-        "effect": "Maybe it's time to settle this the ol' fashioned way, with words. Carefully selected words and a stern talking to. You forego the spell and instead hurl a hurtful phrase at the target with some choice words and a firm stance. Go get 'em tiger."
+        "effect": "Maybe it’s time to settle this the ol’ fashioned way, with words. Carefully selected words and a stern talking to. You forego the spell and instead hurl a hurtful phrase at the target with some choice words and a firm stance. Go get ‘em, tiger."
       },
       {
         "roll": "47-48",
-        "description": "Subtitles, anyone?",
+        "description": "Subtitles, Anyone?",
         "effect": "Your meddling in the ability to put your mind to work has strained it to the point of temporary befuddlement. Your ability to communicate becomes hampered and you speak an unintelligible conglomerate of gibberish for the next 1d4 rounds."
       },
       {
         "roll": "49-50",
-        "description": "Sure, beat up on the smart one\u2026",
+        "description": "Sure, beat up on the smart one…",
         "effect": "Your focus on casting has distracted you and your enemy sees an opening. All attacks made against you are at Advantage until the start of your next turn."
       },
       {
         "roll": "51-52",
         "description": "Brain Fog",
-        "effect": "Your spell backfires, striking your mind. You become dazed and confused as you try to recollect your thoughts. For the next 1d4 rounds, you are unable to speak intelligibly and cannot cast spells that use the Verbal component"
+        "effect": "Your spell backfires, striking your mind. You become dazed and confused as you try to recollect your thoughts. For the next 1d4 rounds, you are unable to speak intelligibly and cannot cast spells that use the Verbal component."
       },
       {
         "roll": "53-54",
         "description": "Planted Firmly",
-        "effect": "The magical energies which concoct the spells from within you are otherwise channeled downwards. You sprout roots from your feet which hold you in place, reducing your speed to 0 ft. You must use an action to remove the roots."
+        "effect": "The magical energies which concoct the spells from within you are otherwise channeled downwards. You sprout roots from your feet which hold you in place, reducing your speed to 0 feet. You must use an action to remove the roots."
       },
       {
         "roll": "55-56",
@@ -855,33 +855,33 @@
       },
       {
         "roll": "57-58",
-        "description": "Everything is Fine, This is Fine",
-        "effect": "Roll a DEX Save, on a fail you immolate, taking your proficiency bonus in d6's of fire damage. On a success you sustain only half damage."
+        "description": "Everything Is Fine, This Is Fine",
+        "effect": "Roll a DEX Save, on a fail you immolate, taking your proficiency bonus in d6’s of fire damage. On a success you sustain only half damage."
       },
       {
         "roll": "59-60",
         "description": "Cluster Headaches!",
-        "effect": "The raw and violent nature of the weave take a strong amount of focus and concentration, so much so that it takes its toll on you. You sustain Psychic damage in d6's equivalent to Spell Slot that was lost in the casting."
+        "effect": "The raw and violent nature of the weave take a strong amount of focus and concentration, so much so that it takes its toll on you. You sustain Psychic damage in d6’s equivalent to Spell Slot that was lost in the casting."
       },
       {
         "roll": "61-62",
         "description": "Blinded By The Light",
-        "effect": "Revved up like a deuce in the middle of the night, you are fired up, but maybe too much. The magics are not channeled correctly and in the spell's faltering nature, your struck with half of the spell's damage in radiant damage."
+        "effect": "Revved up like a deuce in the middle of the night, you are fired up, but maybe too much. The magics are not channeled correctly and in the spell’s faltering nature, your struck with half of the spell’s damage in radiant damage."
       },
       {
         "roll": "63-64",
         "description": "Toxic Shock",
-        "effect": "The virulent and volatile nature of magic during the spell's casting is affected by the elemental planes. It backfires violently, coating you and all creatures within 5 ft of you in acidic ire, sustaining 4d4 acid damage"
+        "effect": "The virulent and volatile nature of magic during the spell’s casting is affected by the elemental planes. It backfires violently, coating you and all creatures within 5 feet of you in acidic ire, sustaining 4d4 acid damage."
       },
       {
         "roll": "65-66",
         "description": "Trash Chalice",
-        "effect": "Your cruel, device. Your blood, like ice. One cast, could kill. The pain, the thrill. Unfortunately no one named Alice is here to rock this moment with a ballad, but rather the magics implode and reinstate themselves as a poisonous ichor which explode in your face, causing you 3d6 poison damage"
+        "effect": "Your cruel, device. Your blood, like ice. One cast, could kill. The pain, the thrill. Unfortunately no one named Alice is here to rock this moment with a ballad, but rather the magics implode and reinstate themselves as a poisonous ichor which explode in your face, causing you 3d6 poison damage."
       },
       {
         "roll": "67-68",
         "description": "Deathlike Retaliation",
-        "effect": "In an attempt to cause death, it instead turns against you. Roll a CON Save against the Target's AC. On a failure, you sustain one of two effects: 4d6 necrotic damage, or 2d6 necrotic damage and 1 Death Saving Throw Fail."
+        "effect": "In an attempt to cause death, it instead turns against you. Roll a CON Save against the target’s AC. On a failure, you sustain one of two effects: 4d6 necrotic damage, or 2d6 necrotic damage and 1 Death Saving Throw Fail."
       },
       {
         "roll": "69-69",
@@ -890,8 +890,8 @@
       },
       {
         "roll": "70-71",
-        "description": "In The Right Light",
-        "effect": "Maybe it's the light, maybe its their charisma, maybe its Maybelline, nobody knows. But the intended target of this spell becomes an ally in your eyes for the next 1d4 rounds."
+        "description": "In the Right Light",
+        "effect": "Maybe it’s the light, maybe its their charisma, maybe its Maybelline, nobody knows. But the intended target of this spell becomes an ally in your eyes for the next 1d4 rounds."
       },
       {
         "roll": "72-73",
@@ -901,21 +901,21 @@
       {
         "roll": "74-75",
         "description": "Tireless Work",
-        "effect": "What you do with the weave is beautiful, deadly, and even mysterious. Your body is a conduit for what you do with the magic you have access to, only this time\u2026 things do not go as planned. You sustain one level of Exhaustion."
+        "effect": "What you do with the weave is beautiful, deadly, and even mysterious. Your body is a conduit for what you do with the magic you have access to, only this time… things do not go as planned. You sustain one level of Exhaustion."
       },
       {
         "roll": "76-77",
         "description": "Ahh!",
-        "effect": "In an attempt to overpower your enemy, it seems as though this attempt turns 180 degrees on you as you become frightened of the intended target of this Spell for the next 1d4 rounds. A successful WIS Save against the Target's  AC may be attempted at the end of all subsequent turns to end the effect."
+        "effect": "In an attempt to overpower your enemy, it seems as though this attempt turns 180 degrees on you as you become frightened of the intended target of this Spell for the next 1d4 rounds. A successful WIS Save against the target’s  AC may be attempted at the end of all subsequent turns to end the effect."
       },
       {
         "roll": "78-79",
         "description": "Awestruck",
-        "effect": "Roll a CON Save against the intended Target's AC. On a fail, you are incapacitated for the next 1d4 rounds, or until someone uses an action to stir you. On a success nothing additional happens."
+        "effect": "Roll a CON Save against the intended target’s AC. On a fail, you are incapacitated for the next 1d4 rounds, or until someone uses an action to stir you. On a success nothing additional happens."
       },
       {
         "roll": "80-81",
-        "description": "Now You See Me\u2026",
+        "description": "Now You See Me…",
         "effect": "They were there a second ago! Where did they go?! You have inadvertently caused the target of this spell to go invisible until the end of your next turn, or until they make any hostile/offensive actions, as per the Invisibility Spell."
       },
       {
@@ -926,7 +926,7 @@
       {
         "roll": "84-85",
         "description": "Rock Bottom",
-        "effect": "Roll a CON Save equivalent to the target's AC. On a fail you are immediately petrified as the magics used in the spell's casting begin to solidify across your form. This gradually ends after 1d6 hours or the use of Greater Restoration or equivalent."
+        "effect": "Roll a CON Save equivalent to the target’s AC. On a fail you are immediately petrified as the magics used in the spell’s casting begin to solidify across your form. This gradually ends after 1d6 hours or the use of Greater Restoration or equivalent."
       },
       {
         "roll": "86-87",
@@ -946,27 +946,27 @@
       {
         "roll": "92-93",
         "description": "Absolutely Stunning",
-        "effect": "Your spell backfires, staggering you 5 ft in a random direction. You sustain 1d4 Force damage and become Stunned until the end of your next turn."
+        "effect": "Your spell backfires, staggering you 5 feet in a random direction. You sustain 1d4 Force damage and become Stunned until the end of your next turn."
       },
       {
         "roll": "94-95",
         "description": "KO",
-        "effect": "Roll a CON Saving Throw against the intended Target's AC, on a fail you fall unconscious. This condition ends when you sustain damage or a creature uses and Action to stir you."
+        "effect": "Roll a CON Saving Throw against the intended target’s AC, on a fail you fall unconscious. This condition ends when you sustain damage or a creature uses and Action to stir you."
       },
       {
         "roll": "96-97",
         "description": "Earth, Wind, and Ire",
-        "effect": "The blast of magic used in the spell's casting is disrupted and you are forced 10 ft backwards violently and fall prone, sustaining 1d6 bludgeoning damage."
+        "effect": "The blast of magic used in the spell’s casting is disrupted and you are forced 10 feet backwards violently and fall prone, sustaining 1d6 bludgeoning damage."
       },
       {
         "roll": "98-99",
         "description": "Double Consumption",
-        "effect": "Roll a WIS Save against the intended Target's AC. On a fail, you lose an additional Spell Slot, equivalent to the level used in the Spell's casting. If none are available, the next threshold lower is consumed, instead. If there are none available, nothing additional happens."
+        "effect": "Roll a WIS Save against the intended target’s AC. On a fail, you lose an additional Spell Slot, equivalent to the level used in the Spell’s casting. If none are available, the next threshold lower is consumed, instead. If there are none available, nothing additional happens."
       },
       {
         "roll": "100-100",
         "description": "Maybe, Just Maybe?",
-        "effect": "The Natural 1 is treated as a regular roll. If the numerical value of the Attack Roll would hit the intended Target, it deals half damage."
+        "effect": "The Natural 1 is treated as a regular roll. If the numerical value of the Attack Roll would hit the intended target, it deals half damage."
       }
     ]
   }
