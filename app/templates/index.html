@@ -216,30 +216,36 @@
 
   // --- Modal Functions (with new A11y improvements) ---
   function showInfoModal(typeKey, sourceName) {
-      const infoText = sourceInfoTexts[typeKey]?.[sourceName];
-      if (infoText && infoModalOverlay && infoModalTextElement && infoModalTitleElement) {
-          infoModalTextElement.innerHTML = infoText;
-          infoModalTitleElement.textContent = `${sourceName}`;
-      } else {
-          console.warn("No info text found for:", typeKey, sourceName);
-          infoModalTextElement.textContent = "Information not available for this selection.";
-          infoModalTitleElement.textContent = "Information";
-      }
+    const infoText = sourceInfoTexts[typeKey]?.[sourceName];
+    if (infoText && infoModalOverlay && infoModalTextElement && infoModalTitleElement) {
+        infoModalTextElement.innerHTML = infoText;
+        infoModalTitleElement.textContent = `${sourceName}`;
+    } else {
+        console.warn("No info text found for:", typeKey, sourceName);
+        infoModalTextElement.textContent = "Information not available for this selection.";
+        infoModalTitleElement.textContent = "Information";
+    }
 
-      mainContent.setAttribute('aria-hidden', 'true');
-      infoModalOverlay.classList.add('active');
-      // No JS focus call needed! The browser will now find the <p> with tabindex="0".
-  }
+    mainContent.setAttribute('aria-hidden', 'true');
+    mainContent.setAttribute('inert', '');
+    infoModalOverlay.classList.add('active');
+
+    // 🔧 Fix: Set focus explicitly
+    requestAnimationFrame(() => {
+        infoModalCloseButton.focus();
+    });
+}
 
   function hideInfoModal() {
       if (infoModalOverlay) {
           infoModalOverlay.classList.remove('active');
-          mainContent.removeAttribute('aria-hidden'); // Restore background for screen readers
+          mainContent.removeAttribute('aria-hidden');
+          mainContent.removeAttribute('inert');
           if (elementThatTriggeredModal) {
               elementThatTriggeredModal.focus(); 
               elementThatTriggeredModal = null;
           }
-      }
+       }
   }
 
   // --- Roll History Functions (with new A11y improvements) ---
