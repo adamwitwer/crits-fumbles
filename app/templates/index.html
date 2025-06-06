@@ -23,92 +23,109 @@
 </head>
 <body>
 
-<h1>Crits & Fumbles</h1>
+<main id="main-content">
+  <h1>Crits & Fumbles</h1>
 
-<form id="main-form">
-  <div>
-    <label for="roll_type">Roll Type</label>
-    <select name="roll_type" id="roll_type" onchange="toggleFields()">
-      <option value="crit" {% if selected_roll_type == 'crit' %}selected{% endif %}>Critical</option>
-      <option value="fumble" {% if selected_roll_type == 'fumble' %}selected{% endif %}>Fumble</option>
-    </select>
-  </div>
-
-  <div id="crit-source-container" style="display:none;">
-    <label for="crit_source">Crit Type</label>
-    <button
-    type="button"
-    class="info-icon"
-    id="crit_source_info_icon"
-    style="display: none;"
-    title="About this crit source"
-    aria-label="More info about this crit type"
-    >
-    ⓘ
-    </button>
-    <select name="crit_source" id="crit_source">
-      <option value="Sterling Vermin" {% if selected_crit_source == 'Sterling Vermin' %}selected{% endif %}>Sterling Vermin</option>
-      <option value="Questionable Arcana" {% if selected_crit_source == 'Questionable Arcana' %}selected{% endif %}>Questionable Arcana</option>
-      <option value="BCoydog" {% if selected_crit_source == 'BCoydog' %}selected{% endif %}>u/BCoydog</option>
-    </select>
-    <div id="crit-fields" style="display:none;">
-      <div>
-        <label for="damage_type">Damage Type</label>
-        <select name="damage_type" id="damage_type" onchange="toggleMagicDropdown()">
-          {# Options populated by JavaScript #}
-        </select>
-      </div>
-      <div id="magic-subtype" style="display: none;">
-        <label for="magic_subtype">Magic Type</label>
-        <select name="magic_subtype" id="magic_subtype">
-          {# Options populated by JavaScript #}
-        </select>
-      </div>
-    </div>
-  </div>
-
-  <div id="fumble-type-container" style="display:none;">
-    <label for="fumbleType">Fumble Type</label><span class="info-icon" id="fumble_type_info_icon" style="display:none;" title="About this fumble source">ⓘ</span>
-    <select id="fumbleType" name="fumbleType" onchange="toggleAttackType()">
-      <option value="Questionable Arcana" {% if selected_fumble_type == 'Questionable Arcana' %}selected{% endif %}>Questionable Arcana</option>
-      <option value="BCoydog" {% if selected_fumble_type == 'BCoydog' %}selected{% endif %}>u/BCoydog</option>
-    </select>
-    <div id="attack-type-container" style="display:none;">
-      <label for="attackType">Attack Type</label>
-      <select id="attackType" name="attackType">
-        <option value="Weapon" {% if selected_attack_type == 'Weapon' %}selected{% endif %}>Weapon</option>
-        <option value="Magic" {% if selected_attack_type == 'Magic' %}selected{% endif %}>Magic</option>
+  <form id="main-form">
+    <div>
+      <label for="roll_type">Roll Type</label>
+      <select name="roll_type" id="roll_type" onchange="toggleFields()">
+        <option value="crit" {% if selected_roll_type == 'crit' %}selected{% endif %}>Critical</option>
+        <option value="fumble" {% if selected_roll_type == 'fumble' %}selected{% endif %}>Fumble</option>
       </select>
     </div>
+
+    <div id="crit-source-container" style="display:none;">
+      <label for="crit_source">Crit Type</label>
+      <button
+      type="button"
+      class="info-icon"
+      id="crit_source_info_icon"
+      style="display: none;"
+      title="About this crit source"
+      aria-label="More info about this crit type"
+      >
+      ⓘ
+      </button>
+      <select name="crit_source" id="crit_source">
+        <option value="Sterling Vermin" {% if selected_crit_source == 'Sterling Vermin' %}selected{% endif %}>Sterling Vermin</option>
+        <option value="Questionable Arcana" {% if selected_crit_source == 'Questionable Arcana' %}selected{% endif %}>Questionable Arcana</option>
+        <option value="BCoydog" {% if selected_crit_source == 'BCoydog' %}selected{% endif %}>u/BCoydog</option>
+      </select>
+      <div id="crit-fields" style="display:none;">
+        <div>
+          <label for="damage_type">Damage Type</label>
+          <select name="damage_type" id="damage_type" onchange="toggleMagicDropdown()">
+            {# Options populated by JavaScript #}
+          </select>
+        </div>
+        <div id="magic-subtype" style="display: none;">
+          <label for="magic_subtype">Magic Type</label>
+          <select name="magic_subtype" id="magic_subtype">
+            {# Options populated by JavaScript #}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div id="fumble-type-container" style="display:none;">
+      <label for="fumbleType">Fumble Type</label><span class="info-icon" id="fumble_type_info_icon" style="display:none;" title="About this fumble source">ⓘ</span>
+      <select id="fumbleType" name="fumbleType" onchange="toggleAttackType()">
+        <option value="Questionable Arcana" {% if selected_fumble_type == 'Questionable Arcana' %}selected{% endif %}>Questionable Arcana</option>
+        <option value="BCoydog" {% if selected_fumble_type == 'BCoydog' %}selected{% endif %}>u/BCoydog</option>
+      </select>
+      <div id="attack-type-container" style="display:none;">
+        <label for="attackType">Attack Type</label>
+        <select id="attackType" name="attackType">
+          <option value="Weapon" {% if selected_attack_type == 'Weapon' %}selected{% endif %}>Weapon</option>
+          <option value="Magic" {% if selected_attack_type == 'Magic' %}selected{% endif %}>Magic</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="button" id="primary-roll-button" onclick="handleRoll('primary')" aria-label="Roll dice for result">⚡️ Roll ⚡️</button>
+
+  </form>
+
+  <div id="error-message" style="display: none; color: red; text-align: center; margin: 1rem 0;"></div>
+  <div id="primary-result-area" style="display: none;"></div>
+  <div id="secondary-prompt-area" style="display: none;" class="bonus-alert">
+      <h2 id="secondary-prompt-text"></h2>
+      <input type="hidden" id="secondary-roll-type-hidden">
+      <input type="hidden" id="secondary-crit-source-hidden">
+      <input type="hidden" id="secondary-damage-type-hidden">
+      <input type="hidden" id="secondary-magic-subtype-hidden">
+      <input type="hidden" id="secondary-primary-result-hidden">
+      <input type="hidden" id="secondary-primary-roll-hidden">
+      <button type="button" id="secondary-roll-button" onclick="handleRoll('secondary')" aria-label="Roll dice for bonus effect">⚡️ Roll Bonus ⚡️</button>
+  </div>
+  <div id="secondary-result-area" style="display: none;"></div>
+
+  <div class="share-container"><button type="button" id="share-discord-button" onclick="shareResultToDiscord()" style="display: none;">
+    <img src="{{ url_for('static', filename='img/discord-icon.svg') }}" alt="Discord Logo" class="discord-icon">
+    <span class="button-text">Share Result to Discord</span></button>
   </div>
 
-  <button type="button" id="primary-roll-button" onclick="handleRoll('primary')" aria-label="Roll dice for result">⚡️ Roll ⚡️</button>
-
-</form>
-
-<div id="error-message" style="display: none; color: red; text-align: center; margin: 1rem 0;"></div>
-<div id="primary-result-area" style="display: none;"></div>
-<div id="secondary-prompt-area" style="display: none;" class="bonus-alert">
-    <h2 id="secondary-prompt-text"></h2>
-    <input type="hidden" id="secondary-roll-type-hidden">
-    <input type="hidden" id="secondary-crit-source-hidden">
-    <input type="hidden" id="secondary-damage-type-hidden">
-    <input type="hidden" id="secondary-magic-subtype-hidden">
-    <input type="hidden" id="secondary-primary-result-hidden">
-    <input type="hidden" id="secondary-primary-roll-hidden">
-    <button type="button" id="secondary-roll-button" onclick="handleRoll('secondary')" aria-label="Roll dice for bonus effect">⚡️ Roll Bonus ⚡️</button>
-</div>
-<div id="secondary-result-area" style="display: none;"></div>
-
-<div class="share-container"><button type="button" id="share-discord-button" onclick="shareResultToDiscord()" style="display: none;">
-  <img src="{{ url_for('static', filename='img/discord-icon.svg') }}" alt="Discord Logo" class="discord-icon">
-  <span class="button-text">Share Result to Discord</span></button>
-</div>
-
-<audio id="dice-sound" preload="auto">
-    <source src="{{ url_for('static', filename='sounds/dice-roll.mp3') }}" type="audio/mpeg">
-    Your browser does not support the audio element.
-</audio>
+  <audio id="dice-sound" preload="auto">
+      <source src="{{ url_for('static', filename='sounds/dice-roll.mp3') }}" type="audio/mpeg">
+      Your browser does not support the audio element.
+  </audio>
+  
+  <footer class="app-footer">
+    <p><a href="https://github.com/adamwitwer/crits-fumbles" target="_blank" rel="noopener" aria-label="GitHub Repository">
+      <svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 0C5.37 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.17c-3.338.726-4.033-1.416-4.033-1.416-.546-1.386-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.776.42-1.304.762-1.603-2.665-.305-5.466-1.334-5.466-5.933 0-1.31.47-2.38 1.235-3.22-.124-.303-.535-1.527.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.98-.399 3-.404 1.02.005 2.043.138 3 .404 2.29-1.552 3.296-1.23 3.296-1.23.653 1.649.242 2.873.118 3.176.767.84 1.233 1.91 1.233 3.22 0 4.61-2.804 5.625-5.475 5.922.43.37.823 1.103.823 2.222v3.293c0 .322.218.694.825.576C20.565 21.796 24 17.298 24 12c0-6.627-5.373-12-12-12z" /></svg></a>
+      | <button
+        id="show-history-button"
+        class="chronicles-button"
+        type="button"
+        aria-label="Crits & Fumbles Chronicles"
+        >
+        📜 C&F Chronicles
+        </button>
+    </p>
+  </footer>
+</main>
+  
 <div id="dice-animation-overlay"></div>
 
 <div id="info-modal-overlay" class="modal-overlay">
@@ -129,20 +146,6 @@
   </div>
 </div> 
 
-<footer class="app-footer">
-  <p><a href="https://github.com/adamwitwer/crits-fumbles" target="_blank" rel="noopener" aria-label="GitHub Repository">
-    <svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 0C5.37 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.17c-3.338.726-4.033-1.416-4.033-1.416-.546-1.386-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.776.42-1.304.762-1.603-2.665-.305-5.466-1.334-5.466-5.933 0-1.31.47-2.38 1.235-3.22-.124-.303-.535-1.527.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.98-.399 3-.404 1.02.005 2.043.138 3 .404 2.29-1.552 3.296-1.23 3.296-1.23.653 1.649.242 2.873.118 3.176.767.84 1.233 1.91 1.233 3.22 0 4.61-2.804 5.625-5.475 5.922.43.37.823 1.103.823 2.222v3.293c0 .322.218.694.825.576C20.565 21.796 24 17.298 24 12c0-6.627-5.373-12-12-12z" /></svg></a>
-     | <button
-       id="show-history-button"
-       class="chronicles-button"
-       type="button"
-       aria-label="Crits & Fumbles Chronicles"
-       >
-       📜 C&F Chronicles
-      </button>
-  </p>
-</footer>
-
 <script>
   // --- Global Elements ---
   const diceAudio = document.getElementById('dice-sound');
@@ -153,6 +156,7 @@
   const secondaryPromptArea = document.getElementById('secondary-prompt-area');
   const secondaryResultArea = document.getElementById('secondary-result-area');
   const shareButton = document.getElementById('share-discord-button');
+  const mainContent = document.getElementById('main-content'); // Main content wrapper
 
   // --- Modal Elements ---
   const infoModalOverlay = document.getElementById('info-modal-overlay');
@@ -200,66 +204,104 @@
       }
   };
 
-  // --- Modal Functions ---
-  function showInfoModal(typeKey, sourceName) { // typeKey is 'critSources' or 'fumbleSources'
+  // --- Modal Functions (with new A11y improvements) ---
+  function showInfoModal(typeKey, sourceName) {
       const infoText = sourceInfoTexts[typeKey]?.[sourceName];
       if (infoText && infoModalOverlay && infoModalTextElement && infoModalTitleElement) {
           infoModalTextElement.innerHTML = infoText;
           infoModalTitleElement.textContent = `${sourceName}`;
-          infoModalOverlay.classList.add('active');
-          infoModalCloseButton.focus(); // Set focus on the close button
       } else {
           console.warn("No info text found for:", typeKey, sourceName);
           infoModalTextElement.textContent = "Information not available for this selection.";
           infoModalTitleElement.textContent = "Information";
-          infoModalOverlay.classList.add('active');
-          infoModalCloseButton.focus(); // Set focus on the close button
       }
+      mainContent.setAttribute('aria-hidden', 'true'); // Hide background from screen readers
+      infoModalOverlay.classList.add('active');
+      
+      // Use requestAnimationFrame to reliably set focus after the modal is painted
+      requestAnimationFrame(() => {
+          infoModalCloseButton.focus();
+      });
   }
 
   function hideInfoModal() {
       if (infoModalOverlay) {
           infoModalOverlay.classList.remove('active');
+          mainContent.removeAttribute('aria-hidden'); // Restore background for screen readers
           if (elementThatTriggeredModal) {
-              elementThatTriggeredModal.focus(); // Return focus to the element that opened the modal
+              elementThatTriggeredModal.focus(); 
               elementThatTriggeredModal = null;
           }
       }
   }
-  
+
+  // --- Roll History Functions (with new A11y improvements) ---
+  async function fetchAndDisplayHistory() {
+    try {
+        const response = await fetch("{{ url_for('get_roll_history') }}");
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const logs = await response.json();
+
+        historyContent.innerHTML = ''; 
+        if (logs.length === 0) {
+            historyContent.innerHTML = '<p>No rolls recorded yet.</p>';
+        } else {
+            const ul = document.createElement('ul');
+            logs.forEach(log => {
+                const li = document.createElement('li');
+                const time = log.timestamp ? new Date(log.timestamp).toLocaleString() : 'Timestamp unavailable';
+                li.innerHTML = `<strong>${time}</strong> ${log.narrative || 'No narrative.'}`;
+                ul.appendChild(li);
+            });
+            historyContent.appendChild(ul);
+        }
+    } catch (error) {
+        console.error('Error fetching roll history:', error);
+        historyContent.innerHTML = '<p>Could not load roll history. Please try again later.</p>';
+    } finally {
+        mainContent.setAttribute('aria-hidden', 'true'); // Hide background
+        historyOverlay.classList.add('showing');
+        document.body.classList.add('modal-open');
+        
+        // Use requestAnimationFrame to reliably set focus
+        requestAnimationFrame(() => {
+            closeHistoryBtn.focus();
+        });
+    }
+  }
+
+  function closeHistoryOverlay() {
+    if (historyOverlay) {
+        historyOverlay.classList.remove('showing');
+        document.body.classList.remove('modal-open');
+        mainContent.removeAttribute('aria-hidden'); // Restore background
+        if (elementThatTriggeredModal) {
+            elementThatTriggeredModal.focus();
+            elementThatTriggeredModal = null;
+        }
+    }
+  }
+
   // --- UI Toggle Functions ---
-  // START BUG FIX MODIFICATION for toggleAttackType
   function toggleAttackType() {
     const fumbleTypeSelect = document.getElementById('fumbleType');
     const selectedFumbleType = fumbleTypeSelect.value;
     const attackTypeContainer = document.getElementById('attack-type-container');
     const attackTypeSelect = document.getElementById('attackType');
     const rollType = document.getElementById('roll_type').value;
-
-    // Preserve current value if it's valid for the new set of options
     const currentAttackTypeValue = attackTypeSelect.value;
-
-    attackTypeSelect.innerHTML = ''; // Clear existing options
-
+    attackTypeSelect.innerHTML = ''; 
     if (rollType === 'fumble') {
         let newOptions = [];
         if (selectedFumbleType === "Questionable Arcana") {
-            newOptions = [
-                { value: "Weapon", text: "Weapon" },
-                { value: "Magic", text: "Magic" }
-            ];
+            newOptions = [{ value: "Weapon", text: "Weapon" }, { value: "Magic", text: "Magic" }];
             attackTypeContainer.style.display = 'block';
         } else if (selectedFumbleType === "BCoydog") {
-            newOptions = [
-                { value: "melee", text: "Melee" },
-                { value: "ranged", text: "Ranged" },
-                { value: "magic", text: "Magic" }
-            ];
+            newOptions = [{ value: "melee", text: "Melee" }, { value: "ranged", text: "Ranged" }, { value: "magic", text: "Magic" }];
             attackTypeContainer.style.display = 'block';
         } else {
             attackTypeContainer.style.display = 'none';
         }
-
         let valueToSet = null;
         newOptions.forEach(opt => {
             const option = document.createElement('option');
@@ -270,51 +312,43 @@
                 valueToSet = currentAttackTypeValue;
             }
         });
-
         if (valueToSet) {
             attackTypeSelect.value = valueToSet;
         } else if (attackTypeSelect.options.length > 0) {
             attackTypeSelect.value = attackTypeSelect.options[0].value;
         }
-
     } else {
         attackTypeContainer.style.display = 'none';
     }
   }
-  // END BUG FIX MODIFICATION for toggleAttackType
 
   function toggleFields() {
     const rollType = document.getElementById('roll_type').value;
     const critFields = document.getElementById('crit-fields');
     const fumbleTypeContainer = document.getElementById('fumble-type-container');
-    const attackTypeContainer = document.getElementById('attack-type-container'); // Keep this line
+    const attackTypeContainer = document.getElementById('attack-type-container');
     const critSourceContainer = document.getElementById('crit-source-container');
-    // Info Icons
     const currentCritSourceInfoIcon = document.getElementById('crit_source_info_icon');
     const currentFumbleTypeInfoIcon = document.getElementById('fumble_type_info_icon');
-
-
     if (rollType === 'fumble') {
       critFields.style.display = 'none';
       critSourceContainer.style.display = 'none';
       if(currentCritSourceInfoIcon) currentCritSourceInfoIcon.style.display = 'none';
-      
       fumbleTypeContainer.style.display = 'block';
       if(currentFumbleTypeInfoIcon) currentFumbleTypeInfoIcon.style.display = 'inline-block'; 
-      toggleAttackType(); // This will correctly set up the attackType dropdown based on the selected fumbleType
+      toggleAttackType();
     } else { // crit
       critFields.style.display = 'block';
       critSourceContainer.style.display = 'block';
       if(currentCritSourceInfoIcon) currentCritSourceInfoIcon.style.display = 'inline-block'; 
-      
       fumbleTypeContainer.style.display = 'none';
       if(currentFumbleTypeInfoIcon) currentFumbleTypeInfoIcon.style.display = 'none';
-      attackTypeContainer.style.display = 'none'; // Ensure it's hidden when not fumble
+      attackTypeContainer.style.display = 'none';
       updateDamageAndMagicTypes(); 
     }
   }
   
-  // --- Helper: Sound Function ---
+  // --- Helper Functions ---
   function playDiceSound() {
     if (diceAudio) {
       diceAudio.currentTime = 0;
@@ -322,29 +356,23 @@
     }
   }
 
-  // --- Helper: Create Final Roll HTML (with number) ---
   function createRollHTML(rollValue, numDice, dieType) {
       let html = '<div class="roll-result">';
       const rollValueSpan = `<span class="roll-value">${rollValue || '?'}</span>`;
-
       if (dieType === 'd100' && numDice === 1) {
           const d10ImageSrc = "{{ url_for('static', filename='img/d10.png') }}";
-          const d10AltText = 'd10';
-          html += `<img src="${d10ImageSrc}" alt="${d10AltText}" class="inline-die" />`; 
+          html += `<img src="${d10ImageSrc}" alt="d10" class="inline-die" />`; 
           html += rollValueSpan;
-          html += `<img src="${d10ImageSrc}" alt="${d10AltText}" class="inline-die" />`; 
+          html += `<img src="${d10ImageSrc}" alt="d10" class="inline-die" />`; 
       } else {
-          const dieImageFilename = (dieType || 'd20') + '.png';
-          const dieImageSrc = "{{ url_for('static', filename='img/') }}" + dieImageFilename;
-          const dieAltText = dieType || 'd20';
-          html += `<img src="${dieImageSrc}" alt="${dieAltText}" class="inline-die" />`;
+          const dieImageSrc = `{{ url_for('static', filename='img/') }}${(dieType || 'd20')}.png`;
+          html += `<img src="${dieImageSrc}" alt="${(dieType || 'd20')}" class="inline-die" />`;
           html += rollValueSpan;
       }
       html += '</div>';
       return html;
   }
 
-  // --- Helper: Format Keywords ---
   function formatKeywords(text) {
       if (!text) return "";
       const keywordClass = "keyword-prefix";
@@ -353,7 +381,6 @@
       return formattedText;
   }
 
-  // --- Helper: Display Rolling Animation ---
   function displayRollingAnimation(dieType, numDice) {
       const overlay = document.getElementById('dice-animation-overlay');
       let animContainer = overlay.querySelector('.rolling-animation-container');
@@ -364,41 +391,32 @@
       } else {
           animContainer.innerHTML = '';
       }
-
       let actualNumDiceForAnim = numDice;
       let actualDieTypeForAnim = dieType;
       if (dieType === 'd100' && numDice === 1) { 
           actualDieTypeForAnim = 'd10'; 
           actualNumDiceForAnim = 2;     
       }
-      
-      const dieImageFilename = actualDieTypeForAnim + '.png';
-      const dieImageSrc = "{{ url_for('static', filename='img/') }}" + dieImageFilename;
-      const dieAltText = actualDieTypeForAnim;
-
+      const dieImageSrc = `{{ url_for('static', filename='img/') }}${actualDieTypeForAnim}.png`;
       for (let i = 0; i < actualNumDiceForAnim; i++) {
           const img = document.createElement('img');
           img.src = dieImageSrc;
-          img.alt = dieAltText;
+          img.alt = actualDieTypeForAnim;
           img.classList.add('inline-die', 'is-rolling');
           animContainer.appendChild(img);
       }
       overlay.style.display = 'flex';
   }
 
-  // --- Helper: Update Damage Type and Magic Subtype Dropdowns ---
    function updateDamageAndMagicTypes() {
        const critSource = document.getElementById('crit_source').value;
        const damageTypeSelect = document.getElementById('damage_type');
        const magicSubtypeContainer = document.getElementById('magic-subtype');
        const magicSubtypeSelect = document.getElementById('magic_subtype');
-
        damageTypeSelect.innerHTML = '';
        magicSubtypeSelect.innerHTML = '';
        magicSubtypeContainer.style.display = 'none';
-
        const sourceData = critSourceDamageTypes[critSource];
-
        if (sourceData) {
            sourceData.options.forEach(type => {
                const option = document.createElement('option');
@@ -415,16 +433,13 @@
        }
    }
 
-  // --- Helper: Toggle Magic Subtype Dropdown ---
   function toggleMagicDropdown() {
     const critSource = document.getElementById('crit_source').value;
     const damageType = document.getElementById('damage_type').value; 
     const magicSubtypeContainer = document.getElementById('magic-subtype');
     const magicSubtypeSelect = document.getElementById('magic_subtype');
-
     magicSubtypeContainer.style.display = 'none';
     magicSubtypeSelect.innerHTML = '';
-
     if (critSource === "Sterling Vermin" && damageType === "magic") {
         const sterlingVerminMagicSubtypes = critSourceDamageTypes["Sterling Vermin"].magicSubtypes;
         if (sterlingVerminMagicSubtypes) {
@@ -897,24 +912,25 @@
 
   // --- Initial Setup on Load ---
   window.onload = function() {
+    // This setup section remains mostly the same, but we don't need to put the
+    // complex logic inside it anymore, since it's handled in the open/close functions.
+    
     const critSourceSelect = document.getElementById('crit_source');
     if (critSourceSelect) {
         critSourceSelect.addEventListener('change', updateDamageAndMagicTypes);
     }
     
-    // --- ACCESSIBILITY EVENT LISTENERS ---
-    
     // Event Listeners for opening Info Modal
     if (critSourceInfoIcon) {
         critSourceInfoIcon.addEventListener('click', () => {
-            elementThatTriggeredModal = document.activeElement; // Store the element that was focused
+            elementThatTriggeredModal = document.activeElement;
             const selectedCritSource = document.getElementById('crit_source').value;
             showInfoModal('critSources', selectedCritSource);
         });
     }
     if (fumbleTypeInfoIcon) {
         fumbleTypeInfoIcon.addEventListener('click', () => {
-            elementThatTriggeredModal = document.activeElement; // Store the element that was focused
+            elementThatTriggeredModal = document.activeElement;
             const selectedFumbleSource = document.getElementById('fumbleType').value;
             showInfoModal('fumbleSources', selectedFumbleSource);
         });
@@ -935,7 +951,7 @@
     // Event Listeners for opening History Modal
     if (showHistoryBtn) {
       showHistoryBtn.addEventListener('click', () => {
-        elementThatTriggeredModal = document.activeElement; // Store the element that was focused
+        elementThatTriggeredModal = document.activeElement;
         fetchAndDisplayHistory();
       });
     }
@@ -957,24 +973,15 @@
         const isInfoModalActive = infoModalOverlay.classList.contains('active');
         const isHistoryModalActive = historyOverlay.classList.contains('showing');
 
-        // 1. Escape key to close any active modal
         if (event.key === 'Escape') {
-            if (isInfoModalActive) {
-                hideInfoModal();
-            }
-            if (isHistoryModalActive) {
-                closeHistoryOverlay();
-            }
+            if (isInfoModalActive) hideInfoModal();
+            if (isHistoryModalActive) closeHistoryOverlay();
         }
 
-        // 2. Tab key to trap focus inside the active modal
         if (event.key === 'Tab') {
             let activeModalContent = null;
-            if (isInfoModalActive) {
-                activeModalContent = infoModal;
-            } else if (isHistoryModalActive) {
-                activeModalContent = historyModal;
-            }
+            if (isInfoModalActive) activeModalContent = infoModal;
+            else if (isHistoryModalActive) activeModalContent = historyModal;
 
             if (activeModalContent) {
                 const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
@@ -1000,7 +1007,7 @@
         }
     });
     
-    toggleFields(); // Initial setup of visible fields and dropdowns
+    toggleFields(); // Initial setup
 };
 </script>
 
