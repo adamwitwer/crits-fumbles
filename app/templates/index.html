@@ -69,7 +69,17 @@
     </div>
 
     <div id="fumble-type-container" style="display:none;">
-      <label for="fumbleType">Fumble Type</label><span class="info-icon" id="fumble_type_info_icon" style="display:none;" title="About this fumble source">ⓘ</span>
+      <label for="fumbleType">Fumble Type</label>
+      <button
+      type="button"
+      class="info-icon"
+      id="fumble_type_info_icon"
+      style="display: none;"
+      title="About this fumble source"
+      aria-label="More info about this crit type"
+      >
+      ⓘ
+      </button>
       <select id="fumbleType" name="fumbleType" onchange="toggleAttackType()">
         <option value="Questionable Arcana" {% if selected_fumble_type == 'Questionable Arcana' %}selected{% endif %}>Questionable Arcana</option>
         <option value="BCoydog" {% if selected_fumble_type == 'BCoydog' %}selected{% endif %}>u/BCoydog</option>
@@ -132,7 +142,7 @@
   <div id="info-modal" class="modal-content" tabindex="-1" role="dialog" aria-modal="true">
     <button id="info-modal-close-button" class="modal-close-button" aria-label="Close modal"></button>
     <h2 id="info-modal-title">Source Information</h2>
-    <p id="info-modal-text">Information will appear here.</p>
+    <p id="info-modal-text" tabindex="0">Information will appear here.</p>
   </div>
 </div>
 
@@ -215,13 +225,10 @@
           infoModalTextElement.textContent = "Information not available for this selection.";
           infoModalTitleElement.textContent = "Information";
       }
-      mainContent.setAttribute('aria-hidden', 'true'); // Hide background from screen readers
+
+      mainContent.setAttribute('aria-hidden', 'true');
       infoModalOverlay.classList.add('active');
-      
-      // Use requestAnimationFrame to reliably set focus after the modal is painted
-      requestAnimationFrame(() => {
-          infoModalCloseButton.focus();
-      });
+      // No JS focus call needed! The browser will now find the <p> with tabindex="0".
   }
 
   function hideInfoModal() {
