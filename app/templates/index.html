@@ -35,7 +35,17 @@
   </div>
 
   <div id="crit-source-container" style="display:none;">
-    <label for="crit_source">Crit Type</label><span class="info-icon" id="crit_source_info_icon" style="display:none;" title="About this crit source">ⓘ</span>
+    <label for="crit_source">Crit Type</label>
+    <button
+    type="button"
+    class="info-icon"
+    id="crit_source_info_icon"
+    style="display: none;"
+    title="About this crit source"
+    aria-label="More info about this crit type"
+    >
+    ⓘ
+    </button>
     <select name="crit_source" id="crit_source">
       <option value="Sterling Vermin" {% if selected_crit_source == 'Sterling Vermin' %}selected{% endif %}>Sterling Vermin</option>
       <option value="Questionable Arcana" {% if selected_crit_source == 'Questionable Arcana' %}selected{% endif %}>Questionable Arcana</option>
@@ -111,16 +121,25 @@
 
 <div id="history-overlay">
   <div id="history-modal" tabindex="-1">
+    <div class="history-header">
+      <h2>Chronicles</h2>
+    </div>
+    <div id="history-content" tabindex="0"></div>
     <button id="close-history-modal" class="modal-close-button" aria-label="Close Chronicles"></button>
-    <div class="history-header"><h2>Chronicles</h2></div>
-    <div id="history-content"></div>
   </div>
 </div> 
 
 <footer class="app-footer">
   <p><a href="https://github.com/adamwitwer/crits-fumbles" target="_blank" rel="noopener" aria-label="GitHub Repository">
     <svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 0C5.37 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.17c-3.338.726-4.033-1.416-4.033-1.416-.546-1.386-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.776.42-1.304.762-1.603-2.665-.305-5.466-1.334-5.466-5.933 0-1.31.47-2.38 1.235-3.22-.124-.303-.535-1.527.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.98-.399 3-.404 1.02.005 2.043.138 3 .404 2.29-1.552 3.296-1.23 3.296-1.23.653 1.649.242 2.873.118 3.176.767.84 1.233 1.91 1.233 3.22 0 4.61-2.804 5.625-5.475 5.922.43.37.823 1.103.823 2.222v3.293c0 .322.218.694.825.576C20.565 21.796 24 17.298 24 12c0-6.627-5.373-12-12-12z" /></svg></a>
-     | <a id="show-history-button" class="subtle-button" aria-label="Crits & Fumbles Chronicles">📜 C&F Chronicles</a>
+     | <button
+       id="show-history-button"
+       class="chronicles-button"
+       type="button"
+       aria-label="Crits & Fumbles Chronicles"
+       >
+       📜 C&F Chronicles
+      </button>
   </p>
 </footer>
 

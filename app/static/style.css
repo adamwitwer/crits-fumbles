@@ -524,6 +524,25 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6);
 }
 
+.chronicles-button {
+  all: unset;
+  display: inline-block;
+  color: var(--clr-link);
+  font-size: var(--font-size-footer);
+  cursor: pointer;
+  text-decoration: none;
+  padding: 0.2em 0.4em;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.chronicles-button:hover,
+.chronicles-button:focus {
+  outline: 1.5px solid var(--clr-button-outline);
+  outline-offset: 1.5px;
+  opacity: 1; 
+  background-color: transparent;
+}
+
 .app-footer a {
   color: var(--clr-link);
   text-decoration: none;
@@ -535,6 +554,10 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
 .app-footer a:focus {
   color: var(--clr-heading);
   text-decoration: none;
+  outline: 1.5px solid var(--clr-button-outline);
+  outline-offset: 2px;
+  opacity: 1;
+  background-color: transparent;
 }
 
 .github-icon {
@@ -757,16 +780,23 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
 }
 
 .info-icon {
+  all: unset; /* Wipe default button styles */
   color: var(--clr-heading);
   opacity: 0.8;
-  font-size: 0.95em;
-  padding: 0.2em;
+  padding: 0 0.2em;
   margin-left: 0.2em;
-  border-radius: 50%;
-  background-color: transparent;
   transition: background-color 0.3s ease, transform 0.2s ease;
   touch-action: manipulation;
   cursor: pointer;
+  display: inline-block; /* Optional, for consistent layout */
+}
+
+.info-icon:focus,
+.info-icon:hover {
+  outline: 1.5px solid var(--clr-button-outline);
+  outline-offset: 1.5   px;
+  opacity: 1; /* Emphasize focus visually */
+  background-color: transparent;
 }
 
 .info-icon:active {
@@ -794,23 +824,28 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
     color: var(--clr-bonus-border);
   }
 
-  .modal-close-button,
-  #close-history-modal,
-  #info-modal-close-button {
+  .modal-close-button {
     color: var(--clr-form-border);
     transition: color 0.2s ease, transform 0.2s ease;
   }
 
   .modal-close-button:hover,
-  .modal-close-button:focus,
-  #close-history-modal:hover,
-  #info-modal-close-button:hover {
+  .modal-close-button:focus {
     color: var(--clr-heading);
     transform: scale(1.1);
   }
 
   #history-content li {
     border-bottom: 1px solid var(--clr-border-subtle);
+  }
+
+   .info-icon {
+    color: var(--clr-heading);
+  }
+
+  .info-icon:focus,
+  .info-icon:hover {
+    color: var(--clr-bonus-border);
   }
 
   .info-icon:active {
@@ -933,6 +968,12 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   .app-footer a:focus {
     color: var(--clr-bonus-border);
 }
+
+  .chronicles-button:hover,
+  .chronicles-button:focus {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--clr-bonus-border);
+  }
 
 #share-discord-button:disabled {
      background-color: #4f545c;
