@@ -694,26 +694,29 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   background-color: transparent;
 }
 
-/* Close X (relative to header) */
-#close-history-modal,
-#info-modal-close-button {
+/* Close button for both modals */
+.modal-close-button {
+  all: unset;
   position: absolute;
   top: 0.5rem; right: 0.5rem;
   width: 32px; height: 32px;
   opacity: 0.3;
   cursor: pointer;
   z-index: 11; /* above the header block */
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-#close-history-modal:hover,
-#info-modal-close-button:hover {
+.modal-close-button:hover,
+.modal-close-button:focus {
   opacity: 1;
+  background-color: transparent;
+  outline: 2px solid var(--clr-button-outline);
+  outline-offset: 2px;
+  transform: scale(1.05);
 }
 
-#close-history-modal:before,
-#close-history-modal:after,
-#info-modal-close-button:before,
-#info-modal-close-button:after {
+.modal-close-button:before,
+.modal-close-button:after {
   content: '';
   position: absolute;
   left: 50%;
@@ -722,12 +725,11 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   height: 15px;
   background-color: var(--clr-heading);
 }
-#close-history-modal:before,
-#info-modal-close-button:before {
+
+.modal-close-button:before {
   transform: translate(-50%, -50%) rotate(45deg);
 }
-#close-history-modal:after,
-#info-modal-close-button:after {
+.modal-close-button:after {
   transform: translate(-50%, -50%) rotate(-45deg);
 }
 
