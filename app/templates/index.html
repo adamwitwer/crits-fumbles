@@ -156,11 +156,22 @@
 
   // --- Modal Elements ---
   const infoModalOverlay = document.getElementById('info-modal-overlay');
+  const infoModal = document.getElementById('info-modal');
   const infoModalTextElement = document.getElementById('info-modal-text');
   const infoModalTitleElement = document.getElementById('info-modal-title');
   const infoModalCloseButton = document.getElementById('info-modal-close-button');
   const critSourceInfoIcon = document.getElementById('crit_source_info_icon');
   const fumbleTypeInfoIcon = document.getElementById('fumble_type_info_icon');
+  
+  // --- History Modal Elements ---
+  const showHistoryBtn = document.getElementById('show-history-button');
+  const historyOverlay = document.getElementById('history-overlay');
+  const historyModal = document.getElementById('history-modal');
+  const closeHistoryBtn = document.getElementById('close-history-modal');
+  const historyContent = document.getElementById('history-content');
+
+  // --- Accessibility Enhancements ---
+  let elementThatTriggeredModal = null;
 
   // --- Data for Dynamic Dropdowns & Info Modals ---
   const critSourceDamageTypes = {
@@ -196,17 +207,23 @@
           infoModalTextElement.innerHTML = infoText;
           infoModalTitleElement.textContent = `${sourceName}`;
           infoModalOverlay.classList.add('active');
+          infoModalCloseButton.focus(); // Set focus on the close button
       } else {
           console.warn("No info text found for:", typeKey, sourceName);
           infoModalTextElement.textContent = "Information not available for this selection.";
           infoModalTitleElement.textContent = "Information";
           infoModalOverlay.classList.add('active');
+          infoModalCloseButton.focus(); // Set focus on the close button
       }
   }
 
   function hideInfoModal() {
       if (infoModalOverlay) {
           infoModalOverlay.classList.remove('active');
+          if (elementThatTriggeredModal) {
+              elementThatTriggeredModal.focus(); // Return focus to the element that opened the modal
+              elementThatTriggeredModal = null;
+          }
       }
   }
   
@@ -833,12 +850,7 @@
     }
   }
   
-  // --- Roll History Elements & Functions ---
-  const showHistoryBtn = document.getElementById('show-history-button');
-  const historyOverlay = document.getElementById('history-overlay');
-  const closeHistoryBtn = document.getElementById('close-history-modal');
-  const historyContent = document.getElementById('history-content');
-
+  // --- Roll History Functions ---
   async function fetchAndDisplayHistory() {
     try {
         const response = await fetch("{{ url_for('get_roll_history') }}");
@@ -859,16 +871,27 @@
             historyContent.appendChild(ul);
         }
 
-        // Use class to trigger animated visibility
         historyOverlay.classList.add('showing');
         document.body.classList.add('modal-open');
+        closeHistoryBtn.focus(); // Set focus on the close button
         
-
     } catch (error) {
         console.error('Error fetching roll history:', error);
         historyContent.innerHTML = '<p>Could not load roll history. Please try again later.</p>';
         historyOverlay.classList.add('showing');
         document.body.classList.add('modal-open');
+        closeHistoryBtn.focus(); // Set focus on the close button
+    }
+ }
+
+ function closeHistoryOverlay() {
+    if (historyOverlay) {
+        historyOverlay.classList.remove('showing');
+        document.body.classList.remove('modal-open');
+        if (elementThatTriggeredModal) {
+            elementThatTriggeredModal.focus(); // Return focus
+            elementThatTriggeredModal = null;
+        }
     }
  }
 
@@ -878,52 +901,104 @@
     if (critSourceSelect) {
         critSourceSelect.addEventListener('change', updateDamageAndMagicTypes);
     }
-    // Event Listeners for Info Icons & Modal
+    
+    // --- ACCESSIBILITY EVENT LISTENERS ---
+    
+    // Event Listeners for opening Info Modal
     if (critSourceInfoIcon) {
         critSourceInfoIcon.addEventListener('click', () => {
+            elementThatTriggeredModal = document.activeElement; // Store the element that was focused
             const selectedCritSource = document.getElementById('crit_source').value;
             showInfoModal('critSources', selectedCritSource);
         });
     }
     if (fumbleTypeInfoIcon) {
         fumbleTypeInfoIcon.addEventListener('click', () => {
+            elementThatTriggeredModal = document.activeElement; // Store the element that was focused
             const selectedFumbleSource = document.getElementById('fumbleType').value;
             showInfoModal('fumbleSources', selectedFumbleSource);
         });
     }
+
+    // Event listeners for closing Info Modal
     if (infoModalCloseButton) {
         infoModalCloseButton.addEventListener('click', hideInfoModal);
     }
     if (infoModalOverlay) {
         infoModalOverlay.addEventListener('click', (event) => {
-            if (event.target === infoModalOverlay) { // Click on overlay itself
+            if (event.target === infoModalOverlay) {
                 hideInfoModal();
             }
         });
     }
-function closeHistoryOverlay() {
-    if (historyOverlay) {
-        historyOverlay.classList.remove('showing');
-        document.body.classList.remove('modal-open');
+    
+    // Event Listeners for opening History Modal
+    if (showHistoryBtn) {
+      showHistoryBtn.addEventListener('click', () => {
+        elementThatTriggeredModal = document.activeElement; // Store the element that was focused
+        fetchAndDisplayHistory();
+      });
     }
-}
 
-// History listeners
-if (showHistoryBtn) {
-    showHistoryBtn.addEventListener('click', fetchAndDisplayHistory);
-}
+    // Event Listeners for closing History Modal
+    if (closeHistoryBtn) {
+        closeHistoryBtn.addEventListener('click', closeHistoryOverlay);
+    }
+    if (historyOverlay) {
+        historyOverlay.addEventListener('click', (event) => {
+            if (event.target === historyOverlay) {
+                closeHistoryOverlay();
+            }
+        });
+    }
+    
+    // Global keyboard listener for modal control (Escape key and Focus Trapping)
+    document.addEventListener('keydown', (event) => {
+        const isInfoModalActive = infoModalOverlay.classList.contains('active');
+        const isHistoryModalActive = historyOverlay.classList.contains('showing');
 
-if (closeHistoryBtn) {
-    closeHistoryBtn.addEventListener('click', closeHistoryOverlay);
-}
+        // 1. Escape key to close any active modal
+        if (event.key === 'Escape') {
+            if (isInfoModalActive) {
+                hideInfoModal();
+            }
+            if (isHistoryModalActive) {
+                closeHistoryOverlay();
+            }
+        }
 
-if (historyOverlay) {
-    historyOverlay.addEventListener('click', (event) => {
-        if (event.target === historyOverlay) {
-            closeHistoryOverlay();
+        // 2. Tab key to trap focus inside the active modal
+        if (event.key === 'Tab') {
+            let activeModalContent = null;
+            if (isInfoModalActive) {
+                activeModalContent = infoModal;
+            } else if (isHistoryModalActive) {
+                activeModalContent = historyModal;
+            }
+
+            if (activeModalContent) {
+                const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+                const focusableElements = Array.from(activeModalContent.querySelectorAll(focusableSelector));
+                
+                if (focusableElements.length === 0) return;
+
+                const firstElement = focusableElements[0];
+                const lastElement = focusableElements[focusableElements.length - 1];
+
+                if (event.shiftKey) { // Shift + Tab
+                    if (document.activeElement === firstElement) {
+                        lastElement.focus();
+                        event.preventDefault();
+                    }
+                } else { // Tab
+                    if (document.activeElement === lastElement) {
+                        firstElement.focus();
+                        event.preventDefault();
+                    }
+                }
+            }
         }
     });
-}
     
     toggleFields(); // Initial setup of visible fields and dropdowns
 };
