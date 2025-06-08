@@ -54,7 +54,7 @@
   --clr-select-arrow: #007CB2; /* Default blueish */
 
   /* --- Backgrounds & Textures --- */
-  --bg-texture: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  --bg-texture: url('img/paper-fibers.webp');
 
   /* --- Borders & Radius --- */
   --border-radius-standard: 8px;
@@ -925,7 +925,7 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
     --clr-select-arrow: #cccccc; /* Light arrow for dark bg */
 
     /* --- Backgrounds & Textures --- */
-    --bg-texture: url('https://www.transparenttextures.com/patterns/dark-mosaic.png');
+    --bg-texture: url('img/dark-mosaic.webp');
     background-blend-mode: overlay;
     
     /* --- Shadows --- */
