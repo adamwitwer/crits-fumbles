@@ -98,7 +98,7 @@
   </form>
 
   <div id="error-message" style="display: none; color: red; text-align: center; margin: 1rem 0;"></div>
-  <div id="primary-result-area" style="display: none;"></div>
+  <div id="primary-result-area" style="display: none;" role="region" aria-live="polite" aria-atomic="true"></div>
   <div id="secondary-prompt-area" style="display: none;" class="bonus-alert">
       <h2 id="secondary-prompt-text"></h2>
       <input type="hidden" id="secondary-roll-type-hidden">
@@ -109,7 +109,7 @@
       <input type="hidden" id="secondary-primary-roll-hidden">
       <button type="button" id="secondary-roll-button" onclick="handleRoll('secondary')" aria-label="Roll dice for bonus effect">⚡️ Roll Bonus ⚡️</button>
   </div>
-  <div id="secondary-result-area" style="display: none;"></div>
+  <div id="secondary-result-area" style="display: none;" aria-live="polite"></div>
 
   <div class="share-container"><button type="button" id="share-discord-button" onclick="shareResultToDiscord()" style="display: none;">
     <img src="{{ url_for('static', filename='img/discord-icon.svg') }}" alt="Discord Logo" class="discord-icon">
@@ -121,14 +121,14 @@
       Your browser does not support the audio element.
   </audio>
   
-  <footer class="app-footer">
+  <footer class="app-footer" role="contentinfo">
     <p><a href="https://github.com/adamwitwer/crits-fumbles" target="_blank" rel="noopener" aria-label="GitHub Repository">
       <svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 0C5.37 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.17c-3.338.726-4.033-1.416-4.033-1.416-.546-1.386-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.776.42-1.304.762-1.603-2.665-.305-5.466-1.334-5.466-5.933 0-1.31.47-2.38 1.235-3.22-.124-.303-.535-1.527.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.98-.399 3-.404 1.02.005 2.043.138 3 .404 2.29-1.552 3.296-1.23 3.296-1.23.653 1.649.242 2.873.118 3.176.767.84 1.233 1.91 1.233 3.22 0 4.61-2.804 5.625-5.475 5.922.43.37.823 1.103.823 2.222v3.293c0 .322.218.694.825.576C20.565 21.796 24 17.298 24 12c0-6.627-5.373-12-12-12z" /></svg></a>
       | <button
         id="show-history-button"
         class="chronicles-button"
         type="button"
-        aria-label="Crits & Fumbles Chronicles"
+        aria-label="View Crits & Fumbles Chronicles"
         >
         📜 C&F Chronicles
         </button>

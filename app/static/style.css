@@ -24,9 +24,9 @@
   --clr-card-bg: rgba(250, 245, 230, 0.8); /* changed for dragon */
   --clr-form-border: #bbb;
   /* Buttons */
-  --clr-button-bg: #c19a6b;
-  --clr-button-text: white;
-  --clr-button-hover-bg: #a67b5b;
+  --clr-button-bg: #a67b5b;
+  --clr-button-text: #fff;
+  --clr-button-hover-bg: #875f46;
   --clr-button-outline: #a67b5b;
   /* Result Boxes */
   --clr-result-bg: rgba(220, 240, 210, 0.8); /* changed for dragon */
@@ -43,7 +43,7 @@
   --clr-scroll-note: #5a3d2b;
   --clr-scroll-note-shadow: rgba(255, 228, 181, 0.6);
   /* Footer */
-  --clr-footer-text: #666;
+  --clr-footer-text: #444;
   --clr-footer-icon: #000;
   --clr-footer-icon-hover: #555;
   /* Dice */
@@ -138,6 +138,7 @@ h1, h2 {
   font-family: var(--font-heading);
   line-height: 1.2;
   margin-bottom: 0.6em;
+  hyphens: none;
 }
 
 h1 {
@@ -617,7 +618,7 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
 /* hyperlinks */
 .modal-content a {
   font-weight: bold;
-  color: var(--clr-heading);
+  color: #3b2a20;
   text-decoration: none;
   background-image: linear-gradient(to right, var(--clr-heading), var(--clr-heading));
   background-repeat: no-repeat;
@@ -989,3 +990,15 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   }
   
 } /* End Dark Mode */
+
+/* === Accessibility: Reduced Motion Support === */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
