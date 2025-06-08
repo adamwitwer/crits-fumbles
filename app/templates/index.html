@@ -373,12 +373,12 @@
       let html = '<div class="roll-result">';
       const rollValueSpan = `<span class="roll-value">${rollValue || '?'}</span>`;
       if (dieType === 'd100' && numDice === 1) {
-          const d10ImageSrc = "{{ url_for('static', filename='img/d10.png') }}";
+          const d10ImageSrc = "{{ url_for('static', filename='img/d10.webp') }}";
           html += `<img src="${d10ImageSrc}" alt="d10" class="inline-die" />`; 
           html += rollValueSpan;
           html += `<img src="${d10ImageSrc}" alt="d10" class="inline-die" />`; 
       } else {
-          const dieImageSrc = `{{ url_for('static', filename='img/') }}${(dieType || 'd20')}.png`;
+          const dieImageSrc = `{{ url_for('static', filename='img/') }}${(dieType || 'd20')}.webp`;
           html += `<img src="${dieImageSrc}" alt="${(dieType || 'd20')}" class="inline-die" />`;
           html += rollValueSpan;
       }
@@ -410,7 +410,7 @@
           actualDieTypeForAnim = 'd10'; 
           actualNumDiceForAnim = 2;     
       }
-      const dieImageSrc = `{{ url_for('static', filename='img/') }}${actualDieTypeForAnim}.png`;
+      const dieImageSrc = `{{ url_for('static', filename='img/') }}${actualDieTypeForAnim}.webp`;
       for (let i = 0; i < actualNumDiceForAnim; i++) {
           const img = document.createElement('img');
           img.src = dieImageSrc;
