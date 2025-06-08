@@ -617,7 +617,7 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
 
 /* hyperlinks */
 .modal-content a {
-  font-weight: bold;
+  font-weight: 700;
   color: #3b2a20;
   text-decoration: none;
   background-image: linear-gradient(to right, var(--clr-heading), var(--clr-heading));
