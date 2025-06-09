@@ -12,7 +12,7 @@ FLASK_APP=app.app
 DISCORD_WEBHOOK_URL='YOUR_SECRET_WEBHOOK'
 ```
 
-If you want the Discord integration feature, you’ll need to create and add the webhook URL from your Discord server.
+If you want the Discord integration feature, add the webhook URL from your Discord server.
 
 3. Now to launch the app:
 
@@ -25,15 +25,15 @@ flask run
 
 ## Notes on the Sources
 
-### Criticals
+* “[Critical Hits Revisited](https://sterlingvermin.wordpress.com/2016/09/27/critical-hits-revisited/)” by Benjamin Huffman (crits only)
+* [Questionable Arcana](https://growupandgame.com/dungeons-and-dragons/questionable-arcana/dnd-5e-crit-confirmed-critical-hit-charts-and-fumble-charts/) (crits & fumbles)
+* [Reddit user u/Bcoydog](https://www.reddit.com/r/DnD/comments/1cuzgxf/critical_hit_fumble_d100_tables_with_51_results/) (crits & fumbles) 
 
-“[Critical Hits Revisited](https://sterlingvermin.wordpress.com/2016/09/27/critical-hits-revisited/)” by Benjamin Huffman
+TODO: Add u/Bcoydog’s Knowledge Check Table (maybe?).
 
-### Fumbles
+## Smack Down
 
-We have two types of fumbles, Smack Down and Questionable Arcana.
-
-#### Smack Down
+_Deprecated. The Smack Down table has been removed for now, but may return someday!_ 
 
 The first fumbles table is what we’ve been using in my current campaign and isn’t a fumble table at all. Instead, it’s the so-called “Smack Down Table or the ‘shit happens’ list,” which (as far as I can tell) can only be found on [DeviantArt](https://www.deviantart.com/pandabarbear/art/The-New-Smack-Down-Table-518745000). PandaBarBear (the user who posted the table) notes that it’s “based on Hack Masters Expanded smart ass smack down table,” which doesn’t exist (as far as I can tell).
 
@@ -46,7 +46,3 @@ A more likely source of the “Smack Down Table” is found in [issue 128 of “
 The “Smack Down Table” from PandaBarBear uses some but not all of the same player punishments.
 
 In any case, as I said, it’s not a fumble table at all. I've used it in the app because we’ve been using it in our game even before I joined, and it’s funny.
-
-#### Questionable Arcana
-
-This is an actual fumbles table, and it accounts for Weapon and Magic attacks. Taken from [Questionable Arcana](https://growupandgame.com/dungeons-and-dragons/questionable-arcana/dnd-5e-crit-confirmed-critical-hit-charts-and-fumble-charts/). 
