@@ -25,9 +25,9 @@ flask run
 
 ## Notes on the Sources
 
-* “[Critical Hits Revisited](https://sterlingvermin.wordpress.com/2016/09/27/critical-hits-revisited/)” by Benjamin Huffman (crits only)
+* [Critical Hits Revisited](https://sterlingvermin.wordpress.com/2016/09/27/critical-hits-revisited/) by Benjamin Huffman (crits only)
 * [Questionable Arcana](https://growupandgame.com/dungeons-and-dragons/questionable-arcana/dnd-5e-crit-confirmed-critical-hit-charts-and-fumble-charts/) (crits & fumbles)
-* [Reddit user u/Bcoydog](https://www.reddit.com/r/DnD/comments/1cuzgxf/critical_hit_fumble_d100_tables_with_51_results/) (crits & fumbles) 
+* [Reddit user u/Bcoydog](https://www.reddit.com/r/DnD/comments/1cuzgxf/critical_hit_fumble_d100_tables_with_51_results/) (crits & fumbles)
 
 TODO: Add u/Bcoydog’s Knowledge Check Table (maybe?).
 
