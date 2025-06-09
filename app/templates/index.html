@@ -7,6 +7,11 @@
     <meta name="robots" content="noindex, nofollow">
     <title>Crits & Fumbles</title>
 
+    <!-- to help with "cold start"-->
+    <link rel="preload" href="{{ url_for('static', filename='img/d20.webp') }}" as="image">
+    <link rel="preload" href="{{ url_for('static', filename='img/d10.webp') }}" as="image">
+    <link rel="preload" href="{{ url_for('static', filename='sounds/dice-roll.mp3') }}" as="audio">
+
     <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" sizes="any" type="image/svg+xml">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" sizes="48x48">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
@@ -134,7 +139,9 @@
   </footer>
 </main>
   
-<div id="dice-animation-overlay"></div>
+<div id="dice-animation-overlay">
+    <div class="rolling-animation-container"></div>
+</div>
 
 <div id="info-modal-overlay" class="modal-overlay">
   <div id="info-modal" class="modal-content" tabindex="-1" role="dialog" aria-modal="true">
@@ -393,8 +400,14 @@
   }
 
   function displayRollingAnimation(dieType, numDice) {
+      
       const overlay = document.getElementById('dice-animation-overlay');
-      let animContainer = overlay.querySelector('.rolling-animation-container');
+      // The container is now guaranteed to exist; helps with cold start.
+      const animContainer = overlay.querySelector('.rolling-animation-container');
+      
+      // Clear contents before adding new dice.
+      animContainer.innerHTML = ''; 
+      
       if (!animContainer) {
           animContainer = document.createElement('div');
           animContainer.classList.add('rolling-animation-container');
