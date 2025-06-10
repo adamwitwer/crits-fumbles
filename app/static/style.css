@@ -133,6 +133,8 @@ body::before {
     z-index: -1;
 }
 
+span.nowrap { white-space: nowrap; }
+
 /* --- Headers --- */
 h1, h2 {
   font-family: var(--font-heading);
