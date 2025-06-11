@@ -248,6 +248,62 @@ button:active {
   box-shadow: var(--shadow-button-active);
 }
 
+/* Mute button */
+/* Matches info button */
+#main-form {
+  position: relative; /* ensure absolute children are positioned relative to the form */
+}
+
+#mute-button {
+  all: unset;
+  position: absolute;
+  top: 1.7em;
+  right: 1.8em;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  padding: 0 0.2em;
+  opacity: 0.8;
+}
+
+#mute-button:hover,
+#mute-button:focus {
+  opacity: 1;
+  outline: 1px solid var(--clr-button-outline);
+}
+
+/* Tooltips for mute, info, and Chronicles buttons */
+#mute-button[data-tooltip]:hover::after,
+#crit-source-container button[data-tooltip]:hover::after, 
+#fumble-type-container button[data-tooltip]:hover::after,
+#show-history-button[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: -2.3em;
+  right: 4em;
+  transform: translateX(50%);
+  background: var(--clr-button-bg);
+  color: var(--clr-button-text);
+  padding: 0.25em 0.5em;
+  border-radius: 0.25em;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  pointer-events: none;
+  z-index: 10;
+}
+
+#crit-source-container button[data-tooltip]:hover::after {
+  top: -1em;
+  right: -5.75em;
+}
+#fumble-type-container button[data-tooltip]:hover::after { 
+  top: -1em;
+  right: -6.5em;
+}
+#show-history-button[data-tooltip]:hover::after {
+  right: -3em;
+}
+
 /* === Result Box Styles === */
 
 .result-box {
@@ -791,7 +847,6 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   transition: background-color 0.3s ease, transform 0.2s ease;
   touch-action: manipulation;
   cursor: pointer;
-  display: inline-block; /* Optional, for consistent layout */
 }
 
 .info-icon:focus,
@@ -881,6 +936,10 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   .bonus-alert {
      padding: calc(var(--spacing-unit) * 2);
   }
+  #mute-button {
+  top: 1.8em;
+  right: 2.3em;
+  font-size: 1.25rem;
 }
 
 @media all and (display-mode: standalone) {

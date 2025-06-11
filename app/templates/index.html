@@ -45,7 +45,7 @@
       class="info-icon"
       id="crit_source_info_icon"
       style="display: none;"
-      title="About this crit source"
+      data-tooltip="About this crit type"
       aria-label="More info about this crit type"
       >
       ⓘ
@@ -78,8 +78,8 @@
       class="info-icon"
       id="fumble_type_info_icon"
       style="display: none;"
-      title="About this fumble source"
-      aria-label="More info about this crit type"
+      data-tooltip="About this fumble type"
+      aria-label="More info about this fumble type"
       >
       ⓘ
       </button>
@@ -95,6 +95,14 @@
         </select>
       </div>
     </div>
+
+    <button
+    type="button"
+    id="mute-button"
+    aria-pressed="false"
+    aria-label="Mute dice sound"
+    data-tooltip="Mute dice rolling"
+    >🔊</button>
 
     <button type="button" id="primary-roll-button" onclick="handleRoll('primary')" aria-label="Roll dice for result">⚡️ Roll ⚡️</button>
 
@@ -132,6 +140,7 @@
         class="chronicles-button"
         type="button"
         aria-label="View Crits & Fumbles Chronicles"
+        data-tooltip="View the Chronicles"
         >
         📜 C&F Chronicles
         </button>
@@ -889,6 +898,35 @@
     }
   }
   
+  // --- Mute Button ---
+  const muteButton = document.getElementById('mute-button');
+    // On load: read saved preference
+    const savedMuted = localStorage.getItem('diceMuted') === 'true';
+    diceAudio.muted = savedMuted;
+    muteButton.textContent = savedMuted ? '🔇' : '🔊';
+    muteButton.setAttribute('aria-pressed', savedMuted);
+
+  function toggleMute() {
+    diceAudio.muted = !diceAudio.muted;
+    const nowMuted = diceAudio.muted;
+
+    // Swap icon and aria-pressed as before
+    muteButton.textContent = nowMuted ? '🔇' : '🔊';
+    muteButton.setAttribute('aria-pressed', nowMuted);
+
+    // Update the tooltip text
+    muteButton.dataset.tooltip = nowMuted
+      ? 'Unmute dice rolling'
+      : 'Mute dice rolling';
+
+    // Persist it
+    localStorage.setItem('diceMuted', nowMuted);
+  }
+
+  muteButton.addEventListener('click', toggleMute);
+
+  // Optional: in playDiceSound(), you can leave it as-is—HTMLAudioElement.play() is a no-op when muted. 
+
   // --- Roll History Functions ---
   async function fetchAndDisplayHistory() {
     try {
