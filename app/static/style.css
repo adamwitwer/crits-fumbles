@@ -302,6 +302,7 @@ button:active {
 }
 #show-history-button[data-tooltip]:hover::after {
   right: -3em;
+  text-shadow: none;
 }
 
 /* === Result Box Styles === */
@@ -897,7 +898,7 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
     border-bottom: 1px solid var(--clr-border-subtle);
   }
 
-   .info-icon {
+  .info-icon {
     color: var(--clr-heading);
   }
 
@@ -940,6 +941,7 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   top: 1.8em;
   right: 2.3em;
   font-size: 1.25rem;
+  }
 }
 
 @media all and (display-mode: standalone) {
@@ -1011,7 +1013,7 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   
   /* Modifies "glow effect" from h1 and footer */
   h1, .app-footer p { text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5),
-                     0 0 5px rgba(50, 30, 30, 0.25);
+                                   0 0 5px rgba(50, 30, 30, 0.25);
   }
 
   select {
@@ -1029,7 +1031,7 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   .app-footer a:hover,
   .app-footer a:focus {
     color: var(--clr-bonus-border);
-}
+  }
 
   .chronicles-button:hover,
   .chronicles-button:focus {
@@ -1037,16 +1039,17 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
     color: var(--clr-bonus-border);
   }
 
-#share-discord-button:disabled {
+  #share-discord-button:disabled {
      background-color: #4f545c;
      color: #7b7b7b;
   }
 
-#share-discord-button:disabled[textContent="Sharing..."] {
+  #share-discord-button:disabled[textContent="Sharing..."] {
      background-color: #5865F2;
      opacity: 0.9;
   }
-#share-discord-button[textContent="Shared!"] {
+  
+  #share-discord-button[textContent="Shared!"] {
      background-color: #3BA55D;
   }
   
