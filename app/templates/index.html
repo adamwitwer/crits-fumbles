@@ -905,6 +905,7 @@
     diceAudio.muted = savedMuted;
     muteButton.textContent = savedMuted ? '🔇' : '🔊';
     muteButton.setAttribute('aria-pressed', savedMuted);
+    muteButton.dataset.tooltip = savedMuted ? 'Unmute dice rolling' : 'Mute dice rolling';
 
   function toggleMute() {
     diceAudio.muted = !diceAudio.muted;
