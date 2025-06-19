@@ -60,18 +60,27 @@ if not FUMBLE_DATA: app.logger.warning("FUMBLE_DATA is empty or failed to load."
 
 # --- Geolocation Helper ---
 def get_geolocation(ip_address):
-    # Use a placeholder for IP addresses in log messages to avoid logging the actual IP.
+    # This is the actual IP address used for the geolocation API call.
+    actual_ip_for_api = ip_address 
+
+    # This is the placeholder used for ALL logging messages to avoid sensitive data.
     ip_display_for_logs = "[IP REDACTED]"
 
-    if not ip_address: return {"city": "an unknown void", "regionName": "the ether"}
+    if not actual_ip_for_api: 
+        app.logger.debug("No IP address provided for geolocation.") # Use debug for common non-errors
+        return {"city": "an unknown void", "regionName": "the ether"}
+    
     try:
-        ip_obj = ipaddress.ip_address(ip_address)
-        if ip_obj.is_loopback: return {"city": "their cozy terminal", "regionName": "the local machine"}
-        if ip_obj.is_private: return {"city": "their local sanctum", "regionName": "the home network"}
-        if ip_obj in ipaddress.ip_network('100.64.0.0/10', strict=False): return {"city": "their secure Tailnet", "regionName": "a private dimension"}
+        ip_obj = ipaddress.ip_address(actual_ip_for_api)
+        if ip_obj.is_loopback: 
+            return {"city": "their cozy terminal", "regionName": "the local machine"}
+        if ip_obj.is_private: 
+            return {"city": "their local sanctum", "regionName": "the home network"}
+        if ip_obj in ipaddress.ip_network('100.64.0.0/10', strict=False): 
+            return {"city": "their secure Tailnet", "regionName": "a private dimension"}
     except ValueError:
         # Handle cases like "localhost" string which is not a valid IP for ipaddress module
-        if isinstance(ip_address, str) and ip_address.lower() == "localhost":
+        if isinstance(actual_ip_for_api, str) and actual_ip_for_api.lower() == "localhost":
             return {"city": "their cozy terminal", "regionName": "the local machine"}
         # Log with the placeholder instead of the actual potentially invalid IP string
         app.logger.warning(f"Invalid IP format for geolocation: {ip_display_for_logs}")
@@ -79,7 +88,7 @@ def get_geolocation(ip_address):
     
     # For external API calls, the actual ip_address is still used.
     try:
-        url = f"http://ip-api.com/json/{ip_address}?fields=status,message,city,regionName,query"
+        url = f"http://ip-api.com/json/{actual_ip_for_api}?fields=status,message,city,regionName,query"
         response_geo = requests.get(url, timeout=3)
         response_geo.raise_for_status()
         data = response_geo.json()
@@ -93,29 +102,32 @@ def get_geolocation(ip_address):
         if data.get("status") == "success":
             return {"city": data.get("city", "unknown city"), "regionName": data.get("regionName", "uncharted territory")}
         
+        # Log error with redacted IP
         app.logger.warning(f"Geo API error for {ip_display_for_logs}: {api_message}")
         return {"city": "parts unknown", "regionName": "mysterious land"}
 
     except requests.exceptions.Timeout:
+        # Log error with redacted IP
         app.logger.warning(f"Geo request timed out for {ip_display_for_logs}")
         return {"city": "realm beyond reach", "regionName": "mists of time"}
     except requests.exceptions.RequestException as e:
         # Sanitize exception string if it's likely to contain the URL with the IP
         error_message = str(e)
-        if isinstance(ip_address, str) and ip_address in error_message: # Check if the original IP is in the error string
-            error_message = error_message.replace(ip_address, ip_display_for_logs)
+        if isinstance(actual_ip_for_api, str) and actual_ip_for_api in error_message: # Check if the original IP is in the error string
+            error_message = error_message.replace(actual_ip_for_api, ip_display_for_logs)
+        # Log error with redacted IP
         app.logger.warning(f"Error fetching geo for {ip_display_for_logs}: {error_message}")
         return {"city": "digital realm", "regionName": "boundless interwebs"}
     except json.JSONDecodeError:
+        # Log error with redacted IP
         app.logger.warning(f"Failed to decode geo JSON for {ip_display_for_logs}")
         return {"city": "garbled signal", "regionName": "static void"}
     except Exception as e:
         # Sanitize generic exception messages as well
         error_message_generic = str(e)
-        if isinstance(ip_address, str) and ip_address in error_message_generic:
-             error_message_generic = error_message_generic.replace(ip_address, ip_display_for_logs)
-        # exc_info=True will log the stack trace. Standard tracebacks don't show all local variables by default,
-        # but the exception message itself (str(e)) is sanitized above.
+        if isinstance(actual_ip_for_api, str) and actual_ip_for_api in error_message_generic:
+             error_message_generic = error_message_generic.replace(actual_ip_for_api, ip_display_for_logs)
+        # Log error with redacted IP and stack trace
         app.logger.error(f"Generic geo error for {ip_display_for_logs}: {error_message_generic}", exc_info=True)
         return {"city": "place beyond perception", "regionName": "the void"}
 
@@ -310,8 +322,14 @@ def index():
 def roll_ajax():
     p = request.get_json(); print(f"Roll payload: {p}") 
     if not p: return jsonify({"status": "error", "errorMessage": "Invalid request data."}), 400
-    xff = request.headers.get('X-Forwarded-For'); ip = xff.split(',')[0].strip() if xff else request.remote_addr
-    return jsonify(get_roll_result_and_log(p, ip))
+    
+    # Extract IP, but ensure only 'ip' (the actual one) is passed to get_geolocation.
+    xff = request.headers.get('X-Forwarded-For')
+    client_ip = xff.split(',')[0].strip() if xff else request.remote_addr
+    
+    # Pass the actual client_ip to get_roll_result_and_log,
+    # and get_geolocation will handle internal redaction for logs.
+    return jsonify(get_roll_result_and_log(p, client_ip))
 
 @app.route('/share_discord', methods=['POST'])
 def share_discord(): 

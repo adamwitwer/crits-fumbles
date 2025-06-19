@@ -457,7 +457,7 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   transform: scale(0.5);
 }
 
-/* To prevent "flash" on dice roll */
+/* Prevents "flash" on dice roll */
 #primary-result-area,
 #secondary-result-area {
   min-height: 10em;
