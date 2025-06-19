@@ -23,6 +23,8 @@
     
     <link rel="stylesheet" href="{{ url_for('static', filename='fonts/fonts.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="{{ url_for('static', filename='js/purify.min.js') }}"></script>
 </head>
 <body>
 
@@ -736,14 +738,14 @@
           primaryRollBtn.disabled = false; 
       }
 
-      primaryResultArea.innerHTML = primaryContent;
+      primaryResultArea.innerHTML = DOMPurify.sanitize(primaryContent);
       primaryResultArea.style.display = showPrimary ? 'block' : 'none';
       primaryResultArea.style.visibility = showPrimary ? 'visible' : 'hidden';
 
       secondaryPromptArea.style.display = showPrompt ? 'block' : 'none';
       secondaryPromptArea.style.visibility = showPrompt ? 'visible' : 'hidden';
 
-      secondaryResultArea.innerHTML = secondaryContent;
+      secondaryResultArea.innerHTML = DOMPurify.sanitize(secondaryContent);
       secondaryResultArea.style.display = showSecondary ? 'block' : 'none';
       secondaryResultArea.style.visibility = showSecondary ? 'visible' : 'hidden';
 
