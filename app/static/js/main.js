@@ -808,14 +808,36 @@
 
   // --- Initial Setup on Load ---
   window.onload = function() {
-    // This setup section remains mostly the same, but we don't need to put the
-    // complex logic inside it anymore, since it's handled in the open/close functions.
-    
+    // --- Event Listeners for Forms and Inputs ---
+
+    // Get references to elements that previously had inline handlers
+    const rollTypeSelect = document.getElementById('roll_type');
     const critSourceSelect = document.getElementById('crit_source');
+    const damageTypeSelect = document.getElementById('damage_type');
+    const fumbleTypeSelect = document.getElementById('fumbleType');
+    const primaryRollBtn = document.getElementById('primary-roll-button');
+    const secondaryRollBtn = document.getElementById('secondary-roll-button');
+
+    // Attach event listeners
+    if (rollTypeSelect) {
+        rollTypeSelect.addEventListener('change', toggleFields);
+    }
     if (critSourceSelect) {
         critSourceSelect.addEventListener('change', updateDamageAndMagicTypes);
     }
-    
+    if (damageTypeSelect) {
+        damageTypeSelect.addEventListener('change', toggleMagicDropdown);
+    }
+    if (fumbleTypeSelect) {
+        fumbleTypeSelect.addEventListener('change', toggleAttackType);
+    }
+    if (primaryRollBtn) {
+        primaryRollBtn.addEventListener('click', () => handleRoll('primary'));
+    }
+    if (secondaryRollBtn) {
+        secondaryRollBtn.addEventListener('click', () => handleRoll('secondary'));
+    }
+
     // Event Listeners for opening Info Modal
     if (critSourceInfoIcon) {
         critSourceInfoIcon.addEventListener('click', () => {
