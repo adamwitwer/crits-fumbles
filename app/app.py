@@ -11,6 +11,29 @@ import ipaddress
 
 app = Flask(__name__)
 
+@app.after_request
+def add_security_headers(response):
+    csp_policy = (
+        "default-src 'none';"
+        "script-src 'self' 'sha256-xkCWla5qon65vOIHCOs7ZCr8zHIHr0UgJN5eX5r7PXU=';"
+        "style-src 'self' 'unsafe-inline';"
+        "img-src 'self' data:;"
+        "media-src 'self';"
+        "font-src 'self';"
+        "connect-src 'self' http://ip-api.com;"
+        "form-action 'self';"
+        "frame-ancestors 'none';"
+        "base-uri 'self';"
+        "object-src 'none';"
+        "worker-src 'self';"
+        "manifest-src 'self';"
+    )
+    response.headers['Content-Security-Policy'] = csp_policy
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    return response
+
 # --- Determine log file path ---
 LOG_STORAGE_DIR = os.environ.get('LOG_STORAGE_DIR', '.')
 LOG_FILENAME = "narrative_dice_log.jsonl"

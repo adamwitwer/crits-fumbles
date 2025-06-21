@@ -759,8 +759,6 @@
 
   muteButton.addEventListener('click', toggleMute);
 
-  // Optional: in playDiceSound(), you can leave it as-is—HTMLAudioElement.play() is a no-op when muted. 
-
   // --- Roll History Functions ---
   async function fetchAndDisplayHistory() {
     try {
@@ -836,6 +834,9 @@
     }
     if (secondaryRollBtn) {
         secondaryRollBtn.addEventListener('click', () => handleRoll('secondary'));
+    }
+      if (shareButton) {
+        shareButton.addEventListener('click', shareResultToDiscord);
     }
 
     // Event Listeners for opening Info Modal

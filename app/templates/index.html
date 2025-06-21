@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
     <title>Crits & Fumbles</title>
-
+    
     <!-- to help with "cold start"-->
     <link rel="prefetch"
       href="{{ url_for('static', filename='img/d20.webp') }}"
@@ -44,7 +44,7 @@
   <form id="main-form">
     <div>
       <label for="roll_type">Roll Type</label>
-      <select name="roll_type" id="roll_type" onchange="toggleFields()">
+      <select name="roll_type" id="roll_type">
         <option value="crit" {% if selected_roll_type == 'crit' %}selected{% endif %}>Critical</option>
         <option value="fumble" {% if selected_roll_type == 'fumble' %}selected{% endif %}>Fumble</option>
       </select>
@@ -70,7 +70,7 @@
       <div id="crit-fields" style="display:none;">
         <div>
           <label for="damage_type">Damage Type</label>
-          <select name="damage_type" id="damage_type" onchange="toggleMagicDropdown()">
+          <select name="damage_type" id="damage_type">
             {# Options populated by JavaScript #}
           </select>
         </div>
@@ -95,7 +95,7 @@
       >
       ⓘ
       </button>
-      <select id="fumbleType" name="fumbleType" onchange="toggleAttackType()">
+      <select id="fumbleType" name="fumbleType">
         <option value="Questionable Arcana" {% if selected_fumble_type == 'Questionable Arcana' %}selected{% endif %}>Questionable Arcana</option>
         <option value="BCoydog" {% if selected_fumble_type == 'BCoydog' %}selected{% endif %}>u/BCoydog</option>
       </select>
@@ -116,7 +116,7 @@
     data-tooltip="Mute dice rolling"
     >🔊</button>
 
-    <button type="button" id="primary-roll-button" onclick="handleRoll('primary')" aria-label="Roll dice for result">⚡️ Roll ⚡️</button>
+    <button type="button" id="primary-roll-button" aria-label="Roll dice for result">⚡️ Roll ⚡️</button>
 
   </form>
 
@@ -130,11 +130,11 @@
       <input type="hidden" id="secondary-magic-subtype-hidden">
       <input type="hidden" id="secondary-primary-result-hidden">
       <input type="hidden" id="secondary-primary-roll-hidden">
-      <button type="button" id="secondary-roll-button" onclick="handleRoll('secondary')" aria-label="Roll dice for bonus effect">⚡️ Roll Bonus ⚡️</button>
+      <button type="button" id="secondary-roll-button" aria-label="Roll dice for bonus effect">⚡️ Roll Bonus ⚡️</button>
   </div>
   <div id="secondary-result-area" style="display: none;" aria-live="polite"></div>
 
-  <div class="share-container"><button type="button" id="share-discord-button" onclick="shareResultToDiscord()" style="display: none;">
+  <div class="share-container"><button type="button" id="share-discord-button" style="display: none;">
     <img src="{{ url_for('static', filename='img/discord-icon.svg') }}" alt="Discord Logo" class="discord-icon">
     <span class="button-text">Share Result to Discord</span></button>
   </div>
