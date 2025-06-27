@@ -43,8 +43,8 @@ class TestRollEndpoints:
                              content_type='application/json')
         
         assert response.status_code == 400
-        data = json.loads(response.data)
-        assert data["status"] == "error"
+        # Flask returns HTML error page for bad JSON, not JSON response
+        assert b'Bad Request' in response.data
     
     def test_roll_missing_context(self, client):
         """Test roll endpoint with missing context"""

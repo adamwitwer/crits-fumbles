@@ -18,15 +18,25 @@ class LoggingService:
         """Ensure log directory exists and return log file path"""
         try:
             os.makedirs(self.config.LOG_STORAGE_DIR, exist_ok=True)
-            current_app.logger.info(f"Log directory ensured/created: {self.config.LOG_STORAGE_DIR}")
             log_path = os.path.join(self.config.LOG_STORAGE_DIR, self.config.LOG_FILENAME)
-            current_app.logger.info(f"Application will use log file at: {log_path}")
+            # Only log if we have an app context
+            try:
+                current_app.logger.info(f"Log directory ensured/created: {self.config.LOG_STORAGE_DIR}")
+                current_app.logger.info(f"Application will use log file at: {log_path}")
+            except RuntimeError:
+                # No app context yet, that's okay during initialization
+                pass
             return log_path
         except OSError as e:
-            current_app.logger.error(f"CRITICAL: Error creating log directory {self.config.LOG_STORAGE_DIR}: {e}. Log persistence may fail.", exc_info=True)
-            current_app.logger.warning(f"Falling back to using log file in current directory: '.' due to error with {self.config.LOG_STORAGE_DIR}.")
             fallback_path = os.path.join('.', self.config.LOG_FILENAME)
-            current_app.logger.info(f"Fallback log file path is now: {fallback_path}")
+            # Only log if we have an app context
+            try:
+                current_app.logger.error(f"CRITICAL: Error creating log directory {self.config.LOG_STORAGE_DIR}: {e}. Log persistence may fail.", exc_info=True)
+                current_app.logger.warning(f"Falling back to using log file in current directory: '.' due to error with {self.config.LOG_STORAGE_DIR}.")
+                current_app.logger.info(f"Fallback log file path is now: {fallback_path}")
+            except RuntimeError:
+                # No app context yet, that's okay during initialization
+                print(f"CRITICAL: Error creating log directory {self.config.LOG_STORAGE_DIR}: {e}. Using fallback: {fallback_path}")
             return fallback_path
     
     def log_successful_roll(self, response, payload, geo_info):
@@ -65,7 +75,7 @@ class LoggingService:
         noun = self._get_noun(descriptor_words)
         
         # Build narrative
-        narrative = f"{article} {noun} from {city}, {region} rolled {roll_value} on {table_name}, resulting in: "{str(result_log).strip()}""
+        narrative = f"{article} {noun} from {city}, {region} rolled {roll_value} on {table_name}, resulting in: \"{str(result_log).strip()}\""
         
         # Add pending secondary roll note
         if response.get("isSecondaryPrompt") and not response.get("secondaryResultText"):

@@ -13,7 +13,11 @@ class DiceService:
     def resolve_roll(self, roll_value, table):
         """Resolve a roll value against a table"""
         if not isinstance(table, dict):
-            current_app.logger.warning(f"Invalid table to resolve_roll: {type(table)}")
+            try:
+                current_app.logger.warning(f"Invalid table to resolve_roll: {type(table)}")
+            except RuntimeError:
+                # No app context during testing, that's okay
+                pass
             raise InvalidTableError(f"Invalid table data: {type(table)}")
         
         try:
@@ -28,12 +32,20 @@ class DiceService:
                 if condition:
                     return result_text
         except (ValueError, TypeError) as e:
-            current_app.logger.error(f"Error resolving roll {roll_value}: {e}", exc_info=True)
+            try:
+                current_app.logger.error(f"Error resolving roll {roll_value}: {e}", exc_info=True)
+            except RuntimeError:
+                # No app context during testing, that's okay
+                pass
             raise InvalidRollValueError(f"Invalid roll value: {roll_value}") from e
         
         # No match found
         table_preview = str(table)[:200] + '...' if len(str(table)) > 200 else str(table)
-        current_app.logger.warning(f"No result for roll {roll_value} in table {table_preview}")
+        try:
+            current_app.logger.warning(f"No result for roll {roll_value} in table {table_preview}")
+        except RuntimeError:
+            # No app context during testing, that's okay
+            pass
         raise InvalidRollValueError(f"No result found for roll {roll_value} in the table")
     
     def roll_critical_hit(self, crit_source, damage_type, magic_subtype=None):
