@@ -9,6 +9,7 @@ from .services.roll_service import RollService
 from .services.logging_service import LoggingService
 from .routes.main import register_main_routes
 from .routes.api import register_api_routes
+from .routes.api_v1 import register_api_v1_routes
 
 def create_app(config_class=Config):
     """Application factory"""
@@ -33,6 +34,7 @@ def create_app(config_class=Config):
     # Register routes
     register_main_routes(app, roll_service)
     register_api_routes(app, logging_service)
+    register_api_v1_routes(app, roll_service, data_service, logging_service)
     
     return app
 

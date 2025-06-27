@@ -11,7 +11,21 @@ class DiceService:
         self.data_service = data_service
     
     def resolve_roll(self, roll_value, table):
-        """Resolve a roll value against a table"""
+        """
+        Resolve a roll value against a table
+        
+        Args:
+            roll_value: The dice roll result (int or string)
+            table: Dictionary mapping ranges/values to result strings
+                   e.g., {"1-5": "Minor", "6-10": "Major", "20": "Critical"}
+        
+        Returns:
+            str: The result text for the given roll value
+            
+        Raises:
+            InvalidTableError: If table format is invalid
+            InvalidRollValueError: If roll_value cannot be parsed or no match found
+        """
         if not isinstance(table, dict):
             try:
                 current_app.logger.warning(f"Invalid table to resolve_roll: {type(table)}")
@@ -22,11 +36,14 @@ class DiceService:
         
         try:
             val = int(roll_value)
+            # Iterate through table entries to find matching range or exact value
             for key, result_text in table.items():
                 if '-' in key:
+                    # Handle range entries like "1-5", "15-20"
                     start, end = map(int, key.split('-'))
                     condition = start <= val <= end
                 else:
+                    # Handle exact value entries like "20", "1"
                     condition = str(val) == key
                 
                 if condition:
