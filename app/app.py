@@ -6,8 +6,11 @@ import os
 import json
 import random
 from flask import Flask, render_template, request, jsonify, url_for
-import datetime # For timestamps in logs
-import ipaddress
+import datetime
+import sys
+import os
+sys.path.append(os.path.dirname(__file__))
+from security_utils import IPRedactor, rate_limiter, csrf_protection, error_handler
 
 app = Flask(__name__)
 
@@ -76,95 +79,42 @@ def load_json(filename):
 CRIT_DATA = load_json("critical_hits_master.json")
 FUMBLE_DATA = load_json("fumbles_master.json")
 
-# Initial data integrity checks (simplified for brevity in this example)
-if not CRIT_DATA: app.logger.warning("CRIT_DATA is empty or failed to load.")
-if not FUMBLE_DATA: app.logger.warning("FUMBLE_DATA is empty or failed to load.")
+# Initial data integrity checks
+if not CRIT_DATA: 
+    app.logger.warning("CRIT_DATA is empty or failed to load.")
+if not FUMBLE_DATA: 
+    app.logger.warning("FUMBLE_DATA is empty or failed to load.")
 
 
-# --- Geolocation Helper ---
+# --- Geolocation Helper (refactored to use security utilities) ---
 def get_geolocation(ip_address):
-    # This is the actual IP address used for the geolocation API call.
-    actual_ip_for_api = ip_address 
-
-    # This is the placeholder used for ALL logging messages to avoid sensitive data.
-    ip_display_for_logs = "[IP REDACTED]"
-
-    if not actual_ip_for_api: 
-        app.logger.debug("No IP address provided for geolocation.") # Use debug for common non-errors
-        return {"city": "an unknown void", "regionName": "the ether"}
-    
-    try:
-        ip_obj = ipaddress.ip_address(actual_ip_for_api)
-        if ip_obj.is_loopback: 
-            return {"city": "their cozy terminal", "regionName": "the local machine"}
-        if ip_obj.is_private: 
-            return {"city": "their local sanctum", "regionName": "the home network"}
-        if ip_obj in ipaddress.ip_network('100.64.0.0/10', strict=False): 
-            return {"city": "their secure Tailnet", "regionName": "a private dimension"}
-    except ValueError:
-        # Handle cases like "localhost" string which is not a valid IP for ipaddress module
-        if isinstance(actual_ip_for_api, str) and actual_ip_for_api.lower() == "localhost":
-            return {"city": "their cozy terminal", "regionName": "the local machine"}
-        # Log with the placeholder instead of the actual potentially invalid IP string
-        app.logger.warning(f"Invalid IP format for geolocation: {ip_display_for_logs}")
-        return {"city": "an unidentifiable nexus", "regionName": "a glitch in the matrix"}
-    
-    # For external API calls, the actual ip_address is still used.
-    try:
-        url = f"http://ip-api.com/json/{actual_ip_for_api}?fields=status,message,city,regionName,query"
-        response_geo = requests.get(url, timeout=3)
-        response_geo.raise_for_status()
-        data = response_geo.json()
-        
-        api_message = data.get('message', 'Unknown ip-api.com error')
-        # Sanitize api_message if it might contain the IP (ip-api.com puts the IP in the 'query' field of its response)
-        # and sometimes in the 'message' field for errors.
-        if data.get("query") and isinstance(api_message, str) and data.get("query") in api_message:
-            api_message = api_message.replace(data.get("query"), ip_display_for_logs)
-
-        if data.get("status") == "success":
-            return {"city": data.get("city", "unknown city"), "regionName": data.get("regionName", "uncharted territory")}
-        
-        # Log error with redacted IP
-        app.logger.warning(f"Geo API error for {ip_display_for_logs}: {api_message}")
-        return {"city": "parts unknown", "regionName": "mysterious land"}
-
-    except requests.exceptions.Timeout:
-        # Log error with redacted IP
-        app.logger.warning(f"Geo request timed out for {ip_display_for_logs}")
-        return {"city": "realm beyond reach", "regionName": "mists of time"}
-    except requests.exceptions.RequestException as e:
-        # Sanitize exception string if it's likely to contain the URL with the IP
-        error_message = str(e)
-        if isinstance(actual_ip_for_api, str) and actual_ip_for_api in error_message: # Check if the original IP is in the error string
-            error_message = error_message.replace(actual_ip_for_api, ip_display_for_logs)
-        # Log error with redacted IP
-        app.logger.warning(f"Error fetching geo for {ip_display_for_logs}: {error_message}")
-        return {"city": "digital realm", "regionName": "boundless interwebs"}
-    except json.JSONDecodeError:
-        # Log error with redacted IP
-        app.logger.warning(f"Failed to decode geo JSON for {ip_display_for_logs}")
-        return {"city": "garbled signal", "regionName": "static void"}
-    except Exception as e:
-        # Sanitize generic exception messages as well
-        error_message_generic = str(e)
-        if isinstance(actual_ip_for_api, str) and actual_ip_for_api in error_message_generic:
-             error_message_generic = error_message_generic.replace(actual_ip_for_api, ip_display_for_logs)
-        # Log error with redacted IP and stack trace
-        app.logger.error(f"Generic geo error for {ip_display_for_logs}: {error_message_generic}", exc_info=True)
-        return {"city": "place beyond perception", "regionName": "the void"}
+    """Get geolocation using the secure IPRedactor utility."""
+    return IPRedactor.get_geolocation(ip_address, app.logger)
 
 # --- Helper Functions ---
 def resolve_roll(roll_value, table):
-    if not isinstance(table, dict): app.logger.warning(f"Invalid table to resolve_roll: {type(table)}"); return "Invalid table data."
+    """Resolve a dice roll value against a table of results."""
+    if not isinstance(table, dict): 
+        app.logger.warning(f"Invalid table to resolve_roll: {type(table)}")
+        return "Invalid table data."
+    
     try:
         val = int(roll_value)
         for key, result_text in table.items():
-            if '-' in key: start, end = map(int, key.split('-')); شرط = start <= val <= end
-            else: شرط = str(val) == key
-            if شرط: return result_text
-    except (ValueError, TypeError) as e: app.logger.error(f"Error resolving roll {roll_value}: {e}", exc_info=True)
-    app.logger.warning(f"No result for roll {roll_value} in table {str(table)[:200] + '...' if len(str(table)) > 200 else table}")
+            if '-' in key: 
+                start, end = map(int, key.split('-'))
+                matches = start <= val <= end
+            else: 
+                matches = str(val) == key
+            
+            if matches: 
+                return result_text
+                
+    except (ValueError, TypeError) as e: 
+        app.logger.error(f"Error resolving roll {roll_value}: {e}", exc_info=True)
+    
+    table_preview = str(table)[:200] + '...' if len(str(table)) > 200 else str(table)
+    app.logger.warning(f"No result for roll {roll_value} in table {table_preview}")
     return "No result found for this roll in the table."
 
 
@@ -343,37 +293,144 @@ def index():
 
 @app.route('/roll', methods=['POST'])
 def roll_ajax():
-    p = request.get_json(); print(f"Roll payload: {p}") 
-    if not p: return jsonify({"status": "error", "errorMessage": "Invalid request data."}), 400
-    
-    # Extract IP, but ensure only 'ip' (the actual one) is passed to get_geolocation.
+    # Extract client IP for rate limiting and geolocation
     xff = request.headers.get('X-Forwarded-For')
     client_ip = xff.split(',')[0].strip() if xff else request.remote_addr
     
-    # Pass the actual client_ip to get_roll_result_and_log,
-    # and get_geolocation will handle internal redaction for logs.
+    # Apply rate limiting: 20 rolls per minute per IP
+    if not rate_limiter.is_allowed(client_ip, limit=20, window_minutes=1):
+        app.logger.warning(f"Rate limit exceeded for {IPRedactor.REDACTED_PLACEHOLDER}")
+        return jsonify(*error_handler.create_error_response(
+            "Rate limit exceeded. Please wait before making more requests.", 
+            429, 
+            "rate_limit"
+        ))
+    
+    # Validate request data
+    p = request.get_json()
+    app.logger.info(f"Roll request from {IPRedactor.REDACTED_PLACEHOLDER}: {p}")
+    
+    if not p: 
+        return jsonify(*error_handler.create_error_response("Invalid request data.", 400, "validation"))
+    
+    # Process the roll request
     return jsonify(get_roll_result_and_log(p, client_ip))
 
 @app.route('/share_discord', methods=['POST'])
-def share_discord(): 
-    url = os.environ.get('DISCORD_WEBHOOK_URL')
-    if not url: return jsonify({"status": "error", "error": "Webhook URL not configured."}), 500
-    p = request.get_json(); msg = p.get('message')
-    if not msg: return jsonify({"status": "error", "error": "No message content."}), 400
-    try: requests.post(url, json={'content': msg}).raise_for_status(); return jsonify({"status": "success"})
-    except Exception as e: app.logger.error(f"Discord send error: {e}"); return jsonify({"status": "error", "error": str(e)}), 500
+def share_discord():
+    # Extract client IP for rate limiting
+    xff = request.headers.get('X-Forwarded-For')
+    client_ip = xff.split(',')[0].strip() if xff else request.remote_addr
+    
+    # Apply rate limiting: 5 Discord shares per minute per IP
+    if not rate_limiter.is_allowed(client_ip, limit=5, window_minutes=1):
+        app.logger.warning(f"Discord share rate limit exceeded for {IPRedactor.REDACTED_PLACEHOLDER}")
+        return jsonify(*error_handler.create_error_response(
+            "Rate limit exceeded. Please wait before sharing again.", 
+            429, 
+            "rate_limit"
+        ))
+    
+    # Check if webhook is configured
+    webhook_url = os.environ.get('DISCORD_WEBHOOK_URL')
+    if not webhook_url: 
+        app.logger.error("Discord webhook URL not configured")
+        return jsonify({"status": "error", "error": "Discord sharing not configured."}), 500
+    
+    # Validate request data
+    payload = request.get_json()
+    if not payload or not payload.get('message'):
+        app.logger.warning(f"Invalid Discord share request from {IPRedactor.REDACTED_PLACEHOLDER}")
+        return jsonify({"status": "error", "error": "No message content provided."}), 400
+    
+    message = payload.get('message')
+    
+    # Basic message validation and sanitization
+    if len(message) > 2000:  # Discord's character limit
+        app.logger.warning(f"Discord message too long from {IPRedactor.REDACTED_PLACEHOLDER}")
+        return jsonify({"status": "error", "error": "Message too long for Discord."}), 400
+    
+    try:
+        # Send to Discord
+        response = requests.post(
+            webhook_url, 
+            json={'content': message}, 
+            timeout=10  # Add timeout for external request
+        )
+        response.raise_for_status()
+        
+        app.logger.info(f"Successful Discord share from {IPRedactor.REDACTED_PLACEHOLDER}")
+        return jsonify({"status": "success"})
+        
+    except requests.exceptions.Timeout:
+        app.logger.error("Discord webhook request timed out")
+        return jsonify({"status": "error", "error": "Discord service temporarily unavailable."}), 503
+        
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f"Discord webhook error: {e}")
+        return jsonify({"status": "error", "error": "Failed to send to Discord."}), 503
+        
+    except Exception as e:
+        app.logger.error(f"Unexpected Discord share error: {e}", exc_info=True)
+        return jsonify({"status": "error", "error": "An unexpected error occurred."}), 500
     
 @app.route('/get_roll_history', methods=['GET'])
-def get_roll_history(): 
-    logs = []
-    if not os.path.exists(NARRATIVE_LOG_FILE_PATH): return jsonify([])
+def get_roll_history():
+    """Get recent roll history with proper error handling and logging."""
+    # Extract client IP for rate limiting
+    xff = request.headers.get('X-Forwarded-For')
+    client_ip = xff.split(',')[0].strip() if xff else request.remote_addr
+    
+    # Apply rate limiting: 10 history requests per minute per IP
+    if not rate_limiter.is_allowed(client_ip, limit=10, window_minutes=1):
+        app.logger.warning(f"History rate limit exceeded for {IPRedactor.REDACTED_PLACEHOLDER}")
+        return jsonify({"status": "error", "message": "Rate limit exceeded."}), 429
+    
+    if not os.path.exists(NARRATIVE_LOG_FILE_PATH):
+        app.logger.debug("No history file found")
+        return jsonify([])
+    
     try:
-        with open(NARRATIVE_LOG_FILE_PATH, "r", encoding="utf-8") as lf: lines = lf.readlines()
+        logs = []
+        with open(NARRATIVE_LOG_FILE_PATH, "r", encoding="utf-8") as log_file:
+            lines = log_file.readlines()
+        
+        # Process last 50 entries
         for line in lines[-50:]:
-            try: entry = json.loads(line); logs.append({"ts": entry.get("timestamp"), "nar": entry.get("narrative")})
-            except: pass 
-        return jsonify(list(reversed([{"timestamp":l["ts"], "narrative":l["nar"]} for l in logs if l.get("nar")])))
-    except Exception as e: app.logger.error(f"History read error: {e}"); return jsonify({"status":"error","msg":"History fail."}),500
+            line = line.strip()
+            if not line:
+                continue
+                
+            try:
+                entry = json.loads(line)
+                timestamp = entry.get("timestamp")
+                narrative = entry.get("narrative")
+                
+                if timestamp and narrative:
+                    logs.append({
+                        "timestamp": timestamp, 
+                        "narrative": narrative
+                    })
+            except json.JSONDecodeError as json_error:
+                app.logger.warning(f"Invalid JSON in history line: {json_error}")
+                continue
+        
+        # Return in reverse chronological order (newest first)
+        result = list(reversed(logs))
+        app.logger.debug(f"Retrieved {len(result)} history entries for {IPRedactor.REDACTED_PLACEHOLDER}")
+        return jsonify(result)
+        
+    except FileNotFoundError:
+        app.logger.warning("History file not found during read")
+        return jsonify([])
+        
+    except PermissionError:
+        app.logger.error("Permission denied reading history file")
+        return jsonify({"status": "error", "message": "Unable to access history."}), 500
+        
+    except Exception as e:
+        app.logger.error(f"Unexpected error reading history: {e}", exc_info=True)
+        return jsonify({"status": "error", "message": "Error retrieving history."}), 500
 
 if __name__ == '__main__':
     app.run()
