@@ -776,6 +776,181 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   background-color: transparent;
 }
 
+/* Webhook Modal Specific Styles */
+.webhook-config-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.webhook-config-content p {
+  margin: 0;
+  text-align: center;
+  color: var(--clr-text);
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-group label {
+  font-weight: 600;
+  color: var(--clr-heading);
+  font-size: var(--font-size-form-elements);
+}
+
+.input-group input[type="url"] {
+  padding: 0.75rem;
+  border: 2px solid var(--clr-form-border);
+  border-radius: 4px;
+  background-color: var(--clr-bg);
+  color: var(--clr-text);
+  font-family: var(--font-body);
+  font-size: var(--font-size-form-elements);
+  transition: border-color 0.2s ease;
+}
+
+.input-group input[type="url"]:focus {
+  outline: none;
+  border-color: var(--clr-button-bg);
+  box-shadow: 0 0 0 2px rgba(166, 123, 91, 0.2);
+}
+
+.input-group small {
+  font-size: 0.85rem;
+  color: var(--clr-footer-text);
+  text-align: center;
+}
+
+.webhook-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primary-button, .secondary-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: var(--font-size-form-elements);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.primary-button {
+  background-color: var(--clr-button-bg);
+  color: var(--clr-button-text);
+}
+
+.primary-button:hover {
+  background-color: var(--clr-button-hover-bg);
+  transform: translateY(-2px);
+}
+
+.secondary-button {
+  background-color: transparent;
+  color: var(--clr-button-bg);
+  border: 2px solid var(--clr-button-bg);
+}
+
+.secondary-button:hover {
+  background-color: var(--clr-button-bg);
+  color: var(--clr-button-text);
+  transform: translateY(-2px);
+}
+
+#shareable-url-section {
+  background-color: rgba(76, 175, 80, 0.1);
+  border: 1px solid var(--clr-result-border);
+  border-radius: 4px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+#shareable-url-section h3 {
+  margin: 0 0 1rem 0;
+  color: var(--clr-result-heading);
+  font-size: 1.2rem;
+}
+
+.url-output-group {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.url-output-group input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 2px solid var(--clr-result-border);
+  border-radius: 4px;
+  background-color: var(--clr-bg);
+  color: var(--clr-text);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+
+.copy-button {
+  padding: 0.75rem 1rem;
+  background-color: var(--clr-result-bg);
+  color: var(--clr-result-heading);
+  border: 2px solid var(--clr-result-border);
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.copy-button:hover {
+  background-color: var(--clr-result-border);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Configure Discord Button Styles */
+.configure-webhook-btn {
+  background-color: var(--clr-button-bg);
+  color: var(--clr-button-text);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: var(--font-size-button-secondary);
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+.configure-webhook-btn:hover {
+  background-color: var(--clr-button-hover-bg);
+  transform: translateY(-2px);
+}
+
+.configure-webhook-btn.connected {
+  background-color: var(--clr-result-border);
+  color: white;
+}
+
+.configure-webhook-btn.connected:hover {
+  background-color: var(--clr-result-heading);
+}
+
+.configure-webhook-btn .discord-icon {
+  width: 20px;
+  height: 20px;
+}
+
 /* Close button for both modals */
 .modal-close-button {
   all: unset;
@@ -862,6 +1037,26 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   background-color: rgba(0, 0, 0, 0.05); /* light tap feedback */
 }
 
+/* Responsive styles for webhook modal */
+@media (max-width: 600px) {
+  .url-output-group {
+    flex-direction: column;
+  }
+  
+  .url-output-group input {
+    font-size: 0.8rem;
+  }
+  
+  .webhook-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .primary-button, .secondary-button {
+    width: 100%;
+  }
+}
+
 /* Dark mode for modals – leaving this here */
 @media (prefers-color-scheme: dark) {
   .modal-content,
@@ -891,6 +1086,28 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   .modal-close-button:focus {
     color: var(--clr-heading);
     transform: scale(1.1);
+  }
+
+  /* Webhook modal dark mode styles */
+  .input-group input[type="url"] {
+    background-color: var(--clr-card-bg);
+    border-color: var(--clr-form-border);
+    color: var(--clr-text);
+  }
+
+  .input-group input[type="url"]:focus {
+    border-color: var(--clr-button-bg);
+    box-shadow: 0 0 0 2px rgba(166, 123, 91, 0.3);
+  }
+
+  .url-output-group input {
+    background-color: var(--clr-card-bg);
+    color: var(--clr-text);
+  }
+
+  #shareable-url-section {
+    background-color: rgba(76, 175, 80, 0.15);
+    border-color: var(--clr-result-border);
   }
 
   #history-content li {

@@ -331,17 +331,22 @@ def share_discord():
             "rate_limit"
         ))
     
-    # Check if webhook is configured
-    webhook_url = os.environ.get('DISCORD_WEBHOOK_URL')
-    if not webhook_url: 
-        app.logger.error("Discord webhook URL not configured")
-        return jsonify({"status": "error", "error": "Discord sharing not configured."}), 500
-    
     # Validate request data
     payload = request.get_json()
     if not payload or not payload.get('message'):
         app.logger.warning(f"Invalid Discord share request from {IPRedactor.REDACTED_PLACEHOLDER}")
         return jsonify({"status": "error", "error": "No message content provided."}), 400
+    
+    # Check for webhook URL - from request payload or environment
+    webhook_url = payload.get('webhookUrl') or os.environ.get('DISCORD_WEBHOOK_URL')
+    if not webhook_url: 
+        app.logger.error("No Discord webhook URL provided")
+        return jsonify({"status": "error", "error": "No Discord webhook URL provided."}), 400
+    
+    # Basic webhook URL validation
+    if not webhook_url.startswith('https://discord.com/api/webhooks/') and not webhook_url.startswith('https://discordapp.com/api/webhooks/'):
+        app.logger.warning(f"Invalid Discord webhook URL format from {IPRedactor.REDACTED_PLACEHOLDER}")
+        return jsonify({"status": "error", "error": "Invalid Discord webhook URL format."}), 400
     
     message = payload.get('message')
     

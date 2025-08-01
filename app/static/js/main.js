@@ -3,6 +3,7 @@ import { playDiceSound, createRollHTML, formatKeywords, displayRollingAnimation 
 import { showInfoModal, hideInfoModal, fetchAndDisplayHistory, closeHistoryOverlay, setElementThatTriggeredModal } from './modals.js';
 import { toggleFields, updateDamageAndMagicTypes, toggleMagicDropdown, toggleAttackType } from './forms.js';
 import { initMuteButton } from './audio.js';
+import './webhook.js'; // Import webhook functionality
 
 // --- Global Elements ---
 const primaryRollBtn = document.getElementById('primary-roll-button');
@@ -273,6 +274,11 @@ function updateUI(data) {
 
 // --- Share to Discord Function ---
 async function shareResultToDiscord() {
+  // Check if webhook is configured
+  if (!window.webhookManager || !window.webhookManager.hasWebhook()) {
+    alert('Please configure your Discord webhook first by clicking "Configure Discord"');
+    return;
+  }
   let resultText = '';
   const primaryResultAreaDiv = document.getElementById('primary-result-area');
   const secondaryResultAreaDiv = document.getElementById('secondary-result-area');
@@ -382,11 +388,18 @@ async function shareResultToDiscord() {
   shareButton.innerHTML = `${discordIconHTML} <span class="button-text">Sharing...</span>`;
 
   try {
+      // Get webhook URL from webhook manager and send via server
+      const webhookUrl = window.webhookManager.getCurrentWebhookURL();
+      
       const response = await fetch(window.CF_CONFIG.shareDiscord, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({ message: resultText })
+          body: JSON.stringify({ 
+              message: resultText,
+              webhookUrl: webhookUrl 
+          })
       });
+      
       const responseData = await response.json();
       if (response.ok && responseData.status === 'success') {
           shareButton.innerHTML = `${discordIconHTML} <span class="button-text">Shared!</span>`;
