@@ -229,7 +229,9 @@ function updateUI(data) {
     }
 
     const isFinalResultShown = showSecondary || (showPrimary && !data.isSecondaryPrompt);
-    if (isFinalResultShown && data.status !== 'error') {
+    const hasWebhook = window.webhookManager && window.webhookManager.hasWebhook();
+    
+    if (isFinalResultShown && data.status !== 'error' && hasWebhook) {
         if (shareButton) {
             shareButton.style.display = 'inline-block';
             shareButton.disabled = false;

@@ -22,6 +22,9 @@ export class WebhookManager {
         const saveBtn = document.getElementById('save-webhook-button');
         const clearBtn = document.getElementById('clear-webhook-button');
         const copyBtn = document.getElementById('copy-url-button');
+        const useUrlBtn = document.getElementById('use-url-button');
+        const copyCurrentBtn = document.getElementById('copy-current-url-button');
+        const generateNewBtn = document.getElementById('generate-new-webhook-button');
         const overlay = document.getElementById('webhook-modal-overlay');
 
         if (configureBtn) {
@@ -42,6 +45,18 @@ export class WebhookManager {
         
         if (copyBtn) {
             copyBtn.addEventListener('click', () => this.copyShareableURL());
+        }
+        
+        if (useUrlBtn) {
+            useUrlBtn.addEventListener('click', () => this.useShareableURL());
+        }
+        
+        if (copyCurrentBtn) {
+            copyCurrentBtn.addEventListener('click', () => this.copyCurrentURL());
+        }
+        
+        if (generateNewBtn) {
+            generateNewBtn.addEventListener('click', () => this.generateNewWebhook());
         }
         
         if (overlay) {
@@ -114,16 +129,28 @@ export class WebhookManager {
 
     openWebhookModal() {
         const overlay = document.getElementById('webhook-modal-overlay');
+        const configMode = document.getElementById('webhook-config-mode');
+        const connectedMode = document.getElementById('webhook-connected-mode');
         const input = document.getElementById('webhook-url-input');
         
-        // Pre-fill with current webhook if available
-        if (this.currentWebhookUrl && input) {
-            input.value = this.currentWebhookUrl;
+        if (this.currentWebhookUrl) {
+            // Show connected mode
+            if (configMode) configMode.style.display = 'none';
+            if (connectedMode) connectedMode.style.display = 'block';
+        } else {
+            // Show configuration mode
+            if (configMode) configMode.style.display = 'block';
+            if (connectedMode) connectedMode.style.display = 'none';
+            
+            // Pre-fill with current webhook if available (shouldn't happen in this branch, but just in case)
+            if (input) {
+                input.value = this.currentWebhookUrl || '';
+            }
         }
         
         if (overlay) {
             overlay.classList.add('active');
-            if (input) {
+            if (!this.currentWebhookUrl && input) {
                 input.focus();
             }
         }
@@ -237,29 +264,138 @@ export class WebhookManager {
         }
     }
 
-    updateUI() {
-        const configureBtn = document.getElementById('configure-webhook-button');
-        const shareBtn = document.getElementById('share-discord-button');
+    useShareableURL() {
+        const output = document.getElementById('shareable-url-output');
+        const useBtn = document.getElementById('use-url-button');
         
-        if (this.currentWebhookUrl) {
-            // Webhook is configured - show as connected
-            if (configureBtn) {
-                const buttonText = configureBtn.querySelector('.button-text');
-                if (buttonText) {
-                    buttonText.textContent = 'Discord Connected';
+        if (!output || !output.value) return;
+        
+        // Update button to show loading state
+        if (useBtn) {
+            const originalText = useBtn.textContent;
+            useBtn.textContent = 'Loading...';
+            useBtn.disabled = true;
+        }
+        
+        // Close the modal first
+        this.closeWebhookModal();
+        
+        // Brief delay to let the modal close, then navigate
+        setTimeout(() => {
+            window.location.href = output.value;
+        }, 300);
+    }
+
+    async copyCurrentURL() {
+        const copyBtn = document.getElementById('copy-current-url-button');
+        
+        if (!this.currentWebhookUrl) {
+            console.error('No webhook URL available to copy');
+            return;
+        }
+        
+        // Generate the current shareable URL
+        const encodedWebhook = this.encodeWebhookURL(this.currentWebhookUrl);
+        if (!encodedWebhook) {
+            console.error('Failed to encode webhook URL');
+            return;
+        }
+        
+        const currentOrigin = window.location.origin;
+        const currentPath = window.location.pathname;
+        const shareableUrl = `${currentOrigin}${currentPath}#webhook=${encodedWebhook}`;
+        
+        console.log('Attempting to copy URL:', shareableUrl);
+        
+        try {
+            // Try modern clipboard API first
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(shareableUrl);
+                
+                if (copyBtn) {
+                    const originalText = copyBtn.textContent;
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(() => {
+                        copyBtn.textContent = originalText;
+                    }, 2000);
                 }
-                configureBtn.classList.add('connected');
+                return;
             }
-        } else {
-            // No webhook configured
-            if (configureBtn) {
-                const buttonText = configureBtn.querySelector('.button-text');
-                if (buttonText) {
-                    buttonText.textContent = 'Configure Discord';
+        } catch (error) {
+            console.log('Clipboard API failed, trying fallback:', error);
+        }
+        
+        // Fallback method - create temporary input element
+        try {
+            const tempInput = document.createElement('input');
+            tempInput.value = shareableUrl;
+            tempInput.style.position = 'absolute';
+            tempInput.style.left = '-9999px';
+            document.body.appendChild(tempInput);
+            
+            tempInput.select();
+            tempInput.setSelectionRange(0, tempInput.value.length);
+            
+            const successful = document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            
+            if (successful) {
+                if (copyBtn) {
+                    const originalText = copyBtn.textContent;
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(() => {
+                        copyBtn.textContent = originalText;
+                    }, 2000);
                 }
-                configureBtn.classList.remove('connected');
+            } else {
+                throw new Error('execCommand failed');
+            }
+        } catch (fallbackError) {
+            console.error('All copy methods failed:', fallbackError);
+            
+            // Final fallback - show the URL in an alert (not ideal but functional)
+            alert(`Copy failed. Please manually copy this URL:\n\n${shareableUrl}`);
+            
+            if (copyBtn) {
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copy failed';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
             }
         }
+    }
+
+    generateNewWebhook() {
+        const configMode = document.getElementById('webhook-config-mode');
+        const connectedMode = document.getElementById('webhook-connected-mode');
+        const input = document.getElementById('webhook-url-input');
+        
+        // Switch to configuration mode
+        if (configMode) configMode.style.display = 'block';
+        if (connectedMode) connectedMode.style.display = 'none';
+        
+        // Pre-fill with current webhook URL for editing
+        if (input && this.currentWebhookUrl) {
+            input.value = this.currentWebhookUrl;
+            input.focus();
+            input.select(); // Select all for easy replacement
+        }
+    }
+
+    updateUI() {
+        // Update status indicator dot
+        const statusDot = document.getElementById('discord-status-dot');
+        
+        if (statusDot) {
+            if (this.currentWebhookUrl) {
+                statusDot.classList.add('connected');
+            } else {
+                statusDot.classList.remove('connected');
+            }
+        }
+        
+        // The share button visibility is handled in main.js based on webhook status and results
     }
 
     getCurrentWebhookURL() {

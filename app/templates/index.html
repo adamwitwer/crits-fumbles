@@ -142,10 +142,6 @@
   <div id="secondary-result-area" style="display: none;" aria-live="polite"></div>
 
   <div class="share-container">
-    <button type="button" id="configure-webhook-button" class="configure-webhook-btn" aria-label="Configure Discord Webhook">
-      <img src="{{ url_for('static', filename='img/discord-icon.svg') }}" alt="Discord Logo" class="discord-icon">
-      <span class="button-text">Configure Discord</span>
-    </button>
     <button type="button" id="share-discord-button" style="display: none;">
       <img src="{{ url_for('static', filename='img/discord-icon.svg') }}" alt="Discord Logo" class="discord-icon">
       <span class="button-text">Share Result to Discord</span>
@@ -168,6 +164,17 @@
         data-tooltip="View the Chronicles"
         >
         📜 C&F Chronicles
+        </button>
+      | <button
+        id="configure-webhook-button"
+        class="discord-footer-button"
+        type="button"
+        aria-label="Configure Discord Webhook"
+        data-tooltip="Configure Discord sharing"
+        >
+        <span class="discord-status-indicator" id="discord-status-dot"></span>
+        <img src="{{ url_for('static', filename='img/discord-icon.svg') }}" alt="Discord Logo" class="discord-footer-icon">
+        Discord
         </button>
     </p>
   </footer>
@@ -198,34 +205,56 @@
 <div id="webhook-modal-overlay" class="modal-overlay">
   <div id="webhook-modal" class="modal-content" tabindex="-1" role="dialog" aria-modal="true">
     <button id="webhook-modal-close-button" class="modal-close-button" aria-label="Close modal"></button>
-    <h2>Configure Discord Webhook</h2>
-    <div class="webhook-config-content">
-      <p>Paste your Discord webhook URL below to enable sharing results directly to your server:</p>
-      
-      <div class="input-group">
-        <label for="webhook-url-input">Discord Webhook URL:</label>
-        <input 
-          type="url" 
-          id="webhook-url-input" 
-          placeholder="https://discord.com/api/webhooks/..." 
-          aria-describedby="webhook-help-text"
-        >
-        <small id="webhook-help-text">Need help? <a href="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks" target="_blank" rel="noopener">Learn how to create a Discord webhook</a></small>
-      </div>
-
-      <div class="webhook-actions">
-        <button type="button" id="save-webhook-button" class="primary-button">Save & Generate Link</button>
-        <button type="button" id="clear-webhook-button" class="secondary-button">Clear</button>
-      </div>
-
-      <div id="shareable-url-section" style="display: none;">
-        <h3>Shareable URL Generated!</h3>
-        <p>Share this URL with others so they can use your Discord webhook:</p>
-        <div class="url-output-group">
-          <input type="text" id="shareable-url-output" readonly>
-          <button type="button" id="copy-url-button" class="copy-button">Copy</button>
+    
+    <!-- Configuration Mode (when no webhook configured) -->
+    <div id="webhook-config-mode" class="webhook-modal-section">
+      <h2>Configure Discord Webhook</h2>
+      <div class="webhook-config-content">
+        <p>Paste your Discord webhook URL below to enable sharing results directly to your server:</p>
+        
+        <div class="input-group">
+          <label for="webhook-url-input">Discord Webhook URL:</label>
+          <input 
+            type="url" 
+            id="webhook-url-input" 
+            placeholder="https://discord.com/api/webhooks/..." 
+            aria-describedby="webhook-help-text"
+          >
+          <small id="webhook-help-text">Need help? <a href="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks" target="_blank" rel="noopener">Learn how to create a Discord webhook</a></small>
         </div>
-        <small>Anyone with this URL can post results to your Discord server. Keep it secure!</small>
+
+        <div class="webhook-actions">
+          <button type="button" id="save-webhook-button" class="primary-button">Save & Generate Link</button>
+          <button type="button" id="clear-webhook-button" class="secondary-button">Clear</button>
+        </div>
+
+        <div id="shareable-url-section" style="display: none;">
+          <h3>Shareable URL Generated!</h3>
+          <p>Share this URL with others so they can use your Discord webhook:</p>
+          <div class="url-output-group">
+            <input type="text" id="shareable-url-output" readonly>
+            <button type="button" id="copy-url-button" class="copy-button">Copy</button>
+          </div>
+          <div class="url-actions">
+            <button type="button" id="use-url-button" class="primary-button">Use This Link</button>
+          </div>
+          <small>Anyone with this URL can post results to your Discord server. Keep it secure!</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Connected Mode (when webhook is already configured) -->
+    <div id="webhook-connected-mode" class="webhook-modal-section" style="display: none;">
+      <h2>Discord Connected</h2>
+      <div class="webhook-config-content">
+        <p>✅ You're using a Discord webhook from a shareable URL!</p>
+        
+        <div class="connected-actions">
+          <button type="button" id="copy-current-url-button" class="primary-button">Copy Current Link</button>
+          <button type="button" id="generate-new-webhook-button" class="secondary-button">Generate New Link</button>
+        </div>
+        
+        <small>Current shareable URL is active and ready for sharing results.</small>
       </div>
     </div>
   </div>

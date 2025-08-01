@@ -602,6 +602,50 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   background-color: transparent;
 }
 
+.discord-footer-button {
+  all: unset;
+  display: inline-block;
+  position: relative; /* For status dot positioning */
+  color: var(--clr-link);
+  font-size: var(--font-size-footer);
+  cursor: pointer;
+  transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 0.8;
+}
+
+.discord-footer-button:hover,
+.discord-footer-button:focus {
+  outline: 1.5px solid var(--clr-button-outline);
+  outline-offset: 1.5px;
+  opacity: 1; 
+  background-color: transparent;
+}
+
+.discord-footer-icon {
+  width: 14px;
+  height: 14px;
+  vertical-align: text-bottom;
+  margin-right: 4px;
+  filter: brightness(0) saturate(100%) invert(21%) sepia(8%) saturate(1567%) hue-rotate(314deg) brightness(96%) contrast(93%);
+}
+
+.discord-status-indicator {
+  position: absolute;
+  top: -2px;
+  right: -6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ff4444; /* Red by default */
+  border: 1px solid var(--clr-bg);
+  transition: background-color 0.3s ease;
+  z-index: 1;
+}
+
+.discord-status-indicator.connected {
+  background-color: #44ff44; /* Green when connected */
+}
+
 .app-footer a {
   color: var(--clr-link);
   text-decoration: none;
@@ -884,6 +928,20 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   margin: 1rem 0;
 }
 
+.url-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.connected-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 2rem 0 1rem 0;
+}
+
 .url-output-group input {
   flex: 1;
   padding: 0.75rem;
@@ -914,42 +972,6 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   transform: translateY(-2px);
 }
 
-/* Configure Discord Button Styles */
-.configure-webhook-btn {
-  background-color: var(--clr-button-bg);
-  color: var(--clr-button-text);
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  font-family: var(--font-body);
-  font-size: var(--font-size-button-secondary);
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.2s ease;
-  margin-bottom: 1rem;
-}
-
-.configure-webhook-btn:hover {
-  background-color: var(--clr-button-hover-bg);
-  transform: translateY(-2px);
-}
-
-.configure-webhook-btn.connected {
-  background-color: var(--clr-result-border);
-  color: white;
-}
-
-.configure-webhook-btn.connected:hover {
-  background-color: var(--clr-result-heading);
-}
-
-.configure-webhook-btn .discord-icon {
-  width: 20px;
-  height: 20px;
-}
 
 /* Close button for both modals */
 .modal-close-button {
@@ -1253,6 +1275,24 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   .chronicles-button:focus {
     background-color: rgba(255, 255, 255, 0.08);
     color: var(--clr-bonus-border);
+  }
+
+  .discord-footer-button:hover,
+  .discord-footer-button:focus {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--clr-bonus-border);
+  }
+
+  .discord-footer-icon {
+    filter: brightness(0) saturate(100%) invert(73%) sepia(74%) saturate(1102%) hue-rotate(255deg) brightness(91%) contrast(95%);
+  }
+
+  .discord-status-indicator {
+    border-color: var(--clr-card-bg); /* Better contrast in dark mode */
+  }
+
+  .discord-status-indicator.connected {
+    background-color: #4ade80; /* Slightly different green for dark mode */
   }
 
   #share-discord-button:disabled {
