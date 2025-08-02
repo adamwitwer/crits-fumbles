@@ -132,6 +132,7 @@ export class WebhookManager {
         const configMode = document.getElementById('webhook-config-mode');
         const connectedMode = document.getElementById('webhook-connected-mode');
         const input = document.getElementById('webhook-url-input');
+        const mainContent = document.getElementById('main-content');
         
         if (this.currentWebhookUrl) {
             // Show connected mode
@@ -149,16 +150,35 @@ export class WebhookManager {
         }
         
         if (overlay) {
-            overlay.classList.add('active');
-            if (!this.currentWebhookUrl && input) {
-                input.focus();
+            // Set main content as inert to trap focus in modal
+            if (mainContent) {
+                mainContent.setAttribute('inert', '');
+                mainContent.setAttribute('aria-hidden', 'true');
             }
+            
+            // Also set body class to prevent scrolling and additional focus issues
+            document.body.classList.add('modal-open');
+            
+            overlay.classList.add('active');
+            
+            // Use requestAnimationFrame to reliably set focus
+            requestAnimationFrame(() => {
+                if (!this.currentWebhookUrl && input) {
+                    input.focus();
+                } else {
+                    // Focus on close button if in connected mode
+                    const closeBtn = document.getElementById('webhook-modal-close-button');
+                    if (closeBtn) closeBtn.focus();
+                }
+            });
         }
     }
 
     closeWebhookModal() {
         const overlay = document.getElementById('webhook-modal-overlay');
         const shareableSection = document.getElementById('shareable-url-section');
+        const useBtn = document.getElementById('use-url-button');
+        const mainContent = document.getElementById('main-content');
         
         if (overlay) {
             overlay.classList.remove('active');
@@ -167,6 +187,21 @@ export class WebhookManager {
         if (shareableSection) {
             shareableSection.style.display = 'none';
         }
+        
+        // Reset the "Use This Link" button state when closing modal
+        if (useBtn) {
+            useBtn.textContent = 'Use This Link';
+            useBtn.disabled = false;
+        }
+        
+        // Remove inert attribute to restore focus to main content
+        if (mainContent) {
+            mainContent.removeAttribute('inert');
+            mainContent.removeAttribute('aria-hidden');
+        }
+        
+        // Remove body class
+        document.body.classList.remove('modal-open');
     }
 
     saveWebhook() {

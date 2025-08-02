@@ -297,14 +297,15 @@ def roll_ajax():
     xff = request.headers.get('X-Forwarded-For')
     client_ip = xff.split(',')[0].strip() if xff else request.remote_addr
     
-    # Apply rate limiting: 20 rolls per minute per IP
-    if not rate_limiter.is_allowed(client_ip, limit=20, window_minutes=1):
-        app.logger.warning(f"Rate limit exceeded for {IPRedactor.REDACTED_PLACEHOLDER}")
-        return jsonify(*error_handler.create_error_response(
-            "Rate limit exceeded. Please wait before making more requests.", 
-            429, 
-            "rate_limit"
-        ))
+    # Apply rate limiting: 20 rolls per minute per IP (skip in development)
+    if not app.config.get('DISABLE_RATE_LIMITING', False):
+        if not rate_limiter.is_allowed(client_ip, limit=20, window_minutes=1):
+            app.logger.warning(f"Rate limit exceeded for {IPRedactor.REDACTED_PLACEHOLDER}")
+            return jsonify(*error_handler.create_error_response(
+                "Rate limit exceeded. Please wait before making more requests.", 
+                429, 
+                "rate_limit"
+            ))
     
     # Validate request data
     p = request.get_json()
@@ -322,14 +323,15 @@ def share_discord():
     xff = request.headers.get('X-Forwarded-For')
     client_ip = xff.split(',')[0].strip() if xff else request.remote_addr
     
-    # Apply rate limiting: 5 Discord shares per minute per IP
-    if not rate_limiter.is_allowed(client_ip, limit=5, window_minutes=1):
-        app.logger.warning(f"Discord share rate limit exceeded for {IPRedactor.REDACTED_PLACEHOLDER}")
-        return jsonify(*error_handler.create_error_response(
-            "Rate limit exceeded. Please wait before sharing again.", 
-            429, 
-            "rate_limit"
-        ))
+    # Apply rate limiting: 5 Discord shares per minute per IP (skip in development)
+    if not app.config.get('DISABLE_RATE_LIMITING', False):
+        if not rate_limiter.is_allowed(client_ip, limit=5, window_minutes=1):
+            app.logger.warning(f"Discord share rate limit exceeded for {IPRedactor.REDACTED_PLACEHOLDER}")
+            return jsonify(*error_handler.create_error_response(
+                "Rate limit exceeded. Please wait before sharing again.", 
+                429, 
+                "rate_limit"
+            ))
     
     # Validate request data
     payload = request.get_json()
@@ -337,8 +339,8 @@ def share_discord():
         app.logger.warning(f"Invalid Discord share request from {IPRedactor.REDACTED_PLACEHOLDER}")
         return jsonify({"status": "error", "error": "No message content provided."}), 400
     
-    # Check for webhook URL - from request payload or environment
-    webhook_url = payload.get('webhookUrl') or os.environ.get('DISCORD_WEBHOOK_URL')
+    # Check for webhook URL from request payload
+    webhook_url = payload.get('webhookUrl')
     if not webhook_url: 
         app.logger.error("No Discord webhook URL provided")
         return jsonify({"status": "error", "error": "No Discord webhook URL provided."}), 400
@@ -386,10 +388,11 @@ def get_roll_history():
     xff = request.headers.get('X-Forwarded-For')
     client_ip = xff.split(',')[0].strip() if xff else request.remote_addr
     
-    # Apply rate limiting: 10 history requests per minute per IP
-    if not rate_limiter.is_allowed(client_ip, limit=10, window_minutes=1):
-        app.logger.warning(f"History rate limit exceeded for {IPRedactor.REDACTED_PLACEHOLDER}")
-        return jsonify({"status": "error", "message": "Rate limit exceeded."}), 429
+    # Apply rate limiting: 10 history requests per minute per IP (skip in development)
+    if not app.config.get('DISABLE_RATE_LIMITING', False):
+        if not rate_limiter.is_allowed(client_ip, limit=10, window_minutes=1):
+            app.logger.warning(f"History rate limit exceeded for {IPRedactor.REDACTED_PLACEHOLDER}")
+            return jsonify({"status": "error", "message": "Rate limit exceeded."}), 429
     
     if not os.path.exists(NARRATIVE_LOG_FILE_PATH):
         app.logger.debug("No history file found")

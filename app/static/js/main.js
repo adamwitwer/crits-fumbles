@@ -492,25 +492,36 @@ function setupEventListeners() {
   document.addEventListener('keydown', (event) => {
       const infoModalOverlay = document.getElementById('info-modal-overlay');
       const historyOverlay = document.getElementById('history-overlay');
+      const webhookModalOverlay = document.getElementById('webhook-modal-overlay');
       const infoModal = document.getElementById('info-modal');
       const historyModal = document.getElementById('history-modal');
+      const webhookModal = document.getElementById('webhook-modal');
 
       const isInfoModalActive = infoModalOverlay.classList.contains('active');
       const isHistoryModalActive = historyOverlay.classList.contains('showing');
+      const isWebhookModalActive = webhookModalOverlay.classList.contains('active');
 
       if (event.key === 'Escape') {
           if (isInfoModalActive) hideInfoModal();
           if (isHistoryModalActive) closeHistoryOverlay();
+          if (isWebhookModalActive && window.webhookManager) window.webhookManager.closeWebhookModal();
       }
 
       if (event.key === 'Tab') {
           let activeModalContent = null;
           if (isInfoModalActive) activeModalContent = infoModal;
           else if (isHistoryModalActive) activeModalContent = historyModal;
+          else if (isWebhookModalActive) activeModalContent = webhookModal;
 
           if (activeModalContent) {
               const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-              const focusableElements = Array.from(activeModalContent.querySelectorAll(focusableSelector));
+              const allFocusableElements = Array.from(activeModalContent.querySelectorAll(focusableSelector));
+              
+              // Filter out elements that are hidden (display: none or visibility: hidden)
+              const focusableElements = allFocusableElements.filter(element => {
+                  const style = window.getComputedStyle(element);
+                  return style.display !== 'none' && style.visibility !== 'hidden';
+              });
               
               if (focusableElements.length === 0) return;
 

@@ -2,6 +2,15 @@
 
 A Flask-based web app for generating critical hit and fumble results in Dungeons & Dragons. A vibe coding project.
 
+## Features
+
+- **Multiple Roll Types**: Critical hits and fumbles from various sources
+- **Source Selection**: Choose from Sterling Vermin, Questionable Arcana, and u/BCoydog tables
+- **Discord Integration**: Share roll results directly to Discord servers via configurable webhook URLs
+- **Roll History**: View your previous rolls in the Chronicles
+- **Responsive Design**: Works on desktop and mobile devices
+- **Accessibility**: Screen reader support and keyboard navigation
+
 ## To Run Locally
 
 1. Clone the repository and navigate to the project folder.
@@ -9,10 +18,9 @@ A Flask-based web app for generating critical hit and fumble results in Dungeons
 
 ```
 FLASK_APP=app.app
-DISCORD_WEBHOOK_URL='YOUR_SECRET_WEBHOOK'
+FLASK_ENV=development
+FLASK_DEBUG=1
 ```
-
-If you want the Discord integration feature, add the webhook URL from your Discord server.
 
 3. Now to launch the app:
 
@@ -22,6 +30,22 @@ source venv/bin/activate
 pip install -r requirements.txt
 flask run
 ```
+
+## Usage
+
+1. **Select Roll Type**: Choose between Critical Hit or Fumble
+2. **Choose Source**: Pick your preferred source material  
+3. **Configure Options**: Select damage type, magic subtype, or attack type as needed
+4. **Roll**: Click the lightning bolt button to generate your result
+5. **Share to Discord** (optional): Configure a Discord webhook to share results directly to your server
+6. **View History**: Click "📜 C&F Chronicles" to see your roll history
+
+### Discord Integration
+
+Configure Discord sharing by clicking the Discord button in the footer:
+- Add your Discord webhook URL to enable sharing
+- Generate shareable URLs that allow others to post to your Discord server  
+- Share roll results directly to Discord with formatted messages
 
 ## Notes on the Sources
 

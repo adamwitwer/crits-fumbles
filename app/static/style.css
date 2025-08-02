@@ -631,10 +631,10 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
 
 .discord-status-indicator {
   position: absolute;
-  top: -2px;
-  right: -6px;
-  width: 6px;
-  height: 6px;
+  top: 5px;
+  right: -14px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background-color: #ff4444; /* Red by default */
   border: 1px solid var(--clr-bg);
@@ -825,6 +825,7 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  hyphens: none;
 }
 
 .webhook-config-content p {
