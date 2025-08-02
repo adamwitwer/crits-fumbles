@@ -276,7 +276,8 @@ button:active {
 #mute-button[data-tooltip]:hover::after,
 #crit-source-container button[data-tooltip]:hover::after, 
 #fumble-type-container button[data-tooltip]:hover::after,
-#show-history-button[data-tooltip]:hover::after {
+#show-history-button[data-tooltip]:hover::after,
+#configure-webhook-button[data-tooltip]:hover::after {
   content: attr(data-tooltip);
   position: absolute;
   top: -2.3em;
@@ -300,8 +301,8 @@ button:active {
   top: -1em;
   right: -6.5em;
 }
-#show-history-button[data-tooltip]:hover::after {
-  right: -3em;
+#show-history-button[data-tooltip]:hover::after,
+#configure-webhook-button[data-tooltip]:hover::after {
   text-shadow: none;
 }
 
@@ -1285,7 +1286,7 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   }
 
   .discord-footer-icon {
-    filter: brightness(0) saturate(100%) invert(73%) sepia(74%) saturate(1102%) hue-rotate(255deg) brightness(91%) contrast(95%);
+    filter: brightness(0) saturate(100%) invert(90%) sepia(79%) saturate(1848%) hue-rotate(307deg) brightness(114%) contrast(95%);
   }
 
   .discord-status-indicator {
