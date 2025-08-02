@@ -3,6 +3,7 @@ export class WebhookManager {
     constructor() {
         this.currentWebhookUrl = null;
         this.init();
+        this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
     init() {
@@ -160,6 +161,7 @@ export class WebhookManager {
             document.body.classList.add('modal-open');
             
             overlay.classList.add('active');
+            document.addEventListener('keydown', this.handleKeyDown);
             
             // Use requestAnimationFrame to reliably set focus
             requestAnimationFrame(() => {
@@ -202,6 +204,7 @@ export class WebhookManager {
         
         // Remove body class
         document.body.classList.remove('modal-open');
+        document.removeEventListener('keydown', this.handleKeyDown);
     }
 
     saveWebhook() {
@@ -417,6 +420,33 @@ export class WebhookManager {
             input.select(); // Select all for easy replacement
         }
     }
+
+    handleKeyDown(event) {
+    if (event.key !== 'Tab') return;
+
+    const modal = document.getElementById('webhook-modal');
+
+    // Modal must be active
+    const overlay = document.getElementById('webhook-modal-overlay');
+    if (!modal || !overlay.classList.contains('active')) return;
+
+    const focusableElements = Array.from(
+        modal.querySelectorAll(
+            'a[href], button:not([disabled]), textarea, input:not([disabled]), select, [tabindex]:not([tabindex="-1"])'
+        )
+    ).filter(el => el.offsetParent !== null); // Filter out hidden elements
+
+    if (focusableElements.length === 0) return;
+
+    const currentIndex = focusableElements.indexOf(document.activeElement);
+    let nextIndex = event.shiftKey ? currentIndex - 1 : currentIndex + 1;
+
+    if (nextIndex < 0) nextIndex = focusableElements.length - 1;
+    if (nextIndex >= focusableElements.length) nextIndex = 0;
+
+    event.preventDefault();
+    focusableElements[nextIndex].focus();
+   }
 
     updateUI() {
         // Update status indicator dot
