@@ -249,15 +249,26 @@
     </div>
 
     <!-- Connected Mode (when webhook is already configured) -->
-    <div id="webhook-connected-mode" class="webhook-modal-section" style="display: none;" tabindex="0">
-      <h2>Discord Connected 🔗</h2>
+    <div
+    id="webhook-connected-mode"
+    class="webhook-modal-section"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="webhook-connected-heading"
+    style="display: none;"
+    tabindex="-1"
+    >
+      <h2 id="webhook-connected-heading">Discord Connected 🔗</h2>
+
       <div class="webhook-config-content">
-        
         <div class="connected-actions">
-          <button type="button" id="copy-current-url-button" class="primary-button">Copy Current Link</button>
-          <button type="button" id="generate-new-webhook-button" class="secondary-button">Generate New Link</button>
+          <button type="button" id="copy-current-url-button" class="primary-button">
+            Copy Current Link
+          </button>
+          <button type="button" id="generate-new-webhook-button" class="secondary-button">
+            Generate New Link
+          </button>
         </div>
-        
       </div>
     </div>
   </div>

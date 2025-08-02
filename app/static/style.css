@@ -1063,6 +1063,35 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
 
 /* Responsive styles for webhook modal */
 @media (max-width: 600px) {
+  /* Fix modal overlay to prevent vertical expansion issues */
+  .modal-overlay {
+    align-items: center;
+    padding: 1rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Constrain modal content height and enable scrolling */
+  .modal-content {
+    max-height: calc(100vh - 2rem);
+    width: calc(100% - 2rem);
+    margin: 0 auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    min-height: auto;
+  }
+  
+  /* Ensure webhook modal sections don't exceed viewport */
+  .webhook-modal-section {
+    max-height: none;
+  }
+  
+  .webhook-config-content {
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+  
   .url-output-group {
     flex-direction: column;
   }
@@ -1074,10 +1103,35 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   .webhook-actions {
     flex-direction: column;
     align-items: stretch;
+    gap: 0.75rem;
   }
   
   .primary-button, .secondary-button {
     width: 100%;
+    padding: 0.875rem 1rem;
+  }
+  
+  /* Make shareable URL section more compact on mobile */
+  #shareable-url-section {
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+  
+  #shareable-url-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Ensure connected mode actions are accessible */
+  .connected-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1.5rem 0 1rem 0;
+  }
+  
+  /* Reduce header size on mobile to avoid close button collision */
+  .modal-content h2 {
+    font-size: 1.2rem;
   }
 }
 
