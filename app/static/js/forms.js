@@ -17,6 +17,9 @@ export function toggleAttackType() {
     } else if (selectedFumbleType === "BCoydog") {
       newOptions = [{ value: "melee", text: "Melee" }, { value: "ranged", text: "Ranged" }, { value: "magic", text: "Magic" }];
       attackTypeContainer.style.display = 'block';
+    } else if (selectedFumbleType === "Fury & Folly") {
+      newOptions = [{ value: "Physical", text: "Physical" }, { value: "Elemental", text: "Elemental" }, { value: "Magical", text: "Magical" }];
+      attackTypeContainer.style.display = 'block';
     } else {
       attackTypeContainer.style.display = 'none';
     }
@@ -66,48 +69,44 @@ export function toggleFields() {
   }
 }
 
+function damageTypeDisplayName(type) {
+  if (type.includes(':')) {
+    const suffix = type.split(':')[1];
+    return suffix.charAt(0).toUpperCase() + suffix.slice(1);
+  }
+  return type.charAt(0).toUpperCase() + type.slice(1);
+}
+
 export function updateDamageAndMagicTypes() {
   const critSource = document.getElementById('crit_source').value;
   const damageTypeSelect = document.getElementById('damage_type');
-  const magicSubtypeContainer = document.getElementById('magic-subtype');
-  const magicSubtypeSelect = document.getElementById('magic_subtype');
   damageTypeSelect.innerHTML = '';
-  magicSubtypeSelect.innerHTML = '';
-  magicSubtypeContainer.style.display = 'none';
   const sourceData = CONFIG.critSourceDamageTypes[critSource];
   if (sourceData) {
-    sourceData.options.forEach(type => {
-      const option = document.createElement('option');
-      option.value = type; 
-      option.textContent = type.charAt(0).toUpperCase() + type.slice(1); 
-      damageTypeSelect.appendChild(option);
-    });
-    toggleMagicDropdown(); 
+    if (sourceData.optgroups) {
+      for (const [groupLabel, types] of Object.entries(sourceData.optgroups)) {
+        const group = document.createElement('optgroup');
+        group.label = groupLabel;
+        types.forEach(type => {
+          const option = document.createElement('option');
+          option.value = type;
+          option.textContent = damageTypeDisplayName(type);
+          group.appendChild(option);
+        });
+        damageTypeSelect.appendChild(group);
+      }
+    } else {
+      sourceData.options.forEach(type => {
+        const option = document.createElement('option');
+        option.value = type;
+        option.textContent = damageTypeDisplayName(type);
+        damageTypeSelect.appendChild(option);
+      });
+    }
   } else {
     const option = document.createElement('option');
     option.value = "";
     option.textContent = "Select Crit Source";
     damageTypeSelect.appendChild(option);
-  }
-}
-
-export function toggleMagicDropdown() {
-  const critSource = document.getElementById('crit_source').value;
-  const damageType = document.getElementById('damage_type').value; 
-  const magicSubtypeContainer = document.getElementById('magic-subtype');
-  const magicSubtypeSelect = document.getElementById('magic_subtype');
-  magicSubtypeContainer.style.display = 'none';
-  magicSubtypeSelect.innerHTML = '';
-  if (critSource === "Sterling Vermin" && damageType === "magic") {
-    const sterlingVerminMagicSubtypes = CONFIG.critSourceDamageTypes["Sterling Vermin"].magicSubtypes;
-    if (sterlingVerminMagicSubtypes) {
-      for (const key in sterlingVerminMagicSubtypes) { 
-        const option = document.createElement('option');
-        option.value = key; 
-        option.textContent = sterlingVerminMagicSubtypes[key]; 
-        magicSubtypeSelect.appendChild(option);
-      }
-      magicSubtypeContainer.style.display = 'block';
-    }
   }
 }

@@ -145,16 +145,13 @@ def get_roll_result_and_log(payload, client_ip=None):
                 crit_source_from_payload = payload.get('critSource', 'Sterling Vermin')
                 response["selectedCritSource"] = crit_source_from_payload
 
-                if crit_source_from_payload in ["Questionable Arcana", "BCoydog"]:
+                if crit_source_from_payload in ["Questionable Arcana", "BCoydog", "Fury & Folly"]:
                     response["dieType"], response["numDice"], roll_value = "d100", 1, random.randint(1, 100)
                 else: # Sterling Vermin
                     response["dieType"], response["numDice"], roll_value = "d20", 1, random.randint(1, 20)
                 response["rollValue"] = roll_value
                 
-                crit_damage_key = (damage_type.lower().strip() if damage_type else None)
-                if crit_source_from_payload == 'Sterling Vermin':
-                    crit_damage_key = magic_subtype if damage_type == 'magic' else damage_type
-                    crit_damage_key = (crit_damage_key.lower().strip() if crit_damage_key else 'slashing')
+                crit_damage_key = (damage_type.lower().strip() if damage_type else 'slashing')
                 
                 source_tables = CRIT_DATA.get(crit_source_from_payload, {})
                 if not source_tables: response.update({"status": "error", "errorMessage": f"Invalid Crit source: {crit_source_from_payload}"})
@@ -168,7 +165,7 @@ def get_roll_result_and_log(payload, client_ip=None):
                             parts = res_text.split(" Effect: ", 1)
                             if len(parts) == 2: response["description"], response["effect"], response["resultText"] = parts[0].strip(), parts[1].strip(), None
                             else: response["description"], response["effect"], response["resultText"] = res_text, "Details not separated.", None
-                        elif crit_source_from_payload == "BCoydog" and isinstance(res_text, str):
+                        elif crit_source_from_payload in ["BCoydog", "Fury & Folly"] and isinstance(res_text, str):
                             parts = res_text.split(": ", 1)
                             if len(parts) == 2: response["description"], response["effect"], response["resultText"] = parts[0].strip(), parts[1].strip(), None
                             else: response["description"], response["effect"], response["resultText"] = res_text, "Details not separated.", None
@@ -197,13 +194,17 @@ def get_roll_result_and_log(payload, client_ip=None):
                     elif fumble_source_from_payload == 'BCoydog':
                         # BCoydog will receive 'melee', 'ranged', or 'magic' (lowercase) from frontend for attack_type
                         # These directly map to keys in fumbles_master.json for BCoydog
-                        key_to_use = attack_type.lower() if attack_type else None 
+                        key_to_use = attack_type.lower() if attack_type else None
                         if key_to_use not in ['melee', 'ranged', 'magic']: # Basic validation
                             app.logger.warning(f"Received unexpected attack_type '{attack_type}' for BCoydog fumble. Defaulting to general or error.")
                             # key_to_use might become None or rely on fallback logic if attack_type is invalid
                             # For robustness, if it's invalid, perhaps force an error or a specific fallback.
                             # For now, if it's not one of these, f_list might be empty and trigger error below.
                             pass # Let the existing fallback or error handling catch invalid keys
+                    elif fumble_source_from_payload == 'Fury & Folly':
+                        key_to_use = attack_type.lower() if attack_type else None
+                        if key_to_use not in ['physical', 'elemental', 'magical']:
+                            key_to_use = None
                     else:
                         response.update({"status": "error", "errorMessage": f"Fumble logic not defined for source: {fumble_source_from_payload}"})
                     # END BUG FIX MODIFICATION for fumble key selection
@@ -257,9 +258,6 @@ def get_roll_result_and_log(payload, client_ip=None):
         if roll_context == 'primary':
             if roll_type_from_payload == 'crit':
                 src = response.get("selectedCritSource", "?"); dmg_key = (payload.get('damageType') or "?").lower()
-                if src == 'Sterling Vermin':
-                    sv_sub = payload.get('magicSubtype'); sv_dmg = payload.get('damageType')
-                    dmg_key = (sv_sub if sv_dmg == 'magic' else sv_dmg or 'slashing').lower()
                 t_name = f"{src} Crit ({dmg_key.title()})"
                 res_log = response.get("description") + " Effect: " + response.get("effect") if response.get("description") and response.get("effect") else response.get("resultText", "N/A")
             elif roll_type_from_payload == 'fumble':
@@ -286,10 +284,10 @@ def index():
     sv_tables = CRIT_DATA.get('Sterling Vermin', {})
     dmg_types = sorted([k for k in sv_tables.keys() if not k.startswith('magic:')])
     magic_subs = sorted([k for k in sv_tables.keys() if k.startswith('magic:')])
-    return render_template('index.html', damage_types=dmg_types, magic_subtypes=magic_subs, 
-                           selected_damage_type="slashing", selected_roll_type="crit", 
-                           selected_crit_source="Sterling Vermin", selected_fumble_type="Questionable Arcana", 
-                           selected_attack_type="Weapon")
+    return render_template('index.html', damage_types=dmg_types, magic_subtypes=magic_subs,
+                           selected_damage_type="slashing", selected_roll_type="crit",
+                           selected_crit_source="Fury & Folly", selected_fumble_type="Fury & Folly",
+                           selected_attack_type="Physical")
 
 @app.route('/roll', methods=['POST'])
 def roll_ajax():

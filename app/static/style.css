@@ -357,9 +357,29 @@ button:active {
 }
 
 div.result-box[data-crit-source="BCoydog"] .description-box p,
-div.result-box[data-fumble-source="BCoydog"] .description-box p { 
+div.result-box[data-fumble-source="BCoydog"] .description-box p,
+div.result-box[data-crit-source="Fury & Folly"] .description-box p,
+div.result-box[data-fumble-source="Fury & Folly"] .description-box p {
   text-align: center;
   font-size: 1.5rem;
+}
+
+.condition-link {
+  font-weight: 700;
+  color: #3b2a20;
+  text-decoration: none;
+  background-image: linear-gradient(to right, var(--clr-heading), var(--clr-heading));
+  background-repeat: no-repeat;
+  background-size: 0% 2px;
+  background-position: 0 100%;
+  transition: background-size 0.3s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.condition-link:hover,
+.condition-link:focus {
+  color: var(--clr-button-hover-bg);
+  background-size: 100% 2px;
+  transform: translateY(-1px);
 }
 
 /* === Dice Animation & Shimmer Styles === */
@@ -1364,7 +1384,17 @@ div.result-box[data-fumble-source="BCoydog"] .description-box p {
   #share-discord-button[textContent="Shared!"] {
      background-color: #3BA55D;
   }
-  
+
+  .condition-link {
+    color: var(--clr-heading);
+    background-image: linear-gradient(to right, var(--clr-bonus-border), var(--clr-bonus-border));
+  }
+
+  .condition-link:hover,
+  .condition-link:focus {
+    color: var(--clr-bonus-border);
+  }
+
 } /* End Dark Mode */
 
 /* === Accessibility: Reduced Motion Support === */

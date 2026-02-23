@@ -33,11 +33,34 @@ export function createRollHTML(rollValue, numDice, dieType) {
   return html;
 }
 
+const CONDITION_URLS = {
+  'Blinded':       'https://www.dndbeyond.com/sources/dnd/br-2024/rules-glossary#BlindedCondition',
+  'Deafened':      'https://www.dndbeyond.com/sources/dnd/br-2024/rules-glossary#DeafenedCondition',
+  'Frightened':    'https://www.dndbeyond.com/sources/dnd/br-2024/rules-glossary#FrightenedCondition',
+  'Grappled':      'https://www.dndbeyond.com/sources/dnd/br-2024/rules-glossary#GrappledCondition',
+  'Incapacitated': 'https://www.dndbeyond.com/sources/dnd/br-2024/rules-glossary#IncapacitatedCondition',
+  'Paralyzed':     'https://www.dndbeyond.com/sources/dnd/br-2024/rules-glossary#ParalyzedCondition',
+  'Petrified':     'https://www.dndbeyond.com/sources/dnd/br-2024/rules-glossary#PetrifiedCondition',
+  'Poisoned':      'https://www.dndbeyond.com/sources/dnd/br-2024/rules-glossary#PoisonedCondition',
+  'Prone':         'https://www.dndbeyond.com/sources/dnd/br-2024/rules-glossary#ProneCondition',
+  'Restrained':    'https://www.dndbeyond.com/sources/dnd/br-2024/rules-glossary#RestrainedCondition',
+  'Stunned':       'https://www.dndbeyond.com/sources/dnd/br-2024/rules-glossary#StunnedCondition',
+  'Unconscious':   'https://www.dndbeyond.com/sources/dnd/br-2024/rules-glossary#UnconsciousCondition',
+};
+
+const CONDITION_PATTERN = new RegExp(
+  '\\b(' + Object.keys(CONDITION_URLS).join('|') + ')\\b', 'g'
+);
+
 export function formatKeywords(text) {
   if (!text) return "";
   const keywordClass = "keyword-prefix";
   let formattedText = text.replaceAll("Melee:", `<span class="${keywordClass}">Melee:</span>`);
   formattedText = formattedText.replaceAll("Ranged:", `<br><br><span class="${keywordClass}">Ranged:</span>`);
+  formattedText = formattedText.replace(CONDITION_PATTERN, (match) => {
+    const url = CONDITION_URLS[match];
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="condition-link">${match}</a>`;
+  });
   return formattedText;
 }
 

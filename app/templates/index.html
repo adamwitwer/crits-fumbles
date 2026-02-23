@@ -64,12 +64,13 @@
       class="info-icon"
       id="crit_source_info_icon"
       style="display: none;"
-      data-tooltip="About this crit type"
+      data-tooltip="About this Crit Type"
       aria-label="More info about this crit type"
       >
       ⓘ
       </button>
       <select name="crit_source" id="crit_source">
+        <option value="Fury & Folly" {% if selected_crit_source == 'Fury & Folly' %}selected{% endif %}>Fury & Folly</option>
         <option value="Sterling Vermin" {% if selected_crit_source == 'Sterling Vermin' %}selected{% endif %}>Sterling Vermin</option>
         <option value="Questionable Arcana" {% if selected_crit_source == 'Questionable Arcana' %}selected{% endif %}>Questionable Arcana</option>
         <option value="BCoydog" {% if selected_crit_source == 'BCoydog' %}selected{% endif %}>u/BCoydog</option>
@@ -78,12 +79,6 @@
         <div>
           <label for="damage_type">Damage Type</label>
           <select name="damage_type" id="damage_type">
-            {# Options populated by JavaScript #}
-          </select>
-        </div>
-        <div id="magic-subtype" style="display: none;">
-          <label for="magic_subtype">Magic Type</label>
-          <select name="magic_subtype" id="magic_subtype">
             {# Options populated by JavaScript #}
           </select>
         </div>
@@ -103,6 +98,7 @@
       ⓘ
       </button>
       <select id="fumbleType" name="fumbleType">
+        <option value="Fury & Folly" {% if selected_fumble_type == 'Fury & Folly' %}selected{% endif %}>Fury & Folly</option>
         <option value="Questionable Arcana" {% if selected_fumble_type == 'Questionable Arcana' %}selected{% endif %}>Questionable Arcana</option>
         <option value="BCoydog" {% if selected_fumble_type == 'BCoydog' %}selected{% endif %}>u/BCoydog</option>
       </select>

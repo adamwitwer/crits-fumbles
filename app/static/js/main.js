@@ -1,7 +1,7 @@
 // Main application logic - modularized version
 import { playDiceSound, createRollHTML, formatKeywords, displayRollingAnimation } from './utils.js';
 import { showInfoModal, hideInfoModal, fetchAndDisplayHistory, closeHistoryOverlay, setElementThatTriggeredModal } from './modals.js';
-import { toggleFields, updateDamageAndMagicTypes, toggleMagicDropdown, toggleAttackType } from './forms.js';
+import { toggleFields, updateDamageAndMagicTypes, toggleAttackType } from './forms.js';
 import { initMuteButton } from './audio.js';
 import './webhook.js'; // Import webhook functionality
 
@@ -46,15 +46,11 @@ async function handleRoll(context) {
     if (payload.rollType === 'crit') {
       payload.critSource = critSource;
       let selectedDamageType = document.getElementById('damage_type').value;
-      payload.damageType = selectedDamageType; 
+      payload.damageType = selectedDamageType;
 
-      if (critSource === "Sterling Vermin" && selectedDamageType === "magic") {
-        payload.magicSubtype = document.getElementById('magic_subtype').value; 
-      }
-      
-      if (critSource === "Questionable Arcana" || critSource === "BCoydog") {
-        dieTypeForAnim = 'd100'; 
-        numDiceForAnim = 1;      
+      if (critSource === "Questionable Arcana" || critSource === "BCoydog" || critSource === "Fury & Folly") {
+        dieTypeForAnim = 'd100';
+        numDiceForAnim = 1;
       } else { // Sterling Vermin crits
         dieTypeForAnim = 'd20';
         numDiceForAnim = 1;
@@ -139,8 +135,8 @@ function updateUI(data) {
     const actualNumDiceRolled = data.numDice || 1;
     const actualDieTypeRolled = data.dieType || 'd20';
 
-    if ((data.selectedRollType === 'fumble' || 
-         (data.selectedRollType === 'crit' && (data.selectedCritSource === 'Questionable Arcana' || data.selectedCritSource === 'BCoydog'))) &&
+    if ((data.selectedRollType === 'fumble' ||
+         (data.selectedRollType === 'crit' && (data.selectedCritSource === 'Questionable Arcana' || data.selectedCritSource === 'BCoydog' || data.selectedCritSource === 'Fury & Folly'))) &&
         data.description && data.effect && !data.secondaryResultText) {
         
         const formattedDescription = formatKeywords(data.description);
@@ -213,7 +209,7 @@ function updateUI(data) {
         
         document.getElementById('secondary-crit-source-hidden').value = data.selectedCritSource;
         document.getElementById('secondary-damage-type-hidden').value = data.original_damageType || document.getElementById('damage_type').value; 
-        document.getElementById('secondary-magic-subtype-hidden').value = data.original_magicSubtype || document.getElementById('magic_subtype').value; 
+        document.getElementById('secondary-magic-subtype-hidden').value = data.original_magicSubtype || '';
         
         let originalPrimaryText = data.resultText; 
         if (data.selectedRollType === 'crit' && data.description && data.effect) {
@@ -250,14 +246,14 @@ function updateUI(data) {
     primaryRollBtn.disabled = false; 
   }
 
-  primaryResultArea.innerHTML = DOMPurify.sanitize(primaryContent);
+  primaryResultArea.innerHTML = DOMPurify.sanitize(primaryContent, { ADD_ATTR: ['target'] });
   primaryResultArea.style.display = showPrimary ? 'block' : 'none';
   primaryResultArea.style.visibility = showPrimary ? 'visible' : 'hidden';
 
   secondaryPromptArea.style.display = showPrompt ? 'block' : 'none';
   secondaryPromptArea.style.visibility = showPrompt ? 'visible' : 'hidden';
 
-  secondaryResultArea.innerHTML = DOMPurify.sanitize(secondaryContent);
+  secondaryResultArea.innerHTML = DOMPurify.sanitize(secondaryContent, { ADD_ATTR: ['target'] });
   secondaryResultArea.style.display = showSecondary ? 'block' : 'none';
   secondaryResultArea.style.visibility = showSecondary ? 'visible' : 'hidden';
 
@@ -272,6 +268,24 @@ function updateUI(data) {
          elementToScrollTo.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }
+}
+
+// --- Discord Helpers ---
+function elementToDiscordText(el) {
+  if (!el) return '';
+  let result = '';
+  for (const node of el.childNodes) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      result += node.textContent;
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      if (node.tagName === 'A' && node.classList.contains('condition-link')) {
+        result += `[**${node.textContent}**](${node.getAttribute('href')})`;
+      } else {
+        result += elementToDiscordText(node);
+      }
+    }
+  }
+  return result;
 }
 
 // --- Share to Discord Function ---
@@ -320,27 +334,27 @@ async function shareResultToDiscord() {
       let critDescription = "";
       let critEffect = "";
 
-      if (critSource === "Questionable Arcana" || critSource === "BCoydog") {
-          critDescription = structuredDescP?.textContent.trim() || "N/A";
-          critEffect = structuredEffectP?.textContent.trim() || "N/A";
+      if (critSource === "Questionable Arcana" || critSource === "BCoydog" || critSource === "Fury & Folly") {
+          critDescription = elementToDiscordText(structuredDescP).trim() || "N/A";
+          critEffect = elementToDiscordText(structuredEffectP).trim() || "N/A";
           console.log("Share to Discord - Structured Crit Desc:", critDescription, "Effect:", critEffect);
           resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue ?? '?'}\n📖 **Description:** ${critDescription}\n\n⚠️ **Effect:** ${critEffect}`;
-      } else { 
-          const primaryText = primaryCritTextP?.textContent.trim() || "N/A";
+      } else {
+          const primaryText = elementToDiscordText(primaryCritTextP).trim() || "N/A";
           console.log("Share to Discord - Sterling Vermin Crit Result:", primaryText);
           resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue ?? '?'}\n⚠️ **Result:** ${primaryText}`;
       }
-      if (secondaryBonusEffectP && secondaryBonusEffectP.textContent.trim() && secondaryRollValue) {
-          const secondaryText = secondaryBonusEffectP.textContent.trim();
+      if (secondaryBonusEffectP && elementToDiscordText(secondaryBonusEffectP).trim() && secondaryRollValue) {
+          const secondaryText = elementToDiscordText(secondaryBonusEffectP).trim();
           console.log("Share to Discord - Bonus Effect:", secondaryText);
           resultText += `\n\n🎲 **Bonus Roll:** ${secondaryRollValue}\n✨ **Effect:** ${secondaryText}`;
       }
   } else if (rollType === 'fumble') {
       console.log("Share to Discord: Fumble path selected. Fumble Source:", fumbleSource);
       messagePrefix += `💀 **Fumble!** 💀\n\n`;
-      
-      const fumbleName = structuredDescP?.textContent.trim() || "N/A";
-      const fumbleEffect = structuredEffectP?.textContent.trim() || "N/A";
+
+      const fumbleName = elementToDiscordText(structuredDescP).trim() || "N/A";
+      const fumbleEffect = elementToDiscordText(structuredEffectP).trim() || "N/A";
 
       console.log("Share to Discord - Fumble Name Element:", structuredDescP);
       console.log("Share to Discord - Fumble Effect Element:", structuredEffectP);
@@ -429,7 +443,6 @@ function setupEventListeners() {
   // Get references to elements
   const rollTypeSelect = document.getElementById('roll_type');
   const critSourceSelect = document.getElementById('crit_source');
-  const damageTypeSelect = document.getElementById('damage_type');
   const fumbleTypeSelect = document.getElementById('fumbleType');
   const critSourceInfoIcon = document.getElementById('crit_source_info_icon');
   const fumbleTypeInfoIcon = document.getElementById('fumble_type_info_icon');
@@ -442,7 +455,6 @@ function setupEventListeners() {
   // Attach event listeners for forms
   if (rollTypeSelect) rollTypeSelect.addEventListener('change', toggleFields);
   if (critSourceSelect) critSourceSelect.addEventListener('change', updateDamageAndMagicTypes);
-  if (damageTypeSelect) damageTypeSelect.addEventListener('change', toggleMagicDropdown);
   if (fumbleTypeSelect) fumbleTypeSelect.addEventListener('change', toggleAttackType);
   if (primaryRollBtn) primaryRollBtn.addEventListener('click', () => handleRoll('primary'));
   if (secondaryRollBtn) secondaryRollBtn.addEventListener('click', () => handleRoll('secondary'));
