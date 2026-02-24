@@ -65,7 +65,6 @@ async function handleRoll(context) {
     payload.rollType = document.getElementById('secondary-roll-type-hidden').value;
     payload.primaryCritSource = document.getElementById('secondary-crit-source-hidden').value; 
     payload.primaryDamageType = document.getElementById('secondary-damage-type-hidden').value;
-    payload.primaryMagicSubtype = document.getElementById('secondary-magic-subtype-hidden').value;
     payload.primaryResultText = document.getElementById('secondary-primary-result-hidden').value;
     payload.primaryRollValue = document.getElementById('secondary-primary-roll-hidden').value;
     dieTypeForAnim = 'd20'; 
@@ -98,13 +97,6 @@ async function handleRoll(context) {
     console.error('Error during fetch or processing:', error);
     if (overlay) overlay.style.display = 'none';
     updateUI({status: 'error', errorMessage: 'Failed to get roll result: ' + error.message});
-  } finally {
-    primaryRollBtn.disabled = false;
-    if (!secondaryPromptArea.style.display || secondaryPromptArea.style.display === 'none' || secondaryPromptArea.style.visibility === 'hidden'){
-      secondaryRollBtn.disabled = true;
-    } else {
-      secondaryRollBtn.disabled = false; 
-    }
   }
 }
 
@@ -208,8 +200,7 @@ function updateUI(data) {
         document.getElementById('secondary-roll-type-hidden').value = data.secondaryType; 
         
         document.getElementById('secondary-crit-source-hidden').value = data.selectedCritSource;
-        document.getElementById('secondary-damage-type-hidden').value = data.original_damageType || document.getElementById('damage_type').value; 
-        document.getElementById('secondary-magic-subtype-hidden').value = data.original_magicSubtype || '';
+        document.getElementById('secondary-damage-type-hidden').value = data.original_damageType || document.getElementById('damage_type').value;
         
         let originalPrimaryText = data.resultText; 
         if (data.selectedRollType === 'crit' && data.description && data.effect) {
@@ -299,12 +290,8 @@ async function shareResultToDiscord() {
   const primaryResultAreaDiv = document.getElementById('primary-result-area');
   const secondaryResultAreaDiv = document.getElementById('secondary-result-area');
 
-  console.log("shareResultToDiscord called. primaryResultAreaDiv:", primaryResultAreaDiv);
-
   const primaryResultBoxDiv = primaryResultAreaDiv.querySelector('.result-box:not(.secondary)');
   const secondaryBonusEffectBoxDiv = secondaryResultAreaDiv.querySelector('.result-box.secondary');
-
-  console.log("primaryResultBoxDiv:", primaryResultBoxDiv);
 
   const primaryCritTextP = primaryResultBoxDiv?.querySelector('p:not(.description-box p)');
   const structuredDescP = primaryResultBoxDiv?.querySelector('.description-box p');
@@ -324,12 +311,9 @@ async function shareResultToDiscord() {
   } else if (fumbleSource && fumbleSource !== "null" && fumbleSource !== "undefined") { 
       rollType = 'fumble';
   }
-  console.log("Determined rollType:", rollType, "- Crit Source from data:", critSource, "- Fumble Source from data:", fumbleSource);
-
   let messagePrefix = "\n\u200b\n";
 
   if (rollType === 'crit') {
-      console.log("Share to Discord: Crit path selected.");
       messagePrefix += `💥 **Critical Hit!** 💥\n\n`;
       let critDescription = "";
       let critEffect = "";
@@ -337,37 +321,25 @@ async function shareResultToDiscord() {
       if (critSource === "Questionable Arcana" || critSource === "BCoydog" || critSource === "Fury & Folly") {
           critDescription = elementToDiscordText(structuredDescP).trim() || "N/A";
           critEffect = elementToDiscordText(structuredEffectP).trim() || "N/A";
-          console.log("Share to Discord - Structured Crit Desc:", critDescription, "Effect:", critEffect);
           resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue ?? '?'}\n📖 **Description:** ${critDescription}\n\n⚠️ **Effect:** ${critEffect}`;
       } else {
           const primaryText = elementToDiscordText(primaryCritTextP).trim() || "N/A";
-          console.log("Share to Discord - Sterling Vermin Crit Result:", primaryText);
           resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue ?? '?'}\n⚠️ **Result:** ${primaryText}`;
       }
       if (secondaryBonusEffectP && elementToDiscordText(secondaryBonusEffectP).trim() && secondaryRollValue) {
           const secondaryText = elementToDiscordText(secondaryBonusEffectP).trim();
-          console.log("Share to Discord - Bonus Effect:", secondaryText);
           resultText += `\n\n🎲 **Bonus Roll:** ${secondaryRollValue}\n✨ **Effect:** ${secondaryText}`;
       }
   } else if (rollType === 'fumble') {
-      console.log("Share to Discord: Fumble path selected. Fumble Source:", fumbleSource);
       messagePrefix += `💀 **Fumble!** 💀\n\n`;
 
       const fumbleName = elementToDiscordText(structuredDescP).trim() || "N/A";
       const fumbleEffect = elementToDiscordText(structuredEffectP).trim() || "N/A";
 
-      console.log("Share to Discord - Fumble Name Element:", structuredDescP);
-      console.log("Share to Discord - Fumble Effect Element:", structuredEffectP);
-      console.log("Share to Discord - Fumble Name Value:", fumbleName);
-      console.log("Share to Discord - Fumble Effect Value:", fumbleEffect);
-      
       resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue ?? '?'}\n😩 **Fumble:** ${fumbleName}\n\n⚠️ **Effect:** ${fumbleEffect}`;
-  } else {
-      console.log("Share to Discord: rollType is null or undefined. Neither crit nor fumble path taken for main content.");
   }
       
   if (!resultText || (resultText.includes('N/A') && !resultText.replace(/N\/A/g, '').replace(messagePrefix, '').trim())) {
-      console.log("Share to Discord: Entering fallback logic for resultText construction.");
       const tempPrimaryText = primaryResultAreaDiv.textContent.replace(/(\n|\r|\s{2,})/g, ' ').replace(/Effect/g, '\nEffect').trim();
       const tempSecondaryText = secondaryResultAreaDiv.textContent.replace(/(\n|\r|\s{2,})/g, ' ').trim();
       
@@ -394,8 +366,6 @@ async function shareResultToDiscord() {
           return;
       }
   }
-  
-  console.log("Final resultText for Discord:", resultText);
   
   const discordIconHTML = shareButton.querySelector('.discord-icon')?.outerHTML || '';
   const originalButtonHTML = shareButton.innerHTML; 
@@ -500,18 +470,20 @@ function setupEventListeners() {
       });
   }
   
+  // Cache modal elements for keydown handler
+  const infoModalOverlayEl = document.getElementById('info-modal-overlay');
+  const historyOverlayEl = document.getElementById('history-overlay');
+  const webhookModalOverlayEl = document.getElementById('webhook-modal-overlay');
+  const infoModalEl = document.getElementById('info-modal');
+  const historyModalEl = document.getElementById('history-modal');
+  const webhookModalEl = document.getElementById('webhook-modal');
+
   // Global keyboard listener for modal control (Escape key and Focus Trapping)
   document.addEventListener('keydown', (event) => {
-      const infoModalOverlay = document.getElementById('info-modal-overlay');
-      const historyOverlay = document.getElementById('history-overlay');
-      const webhookModalOverlay = document.getElementById('webhook-modal-overlay');
-      const infoModal = document.getElementById('info-modal');
-      const historyModal = document.getElementById('history-modal');
-      const webhookModal = document.getElementById('webhook-modal');
 
-      const isInfoModalActive = infoModalOverlay.classList.contains('active');
-      const isHistoryModalActive = historyOverlay.classList.contains('showing');
-      const isWebhookModalActive = webhookModalOverlay.classList.contains('active');
+      const isInfoModalActive = infoModalOverlayEl.classList.contains('active');
+      const isHistoryModalActive = historyOverlayEl.classList.contains('showing');
+      const isWebhookModalActive = webhookModalOverlayEl.classList.contains('active');
 
       if (event.key === 'Escape') {
           if (isInfoModalActive) hideInfoModal();
@@ -521,9 +493,9 @@ function setupEventListeners() {
 
       if (event.key === 'Tab') {
           let activeModalContent = null;
-          if (isInfoModalActive) activeModalContent = infoModal;
-          else if (isHistoryModalActive) activeModalContent = historyModal;
-          else if (isWebhookModalActive) activeModalContent = webhookModal;
+          if (isInfoModalActive) activeModalContent = infoModalEl;
+          else if (isHistoryModalActive) activeModalContent = historyModalEl;
+          else if (isWebhookModalActive) activeModalContent = webhookModalEl;
 
           if (activeModalContent) {
               const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
@@ -557,8 +529,8 @@ function setupEventListeners() {
 }
 
 // --- Initial Setup on Load ---
-window.onload = function() {
+document.addEventListener('DOMContentLoaded', () => {
   setupEventListeners();
   initMuteButton();
   toggleFields(); // Initial setup
-};
+});

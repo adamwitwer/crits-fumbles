@@ -14,21 +14,16 @@
     
     <title>Crits & Fumbles</title>
     
-    <!-- to help with "cold start"-->
-    <link rel="prefetch"
+    <!-- preload dice assets for responsive first roll -->
+    <link rel="preload"
       href="{{ url_for('static', filename='img/d20.webp') }}"
       as="image"
       type="image/webp">
 
-    <link rel="prefetch"
+    <link rel="preload"
       href="{{ url_for('static', filename='img/d10.webp') }}"
       as="image"
       type="image/webp">
-
-    <link rel="prefetch"
-      href="{{ url_for('static', filename='sounds/dice-roll.mp3') }}"
-      as="audio"
-      type="audio/mpeg">
 
     <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" sizes="any" type="image/svg+xml">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" sizes="48x48">
@@ -123,14 +118,13 @@
 
   </form>
 
-  <div id="error-message" style="display: none; color: red; text-align: center; margin: 1rem 0;"></div>
+  <div id="error-message" role="alert" style="display: none; color: red; text-align: center; margin: 1rem 0;"></div>
   <div id="primary-result-area" style="display: none;" role="region" aria-live="polite" aria-atomic="true"></div>
   <div id="secondary-prompt-area" style="display: none;" class="bonus-alert">
       <h2 id="secondary-prompt-text"></h2>
       <input type="hidden" id="secondary-roll-type-hidden">
       <input type="hidden" id="secondary-crit-source-hidden">
       <input type="hidden" id="secondary-damage-type-hidden">
-      <input type="hidden" id="secondary-magic-subtype-hidden">
       <input type="hidden" id="secondary-primary-result-hidden">
       <input type="hidden" id="secondary-primary-roll-hidden">
       <button type="button" id="secondary-roll-button" aria-label="Roll dice for bonus effect">⚡️ Roll Bonus ⚡️</button>
@@ -150,18 +144,28 @@
   </audio>
   
   <footer class="app-footer" role="contentinfo">
-    <p><a href="https://github.com/adamwitwer/crits-fumbles" target="_blank" rel="noopener" aria-label="GitHub Repository">
-      <svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 0C5.37 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.17c-3.338.726-4.033-1.416-4.033-1.416-.546-1.386-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.776.42-1.304.762-1.603-2.665-.305-5.466-1.334-5.466-5.933 0-1.31.47-2.38 1.235-3.22-.124-.303-.535-1.527.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.98-.399 3-.404 1.02.005 2.043.138 3 .404 2.29-1.552 3.296-1.23 3.296-1.23.653 1.649.242 2.873.118 3.176.767.84 1.233 1.91 1.233 3.22 0 4.61-2.804 5.625-5.475 5.922.43.37.823 1.103.823 2.222v3.293c0 .322.218.694.825.576C20.565 21.796 24 17.298 24 12c0-6.627-5.373-12-12-12z" /></svg></a>
-      | <button
+    <p class="footer-links">
+      <a href="https://github.com/adamwitwer/crits-fumbles" target="_blank" rel="noopener" aria-label="GitHub Repository">
+        <svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M12 0C5.37 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.17c-3.338.726-4.033-1.416-4.033-1.416-.546-1.386-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.776.42-1.304.762-1.603-2.665-.305-5.466-1.334-5.466-5.933 0-1.31.47-2.38 1.235-3.22-.124-.303-.535-1.527.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.98-.399 3-.404 1.02.005 2.043.138 3 .404 2.29-1.552 3.296-1.23 3.296-1.23.653 1.649.242 2.873.118 3.176.767.84 1.233 1.91 1.233 3.22 0 4.61-2.804 5.625-5.475 5.922.43.37.823 1.103.823 2.222v3.293c0 .322.218.694.825.576C20.565 21.796 24 17.298 24 12c0-6.627-5.373-12-12-12z" />
+        </svg>
+      </a>
+      
+      <span class="footer-separator" aria-hidden="true">|</span>
+
+      <button
         id="show-history-button"
         class="chronicles-button"
         type="button"
         aria-label="View Crits & Fumbles Chronicles"
         data-tooltip="View the Chronicles"
         >
-        📜 C&F Chronicles
-        </button>
-      | <button
+        C&F Chronicles
+      </button>
+      
+      <span class="footer-separator" aria-hidden="true">|</span>
+
+      <button
         id="configure-webhook-button"
         class="discord-footer-button"
         type="button"
@@ -176,17 +180,17 @@
           </g>
         </svg>
         Discord
-        </button>
+      </button>
     </p>
   </footer>
 </main>
   
-<div id="dice-animation-overlay">
+<div id="dice-animation-overlay" role="status" aria-label="Rolling dice">
     <div class="rolling-animation-container"></div>
 </div>
 
 <div id="info-modal-overlay" class="modal-overlay">
-  <div id="info-modal" class="modal-content" tabindex="-1" role="dialog" aria-modal="true">
+  <div id="info-modal" class="modal-content" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="info-modal-title">
     <button id="info-modal-close-button" class="modal-close-button" aria-label="Close modal"></button>
     <h2 id="info-modal-title">Source Information</h2>
     <p id="info-modal-text" tabindex="0">Information will appear here.</p>
@@ -194,9 +198,9 @@
 </div>
 
 <div id="history-overlay">
-  <div id="history-modal" tabindex="-1" role="dialog" aria-modal="true">
+  <div id="history-modal" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="history-modal-title">
     <div class="history-header">
-      <h2>Chronicles</h2>
+      <h2 id="history-modal-title">Chronicles</h2>
     </div>
     <div id="history-content" tabindex="0"></div>
     <button id="close-history-modal" class="modal-close-button" aria-label="Close Chronicles"></button>
@@ -248,11 +252,7 @@
     <div
     id="webhook-connected-mode"
     class="webhook-modal-section"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="webhook-connected-heading"
     style="display: none;"
-    tabindex="-1"
     >
       <h2 id="webhook-connected-heading">Discord Connected 🔗</h2>
 

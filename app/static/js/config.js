@@ -9,7 +9,6 @@ export const CONFIG = {
         "magic:lightning", "magic:necrotic", "magic:poison",
         "magic:psychic", "magic:radiant", "magic:thunder"
       ],
-      magicSubtypes: {},
       optgroups: {
         "Physical": ["bludgeoning", "piercing", "slashing"],
         "Magic": [
@@ -19,15 +18,14 @@ export const CONFIG = {
         ]
       }
     },
-    "Questionable Arcana": { options: ["weapon", "spell"], magicSubtypes: {} },
-    "BCoydog": { options: ["melee", "ranged", "magic"], magicSubtypes: {} },
+    "Questionable Arcana": { options: ["weapon", "spell"] },
+    "BCoydog": { options: ["melee", "ranged", "magic"] },
     "Fury & Folly": {
       options: [
         "bludgeoning", "slashing", "piercing",
         "acid", "cold", "fire", "lightning", "thunder",
         "force", "necrotic", "poison", "psychic", "radiant"
       ],
-      magicSubtypes: {},
       optgroups: {
         "Physical":  ["bludgeoning", "slashing", "piercing"],
         "Elemental": ["acid", "cold", "fire", "lightning", "thunder"],

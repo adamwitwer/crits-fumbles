@@ -66,19 +66,9 @@ export function formatKeywords(text) {
 
 export function displayRollingAnimation(dieType, numDice) {
   const overlay = document.getElementById('dice-animation-overlay');
-  // The container is now guaranteed to exist; helps with cold start.
   const animContainer = overlay.querySelector('.rolling-animation-container');
-  
-  // Clear contents before adding new dice.
-  animContainer.innerHTML = ''; 
-  
-  if (!animContainer) {
-    animContainer = document.createElement('div');
-    animContainer.classList.add('rolling-animation-container');
-    overlay.appendChild(animContainer);
-  } else {
-    animContainer.innerHTML = '';
-  }
+  animContainer.innerHTML = '';
+
   let actualNumDiceForAnim = numDice;
   let actualDieTypeForAnim = dieType;
   if (dieType === 'd100' && numDice === 1) { 

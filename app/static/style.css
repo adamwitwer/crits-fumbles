@@ -22,6 +22,7 @@
   --clr-border-subtle: #eee;
   /* Cards & Forms */
   --clr-card-bg: rgba(250, 245, 230, 0.8); /* changed for dragon */
+  --clr-card-border: #d4c5a9;
   --clr-form-border: #bbb;
   /* Buttons */
   --clr-button-bg: #a67b5b;
@@ -214,7 +215,7 @@ select {
   color: var(--clr-text); /* Explicitly set text color using the variable; otherwise, the text is blue in iOS */
 }
 
-#magic-subtype, #attack-type-container, #crit-fields {
+#attack-type-container, #crit-fields {
   margin-top: 0.5em;
 }
 
@@ -574,20 +575,6 @@ div.result-box[data-fumble-source="Fury & Folly"] .description-box p {
   opacity: 0.7;
 }
 
-/* Specific visual states during/after sharing */
-#share-discord-button:disabled[textContent="Sharing..."] {
-  background-color: #5865F2;
-  color: var(--clr-button-text); /* Ensure text is visible */
-  opacity: 0.9;
-  cursor: default;
-}
-#share-discord-button[textContent="Shared!"] {
-  background-color: #3BA55D; /* Discord green for success feedback */
-  color: var(--clr-button-text);
-  cursor: default;
-  opacity: 1;
-}
-
 /* === Footer Styles === */
 
 .app-footer {
@@ -625,7 +612,8 @@ div.result-box[data-fumble-source="Fury & Folly"] .description-box p {
 
 .discord-footer-button {
   all: unset;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center; 
   position: relative; /* For status dot positioning */
   color: var(--clr-link);
   font-size: var(--font-size-footer);
@@ -640,14 +628,14 @@ div.result-box[data-fumble-source="Fury & Folly"] .description-box p {
   outline-offset: 1.5px;
   opacity: 1; 
   background-color: transparent;
+  color: var(--clr-heading);
 }
 
 .discord-footer-icon {
   width: 14px;
   height: 14px;
-  vertical-align: text-bottom;
-  margin-right: 4px;
-  filter: brightness(0) saturate(100%) invert(21%) sepia(8%) saturate(1567%) hue-rotate(314deg) brightness(96%) contrast(93%);
+  margin-right: 8px;
+  fill: currentColor;
 }
 
 .discord-status-indicator {
@@ -691,6 +679,19 @@ div.result-box[data-fumble-source="Fury & Folly"] .description-box p {
   padding-bottom: 0.2em;
 }
 
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.footer-separator {
+  opacity: 0.7;
+  user-select: none;
+  pointer-events: none;
+}
+
 /* === Modals === */
 
 /* Overlay for info */
@@ -723,14 +724,13 @@ div.result-box[data-fumble-source="Fury & Folly"] .description-box p {
   hyphens: auto;
   padding: 25px;
   border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 0 12px rgba(255, 248, 220, 0.1);
   max-width: 500px;
   width: 85%;
   position: relative;
   opacity: 0;
   transform: translateY(-20px);
   transition: transform 0.3s ease, opacity 0.3s ease;
-  box-shadow: 0 0 12px rgba(255, 248, 220, 0.1);
 }
 .modal-overlay.active .modal-content {
   transform: translateY(0);
@@ -1071,7 +1071,7 @@ div.result-box[data-fumble-source="Fury & Folly"] .description-box p {
 .info-icon:focus,
 .info-icon:hover {
   outline: 1.5px solid var(--clr-button-outline);
-  outline-offset: 1.5   px;
+  outline-offset: 1.5px;
   opacity: 1; /* Emphasize focus visually */
   background-color: transparent;
 }
@@ -1359,10 +1359,6 @@ div.result-box[data-fumble-source="Fury & Folly"] .description-box p {
     color: var(--clr-bonus-border);
   }
 
-  .discord-footer-icon {
-    filter: brightness(0) saturate(100%) invert(90%) sepia(79%) saturate(1848%) hue-rotate(307deg) brightness(114%) contrast(95%);
-  }
-
   .discord-status-indicator {
     border-color: var(--clr-card-bg); /* Better contrast in dark mode */
   }
@@ -1374,15 +1370,6 @@ div.result-box[data-fumble-source="Fury & Folly"] .description-box p {
   #share-discord-button:disabled {
      background-color: #4f545c;
      color: #7b7b7b;
-  }
-
-  #share-discord-button:disabled[textContent="Sharing..."] {
-     background-color: #5865F2;
-     opacity: 0.9;
-  }
-  
-  #share-discord-button[textContent="Shared!"] {
-     background-color: #3BA55D;
   }
 
   .condition-link {

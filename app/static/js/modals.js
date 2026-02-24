@@ -76,7 +76,7 @@ export async function fetchAndDisplayHistory() {
     console.error('Error fetching roll history:', error);
     historyContent.innerHTML = '<p>Could not load roll history. Please try again later.</p>';
   } finally {
-    mainContent.setAttribute('aria-hidden', 'true'); // Hide background
+    mainContent.setAttribute('inert', ''); // Hide background
     historyOverlay.classList.add('showing');
     document.body.classList.add('modal-open');
     
@@ -94,7 +94,7 @@ export function closeHistoryOverlay() {
   if (historyOverlay) {
     historyOverlay.classList.remove('showing');
     document.body.classList.remove('modal-open');
-    mainContent.removeAttribute('aria-hidden'); // Restore background
+    mainContent.removeAttribute('inert'); // Restore background
     if (elementThatTriggeredModal) {
       elementThatTriggeredModal.focus();
       elementThatTriggeredModal = null;

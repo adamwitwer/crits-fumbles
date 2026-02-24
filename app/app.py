@@ -5,10 +5,10 @@ import requests
 import os
 import json
 import random
+from collections import deque
 from flask import Flask, render_template, request, jsonify, url_for
 import datetime
 import sys
-import os
 sys.path.append(os.path.dirname(__file__))
 from security_utils import IPRedactor, rate_limiter, csrf_protection, error_handler
 
@@ -23,7 +23,7 @@ def add_security_headers(response):
         "img-src 'self' data:;"
         "media-src 'self';"
         "font-src 'self';"
-        "connect-src 'self' http://ip-api.com;"
+        "connect-src 'self';"
         "form-action 'self';"
         "frame-ancestors 'none';"
         "base-uri 'self';"
@@ -34,7 +34,6 @@ def add_security_headers(response):
     response.headers['Content-Security-Policy'] = csp_policy
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Frame-Options'] = 'DENY'
-    response.headers['X-XSS-Protection'] = '1; mode=block'
     return response
 
 # --- Determine log file path ---
@@ -128,14 +127,12 @@ def get_roll_result_and_log(payload, client_ip=None):
                   "selectedRollType": payload.get('rollType'), "selectedCritSource": payload.get('critSource'), 
                   "selectedFumbleType": payload.get('fumbleType'), "selectedAttackType": payload.get('attackType'), 
                   "numDice": 1, "dieType": "d20",
-                  "original_damageType": payload.get('damageType'),    # Pass original damageType from request
-                  "original_magicSubtype": payload.get('magicSubtype') # Pass original magicSubtype from request
+                  "original_damageType": payload.get('damageType')    # Pass original damageType from request
     }
 
     roll_context = payload.get('rollContext', 'primary')
     roll_type_from_payload = payload.get('rollType')
     damage_type = payload.get('damageType')
-    magic_subtype = payload.get('magicSubtype')
     fumble_source_from_payload = payload.get('fumbleType')
     attack_type = payload.get('attackType')
 
@@ -281,10 +278,7 @@ def get_roll_result_and_log(payload, client_ip=None):
 # --- Routes ---
 @app.route('/', methods=['GET'])
 def index():
-    sv_tables = CRIT_DATA.get('Sterling Vermin', {})
-    dmg_types = sorted([k for k in sv_tables.keys() if not k.startswith('magic:')])
-    magic_subs = sorted([k for k in sv_tables.keys() if k.startswith('magic:')])
-    return render_template('index.html', damage_types=dmg_types, magic_subtypes=magic_subs,
+    return render_template('index.html',
                            selected_damage_type="slashing", selected_roll_type="crit",
                            selected_crit_source="Fury & Folly", selected_fumble_type="Fury & Folly",
                            selected_attack_type="Physical")
@@ -358,9 +352,10 @@ def share_discord():
     try:
         # Send to Discord
         response = requests.post(
-            webhook_url, 
-            json={'content': message}, 
-            timeout=10  # Add timeout for external request
+            webhook_url,
+            json={'content': message},
+            timeout=10,
+            allow_redirects=False
         )
         response.raise_for_status()
         
@@ -399,10 +394,9 @@ def get_roll_history():
     try:
         logs = []
         with open(NARRATIVE_LOG_FILE_PATH, "r", encoding="utf-8") as log_file:
-            lines = log_file.readlines()
-        
-        # Process last 50 entries
-        for line in lines[-50:]:
+            lines = deque(log_file, maxlen=50)
+
+        for line in lines:
             line = line.strip()
             if not line:
                 continue
