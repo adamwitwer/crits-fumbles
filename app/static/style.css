@@ -273,17 +273,19 @@ button:active {
   outline: 1px solid var(--clr-button-outline);
 }
 
-/* Tooltips for mute, info, and Chronicles buttons */
-#mute-button[data-tooltip]:hover::after,
-#crit-source-container button[data-tooltip]:hover::after, 
-#fumble-type-container button[data-tooltip]:hover::after,
-#show-history-button[data-tooltip]:hover::after,
-#configure-webhook-button[data-tooltip]:hover::after {
+/* Tooltips for various buttons */
+[data-tooltip] {
+  position: relative;
+}
+
+/* 2) Tooltip bubble */
+[data-tooltip]:hover::after,
+[data-tooltip]:focus-visible::after {
   content: attr(data-tooltip);
   position: absolute;
-  top: -2.3em;
-  right: 4em;
-  transform: translateX(50%);
+  left: 50%;
+  bottom: calc(100% + 8px); /* sits above the element */
+  transform: translateX(-50%);
   background: var(--clr-button-bg);
   color: var(--clr-button-text);
   padding: 0.25em 0.5em;
@@ -291,20 +293,22 @@ button:active {
   white-space: nowrap;
   font-size: 0.75rem;
   pointer-events: none;
-  z-index: 10;
+  z-index: 50;
+  text-shadow: none;
 }
 
-#crit-source-container button[data-tooltip]:hover::after {
-  top: -1em;
-  right: -5.75em;
-}
-#fumble-type-container button[data-tooltip]:hover::after { 
-  top: -1em;
-  right: -6.5em;
-}
-#show-history-button[data-tooltip]:hover::after,
-#configure-webhook-button[data-tooltip]:hover::after {
-  text-shadow: none;
+/* optional: little arrow */
+[data-tooltip]:hover::before,
+[data-tooltip]:focus-visible::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 2px);
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--clr-button-bg);
+  pointer-events: none;
+  z-index: 50;
 }
 
 /* === Result Box Styles === */
@@ -577,10 +581,10 @@ div.result-box[data-fumble-source="Fury & Folly"] .description-box p {
 
 /* === Footer Styles === */
 
-.app-footer {
+footer.app-footer {
   position: relative;
   margin-top: calc(var(--spacing-unit) * 4);
-  padding: 0.75em 1em;
+  padding-bottom: 1em;
 }
 
 .app-footer p {
@@ -591,44 +595,36 @@ div.result-box[data-fumble-source="Fury & Folly"] .description-box p {
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6);
 }
 
-.chronicles-button {
-  all: unset;
-  display: inline-block;
-  color: var(--clr-link);
-  font-size: var(--font-size-footer);
-  cursor: pointer;
-  text-decoration: none;
-  padding: 0.2em 0.4em;
-  transition: color 0.2s ease, background-color 0.2s ease;
+.app-footer .footer-links > a,
+.app-footer .footer-links > button {
+  /* consistent baseline */
+  opacity: 0.8;
+  transition: color 0.2s ease, opacity 0.2s ease;
 }
 
-.chronicles-button:hover,
-.chronicles-button:focus {
-  outline: 1.5px solid var(--clr-button-outline);
-  outline-offset: 1.5px;
-  opacity: 1; 
+.app-footer .footer-links > a:hover,
+.app-footer .footer-links > a:focus,
+.app-footer .footer-links > button:hover,
+.app-footer .footer-links > button:focus {
+  opacity: 1;
   background-color: transparent;
+  outline: 1.5px solid var(--clr-button-outline); /* matches info button outline */
+  outline-offset: 1.5px;
+  transform: none;
+  box-shadow: none;
 }
 
+.chronicles-button,
 .discord-footer-button {
   all: unset;
   display: inline-flex;
-  align-items: center; 
-  position: relative; /* For status dot positioning */
-  color: var(--clr-link);
-  font-size: var(--font-size-footer);
+  align-items: center;
   cursor: pointer;
-  transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  opacity: 0.8;
+  padding: 0 0.2rem;
 }
 
-.discord-footer-button:hover,
-.discord-footer-button:focus {
-  outline: 1.5px solid var(--clr-button-outline);
-  outline-offset: 1.5px;
-  opacity: 1; 
-  background-color: transparent;
-  color: var(--clr-heading);
+.discord-footer-button {
+  position: relative; /* for status dot positioning */
 }
 
 .discord-footer-icon {
@@ -662,32 +658,22 @@ div.result-box[data-fumble-source="Fury & Folly"] .description-box p {
   transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
 }
 
-.app-footer a:hover,
-.app-footer a:focus {
-  color: var(--clr-heading);
-  text-decoration: none;
-  outline: 1.5px solid var(--clr-button-outline);
-  outline-offset: 2px;
-  opacity: 1;
-  background-color: transparent;
-}
-
 .github-icon {
-  width: 1.4em;
-  height: 1.4em;
+  width: 1.2rem;
+  height: 1.2rem;
   vertical-align: middle;
-  padding-bottom: 0.2em;
+  padding-bottom: 0.2rem;
 }
 
 .footer-links {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.8rem;
 }
 
 .footer-separator {
-  opacity: 0.7;
+  opacity: 0.8;
   user-select: none;
   pointer-events: none;
 }
@@ -1059,10 +1045,12 @@ div.result-box[data-fumble-source="Fury & Folly"] .description-box p {
 
 .info-icon {
   all: unset; /* Wipe default button styles */
+  position: relative;
+  display: inline-flex;
   color: var(--clr-heading);
   opacity: 0.8;
-  padding: 0 0.2em;
-  margin-left: 0.2em;
+  padding: 0 0.2rem;
+  margin-left: 0.2rem;
   transition: background-color 0.3s ease, transform 0.2s ease;
   touch-action: manipulation;
   cursor: pointer;
@@ -1072,13 +1060,10 @@ div.result-box[data-fumble-source="Fury & Folly"] .description-box p {
 .info-icon:hover {
   outline: 1.5px solid var(--clr-button-outline);
   outline-offset: 1.5px;
-  opacity: 1; /* Emphasize focus visually */
+  opacity: 1;
   background-color: transparent;
-}
-
-.info-icon:active {
-  transform: scale(0.95);
-  background-color: rgba(0, 0, 0, 0.05); /* light tap feedback */
+  transform: none;
+  box-shadow: none;
 }
 
 /* Responsive styles for webhook modal */
@@ -1221,9 +1206,6 @@ div.result-box[data-fumble-source="Fury & Folly"] .description-box p {
     color: var(--clr-bonus-border);
   }
 
-  .info-icon:active {
-    background-color: rgba(255, 255, 255, 0.08); /* soft light tap feedback */
-  }
 }
 
 /* === Responsive Adjustments === */
@@ -1343,19 +1325,11 @@ div.result-box[data-fumble-source="Fury & Folly"] .description-box p {
   }
 
   .app-footer a:hover,
-  .app-footer a:focus {
-    color: var(--clr-bonus-border);
-  }
-
+  .app-footer a:focus,
   .chronicles-button:hover,
-  .chronicles-button:focus {
-    background-color: rgba(255, 255, 255, 0.08);
-    color: var(--clr-bonus-border);
-  }
-
+  .chronicles-button:focus,
   .discord-footer-button:hover,
   .discord-footer-button:focus {
-    background-color: rgba(255, 255, 255, 0.08);
     color: var(--clr-bonus-border);
   }
 
