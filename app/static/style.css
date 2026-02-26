@@ -1244,6 +1244,14 @@ footer.app-footer {
   h1 { margin-top: 2.7em; /* adjusted for standalone mode */ }
 }
 
+/* On touch devices, disable tooltip bubbles to avoid the pre-click flash */
+@media (hover: none), (pointer: coarse) {
+  [data-tooltip]::after,
+  [data-tooltip]::before {
+    content: none !important;
+  }
+}
+
 /* === Dark Mode === */
 
 @media (prefers-color-scheme: dark) {
