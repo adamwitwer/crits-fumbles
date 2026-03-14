@@ -90,7 +90,7 @@ Click the Discord button in the footer to configure sharing:
 
 _Deprecated. The Smack Down table has been removed for now, but may return someday!_
 
-The first fumbles table used in the campaign wasn't a fumble table at all. It was the "Smack Down Table" or the "shit happens list," which can only be found on [DeviantArt](https://www.deviantart.com/pandabarbear/art/The-New-Smack-Down-Table-518745000). PandaBarBear notes it's "based on Hack Masters Expanded smart ass smack down table."
+The first fumbles table used in this app wasn't a fumbles table at all. It was the "Smack Down Table" or the "shit happens list," which can only be found on [DeviantArt](https://www.deviantart.com/pandabarbear/art/The-New-Smack-Down-Table-518745000). PandaBarBear notes it's "based on Hack Masters Expanded smart ass smack down table."
 
 A more likely source is [issue 128 of "Knights of the Dinner Table,"](https://kenzerco.com/product/knights-of-the-dinner-table-128/) which includes "The EXPANDED Smart Ass Smack Down Table" on page 41, created for DMs to punish disruptive players:
 
