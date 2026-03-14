@@ -8,7 +8,7 @@ export function toggleAttackType() {
   const attackTypeSelect = document.getElementById('attackType');
   const rollType = document.getElementById('roll_type').value;
   const currentAttackTypeValue = attackTypeSelect.value;
-  attackTypeSelect.innerHTML = ''; 
+  attackTypeSelect.innerHTML = '';
   if (rollType === 'fumble') {
     let newOptions = [];
     if (selectedFumbleType === "Questionable Arcana") {

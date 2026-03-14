@@ -137,7 +137,7 @@ function updateUI(data) {
         const currentResultBoxClass = data.selectedRollType === 'fumble' ? 'fumble' : 'result';
         
         primaryContent = `
-            <div class="result-box ${currentResultBoxClass}" data-roll-value="${rollValueToShow}" data-roll-type="${data.selectedRollType}" data-crit-source="${data.selectedCritSource}" data-fumble-source="${data.selectedFumbleType}">
+            <div class="result-box ${currentResultBoxClass}" data-roll-value="${rollValueToShow}" data-roll-type="${data.selectedRollType}" data-crit-source="${data.selectedCritSource}" data-fumble-source="${data.selectedFumbleType}" data-damage-type="${data.original_damageType || ''}" data-attack-type="${data.selectedAttackType || ''}">
               ${createRollHTML(rollValueToShow, actualNumDiceRolled, actualDieTypeRolled)}
               <div class="description-box">
                  <p>${formattedDescription}</p> 
@@ -172,7 +172,9 @@ function updateUI(data) {
                  data-roll-value="${rollValueToShow}"
                  data-roll-type="${rollTypeForPrimaryBoxAtt}"
                  data-crit-source="${critSourceForPrimaryBoxAtt !== null && critSourceForPrimaryBoxAtt !== undefined ? critSourceForPrimaryBoxAtt : ''}"
-                 data-fumble-source="${fumbleSourceForPrimaryBoxAtt !== null && fumbleSourceForPrimaryBoxAtt !== undefined ? fumbleSourceForPrimaryBoxAtt : ''}">
+                 data-fumble-source="${fumbleSourceForPrimaryBoxAtt !== null && fumbleSourceForPrimaryBoxAtt !== undefined ? fumbleSourceForPrimaryBoxAtt : ''}"
+                 data-damage-type="${data.original_damageType || ''}"
+                 data-attack-type="${data.selectedAttackType || ''}">
               ${createRollHTML(rollValueToShow, actualNumDiceRolled, actualDieTypeRolled)}
               <p>${formattedResultText}</p>
               ${data.isSecondaryPrompt && !data.secondaryResultText ? '<p class="scroll-note">👇 Bonus Effect!!! 👇</p>' : ''}
@@ -304,7 +306,9 @@ async function shareResultToDiscord() {
 
   const critSource = primaryResultBoxDiv?.dataset.critSource;
   const fumbleSource = primaryResultBoxDiv?.dataset.fumbleSource;
-  
+  const rawDamageType = primaryResultBoxDiv?.dataset.damageType;
+  const rawAttackType = primaryResultBoxDiv?.dataset.attackType;
+
   let rollType = null;
   if (critSource && critSource !== "null" && critSource !== "undefined") { 
       rollType = 'crit';
@@ -318,17 +322,26 @@ async function shareResultToDiscord() {
       let critDescription = "";
       let critEffect = "";
 
+      // Format damage type for display
+      let damageTypeLine = '';
+      if (rawDamageType && rawDamageType !== 'undefined' && rawDamageType !== 'null' && rawDamageType.trim()) {
+          const dtDisplay = rawDamageType.includes(':')
+              ? rawDamageType.split(':')[1].charAt(0).toUpperCase() + rawDamageType.split(':')[1].slice(1)
+              : rawDamageType.charAt(0).toUpperCase() + rawDamageType.slice(1);
+          damageTypeLine = `\n🗡️ **Damage Type:** ${dtDisplay}`;
+      }
+
       if (critSource === "Questionable Arcana" || critSource === "BCoydog" || critSource === "Fury & Folly") {
           critDescription = elementToDiscordText(structuredDescP).trim() || "N/A";
           critEffect = elementToDiscordText(structuredEffectP).trim() || "N/A";
-          resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue ?? '?'}\n📖 **Description:** ${critDescription}\n\n⚠️ **Effect:** ${critEffect}`;
+          resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue ?? '?'}${damageTypeLine}\n\n**${critDescription}!**\n\n⚠️ ${critEffect}`;
       } else {
           const primaryText = elementToDiscordText(primaryCritTextP).trim() || "N/A";
-          resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue ?? '?'}\n⚠️ **Result:** ${primaryText}`;
+          resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue ?? '?'}${damageTypeLine}\n\n**${primaryText}!**`;
       }
       if (secondaryBonusEffectP && elementToDiscordText(secondaryBonusEffectP).trim() && secondaryRollValue) {
           const secondaryText = elementToDiscordText(secondaryBonusEffectP).trim();
-          resultText += `\n\n🎲 **Bonus Roll:** ${secondaryRollValue}\n✨ **Effect:** ${secondaryText}`;
+          resultText += `\n\n🎲 **Bonus Roll:** ${secondaryRollValue}\n\n**${secondaryText}!**`;
       }
   } else if (rollType === 'fumble') {
       messagePrefix += `💀 **Fumble!** 💀\n\n`;
@@ -336,7 +349,14 @@ async function shareResultToDiscord() {
       const fumbleName = elementToDiscordText(structuredDescP).trim() || "N/A";
       const fumbleEffect = elementToDiscordText(structuredEffectP).trim() || "N/A";
 
-      resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue ?? '?'}\n😩 **Fumble:** ${fumbleName}\n\n⚠️ **Effect:** ${fumbleEffect}`;
+      // Add Damage Type line for fumbles
+      let fumbleDamageTypeLine = '';
+      if (rawAttackType && rawAttackType !== 'undefined' && rawAttackType !== 'null' && rawAttackType.trim()) {
+          const dtDisplay = rawAttackType.charAt(0).toUpperCase() + rawAttackType.slice(1);
+          fumbleDamageTypeLine = `\n🗡️ **Damage Type:** ${dtDisplay}`;
+      }
+
+      resultText = `${messagePrefix}🎲 **Rolled:** ${primaryRollValue ?? '?'}${fumbleDamageTypeLine}\n\n**${fumbleName}!**\n\n⚠️ ${fumbleEffect}`;
   }
       
   if (!resultText || (resultText.includes('N/A') && !resultText.replace(/N\/A/g, '').replace(messagePrefix, '').trim())) {
