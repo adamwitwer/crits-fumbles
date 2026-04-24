@@ -9,7 +9,7 @@
       "12-13": "Take a seat! Roll damage dice twice and add them together and the creature is knocked prone.",
       "14-16": "Rocked and rolled! Roll damage dice twice and add them together, push the creature up to 15 feet away, and the creature is knocked prone.",
       "17-18": "Grievous injury! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add the result. Then roll on the Minor Injury chart. If the creature is wearing heavy armor roll on the Major Injury chart instead.",
-      "19": "Crushed! Deal the twice maximum result of your damage dice and roll on the major injury chart.",
+      "19": "Crushed! Deal twice the maximum result of your damage dice and roll on the major injury chart.",
       "20": "Splat! Deal the maximum result of your damage dice twice, the creature is stunned until the end of your next turn, and roll on the major injury chart."
     },
     "magic:acid": {
@@ -19,10 +19,10 @@
       "7-8": "Melted flesh! Roll your damage as normal and the creature is disfigured. While disfigured the creature has disadvantage on all Charisma ability checks except Charisma (Intimidation). Being disfigured can be removed with the spell greater restoration.",
       "9-11": "Great hit! Roll your damage dice twice and add them together.",
       "12-13": "Boiling flesh! Roll twice as many damage dice as normal and if the creature is wearing armor its AC modifier is reduced by 1 until it can be repaired (for 1/4th the price of new armor of the same type) or cleaned (if the armor is magical). If the creature is not wearing armor, roll on the minor injury chart.",
-      "14-16": "Horrific mutilation! Roll twice as many damage dice as normal and roll on the minor injury chart. Additionally, the creature is disfigured.  While disfigured the creature has disadvantage on all Charisma ability checks except Charisma (Intimidation). Being disfigured can be removed with the spell greater restoration.",
+      "14-16": "Horrific mutilation! Roll twice as many damage dice as normal and roll on the minor injury chart. Additionally, the creature is disfigured. While disfigured the creature has disadvantage on all Charisma ability checks except Charisma (Intimidation). Being disfigured can be removed with the spell greater restoration.",
       "17-18": "Caustic trauma! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add that result. If the creature is wearing armor, roll on the minor injury chart and its AC modifier is reduced by 2 until it can be repaired (for half the price of new armor of the same type) or cleaned (if the armor is magical). If the creature is not wearing armor, roll on the major injury chart.",
       "19": "Vitriolic! Deal twice the maximum result of your damage dice and roll on the major injury chart.",
-      "20": "Acid bath! Deal twice the maximum result of your damage dice. If the creature is wearing armor, the armor is destroyed (if non-magical) or rendered useless until cleaned during a long rest (if magical) and roll on the major injury chart.  If the creature is not wearing armor, roll on the major injury chart and the creature is disfigured.  While disfigured the creature has disadvantage on all Charisma ability checks except Charisma (Intimidation). Being disfigured can be removed with the spell greater restoration."
+      "20": "Acid bath! Deal twice the maximum result of your damage dice. If the creature is wearing armor, the armor is destroyed (if non-magical) or rendered useless until cleaned during a long rest (if magical) and roll on the major injury chart. If the creature is not wearing armor, roll on the major injury chart and the creature is disfigured. While disfigured the creature has disadvantage on all Charisma ability checks except Charisma (Intimidation). Being disfigured can be removed with the spell greater restoration."
     },
     "magic:cold": {
       "1": "You call that a crit? Roll damage as normal.",
@@ -115,10 +115,10 @@
       "7-8": "Disheartening blast! Roll your damage as normal and the creature is frightened until the end of its next turn.",
       "9-11": "Great hit! Roll twice as many damage dice as normal.",
       "12-13": "Awed! Roll twice as many damage dice as normal and the creature is frightened until the end of its next turn.",
-      "14-16": "Holy terror! Roll twice as many damage dice as normal and roll on the minor injury chart.  Additionally, the creature is frightened for the next minute. It can make a Wisdom saving throw (DC 16) at the end of each of its turns to end this effect.",
-      "17-18": "Righteous mark! Deal the maximum amount of damage for your normal damage dice then roll your damage dice and add that result, then roll on the minor injury chart. Additionally, the creature glows for the next minute. While glowing it produces bright light up 10 feet and dim light up to 30 feet and all successful attacks against the creature deal an additional 1d4 radiant damage.",
+      "14-16": "Holy terror! Roll twice as many damage dice as normal and roll on the minor injury chart. Additionally, the creature is frightened for the next minute. It can make a Wisdom saving throw (DC 16) at the end of each of its turns to end this effect.",
+      "17-18": "Righteous mark! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add that result, then roll on the minor injury chart. Additionally, the creature glows for the next minute. While glowing it produces bright light up to 10 feet and dim light up to 30 feet and all successful attacks against the creature deal an additional 1d4 radiant damage.",
       "19": "Wrath of the gods! Deal twice the maximum result of your damage dice and roll on the major injury chart.",
-      "20": "Smote! Deal twice the maximum result of your damage dice and roll on the major injury chart.  Additionally, the creature glows for the next minute. While glowing it produces bright light up 10 feet and dim light up to 30 feet and all successful attacks against the creature deal an additional 1d6 radiant damage."
+      "20": "Smote! Deal twice the maximum result of your damage dice and roll on the major injury chart. Additionally, the creature glows for the next minute. While glowing it produces bright light up to 10 feet and dim light up to 30 feet and all successful attacks against the creature deal an additional 1d6 radiant damage."
     },
     "magic:thunder": {
       "1": "You call that a crit? Roll damage as normal.",
@@ -128,9 +128,9 @@
       "9-11": "Great hit! Roll twice as many damage dice as normal.",
       "12-13": "Thunder clap! Roll twice as many damage dice as normal and the creature is stunned until the start of its next turn and deafened for one minute.",
       "14-16": "Burst ear drums! Roll twice as many damage dice as normal and the creature is deafened permanently. Then roll on the minor injury chart.",
-      "17-18": "Concussive blast! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add that result. The creature stunned until the end of its next turn and deafened permanently. Then roll on the minor injury chart.",
+      "17-18": "Concussive blast! Deal the maximum amount of damage from your normal damage dice then roll your damage dice and add that result. The creature is stunned until the end of its next turn and deafened permanently. Then roll on the minor injury chart.",
       "19": "Wall of sound! Deal twice the maximum result of your damage dice and roll on the major injury chart.",
-      "20": "Sonic salvo! Deal twice the maximum result of your damage dice, the creature is deafened permanently, and stunned until the end of its next round. Then roll on the major injury chart."
+      "20": "Sonic salvo! Deal twice the maximum result of your damage dice, the creature is deafened permanently, and stunned until the end of its next turn. Then roll on the major injury chart."
     },
     "piercing": {
       "1": "You call that a crit? Roll damage as normal.",
@@ -148,7 +148,7 @@
       "1": "You call that a crit? Roll damage as normal.",
       "2-3": "Sliced and diced! Roll damage as normal and the creature loses 1d6 hit points at the start of its next turn.",
       "4-6": "Good hit! Do not roll your damage dice, instead deal the maximum result possible with those dice.",
-      "7-8": "Open gash! Roll your damage dice as normal and the creature is bleeding. For the next minute the creature loses 1d4 damage at the start of each of its turns until it uses an action to staunch this wound.",
+      "7-8": "Open gash! Roll your damage dice as normal and the creature is bleeding. For the next minute the creature loses 1d4 hit points at the start of each of its turns until it uses an action to staunch this wound.",
       "9-11": "Great hit! Roll your damage dice twice and add them together.",
       "12-13": "Deep slice! Roll your damage dice twice and add them together and the creature is bleeding. For the next minute the creature loses 1d8 hit points at the start of each of its turns until it uses an action to staunch this wound.",
       "14-16": "Lacerated! Roll your damage dice twice and add them together and the creature is bleeding. For the next minute the creature loses 1d12 hit points at the start of each of its turns until it uses an action to staunch this wound.",
@@ -168,8 +168,8 @@
       "25-29": "You begin to recognize patterns in your opponents fighting technique. Effect: You gain +2 to your AC against your target, and advantage on all savings throws from effects originating from your target until your next turn.",
       "30-39": "You are able to maneuver towards your opponent while attacking, and attempt to harass them. Effect: After your attack you can choose to attempt to grapple your opponent if you have a free hand, or attempt to shove your opponent if both hands are in use.",
       "40-49": "You are able to maneuver towards your opponent while attacking and harass them. Effect: After your attack you can choose to automatically succeed in grappling your opponent if you have a free hand, or shoving your opponent if both hands are in use.",
-      "50-59": "You attempt to disarm your opponent. Effect: You are able to take the disarm action after your attack",
-      "60-69": "You kick your target\u2019s weapon out of their hands. Effect: You are able to take the disarm action after your attack, and can steal your opponents weapon if you have a free hand. Otherwise you can knock it up to 20 feet away.",
+      "50-59": "You attempt to disarm your opponent. Effect: You are able to take the disarm action after your attack.",
+      "60-69": "You kick your target\u2019s weapon out of their hands. Effect: You are able to take the disarm action after your attack, and can steal your opponent\u2019s weapon if you have a free hand. Otherwise you can knock it up to 20 feet away.",
       "70-74": "Your senses heighten and you become aware of threats around the battlefield. Effect: You are able to use the dodge action after your attack.",
       "75-79": "Your attack knocks your target over. Effect: Your target is knocked prone.",
       "80-84": "Your strike surprises your opponent. Effect: Your target is surprised until the end of their next turn.",
@@ -186,16 +186,16 @@
       "15-19": "You feel the ebb and flow of the battle, and know where to make your next move. Effect: After your turn you move to the top of the initiative order.",
       "20-29": "Your spell cripples your opponent. Effect: Your target\u2019s movement speed is cut in half for their next 2 turns.",
       "30-39": "Your spell attack knocks your target over. Effect: Your target is knocked prone.",
-      "40-49": "The light from your spell flashes near your target\u2019s eyes Effect: Your target is blinded until the end of their next turn.",
-      "50-59": "You blast the targets weapons out of their hands. Effect: Your target\u2019s weapon is flung 1d6*5 feet away in a random direction.",
-      "60-69": "The sight of your magic fills the target\u2019s heart with fear. Effect: Your target is frightened by you until you stop casting magic. You are able to discern the source of your targets fear.",
+      "40-49": "The light from your spell flashes near your target\u2019s eyes. Effect: Your target is blinded until the end of their next turn.",
+      "50-59": "You blast the target\u2019s weapon out of their hands. Effect: Your target\u2019s weapon is flung 1d6*5 feet away in a random direction.",
+      "60-69": "The sight of your magic fills the target\u2019s heart with fear. Effect: Your target is frightened by you until you stop casting magic. You are able to discern the source of your target\u2019s fear.",
       "70-74": "The force from your spell stuns your opponent. Effect: Your target is incapacitated until the end of their next turn.",
-      "75-79": "Your spell is incidentally infused with fey energy. Effect: Roll 10d8. If your targets current health is lower than the number rolled they fall asleep for 1 minute.",
-      "80-84": "Your spells strike surprises your opponent. Effect: Your target is surprised until the end of their next turn.",
+      "75-79": "Your spell is incidentally infused with fey energy. Effect: Roll 10d8. If your target\u2019s current health is lower than the number rolled they fall asleep for 1 minute.",
+      "80-84": "Your spell\u2019s strike surprises your opponent. Effect: Your target is surprised until the end of their next turn.",
       "85-89": "Your spell strikes with great force. Effect: Roll an additional set of spell damage dice above and beyond your normal critical roll.",
       "90-94": "Your spell strikes with extreme force. Effect: Roll an additional set of spell damage dice above and beyond your normal critical roll, and the target suffers one unit of exhaustion.",
-      "96-99": "Your spell strikes with debilitating force. Effect: Roll an additional set of spell damage dice above and beyond your normal critical roll, and the target suffers a permanent injury chose by the DM. The permanent injury can be healed with extended rest of a length determined by the DM, but the attack leaves a scar.",
-      "100": "Your spell strikes with devastating force. Effect: Roll an additional set of spell damage dice above and beyond your normal critical roll, and the target suffers 1 unit of exhaustion, and the target suffers a permanent injury chose by the DM. The permanent injury can be healed with extended rest of a length determined by the DM, but the attack leaves a scar."
+      "95-99": "Your spell strikes with debilitating force. Effect: Roll an additional set of spell damage dice above and beyond your normal critical roll, and the target suffers a permanent injury chosen by the DM. The permanent injury can be healed with extended rest of a length determined by the DM, but the attack leaves a scar.",
+      "100": "Your spell strikes with devastating force. Effect: Roll an additional set of spell damage dice above and beyond your normal critical roll, and the target suffers 1 unit of exhaustion, and the target suffers a permanent injury chosen by the DM. The permanent injury can be healed with extended rest of a length determined by the DM, but the attack leaves a scar."
     }
   },
   "BCoydog": {
@@ -205,10 +205,10 @@
       "05-06": "With flourish!: Your strike is executed with perfect form and all take notice. You may make a contested intimidation check against their WIS Save. On a success, the target becomes Frightened of you for 1d4 rounds.",
       "07-08": "GTFO of my way!: Adrenaline courses through you with primal fury. You smash your weapon into your enemy and may (at your discretion) push them up to 10 feet away in a straight line. This does not provoke an attack of opportunity from nearby creatures.",
       "09-10": "Clean sweep!: It\u2019s a clean sweep! You deal the normal double damage and knock your opponent off-balance and prone.",
-      "11-12": "Plan See: Whether intentional or poor luck, your opponent becomes blinded for one round. Maybe it was sweat, blood\u2026 tears? Maybe it was pocket sand! Either way, they are blinded until your next turn. They can end this condition early by using their action to wipe their eyes.",
+      "11-12": "Pocket Sand!: Whether intentional or poor luck, your opponent becomes blinded for one round. Maybe it was sweat, blood\u2026 tears? Maybe it was pocket sand! Either way, they are blinded until your next turn. They can end this condition early by using their action to wipe their eyes.",
       "13-14": "Ah! My digits!: You slam their hand and/or fingers with your attack and they drop their weapon as a result of the pain.",
       "15-16": "Kneecapped: Yep, you guessed it. You strike their leg with enough force to cause something to\u2026 not feel quite right. The target\u2019s movement speed becomes halved and they have disadvantage on all DEX Saves for the next 1d4 rounds.",
-      "17-18": "Woah\u2026 easy dude\u2026: Your ferocity knows no bounds and the enemy takes note. All other enemy combatants within 15 ft of you become Frightened of you until the end of your next turn",
+      "17-18": "Whoa\u2026 easy there, killer\u2026: Your ferocity knows no bounds and the enemy takes note. All other enemy combatants within 15 ft of you become Frightened of you until the end of your next turn.",
       "19-20": "Adrenaline: Epinephrine begins to course through your veins as the heat of battle causes you to enter a state of pure adrenaline, numbing the blows of battle. You have resistance to all types of damage until the end of your next turn.",
       "21-22": "Hey! Look over here!: You draw the target\u2019s attention and open them up for an attack, but not by you. The nearest friendly combatant closest to you gains Advantage on all attacks made against the target on their next turn. Similarly, they may also move away from the target without incurring an Attack of Opportunity.",
       "23-24": "Fancy Footwork: Your ability to maneuver the battlefield after an attack is remarkable! You may move up to half your movement speed without provoking an Attack of Opportunity from the target of this attack.",
@@ -231,7 +231,7 @@
       "57-58": "Two-Pronged Attack: You motivate a friendly creature to make a free attack, if they so choose. This can only be done if they have their Reaction available for the round and are not incapacitated.",
       "59-60": "Distraction: If you so choose, you may become the center of attention for all hostile creatures within 5 ft of you, causing all affected creatures to focus on you until the end of your next turn. This can take the form of a taunt, a battle cry, or obscene profanities involving the target\u2019s mother.",
       "61-62": "Hardy Target: Add your CON Modifier to your AC until the end of your next turn.",
-      "63-64": "Catch These Hands: Your reach increases by 5 ft until the end of your next turn",
+      "63-64": "Catch These Hands: Your reach increases by 5 ft until the end of your next turn.",
       "65-66": "Diss and Gauge: You gauge the level of your enemy\u2019s focus, and you see an opening, you may move the full complement of your movement speed during this round only without provoking any attacks of opportunity.",
       "67-68": "Parry Situation: Roll a d4, the result is added to your AC until the end of your next turn.",
       "69-69": "Nice.: You deal the maximum amount of damage possible. Nice.",
@@ -281,7 +281,7 @@
       "51-52": "Another One: How about one, or two, or twenty. Just keep going, send a hail of projectiles, make it rain terror. You can make one additional attack.",
       "53-54": "Commanding Presence: You instill a sense of vigor and valiance in one ally who is furthest from you, but within your line of sight. If they have a reaction available, they may use it to make a single attack.",
       "55-56": "Call of Nature: Your strike causes agitation in the nearest avian creature. The agitation becomes directed at the target of your attack, causing a Giant Eagle to swoop down and make a multiattack against the target. It takes its turn directly after yours and departs after its turn ends. Its movement does not provoke attacks of opportunity.",
-      "57-58": "Hollow Point Rounds: The projectile collides with a hard point beneath the surface of the combatants flesh, and explodes dealing 2d4 piercing damage. The target must then roll a CON Save, on a fail they sustain an additional 1d4 bleed damage at the start of each of their turns until they use an Action to stem the bleeding.",
+      "57-58": "Hollow Point Rounds: The projectile collides with a hard point beneath the surface of the combatant’s flesh, and explodes dealing 2d4 piercing damage. The target must then roll a CON Save, on a fail they sustain an additional 1d4 bleed damage at the start of each of their turns until they use an Action to stem the bleeding.",
       "59-60": "Armor Piercing Rounds: Your shot is fired with such intense velocity that the nearest hostile creature behind the target, in a straight line from your space, sustains the same amount of damage as the target.",
       "61-62": "Ring Their Bell: If you so choose, your shot strikes the target\u2019s helmet (or equivalent hard surface) and renders them incapacitated until the end of your next turn.",
       "63-64": "How Magical!: If you have a spellcaster in your adventuring party with a reaction available, they may use their reaction to redirect your projectile, possibly striking another target. Roll another Attack Roll to hit the secondary target. If this hits, it deals normal damage.",
@@ -306,7 +306,7 @@
       "100-100": "BFG: Your aim is true and your projectile strikes with lethal impact. You deal triple damage."
     },
     "magic": {
-      "01-02": "Where the fuck I am?: Your ability to channel magic is so overwhelming you daze your opponent in a blast of Arcane prowess. On your opponents next turn they are confused and forego their turn and instead move in a random direction up to their movement speed. This is determined at random by the DM.",
+      "01-02": "Where the fuck am I?: Your ability to channel magic is so overwhelming you daze your opponent in a blast of Arcane prowess. On your opponent’s next turn they are confused and forego their turn and instead move in a random direction up to their movement speed. This is determined at random by the DM.",
       "03-04": "What a blast!: You strike your target with utter power, all enemy combatants within 5 ft of the target take 1d4 Force damage.",
       "05-06": "I have seen into the void\u2026: Your magic impacts your target with such fearsome might that they begin to second guess attacking you. Your target becomes frightened of you until the end of your next turn.",
       "07-08": "Eye, eye!: Either you\u2019re a sharpshooter\u2026 or just plain vindictive, or maybe the target has bad luck\u2026 because your spell slams into their face. Your target becomes blinded until the end of their next turn.",
@@ -346,16 +346,16 @@
       "74-75": "Who\u2019s a Good Boy?!: Your attempt at pulling in the elements was not only wildly successful but they have brought a friend with them! In the casting of the spell, your magics summon a Hell Hound within 5 ft of the target of this spell. It takes its turn right after you and is under your control. After its turn it is immediately returned to its plane of existence.",
       "76-77": "Blowhard: Perhaps caused by the whirlwind of clashing magics, or something else entirely, there is a new combatant. The magics used in the casting of this spell cause an Air Elemental to form in a space within 5 ft of the target of this spell. Its turn comes right after yours and is hostile to all targets on the battlefield, prioritizing the target of this spell. It vanishes at the end of its turn.",
       "78-79": "Earth Win, and\u2026 Fire!: Maybe Mother Nature is angry, maybe the earth beneath you is tired of being walked all over like dirt, well\u2026 yeah\u2026 anyway, an Earth Elemental forms in a space within 5 ft of the target of this spell. Its turn comes right after yours and is hostile to all targets on the battlefield, prioritizing the target of this spell. It vanishes at the end of its turn.",
-      "80-81": "Water You Doing?!: When it rains, it pours. The clashing of magics used in the spells casting causes a Water Elemental to form in a space within 5 ft of the target of this spell. Its turn comes right after yours and is hostile to all targets on the battlefield, prioritizing the target of this spell. It vanishes at the end of its turn.",
+      "80-81": "Water You Doing?!: When it rains, it pours. The clashing of magics used in the spell’s casting causes a Water Elemental to form in a space within 5 ft of the target of this spell. Its turn comes right after yours and is hostile to all targets on the battlefield, prioritizing the target of this spell. It vanishes at the end of its turn.",
       "82-83": "Ready\u2026 Maim\u2026 Fire!: Time to turn up the heat! The friction of magics have caused a Fire Elemental to form in a space within 5 ft of the target of this spell. Its turn comes right after yours and is hostile to all targets on the battlefield, prioritizing the target of this spell. It vanishes at the end of its turn.",
-      "84-85": "Blunt Force Trauma: The weapon the enemy is using becomes animated and attacks the target of this spell. It shunts itself backwards, into their face, causing 1d6 + Your Spellcasting Ability Modifier in bludgeoning damage. If the enemy is not holding a weapon, it strikes itself in its confusion. Just like the good ol\u2019 days.",
+      "84-85": "Blunt Force Trauma: The weapon the enemy is using becomes animated and attacks the target of this spell. It shunts itself backwards, into their face, causing 1d6 + your Spellcasting Ability Modifier in bludgeoning damage. If the enemy is not holding a weapon, it strikes itself in its confusion. Just like the good ol\u2019 days.",
       "86-87": "Popping Smoke: Either through a sheer gust of wind, fire and brimstone, or an overload of magical force, there is a distractingly obstructive burst of smoke. All targets within 5 ft of the target of this spell, including the target, are obscured in a momentary smokescreen. All attacks made by the affected targets must make all attacks at disadvantage until the end of your next turn.",
       "88-89": "Harrowing Company: The necrotic forces at work which harbor a sense of dread and violence between death and undeath begin to manifest itself into the goodest of boys, hopefully. Your magics summon a Harrow Hound within 5 ft of the target of this spell. It takes its turn right after you and is under your control. After its turn it immediately rejoins the plane from which it came.",
       "90-91": "Valiant Steed of Beauty: There is a collision of good and evil, and in this moment, a rare occurrence happens before your very eyes. The warring between the forces of good and evil strike a balance as a Unicorn leaps from the tear in reality, created by the magics you have wrought. The Unicorn spawns within 5 ft of the target of this spell. It takes its turn right after you and is under your control. After its turn it immediately rejoins the plane from which it came.",
-      "92-93": "Death By a Thousand Cuts: Either you have summoned a knife storm native to Ooo, a maelstrom of blades have materialized into the space occupied by the target, or some other strange and amusing phenomena has taken place. An abundance of razor sharp material manifests into the space of the target of this spell, causing 4d4 slashing damage as they whirl around the target and vanish just as soon as they appeared.",
+      "92-93": "Death By a Thousand Cuts: Either you have summoned a knife storm native to Ooo, a maelstrom of blades have materialized into the space occupied by the target, or some other strange and amusing phenomena has taken place. An abundance of razor-sharp material manifests into the space of the target of this spell, causing 4d4 slashing damage as they whirl around the target and vanish just as soon as they appeared.",
       "94-95": "Size Matters: The raw power used to shape the magics you used in the casting of this spell begin to tether themselves to your being. If you choose, you can accept the temporary changes that come with the wild magics that wrap themselves around you. Doing so allows you to increase your size by one size category for the next 1d4 rounds.",
       "96-97": "Nonmagical Defiance: The raw magical energy from the school of Abjuration encompasses your form and protects you from harm. Until the end of your next turn you have resistance to nonmagical bludgeoning, piercing, and slashing damage.",
-      "98-99": "Hither and Tither: The force from the strike of your magics causes the target to be blasted 10 ft in a straight line either toward you, or directly away from you.",
+      "98-99": "Hither and Thither: The force from the strike of your magics causes the target to be blasted 10 ft in a straight line either toward you, or directly away from you.",
       "100-100": "Insight of the Weave: For a moment, you gain a glimpse into the mysteries and lost practices surrounding the magics of old. Roll a d100: 1-90 = Triple Damage / 91-100 Triple Damage and Roll again, taking an additional Critical Hit effect. If you roll a 100 and the CR of the creature is equal to your level or lower, it is instantly slain."
     }
   },
@@ -370,9 +370,9 @@
     },
     "major_injuries": {
       "1-3": "Crippled leg! The creature\u2019s movement speed is reduced by 10 feet and it has disadvantage on Dexterity saving throws.",
-      "4-8": "Crippled arm! Randomly determine one of the creature\u2019s arms.  That arm cannot be used to hold an item and any ability check requiring that arm automatically fails or has disadvantage (DM\u2019s choice).",
+      "4-8": "Crippled arm! Randomly determine one of the creature\u2019s arms. That arm cannot be used to hold an item and any ability check requiring that arm automatically fails or has disadvantage (DM\u2019s choice).",
       "9-11": "Severely wounded! The creature\u2019s maximum hit points are reduced by an amount equivalent to the damage dealt by the attack.",
-      "12-16": "Edge of death!  The creature has disadvantage on Constitution and death saving throws.",
+      "12-16": "Edge of death! The creature has disadvantage on Constitution and death saving throws.",
       "17-19": "My eyes! The creature is blinded.",
       "20": "Decapitated! The creature is dead."
     },
@@ -391,7 +391,7 @@
       "12": "Anterograde amnesia. Whenever you try to recall a fact you learned since you received this insanity, make a Wisdom saving throw (DC 12). If you fail you cannot recall the fact.",
       "13": "Dependence. You must pass a Wisdom saving throw (DC 14) to take an action that one or more of your allies disapprove of.",
       "14": "Anxious. You have disadvantage on saving throws against being frightened. Additionally, once per day the DM can call on you to succeed a Wisdom saving throw (DC 14) or be frightened by a creature of the DM\u2019s choosing for the next minute.",
-      "15": "Mute. Whenever you wish to speak allowed (including casting a spell that has verbal components) you must succeed on a Wisdom saving throw (DC 13) to do so.",
+      "15": "Mute. Whenever you wish to speak aloud (including casting a spell that has verbal components) you must succeed on a Wisdom saving throw (DC 13) to do so.",
       "16": "Narcolepsy. You have disadvantage on saving throws against sleeping or unconsciousness. Once per day the DM may call on you to succeed on a Constitution saving throw (DC 12) or fall unconscious for one minute or until you take damage or another creature spends their action trying to rouse you.",
       "17": "Insomnia. You cannot take long rests and your short rests take 8 hours to complete.",
       "18": "Homicidal. After each long rest you must pass a Wisdom saving throw (DC 14) or be overcome with the urge to end the life of a humanoid creature and you cannot benefit from another long rest until you do so.",
@@ -418,7 +418,7 @@
       "66-80": "Crippling Cut: Resolve critical damage as normal. A wave of whipping arcs of steel twists posture and footing, forcing the target into a losing position. The target is Restrained until the end of its next turn.",
       "81-90": "Deep Rend: Deal maximum critical damage, then roll the damage dice once and add the result. A surge of whipping arcs of steel crashes through defenses and overwhelms body and will. The target is Incapacitated until the end of its next turn.",
       "91-95": "Bloodletting: Deal maximum critical damage, then roll the damage dice once and add the result. A surge of whipping arcs of steel crashes through defenses and overwhelms body and will. The target is Stunned until the end of its next turn.",
-      "96-100": "Executioner\u2019s Arc: Deal maximum critical damage twice. Whipping arcs of steel peaks in a catastrophic crescendo. The target is Unconscious until the end of its next turn. When this condition ends, the target wakes up Prone."
+      "96-100": "Executioner\u2019s Arc: Deal maximum critical damage twice. Whipping arcs of steel peak in a catastrophic crescendo. The target is Unconscious until the end of its next turn. When this condition ends, the target wakes up Prone."
     },
     "piercing": {
       "1-20": "Clean Puncture: Resolve critical damage as normal.",
@@ -448,7 +448,7 @@
       "66-80": "Icy Bind: Resolve critical damage as normal. A wave of killing frost and brittle ice twists posture and footing, forcing the target into a losing position. The target is Blinded until the end of its next turn.",
       "81-90": "Deep Freeze: Deal maximum critical damage, then roll the damage dice once and add the result. A surge of killing frost and brittle ice crashes through defenses and overwhelms body and will. The target is Incapacitated until the end of its next turn.",
       "91-95": "Flash-Frozen: Deal maximum critical damage, then roll the damage dice once and add the result. A surge of killing frost and brittle ice crashes through defenses and overwhelms body and will. The target is Stunned until the end of its next turn.",
-      "96-100": "Icebound: Deal maximum critical damage twice. Killing frost and brittle ice peaks in a catastrophic crescendo. The target is Paralyzed until the end of its next turn."
+      "96-100": "Icebound: Deal maximum critical damage twice. Killing frost and brittle ice peak in a catastrophic crescendo. The target is Paralyzed until the end of its next turn."
     },
     "fire": {
       "1-20": "Scorched: Resolve critical damage as normal.",
