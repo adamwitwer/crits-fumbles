@@ -1,6 +1,91 @@
 // Form handling and UI toggle functions
 import { CONFIG } from './config.js';
 
+const SOURCE_STORAGE_KEYS = {
+  crit_source: 'cf.critSource',
+  fumbleType: 'cf.fumbleType',
+};
+
+function readStoredSource(selectId) {
+  try {
+    return localStorage.getItem(SOURCE_STORAGE_KEYS[selectId]);
+  } catch (e) {
+    return null;
+  }
+}
+
+function writeStoredSource(selectId, value) {
+  try {
+    localStorage.setItem(SOURCE_STORAGE_KEYS[selectId], value);
+  } catch (e) { /* ignore quota/privacy errors */ }
+}
+
+function optionLabel(selectEl) {
+  const opt = selectEl.options[selectEl.selectedIndex];
+  return opt ? opt.textContent : selectEl.value;
+}
+
+function updateSummaryText(summaryEl, selectEl) {
+  if (!summaryEl || !selectEl) return;
+  const nameEl = summaryEl.querySelector('[data-source-name]');
+  if (nameEl) nameEl.textContent = optionLabel(selectEl);
+}
+
+function setChooserOpen(chooserEl, summaryEl, changeBtn, open) {
+  if (!chooserEl || !summaryEl) return;
+  chooserEl.classList.toggle('is-open', open);
+  summaryEl.classList.toggle('is-hidden', open);
+  if (changeBtn) changeBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+export function initSourceDisclosure() {
+  ['crit_source', 'fumbleType'].forEach(selectId => {
+    const selectEl = document.getElementById(selectId);
+    if (!selectEl) return;
+    const stored = readStoredSource(selectId);
+    if (stored) {
+      const exists = Array.from(selectEl.options).some(o => o.value === stored);
+      if (exists) selectEl.value = stored;
+    }
+  });
+
+  document.querySelectorAll('.source-change-btn').forEach(btn => {
+    const chooserEl = document.getElementById(btn.dataset.chooser);
+    const summaryEl = document.getElementById(btn.dataset.summary);
+    btn.addEventListener('click', () => {
+      setChooserOpen(chooserEl, summaryEl, btn, true);
+      const select = chooserEl?.querySelector('select');
+      if (select) select.focus();
+    });
+  });
+
+  const critSelect = document.getElementById('crit_source');
+  const fumbleSelect = document.getElementById('fumbleType');
+  const critSummary = document.getElementById('crit-source-summary');
+  const fumbleSummary = document.getElementById('fumble-type-summary');
+  const critChooser = document.getElementById('crit-source-chooser');
+  const fumbleChooser = document.getElementById('fumble-type-chooser');
+  const critChangeBtn = critSummary?.querySelector('.source-change-btn');
+  const fumbleChangeBtn = fumbleSummary?.querySelector('.source-change-btn');
+
+  if (critSelect) {
+    updateSummaryText(critSummary, critSelect);
+    critSelect.addEventListener('change', () => {
+      writeStoredSource('crit_source', critSelect.value);
+      updateSummaryText(critSummary, critSelect);
+      setChooserOpen(critChooser, critSummary, critChangeBtn, false);
+    });
+  }
+  if (fumbleSelect) {
+    updateSummaryText(fumbleSummary, fumbleSelect);
+    fumbleSelect.addEventListener('change', () => {
+      writeStoredSource('fumbleType', fumbleSelect.value);
+      updateSummaryText(fumbleSummary, fumbleSelect);
+      setChooserOpen(fumbleChooser, fumbleSummary, fumbleChangeBtn, false);
+    });
+  }
+}
+
 export function toggleAttackType() {
   const fumbleTypeSelect = document.getElementById('fumbleType');
   const selectedFumbleType = fumbleTypeSelect.value;
@@ -51,21 +136,27 @@ export function toggleFields() {
   const critSourceContainer = document.getElementById('crit-source-container');
   const currentCritSourceInfoIcon = document.getElementById('crit_source_info_icon');
   const currentFumbleTypeInfoIcon = document.getElementById('fumble_type_info_icon');
+  const critSummary = document.getElementById('crit-source-summary');
+  const fumbleSummary = document.getElementById('fumble-type-summary');
   if (rollType === 'fumble') {
     critFields.style.display = 'none';
     critSourceContainer.style.display = 'none';
     if(currentCritSourceInfoIcon) currentCritSourceInfoIcon.style.display = 'none';
     fumbleTypeContainer.style.display = 'block';
-    if(currentFumbleTypeInfoIcon) currentFumbleTypeInfoIcon.style.display = 'inline-block'; 
+    if(currentFumbleTypeInfoIcon) currentFumbleTypeInfoIcon.style.display = 'inline-block';
+    if (critSummary) critSummary.classList.remove('is-active');
+    if (fumbleSummary) fumbleSummary.classList.add('is-active');
     toggleAttackType();
   } else { // crit
     critFields.style.display = 'block';
     critSourceContainer.style.display = 'block';
-    if(currentCritSourceInfoIcon) currentCritSourceInfoIcon.style.display = 'inline-block'; 
+    if(currentCritSourceInfoIcon) currentCritSourceInfoIcon.style.display = 'inline-block';
     fumbleTypeContainer.style.display = 'none';
     if(currentFumbleTypeInfoIcon) currentFumbleTypeInfoIcon.style.display = 'none';
     attackTypeContainer.style.display = 'none';
-    updateDamageAndMagicTypes(); 
+    if (critSummary) critSummary.classList.add('is-active');
+    if (fumbleSummary) fumbleSummary.classList.remove('is-active');
+    updateDamageAndMagicTypes();
   }
 }
 

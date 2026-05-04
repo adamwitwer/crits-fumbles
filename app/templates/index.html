@@ -53,23 +53,25 @@
     </div>
 
     <div id="crit-source-container" style="display:none;">
-      <label for="crit_source">Crit Type</label>
-      <button
-      type="button"
-      class="info-icon"
-      id="crit_source_info_icon"
-      style="display: none;"
-      data-tooltip="About this Crit Type"
-      aria-label="More info about this crit type"
-      >
-      ⓘ
-      </button>
-      <select name="crit_source" id="crit_source">
-        <option value="Fury & Folly" {% if selected_crit_source == 'Fury & Folly' %}selected{% endif %}>Fury & Folly</option>
-        <option value="Sterling Vermin" {% if selected_crit_source == 'Sterling Vermin' %}selected{% endif %}>Sterling Vermin</option>
-        <option value="Questionable Arcana" {% if selected_crit_source == 'Questionable Arcana' %}selected{% endif %}>Questionable Arcana</option>
-        <option value="BCoydog" {% if selected_crit_source == 'BCoydog' %}selected{% endif %}>u/BCoydog</option>
-      </select>
+      <div class="source-chooser" id="crit-source-chooser">
+        <label for="crit_source">Crit Type</label>
+        <button
+        type="button"
+        class="info-icon"
+        id="crit_source_info_icon"
+        style="display: none;"
+        data-tooltip="About this Crit Type"
+        aria-label="More info about this crit type"
+        >
+        ⓘ
+        </button>
+        <select name="crit_source" id="crit_source">
+          <option value="Fury & Folly" {% if selected_crit_source == 'Fury & Folly' %}selected{% endif %}>Fury & Folly</option>
+          <option value="Sterling Vermin" {% if selected_crit_source == 'Sterling Vermin' %}selected{% endif %}>Sterling Vermin</option>
+          <option value="Questionable Arcana" {% if selected_crit_source == 'Questionable Arcana' %}selected{% endif %}>Questionable Arcana</option>
+          <option value="BCoydog" {% if selected_crit_source == 'BCoydog' %}selected{% endif %}>u/BCoydog</option>
+        </select>
+      </div>
       <div id="crit-fields" style="display:none;">
         <div>
           <label for="damage_type">Damage Type</label>
@@ -81,22 +83,24 @@
     </div>
 
     <div id="fumble-type-container" style="display:none;">
-      <label for="fumbleType">Fumble Type</label>
-      <button
-      type="button"
-      class="info-icon"
-      id="fumble_type_info_icon"
-      style="display: none;"
-      data-tooltip="About this fumble type"
-      aria-label="More info about this fumble type"
-      >
-      ⓘ
-      </button>
-      <select id="fumbleType" name="fumbleType">
-        <option value="Fury & Folly" {% if selected_fumble_type == 'Fury & Folly' %}selected{% endif %}>Fury & Folly</option>
-        <option value="Questionable Arcana" {% if selected_fumble_type == 'Questionable Arcana' %}selected{% endif %}>Questionable Arcana</option>
-        <option value="BCoydog" {% if selected_fumble_type == 'BCoydog' %}selected{% endif %}>u/BCoydog</option>
-      </select>
+      <div class="source-chooser" id="fumble-type-chooser">
+        <label for="fumbleType">Fumble Type</label>
+        <button
+        type="button"
+        class="info-icon"
+        id="fumble_type_info_icon"
+        style="display: none;"
+        data-tooltip="About this fumble type"
+        aria-label="More info about this fumble type"
+        >
+        ⓘ
+        </button>
+        <select id="fumbleType" name="fumbleType">
+          <option value="Fury & Folly" {% if selected_fumble_type == 'Fury & Folly' %}selected{% endif %}>Fury & Folly</option>
+          <option value="Questionable Arcana" {% if selected_fumble_type == 'Questionable Arcana' %}selected{% endif %}>Questionable Arcana</option>
+          <option value="BCoydog" {% if selected_fumble_type == 'BCoydog' %}selected{% endif %}>u/BCoydog</option>
+        </select>
+      </div>
       <div id="attack-type-container" style="display:none;">
         <label for="attackType">Damage Type</label>
         <select id="attackType" name="attackType">
@@ -115,6 +119,17 @@
     >🔊</button>
 
     <button type="button" id="primary-roll-button" aria-label="Roll dice for result">⚡️ Roll ⚡️</button>
+
+    <div class="source-footer">
+      <p class="source-summary" id="crit-source-summary">
+        Using <strong data-source-name>Fury &amp; Folly</strong>
+        <button type="button" class="source-change-btn" data-chooser="crit-source-chooser" data-summary="crit-source-summary" aria-expanded="false">change</button>
+      </p>
+      <p class="source-summary" id="fumble-type-summary">
+        Using <strong data-source-name>Fury &amp; Folly</strong>
+        <button type="button" class="source-change-btn" data-chooser="fumble-type-chooser" data-summary="fumble-type-summary" aria-expanded="false">change</button>
+      </p>
+    </div>
 
   </form>
 
