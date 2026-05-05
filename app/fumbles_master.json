@@ -980,7 +980,7 @@
       {
         "roll": "21-35",
         "description": "Off Balance",
-        "effect": "The attacker loses their footing. They have disadvantage on Dexterity saving throws until the end of their next turn and can\u2019t take reactions until the start of their next turn. Their stance unravels; for a moment they fight just to stay upright."
+        "effect": "The attacker loses their footing. They have disadvantage on all saving throws and can\u2019t take reactions until the end of their next turn. Their stance unravels; for a moment they fight just to stay upright."
       },
       {
         "roll": "36-50",
