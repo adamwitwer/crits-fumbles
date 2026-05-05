@@ -231,6 +231,13 @@ def get_roll_result_and_log(payload, client_ip=None):
                                 except ValueError: app.logger.warning(f"Malformed roll '{rr_str}' in {fumble_source_from_payload}"); continue
                                 if match: response.update({"description": entry.get('description', 'N/A'), "effect": entry.get('effect', 'N/A')}); found = True; break
                             if not found: response.update({"description": f"No matching {fumble_source_from_payload} fumble for {roll_value} in {key_to_use}.", "effect": "No additional effect."})
+
+                            # Detect references to follow-up injury/insanity tables in the fumble effect.
+                            fumble_effect_text = response.get("effect", "")
+                            if isinstance(fumble_effect_text, str):
+                                if "minor injury" in fumble_effect_text.lower(): response.update({"isSecondaryPrompt": True, "secondaryPromptText": "Minor Injury!", "secondaryType": "minor"})
+                                elif "major injury" in fumble_effect_text.lower(): response.update({"isSecondaryPrompt": True, "secondaryPromptText": "Major Injury!", "secondaryType": "major"})
+                                elif "insanity" in fumble_effect_text.lower(): response.update({"isSecondaryPrompt": True, "secondaryPromptText": "Insanity!", "secondaryType": "insanity"})
                     # If key_to_use was None (e.g. from undefined fumble source), error is already set.
             else: response.update({"status": "error", "errorMessage": f"Invalid primary roll type: {roll_type_from_payload}"})
 

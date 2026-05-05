@@ -199,14 +199,17 @@ function updateUI(data) {
 
     if (showPrompt) {
         document.getElementById('secondary-prompt-text').textContent = data.secondaryPromptText || 'Bonus Effect!';
-        document.getElementById('secondary-roll-type-hidden').value = data.secondaryType; 
-        
-        document.getElementById('secondary-crit-source-hidden').value = data.selectedCritSource;
-        document.getElementById('secondary-damage-type-hidden').value = data.original_damageType || document.getElementById('damage_type').value;
-        
-        let originalPrimaryText = data.resultText; 
-        if (data.selectedRollType === 'crit' && data.description && data.effect) {
-            originalPrimaryText = data.description + " Effect: " + data.effect; 
+        document.getElementById('secondary-roll-type-hidden').value = data.secondaryType;
+
+        document.getElementById('secondary-crit-source-hidden').value = data.selectedCritSource || '';
+        const damageTypeForSecondary = data.selectedRollType === 'fumble'
+            ? ''
+            : (data.original_damageType || document.getElementById('damage_type').value || '');
+        document.getElementById('secondary-damage-type-hidden').value = damageTypeForSecondary;
+
+        let originalPrimaryText = data.resultText;
+        if ((data.selectedRollType === 'crit' || data.selectedRollType === 'fumble') && data.description && data.effect) {
+            originalPrimaryText = data.description + " Effect: " + data.effect;
         } else if (!data.resultText && data.description) {
             originalPrimaryText = data.description;
         }

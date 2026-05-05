@@ -975,126 +975,126 @@
       {
         "roll": "1-20",
         "description": "Overextended",
-        "effect": "You overcommit to the attack. The next attack roll you make before the end of your next turn has disadvantage. Big swing, no finish; you throw hands like a tavern door in a windstorm."
+        "effect": "The attacker overcommits to the strike. They lose any additional attacks this turn, and their attacks have disadvantage until the end of their next turn. The blow sails wide, momentum carrying them a half-step past the mark."
       },
       {
         "roll": "21-35",
         "description": "Off Balance",
-        "effect": "You lose your footing. You can\u2019t take reactions until the start of your next turn. Your stance is so sloppy it should come with a mop and bucket."
+        "effect": "The attacker loses their footing. They have disadvantage on Dexterity saving throws until the end of their next turn and can\u2019t take reactions until the start of their next turn. Their stance unravels; for a moment they fight just to stay upright."
       },
       {
         "roll": "36-50",
         "description": "Wide Open",
-        "effect": "You leave yourself exposed. The next attack against you before the start of your next turn has advantage. You opened your guard like you were inviting a free punch buffet."
+        "effect": "The attacker leaves themselves exposed. The next attack against them before the start of their next turn has advantage. The line of their guard collapses, and the opening is plain to see."
       },
       {
         "roll": "51-65",
         "description": "Drop It",
-        "effect": "Your weapon slips from your grasp and lands at your feet. It takes an object interaction to retrieve it. Your grip folded faster than a cheap camp stool, butterfingers."
+        "effect": "The attacker\u2019s weapon slips from their grasp and clatters 1d4 \u00d7 5 ft away in a random direction. Retrieving it costs movement. The hilt twists wrong against the palm and the weapon is gone before they register it leaving."
       },
       {
         "roll": "66-80",
         "description": "Hard Fall",
-        "effect": "You stumble and fall Prone until the end of your next turn. You met the floor hard enough to introduce yourself twice, dumbass."
+        "effect": "The attacker stumbles and falls Prone until the end of their next turn. The ground rushes up to meet them, and the impact rings through their bones."
       },
       {
         "roll": "81-90",
         "description": "Strained",
-        "effect": "You pull something during the attack. Your speed is reduced to 0 until the end of your next turn. Congratulations, you sprinted straight into your own warranty void."
+        "effect": "The attacker pulls something during the strike. They are Restrained until the end of their next turn as their own body locks against them. A muscle gives out somewhere deep; for a moment, the legs will not answer."
       },
       {
         "roll": "91-95",
         "description": "Self-Inflicted",
-        "effect": "In the chaos, you strike yourself. You take 1d6 damage of the weapon\u2019s type. You landed your cleanest hit on the one target that always stands still: you."
+        "effect": "In the chaos, the attacker strikes themselves. They take 2d6 damage of the weapon\u2019s type. The blade finds the only target it could not miss."
       },
       {
         "roll": "96-100",
         "description": "Total Disaster",
-        "effect": "You lose control completely. You fall Prone until the end of your next turn, drop your weapon, and take 1d6 damage of the weapon\u2019s type. That wasn\u2019t a combat turn; that was a public-service warning label."
+        "effect": "The attacker loses control completely. Their weapon flies 2d6 \u00d7 5 ft away in a random direction; they fall Prone until the end of their next turn and take 2d6 damage of the weapon\u2019s type. Then roll on the Minor Injury chart. The motion turns against them all at once; everything that could go wrong, does."
       }
     ],
     "elemental": [
       {
         "roll": "1-20",
         "description": "Flare-Up",
-        "effect": "The energy surges unpredictably. You can\u2019t take reactions until the start of your next turn. You just poked a thunderhead and acted surprised when it answered."
+        "effect": "The energy surges unpredictably. The caster can\u2019t take reactions until the start of their next turn. Sparks crackle across their skin in protest; the spell is loud where it should be quiet."
       },
       {
         "roll": "21-35",
         "description": "Backdraft",
-        "effect": "The blast partially rebounds. You take 1d4 damage of the spell\u2019s type. Your spell looped back like bad weather and ruined your own forecast."
+        "effect": "The blast partially rebounds. The caster takes 1d4 damage of the spell\u2019s type. The energy curls back along the casting line and finds them waiting at the source."
       },
       {
         "roll": "36-50",
         "description": "Blinding Flash",
-        "effect": "A sudden flash obscures your vision. You are Blinded until the start of your next turn. You summoned a tiny sun and stood there staring at it like a genius."
+        "effect": "A sudden flash obscures the caster\u2019s vision. They are Blinded until the start of their next turn. The spell ignites brighter than intended; for a moment, the world is white."
       },
       {
         "roll": "51-65",
         "description": "Unstable Ground",
-        "effect": "The energy disturbs the area around you. You fall Prone until the end of your next turn. The planet itself rejected your casting and dumped you on your ass."
+        "effect": "The energy disturbs the area around the caster. They fall Prone until the end of their next turn. The earth or air around their feet shudders, and they go down with it."
       },
       {
         "roll": "66-80",
-        "description": "Wild Surgelet",
-        "effect": "The effect veers slightly off course. If another creature is within 5 feet of the original target, the DM may choose that creature as the new target. You aimed at one creature and offended local geography instead."
+        "description": "Wild Surge",
+        "effect": "The effect veers off course. If a creature other than the intended target is within 5 ft of the original target, the DM chooses one as the new target. The spell bends mid-flight, drawn to a heat it knows better than the one the caster named."
       },
       {
         "roll": "81-90",
         "description": "Elemental Feedback",
-        "effect": "The energy lashes back. You take 1d6 damage of the spell\u2019s type and your speed is reduced to 0 until the end of your next turn. You pissed off the weather and now the weather is personal."
+        "effect": "The energy lashes back. The caster takes 1d6 damage of the spell\u2019s type and is Restrained until the end of their next turn as the element coils around them. The element answers in kind, and the body forgets how to move forward."
       },
       {
         "roll": "91-95",
         "description": "Overload",
-        "effect": "The surge overwhelms your senses. You are Stunned until the end of your next turn. Your nerves just got hit by a hurricane warning siren at point-blank range."
+        "effect": "The surge overwhelms the caster\u2019s senses. They are Stunned until the end of their next turn and the spell slot is expended. The casting goes through them instead of out from them."
       },
       {
         "roll": "96-100",
         "description": "Elemental Burst",
-        "effect": "The power detonates at your position. You take 2d6 damage of the spell\u2019s type and fall Prone until the end of your next turn. Mother Nature reviewed your technique and handed back a failing grade."
+        "effect": "The power detonates at the caster\u2019s position. They take 2d8 damage of the spell\u2019s type, fall Prone until the end of their next turn, and the spell slot is expended. Every other creature within 10 ft (allies included) takes 1d6 damage of the spell\u2019s type (Dexterity save, half on success). The element refuses to leave the hand cleanly; it claims its territory before going."
       }
     ],
     "magical": [
       {
         "roll": "1-20",
         "description": "Arcane Static",
-        "effect": "Your spell sputters. You have disadvantage on the next spell attack roll you make before the end of your next turn. The weave finds your methodology unconvincing and your execution remedial."
+        "effect": "The caster\u2019s spell sputters. They have disadvantage on the next spell attack roll they make before the end of their next turn. The weave hesitates around their fingertips, as if waiting for a clearer signal."
       },
       {
         "roll": "21-35",
         "description": "Mental Slip",
-        "effect": "Your concentration falters briefly. You can\u2019t take reactions until the start of your next turn. Your thesis collapsed mid-sentence; truly undergraduate work."
+        "effect": "The caster\u2019s concentration falters briefly. They can\u2019t take reactions until the start of their next turn. The thread of the spell slips, and for a moment their thoughts will not gather."
       },
       {
         "roll": "36-50",
         "description": "Weave Distortion",
-        "effect": "The magic bends unpredictably. The next attack against you before the start of your next turn has advantage. You have become a live demonstration of why apprentices are supervised."
+        "effect": "The magic bends unpredictably. The next attack against the caster before the start of their next turn has advantage. The air around them shimmers wrong, and they stand revealed at its center."
       },
       {
         "roll": "51-65",
         "description": "Psychic Recoil",
-        "effect": "Arcane feedback rattles your mind. You take 1d4 psychic damage. Fascinating result: self-inflicted cognition failure in a single casting."
+        "effect": "Arcane feedback rattles the caster\u2019s mind. They take 2d4 psychic damage. If concentrating on a spell, they must make a Constitution saving throw (DC 10) or lose concentration. Something pushes back from the other side of the casting."
       },
       {
         "roll": "66-80",
         "description": "Spell Lock",
-        "effect": "The weave resists you. You are Restrained until the end of your next turn as shimmering energy binds you. The arcane lattice has formally denied your access privileges."
+        "effect": "The weave resists the caster. They are Restrained until the end of their next turn as shimmering energy binds them. Lines of light wrap their limbs and refuse to slack."
       },
       {
         "roll": "81-90",
         "description": "Mind Fracture",
-        "effect": "Your thoughts splinter under the strain. You are Frightened until the end of your next turn. Your mental architecture is currently held together by panic and optimism."
+        "effect": "The caster\u2019s thoughts splinter under the strain. They are Frightened until the end of their next turn and the spell slot is expended. The casting opens a door in their head, and something on the other side is looking back."
       },
       {
         "roll": "91-95",
         "description": "Arcane Collapse",
-        "effect": "Your control shatters momentarily. You are Incapacitated until the end of your next turn. You\u2019ve achieved the rare feat of blue-screening your own soul."
+        "effect": "The caster\u2019s control shatters momentarily. They are Incapacitated until the end of their next turn and the spell slot is expended. For a heartbeat, the weave forgets their name."
       },
       {
         "roll": "96-100",
         "description": "Reality Snaps",
-        "effect": "The magic tears violently around you. You take 2d6 force damage and are Stunned until the end of your next turn. Reality issued a peer review and your paper got shredded."
+        "effect": "The magic tears violently around the caster. They take 2d6 force damage and are Stunned until the end of their next turn. The spell slot is expended and they lose concentration on any spell they are maintaining. Then roll on the Minor Injury chart. The space around them folds back on itself, and they are still inside it."
       }
     ]
   }
