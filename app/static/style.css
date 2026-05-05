@@ -219,6 +219,58 @@ select {
   margin-top: 0.5em;
 }
 
+.segmented-toggle {
+  display: flex;
+  width: 100%;
+  border: none;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  margin-top: 1.3em;
+  margin-bottom: calc(-1 * var(--gap-form) + 0.6em);
+}
+
+.segmented-toggle input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+}
+
+.segmented-toggle label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.55em 0.6em;
+  font-size: var(--font-size-form-elements);
+  font-family: inherit;
+  color: color-mix(in srgb, var(--clr-text) 55%, transparent);
+  background: transparent;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  margin-bottom: 0;
+}
+
+.segmented-toggle label + input[type="radio"] + label {
+  border-left: var(--border-width-standard) solid var(--clr-form-border);
+}
+
+.segmented-toggle input[type="radio"]:checked + label {
+  background: var(--clr-button-bg);
+  color: var(--clr-button-text);
+  font-weight: 600;
+}
+
+.segmented-toggle input[type="radio"]:focus-visible + label {
+  outline: 2px solid var(--clr-button-outline);                                                                       
+  outline-offset: -2px;                        
+}       
+
+
 button {
   font-size: var(--font-size-button-primary);
   font-family: var(--font-heading);
@@ -258,8 +310,8 @@ button:active {
 #mute-button {
   all: unset;
   position: absolute;
-  top: 1.7em;
-  right: 1.8em;
+  top: 1rem;
+  right: 1.6rem;
   font-size: 1rem;
   cursor: pointer;
   transition: opacity 0.2s ease;
@@ -1072,8 +1124,8 @@ footer.app-footer {
 .source-summary {
   display: none;
   font-size: 0.72em;
-  opacity: 0.65;
-  margin: 0;
+  color: color-mix(in srgb, var(--clr-text) 100%, transparent);
+  margin: -0.5rem 0;
 }
 
 .source-summary.is-active {
@@ -1096,6 +1148,7 @@ footer.app-footer {
   margin-left: 0.35rem;
   font-size: inherit;
   touch-action: manipulation;
+  padding: 0 0.2rem;
 }
 
 .source-change-btn:focus,
@@ -1103,6 +1156,7 @@ footer.app-footer {
   outline: 1.5px solid var(--clr-button-outline);
   outline-offset: 1.5px;
   opacity: 1;
+  background: transparent;
 }
 
 .info-icon:focus,
@@ -1280,12 +1334,15 @@ footer.app-footer {
   }
   form,
   .bonus-alert {
-     padding: calc(var(--spacing-unit) * 2);
+    padding: calc(var(--spacing-unit) * 2);
   }
   #mute-button {
-  top: 1.8em;
-  right: 2.3em;
-  font-size: 1.25rem;
+    top: 1.2em;
+    right: 1.9em;
+    font-size: 1.25rem;
+  }
+  .source-summary {
+    margin: 1rem 0 0 0;
   }
 }
 
@@ -1376,6 +1433,24 @@ footer.app-footer {
      background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23cccccc%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
   }
 
+  .segmented-toggle {
+    background: #333;
+    border-color: var(--clr-form-border);
+  }
+
+  .segmented-toggle label {
+    color: var(--clr-text);
+  }
+
+  .segmented-toggle label + input[type="radio"] + label {
+    border-left-color: var(--clr-form-border);
+  }
+
+  .segmented-toggle input[type="radio"]:checked + label {
+    background: var(--clr-button-bg);
+    color: var(--clr-button-text);
+  }
+  
   button {
     /* background/color uses variables */
     border: var(--border-width-standard) solid #777; /* Specific subtle border for dark button */

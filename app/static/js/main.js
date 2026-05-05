@@ -40,7 +40,7 @@ async function handleRoll(context) {
   let dieTypeForAnim, numDiceForAnim;
 
   if (context === 'primary') {
-    payload.rollType = document.getElementById('roll_type').value;
+    payload.rollType = document.querySelector('input[name="roll_type"]:checked').value;
     const critSource = document.getElementById('crit_source').value;
 
     if (payload.rollType === 'crit') {
@@ -431,7 +431,7 @@ async function shareResultToDiscord() {
 // --- Event Setup and Initialization ---
 function setupEventListeners() {
   // Get references to elements
-  const rollTypeSelect = document.getElementById('roll_type');
+  const rollTypeToggle = document.getElementById('roll-type-toggle');
   const critSourceSelect = document.getElementById('crit_source');
   const fumbleTypeSelect = document.getElementById('fumbleType');
   const critSourceInfoIcon = document.getElementById('crit_source_info_icon');
@@ -443,7 +443,7 @@ function setupEventListeners() {
   const historyOverlay = document.getElementById('history-overlay');
 
   // Attach event listeners for forms
-  if (rollTypeSelect) rollTypeSelect.addEventListener('change', toggleFields);
+  if (rollTypeToggle) rollTypeToggle.addEventListener('change', toggleFields);
   if (critSourceSelect) critSourceSelect.addEventListener('change', updateDamageAndMagicTypes);
   if (fumbleTypeSelect) fumbleTypeSelect.addEventListener('change', toggleAttackType);
   if (primaryRollBtn) primaryRollBtn.addEventListener('click', () => handleRoll('primary'));

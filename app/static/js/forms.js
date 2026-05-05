@@ -91,7 +91,7 @@ export function toggleAttackType() {
   const selectedFumbleType = fumbleTypeSelect.value;
   const attackTypeContainer = document.getElementById('attack-type-container');
   const attackTypeSelect = document.getElementById('attackType');
-  const rollType = document.getElementById('roll_type').value;
+  const rollType = document.querySelector('input[name="roll_type"]:checked').value;
   const currentAttackTypeValue = attackTypeSelect.value;
   attackTypeSelect.innerHTML = '';
   if (rollType === 'fumble') {
@@ -129,7 +129,7 @@ export function toggleAttackType() {
 }
 
 export function toggleFields() {
-  const rollType = document.getElementById('roll_type').value;
+  const rollType = document.querySelector('input[name="roll_type"]:checked').value;
   const critFields = document.getElementById('crit-fields');
   const fumbleTypeContainer = document.getElementById('fumble-type-container');
   const attackTypeContainer = document.getElementById('attack-type-container');

@@ -44,12 +44,11 @@
   <h1>Crits & Fumbles</h1>
 
   <form id="main-form">
-    <div>
-      <label for="roll_type">Roll Type</label>
-      <select name="roll_type" id="roll_type">
-        <option value="crit" {% if selected_roll_type == 'crit' %}selected{% endif %}>Critical</option>
-        <option value="fumble" {% if selected_roll_type == 'fumble' %}selected{% endif %}>Fumble</option>
-      </select>
+    <div class="segmented-toggle" id="roll-type-toggle" role="radiogroup" aria-label="Roll Type">
+      <input type="radio" name="roll_type" id="roll_type_crit" value="crit" {% if selected_roll_type != 'fumble' %}checked{% endif %}>
+      <label for="roll_type_crit">Critical</label>
+      <input type="radio" name="roll_type" id="roll_type_fumble" value="fumble" {% if selected_roll_type == 'fumble' %}checked{% endif %}>
+      <label for="roll_type_fumble">Fumble</label>
     </div>
 
     <div id="crit-source-container" style="display:none;">
@@ -123,11 +122,11 @@
     <div class="source-footer">
       <p class="source-summary" id="crit-source-summary">
         Using <strong data-source-name>Fury &amp; Folly</strong>
-        <button type="button" class="source-change-btn" data-chooser="crit-source-chooser" data-summary="crit-source-summary" aria-expanded="false">change</button>
+        <button type="button" class="source-change-btn" data-chooser="crit-source-chooser" data-summary="crit-source-summary" aria-expanded="false" data-tooltip="Change Crit or Fumble Table" aria-label="Change Crit or Fumble Table">change</button>
       </p>
       <p class="source-summary" id="fumble-type-summary">
         Using <strong data-source-name>Fury &amp; Folly</strong>
-        <button type="button" class="source-change-btn" data-chooser="fumble-type-chooser" data-summary="fumble-type-summary" aria-expanded="false">change</button>
+        <button type="button" class="source-change-btn" data-chooser="fumble-type-chooser" data-summary="fumble-type-summary" aria-expanded="false" data-tooltip="Change Crit or Fumble Table" aria-label="Change Crit or Fumble Table">change</button>
       </p>
     </div>
 
