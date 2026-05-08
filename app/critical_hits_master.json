@@ -403,7 +403,7 @@
     "bludgeoning": {
       "1-15": "Solid Hit: Resolve critical damage as normal. Roll one additional damage die.",
       "16-35": "Off-Balance: Resolve critical damage as normal. The target is knocked Prone and pushed 5 ft.",
-      "36-55": "Driving Impact: Resolve critical damage as normal. The target is Deafened until the end of its next turn and pushed 5 ft.",
+      "36-55": "Driving Impact: Resolve critical damage as normal, plus one additional damage die. The target is Deafened and attacks at a disadvantage until the end of its next turn.",
       "56-75": "Knockdown: Deal maximum critical damage (do not roll). The target is Grappled until the end of its next turn and pushed 10 ft if not anchored.",
       "76-90": "Bone-Shaker: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and knocked back 10 ft.",
       "91-95": "Concussive Blast: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn; if wearing a helmet, it is dented or knocked off.",
@@ -416,7 +416,7 @@
       "56-75": "Sweeping Slash: Deal maximum critical damage (do not roll). The target is Grappled until the end of its next turn and bleeds 1d6 at the start of each of its turns until it uses an action to staunch the wound.",
       "76-90": "Deep Rend: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and bleeds 1d8 at the start of each of its turns until it uses an action to staunch the wound.",
       "91-95": "Bloodletting: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn and bleeds 2d6 at the start of each of its turns until it uses an action to staunch the wound.",
-      "96-100": "Executioner\u2019s Arc: Deal maximum critical damage twice (do not roll). The target is Unconscious until the end of its next turn, wakes Prone, and bleeds 2d8 at the start of each of its turns until it uses an action to staunch the wound."
+      "96-100": "Executioner\u2019s Arc: Deal maximum critical damage twice (do not roll). The target is Unconscious until the end of its next turn, wakes Prone, and bleeds 2d8 at the start of each turn until it uses an action to staunch the wound."
     },
     "piercing": {
       "1-15": "Clean Puncture: Resolve critical damage as normal. Roll one additional damage die.",
@@ -442,7 +442,7 @@
       "36-55": "Ice Bite: Resolve critical damage as normal. The target is Grappled by ice until the end of its next turn and its speed is halved until the end of its next turn.",
       "56-75": "Frozen Step: Deal maximum critical damage (do not roll). The target is Restrained until the end of its next turn and its speed is halved until the end of its next turn.",
       "76-90": "Deep Freeze: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and its speed is 0 until the end of its next turn.",
-      "91-95": "Flash-Frozen: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn and its speed is 0 until the end of its next turn.",
+      "91-95": "Flash-Frozen: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. Extreme cold has Stunned the target until the end of its next turn.",
       "96-100": "Icebound: Deal maximum critical damage twice (do not roll). The target is Paralyzed until the end of its next turn, encased in a thin layer of ice; on its next turn it must use its action to break free or remain Paralyzed."
     },
     "fire": {
@@ -456,8 +456,8 @@
     },
     "lightning": {
       "1-15": "Crackling Hit: Resolve critical damage as normal. Roll one additional damage die.",
-      "16-35": "Static Jolt: Resolve critical damage as normal. The target is Frightened until the end of its next turn; one creature within 5 ft of the target takes 1d4 lightning damage.",
-      "36-55": "Arc Flash: Resolve critical damage as normal. The target is knocked Prone; one creature within 5 ft of the target takes 1d4 lightning damage.",
+      "16-35": "Static Jolt: Resolve critical damage as normal. The target is Frightened until the end of its next turn; one creature within 10 ft of the target takes 1d4 lightning damage.",
+      "36-55": "Arc Flash: Resolve critical damage as normal. The target is knocked Prone; one creature within 10 ft of the target takes 1d4 lightning damage.",
       "56-75": "Nervous Shock: Deal maximum critical damage (do not roll). The target is Grappled by spasming muscles until the end of its next turn; one creature within 10 ft of the target takes 1d6 lightning damage.",
       "76-90": "Muscle Lock: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn; one creature within 10 ft of the target takes 1d8 lightning damage.",
       "91-95": "Overload: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn; up to two creatures within 10 ft of the target take 1d8 lightning damage each.",
@@ -465,7 +465,7 @@
     },
     "thunder": {
       "1-15": "Booming Hit: Resolve critical damage as normal. Roll one additional damage die.",
-      "16-35": "Ear-Ring: Resolve critical damage as normal. The target is Deafened until the end of its next turn and pushed 5 ft.",
+      "16-35": "Ringing Ears: Resolve critical damage as normal. Roll one additional damage die. The target is Deafened until the end of its next turn and pushed 5 ft.",
       "36-55": "Shockwave: Resolve critical damage as normal. The target is knocked Prone, pushed 5 ft, and Deafened until the end of its next turn.",
       "56-75": "Floor-Rattle: Deal maximum critical damage (do not roll). The target is Frightened until the end of its next turn, pushed 10 ft, and Deafened for 1 minute.",
       "76-90": "Concussed: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn, pushed 10 ft, and Deafened for 1 minute.",
@@ -487,30 +487,30 @@
       "36-55": "Grave Chill: Resolve critical damage as normal. The target is Frightened until the end of its next turn; the target\u2019s hit point maximum is reduced by the damage dealt by this attack until it completes a long rest.",
       "56-75": "Soul Taint: Deal maximum critical damage (do not roll). The target is Blinded until the end of its next turn; the target\u2019s hit point maximum is reduced by the damage dealt until it completes a long rest.",
       "76-90": "Wither: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn; the target\u2019s hit point maximum is reduced by the damage dealt until it completes a long rest.",
-      "91-95": "Black Veil: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn; the target\u2019s hit point maximum is reduced by the damage dealt until it is restored by greater restoration.",
-      "96-100": "Death Spiral: Deal maximum critical damage twice (do not roll). The target is Unconscious until the end of its next turn and wakes Prone; the target\u2019s hit point maximum is reduced by the damage dealt until it is restored by greater restoration."
+      "91-95": "Black Veil: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn; the target\u2019s hit point maximum is reduced by the damage dealt until it is restored by Greater Restoration.",
+      "96-100": "Death Spiral: Deal maximum critical damage twice (do not roll). The target is Unconscious until the end of its next turn and wakes Prone; the target\u2019s hit point maximum is reduced by the damage dealt until it is restored by Greater Restoration."
     },
     "poison": {
       "1-15": "Toxic Hit: Resolve critical damage as normal. Roll one additional damage die.",
-      "16-35": "Sickening Sting: Resolve critical damage as normal. The target is Poisoned until it succeeds on a Constitution saving throw (DC 12) at the end of its next turn.",
-      "36-55": "Venom Rush: Resolve critical damage as normal. The target is knocked Prone and takes 1d4 poison damage at the start of each of its turns until it succeeds on a Constitution saving throw (DC 12) at the end of one of its turns.",
-      "56-75": "Nauseated: Deal maximum critical damage (do not roll). The target is Poisoned and takes 1d6 poison damage at the start of each of its turns until it succeeds on a Constitution saving throw (DC 14) at the end of one of its turns.",
-      "76-90": "Toxic Shock: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and takes 1d8 poison damage at the start of each of its turns until it succeeds on a Constitution saving throw (DC 14) at the end of one of its turns.",
-      "91-95": "System Crash: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn and takes 2d6 poison damage at the start of each of its turns until it succeeds on a Constitution saving throw (DC 16) at the end of one of its turns.",
-      "96-100": "Blackout: Deal maximum critical damage twice (do not roll). The target is Unconscious until the end of its next turn, wakes Prone and Poisoned, and takes 2d8 poison damage at the start of each of its turns until it succeeds on a Constitution saving throw (DC 16) at the end of one of its turns."
+      "16-35": "Sickening Sting: Resolve critical damage as normal. The target is Poisoned until it succeeds on a Constitution saving throw (DC 12) at the beginning of each subsequent turn.",
+      "36-55": "Venom Rush: Resolve critical damage as normal. The target is knocked Prone and takes 1d4 poison damage at the start of each subsequent turn until it succeeds on a Constitution saving throw (DC 12).",
+      "56-75": "Nauseated: Deal maximum critical damage (do not roll). The target is Poisoned and takes 1d6 poison damage at the start of each subsequent turn until it succeeds on a Constitution saving throw (DC 14).",
+      "76-90": "Toxic Shock: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and takes 1d8 poison damage at the start of each subsequent turn until it succeeds on a Constitution saving throw (DC 14).",
+      "91-95": "System Crash: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn and takes 2d6 poison damage at the start of each subsequent turn until it succeeds on a Constitution saving throw (DC 16).",
+      "96-100": "Blackout: Deal maximum critical damage twice (do not roll). The target is Unconscious until the end of its next turn, wakes Prone and Poisoned, and takes 2d8 poison damage at the start of each subsequent turn until it succeeds on a Constitution saving throw (DC 16)."
     },
     "psychic": {
       "1-15": "Mind Spike: Resolve critical damage as normal. Roll one additional damage die.",
-      "16-35": "Vertigo: Resolve critical damage as normal. The target is Blinded until the end of its next turn; on its next turn, you choose the direction of its movement.",
-      "36-55": "Intrusive Thought: Resolve critical damage as normal. The target is Frightened until the end of its next turn; on its next turn, the DM chooses the target of its action (if any).",
-      "56-75": "Panic: Deal maximum critical damage (do not roll). The target is Grappled in mental anguish until the end of its next turn; on its next turn, the DM controls its movement.",
-      "76-90": "Overwhelmed: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn; the DM controls its action on the turn after that.",
-      "91-95": "Mind Snare: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn; the DM controls its full turn (action and movement) on the turn after that.",
-      "96-100": "Ego Shatter: Deal maximum critical damage twice (do not roll). The target is Unconscious until the end of its next turn and wakes Prone; for the next minute, the DM controls one of the target\u2019s actions or moves at the start of each of its turns (target\u2019s choice which)."
+      "16-35": "Vertigo: Resolve critical damage as normal. The target is Blinded until the end of its next turn; on its next turn, the target staggers 10 ft in a random direction of the DM\u2019s choosing.",
+      "36-55": "Intrusive Thought: Resolve critical damage as normal. The target is Frightened until the end of its next turn; on its next turn, it attacks any ally within 15 ft.",
+      "56-75": "Panic: Deal maximum critical damage (do not roll). The target is Grappled in mental anguish until the end of its next turn; it attacks with disadvantage on its next turn.",
+      "76-90": "Overwhelmed: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn; the attacker controls its first action on the subsequent turn.",
+      "91-95": "Mind Snare: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The attacker controls the target\u2019s movement next turn.",
+      "96-100": "Ego Shatter: Deal maximum critical damage twice (do not roll). The attacker controls the target\u2019s next turn (action and movement)."
     },
     "radiant": {
       "1-15": "Searing Light: Resolve critical damage as normal. Roll one additional damage die.",
-      "16-35": "Dazzle: Resolve critical damage as normal. The target is Blinded until the end of its next turn.",
+      "16-35": "Dazzle: Resolve critical damage as normal. Roll one additional damage die. The target is Blinded until the end of its next turn.",
       "36-55": "Revealing Glow: Resolve critical damage as normal. The target is Frightened until the end of its next turn and glows with dim light in a 10-ft radius until the end of its next turn; attacks against it have advantage during this time.",
       "56-75": "Holy Terror: Deal maximum critical damage (do not roll). The target is Grappled by divine radiance until the end of its next turn and glows for 1 minute (dim light, 10-ft radius); attacks against it have advantage while glowing.",
       "76-90": "Sunburst: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and glows for 1 minute; attacks against it have advantage while glowing.",

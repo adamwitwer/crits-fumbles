@@ -975,126 +975,126 @@
       {
         "roll": "1-20",
         "description": "Overextended",
-        "effect": "The attacker overcommits to the strike. They lose any additional attacks this turn, and their attacks have disadvantage until the end of their next turn. The blow sails wide, momentum carrying them a half-step past the mark."
+        "effect": "The attacker overcommits to the strike. They lose any additional attacks this turn, and their attacks have disadvantage until the end of their next turn."
       },
       {
         "roll": "21-35",
         "description": "Off Balance",
-        "effect": "The attacker loses their footing. They have disadvantage on all saving throws and can\u2019t take reactions until the end of their next turn. Their stance unravels; for a moment they fight just to stay upright."
+        "effect": "The attacker loses their footing and falls Prone."
       },
       {
         "roll": "36-50",
         "description": "Wide Open",
-        "effect": "The attacker leaves themselves exposed. The next attack against them before the start of their next turn has advantage. The line of their guard collapses, and the opening is plain to see."
+        "effect": "The attacker leaves themselves exposed. Attacks against them before the start of their next turn have advantage."
       },
       {
         "roll": "51-65",
         "description": "Drop It",
-        "effect": "The attacker\u2019s weapon slips from their grasp and clatters 1d4 \u00d7 5 ft away in a random direction. Retrieving it costs movement. The hilt twists wrong against the palm and the weapon is gone before they register it leaving."
+        "effect": "The attacker\u2019s weapon slips from their grasp and clatters 1d4 \u00d7 5 ft away in a random direction. Retrieving it costs an action."
       },
       {
         "roll": "66-80",
-        "description": "Hard Fall",
-        "effect": "The attacker stumbles and falls Prone until the end of their next turn. The ground rushes up to meet them, and the impact rings through their bones."
+        "description": "Friend or Foe?",
+        "effect": "The attacker hits an ally of the DM\u2019s choosing within 15 ft and must roll for full damage."
       },
       {
         "roll": "81-90",
         "description": "Strained",
-        "effect": "The attacker pulls something during the strike. They are Restrained until the end of their next turn as their own body locks against them. A muscle gives out somewhere deep; for a moment, the legs will not answer."
+        "effect": "The attacker pulls something during the strike. They are Restrained until the end of their next turn as their own body locks against them."
       },
       {
         "roll": "91-95",
         "description": "Self-Inflicted",
-        "effect": "In the chaos, the attacker strikes themselves. They take 2d6 damage of the weapon\u2019s type. The blade finds the only target it could not miss."
+        "effect": "In the chaos, the attacker strikes themselves. They take 2d6 damage of the weapon\u2019s type."
       },
       {
         "roll": "96-100",
         "description": "Total Disaster",
-        "effect": "The attacker loses control completely. Their weapon flies 2d6 \u00d7 5 ft away in a random direction; they fall Prone until the end of their next turn and take 2d6 damage of the weapon\u2019s type. Then roll on the Minor Injury chart. The motion turns against them all at once; everything that could go wrong, does."
+        "effect": "The attacker loses control completely. Their weapon flies 2d6 \u00d7 5 ft away in a random direction; they fall Prone and cannot stand until they spend an action to regain their footing. They take 2d6 damage of the weapon\u2019s type. Then roll on the Minor Injury chart."
       }
     ],
     "elemental": [
       {
         "roll": "1-20",
         "description": "Flare-Up",
-        "effect": "The energy surges unpredictably. The caster can\u2019t take reactions until the start of their next turn. Sparks crackle across their skin in protest; the spell is loud where it should be quiet."
+        "effect": "The energy surges unpredictably. The caster loses any additional attacks this turn, and attack rolls have disadvantage until the end of their next turn."
       },
       {
         "roll": "21-35",
         "description": "Backdraft",
-        "effect": "The blast partially rebounds. The caster takes 1d4 damage of the spell\u2019s type. The energy curls back along the casting line and finds them waiting at the source."
+        "effect": "The blast partially rebounds. The caster takes 1d4 damage of the spell\u2019s type and loses all remaining actions this turn."
       },
       {
         "roll": "36-50",
         "description": "Blinding Flash",
-        "effect": "A sudden flash obscures the caster\u2019s vision. They are Blinded until the start of their next turn. The spell ignites brighter than intended; for a moment, the world is white."
+        "effect": "A sudden flash obscures the caster\u2019s vision. The caster is Blinded until the end of their next turn."
       },
       {
         "roll": "51-65",
         "description": "Unstable Ground",
-        "effect": "The energy disturbs the area around the caster. They fall Prone until the end of their next turn. The earth or air around their feet shudders, and they go down with it."
+        "effect": "The energy disturbs the area around the caster. The caster falls Prone and cannot stand until they spend an action to regain their footing."
       },
       {
         "roll": "66-80",
         "description": "Wild Surge",
-        "effect": "The effect veers off course. If a creature other than the intended target is within 5 ft of the original target, the DM chooses one as the new target. The spell bends mid-flight, drawn to a heat it knows better than the one the caster named."
+        "effect": "The effect veers off course. If another creature is within 10 ft of the original target, the DM selects one of them as the new target."
       },
       {
         "roll": "81-90",
         "description": "Elemental Feedback",
-        "effect": "The energy lashes back. The caster takes 1d6 damage of the spell\u2019s type and is Restrained until the end of their next turn as the element coils around them. The element answers in kind, and the body forgets how to move forward."
+        "effect": "The energy lashes back. The caster takes 1d6 damage of the spell\u2019s type and is Restrained until the end of their next turn as the element coils around them."
       },
       {
         "roll": "91-95",
         "description": "Overload",
-        "effect": "The surge overwhelms the caster\u2019s senses. They are Stunned until the end of their next turn and the spell slot is expended. The casting goes through them instead of out from them."
+        "effect": "The surge overwhelms the caster\u2019s senses. They can\u2019t take reactions and attack rolls against them have advantage until the end of their next turn."
       },
       {
         "roll": "96-100",
         "description": "Elemental Burst",
-        "effect": "The power detonates at the caster\u2019s position. They take 2d8 damage of the spell\u2019s type, fall Prone until the end of their next turn, and the spell slot is expended. Every other creature within 10 ft (allies included) takes 1d6 damage of the spell\u2019s type (Dexterity save, half on success). The element refuses to leave the hand cleanly; it claims its territory before going."
+        "effect": "The power detonates at the caster\u2019s position. They take 2d8 damage of the spell\u2019s type, fall Prone and cannot stand until they spend an action to regain their footing, and the spell slot is expended. Every other creature within 10 ft (allies included) takes 1d6 damage of the spell\u2019s type (Dexterity save, half on success)."
       }
     ],
     "magical": [
       {
         "roll": "1-20",
         "description": "Arcane Static",
-        "effect": "The caster\u2019s spell sputters. They have disadvantage on the next spell attack roll they make before the end of their next turn. The weave hesitates around their fingertips, as if waiting for a clearer signal."
+        "effect": "The caster\u2019s spell sputters. They have disadvantage any attack roll they make before the end of their next turn."
       },
       {
         "roll": "21-35",
         "description": "Mental Slip",
-        "effect": "The caster\u2019s concentration falters briefly. They can\u2019t take reactions until the start of their next turn. The thread of the spell slips, and for a moment their thoughts will not gather."
+        "effect": "The caster\u2019s concentration falters briefly. They can\u2019t take reactions and all attacks have disadvantage through the end of their next turn."
       },
       {
         "roll": "36-50",
         "description": "Weave Distortion",
-        "effect": "The magic bends unpredictably. The next attack against the caster before the start of their next turn has advantage. The air around them shimmers wrong, and they stand revealed at its center."
+        "effect": "Magic bends unpredictably, and the weave betrays the caster. The next two attacks against the caster have advantage."
       },
       {
         "roll": "51-65",
         "description": "Psychic Recoil",
-        "effect": "Arcane feedback rattles the caster\u2019s mind. They take 2d4 psychic damage. If concentrating on a spell, they must make a Constitution saving throw (DC 10) or lose concentration. Something pushes back from the other side of the casting."
+        "effect": "Arcane feedback rattles the caster\u2019s mind. They take 2d4 psychic damage and lose all remaining actions this turn. If concentrating on a spell, they must make a Constitution saving throw (DC 10) or lose concentration."
       },
       {
         "roll": "66-80",
         "description": "Spell Lock",
-        "effect": "The weave resists the caster. They are Restrained until the end of their next turn as shimmering energy binds them. Lines of light wrap their limbs and refuse to slack."
+        "effect": "The weave resists the caster. They are Restrained until the end of their next turn as shimmering energy binds them."
       },
       {
         "roll": "81-90",
         "description": "Mind Fracture",
-        "effect": "The caster\u2019s thoughts splinter under the strain. They are Frightened until the end of their next turn and the spell slot is expended. The casting opens a door in their head, and something on the other side is looking back."
+        "effect": "The caster\u2019s thoughts splinter under the strain. They are Frightened until the end of their next turn and the spell slot is expended."
       },
       {
         "roll": "91-95",
         "description": "Arcane Collapse",
-        "effect": "The caster\u2019s control shatters momentarily. They are Incapacitated until the end of their next turn and the spell slot is expended. For a heartbeat, the weave forgets their name."
+        "effect": "The caster\u2019s control shatters. They are Incapacitated until the end of their next turn and the spell slot is expended."
       },
       {
         "roll": "96-100",
         "description": "Reality Snaps",
-        "effect": "The magic tears violently around the caster. They take 2d6 force damage and are Stunned until the end of their next turn. The spell slot is expended and they lose concentration on any spell they are maintaining. Then roll on the Minor Injury chart. The space around them folds back on itself, and they are still inside it."
+        "effect": "The magic tears violently around the caster. They take 2d6 force damage and are Stunned until the end of their next turn. The spell slot is expended and they lose concentration on any spell they are maintaining. Then roll on the Minor Injury chart."
       }
     ]
   }
