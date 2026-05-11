@@ -990,12 +990,12 @@
       {
         "roll": "51-65",
         "description": "Drop It",
-        "effect": "The attacker\u2019s weapon slips from their grasp and clatters 1d4 \u00d7 5 ft away in a random direction. Retrieving it costs an action."
+        "effect": "The attacker\u2019s weapon slips from their grasp and clatters 1d4 \u00d7 5 feet away in a random direction. Retrieving it costs an action."
       },
       {
         "roll": "66-80",
         "description": "Friend or Foe?",
-        "effect": "The attacker hits an ally of the DM\u2019s choosing within 15 ft and must roll for full damage."
+        "effect": "The attacker hits an ally of the DM\u2019s choosing within 15 feet and must roll for full damage."
       },
       {
         "roll": "81-90",
@@ -1010,7 +1010,7 @@
       {
         "roll": "96-100",
         "description": "Total Disaster",
-        "effect": "The attacker loses control completely. Their weapon flies 2d6 \u00d7 5 ft away in a random direction; they fall Prone and cannot stand until they spend an action to regain their footing. They take 2d6 damage of the weapon\u2019s type. Then roll on the Minor Injury chart."
+        "effect": "The attacker loses control completely. Their weapon flies 2d6 \u00d7 5 feet away in a random direction; they fall Prone and cannot stand until they spend an action to regain their footing. They take 2d6 damage of the weapon\u2019s type. Then roll on the Minor Injury chart."
       }
     ],
     "elemental": [
@@ -1037,7 +1037,7 @@
       {
         "roll": "66-80",
         "description": "Wild Surge",
-        "effect": "The effect veers off course. If another creature is within 10 ft of the original target, the DM selects one of them as the new target."
+        "effect": "The effect veers off course. If another creature is within 10 feet of the original target, the DM selects one of them as the new target."
       },
       {
         "roll": "81-90",
@@ -1052,19 +1052,19 @@
       {
         "roll": "96-100",
         "description": "Elemental Burst",
-        "effect": "The power detonates at the caster\u2019s position. They take 2d8 damage of the spell\u2019s type, fall Prone and cannot stand until they spend an action to regain their footing, and the spell slot is expended. Every other creature within 10 ft (allies included) takes 1d6 damage of the spell\u2019s type (Dexterity save, half on success)."
+        "effect": "The power detonates at the caster\u2019s position. They take 2d8 damage of the spell\u2019s type, fall Prone, and cannot stand until they spend an action to regain their footing, and the spell slot is expended. Every other creature within 10 feet (allies included) takes 1d6 damage of the spell\u2019s type (Dexterity save, half on success)."
       }
     ],
     "magical": [
       {
         "roll": "1-20",
         "description": "Arcane Static",
-        "effect": "The caster\u2019s spell sputters. They have disadvantage any attack roll they make before the end of their next turn."
+        "effect": "The caster\u2019s spell sputters. They have disadvantage on any attack roll they make before the end of their next turn."
       },
       {
         "roll": "21-35",
         "description": "Mental Slip",
-        "effect": "The caster\u2019s concentration falters briefly. They can\u2019t take reactions and all attacks have disadvantage through the end of their next turn."
+        "effect": "The caster\u2019s concentration falters briefly. They can\u2019t take reactions, and they have disadvantage on attack rolls until the end of their next turn."
       },
       {
         "roll": "36-50",
