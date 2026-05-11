@@ -1,7 +1,7 @@
 // Main application logic - modularized version
 import { playDiceSound, createRollHTML, formatKeywords, displayRollingAnimation } from './utils.js';
 import { showInfoModal, hideInfoModal, fetchAndDisplayHistory, closeHistoryOverlay, setElementThatTriggeredModal } from './modals.js';
-import { toggleFields, updateDamageAndMagicTypes, toggleAttackType, initSourceDisclosure } from './forms.js';
+import { toggleFields, updateDamageAndMagicTypes, toggleAttackType, initSourceDisclosure, closeAllChoosers } from './forms.js';
 import { initMuteButton } from './audio.js';
 import './webhook.js'; // Import webhook functionality
 
@@ -16,6 +16,7 @@ const shareButton = document.getElementById('share-discord-button');
 
 // --- Main Roll Handler (AJAX) ---
 async function handleRoll(context) {
+  closeAllChoosers();
   playDiceSound();
   errorMessageDiv.style.display = 'none';
   errorMessageDiv.textContent = '';

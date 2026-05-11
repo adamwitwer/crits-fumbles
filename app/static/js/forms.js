@@ -73,7 +73,6 @@ export function initSourceDisclosure() {
     critSelect.addEventListener('change', () => {
       writeStoredSource('crit_source', critSelect.value);
       updateSummaryText(critSummary, critSelect);
-      setChooserOpen(critChooser, critSummary, critChangeBtn, false);
     });
   }
   if (fumbleSelect) {
@@ -81,9 +80,16 @@ export function initSourceDisclosure() {
     fumbleSelect.addEventListener('change', () => {
       writeStoredSource('fumbleType', fumbleSelect.value);
       updateSummaryText(fumbleSummary, fumbleSelect);
-      setChooserOpen(fumbleChooser, fumbleSummary, fumbleChangeBtn, false);
     });
   }
+}
+
+export function closeAllChoosers() {
+  document.querySelectorAll('.source-change-btn').forEach(btn => {
+    const chooserEl = document.getElementById(btn.dataset.chooser);
+    const summaryEl = document.getElementById(btn.dataset.summary);
+    setChooserOpen(chooserEl, summaryEl, btn, false);
+  });
 }
 
 export function toggleAttackType() {
