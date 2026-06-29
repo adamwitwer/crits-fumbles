@@ -407,7 +407,7 @@
       "56-75": "Knockdown: Deal maximum critical damage (do not roll). The target is Grappled until the end of its next turn and pushed 10 feet if not anchored.",
       "76-90": "Bone-Shaker: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and knocked back 10 feet.",
       "91-95": "Concussive Blast: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn; if wearing a helmet, it is dented or knocked off.",
-      "96-100": "Head-Ringer: Deal maximum critical damage twice (do not roll). The target is Unconscious until the end of its next turn, pushed 15 feet, and wakes Prone."
+      "96-100": "Head-Ringer: Deal maximum critical damage twice (do not roll). The target is Unconscious until the beginning of its next turn, pushed 15 feet, and wakes Prone."
     },
     "slashing": {
       "1-15": "Clean Strike: Resolve critical damage as normal. Roll one additional damage die.",
@@ -416,7 +416,7 @@
       "56-75": "Sweeping Slash: Deal maximum critical damage (do not roll). The target is Grappled until the end of its next turn and bleeds 1d6 at the start of each of its turns until it uses an action to staunch the wound.",
       "76-90": "Deep Rend: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and bleeds 1d8 at the start of each of its turns until it uses an action to staunch the wound.",
       "91-95": "Bloodletting: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn and bleeds 2d6 at the start of each of its turns until it uses an action to staunch the wound.",
-      "96-100": "Executioner\u2019s Arc: Deal maximum critical damage twice (do not roll). The target is Unconscious until the end of its next turn, wakes Prone, and bleeds 2d8 at the start of each turn until it uses an action to staunch the wound."
+      "96-100": "Executioner\u2019s Arc: Deal maximum critical damage twice (do not roll). The target is Unconscious until the beginning of its next turn, wakes Prone, and bleeds 2d8 at the start of each turn until it uses an action to staunch the wound."
     },
     "piercing": {
       "1-15": "Clean Puncture: Resolve critical damage as normal. Roll one additional damage die.",
@@ -425,7 +425,7 @@
       "56-75": "Winded: Deal maximum critical damage (do not roll). The target is Grappled until the end of its next turn.",
       "76-90": "Pinning Strike: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn; if your weapon is left in the wound, the target\u2019s movement is 0 until it spends an action removing it.",
       "91-95": "Vital Strike: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn; if wearing armor, its AC is reduced by 2 until repaired.",
-      "96-100": "Heartseeker: Deal maximum critical damage twice (do not roll). The target is Unconscious until the end of its next turn and wakes Prone; if wearing armor, its AC is reduced by 2 until repaired."
+      "96-100": "Heartseeker: Deal maximum critical damage twice (do not roll). The target is Unconscious until the beginning of its next turn and wakes Prone; if wearing armor, its AC is reduced by 2 until repaired."
     },
     "acid": {
       "1-15": "Corrosive Hit: Resolve critical damage as normal. Roll one additional damage die.",
@@ -434,16 +434,16 @@
       "56-75": "Blistering Spray: Deal maximum critical damage (do not roll). The target is Frightened until the end of its next turn; if wearing armor, its AC is reduced by 1 until repaired or cleaned.",
       "76-90": "Caustic Wash: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn; if wearing armor, its AC is reduced by 2 until repaired or cleaned.",
       "91-95": "Melting Pain: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn; if wearing armor, its AC is reduced by 2 until repaired or cleaned.",
-      "96-100": "Dissolution: Deal maximum critical damage twice (do not roll). The target is Unconscious until the end of its next turn and wakes Prone; if wearing non-magical armor, it is destroyed; magical armor is rendered useless until cleaned during a long rest."
+      "96-100": "Dissolution: Deal maximum critical damage twice (do not roll). The target is Unconscious until the beginning of its next turn and wakes Prone; if wearing non-magical armor, it is destroyed; magical armor is rendered useless until cleaned during a long rest."
     },
     "cold": {
       "1-15": "Chilled: Resolve critical damage as normal. Roll one additional damage die.",
       "16-35": "Numbing Frost: Resolve critical damage as normal. The target is knocked Prone and its speed is halved until the end of its next turn.",
       "36-55": "Ice Bite: Resolve critical damage as normal. The target is Grappled by ice until the end of its next turn and its speed is halved until the end of its next turn.",
       "56-75": "Frozen Step: Deal maximum critical damage (do not roll). The target is Restrained until the end of its next turn and its speed is halved until the end of its next turn.",
-      "76-90": "Deep Freeze: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn.",
-      "91-95": "Flash-Frozen: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. Extreme cold has Stunned the target until the end of its next turn.",
-      "96-100": "Icebound: Deal maximum critical damage twice (do not roll). The target is Paralyzed until the end of its next turn, encased in a thin layer of ice; on its next turn it must use its action to break free or remain Paralyzed."
+      "76-90": "Deep Freeze: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the beginning of its next turn.",
+      "91-95": "Flash-Frozen: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. Extreme cold has Stunned the target until the beginning of its next turn.",
+      "96-100": "Icebound: Deal maximum critical damage twice (do not roll). The target is Paralyzed, encased in a thin layer of ice; on its next turn it must use its action to break free or remain Paralyzed."
     },
     "fire": {
       "1-15": "Scorched: Resolve critical damage as normal. Roll one additional damage die.",
@@ -452,7 +452,7 @@
       "56-75": "Blazing Strike: Deal maximum critical damage (do not roll). The target ignites: it takes 1d6 fire damage at the start of each of its turns until it uses an action to extinguish the flames.",
       "76-90": "Flashover: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and takes 1d8 fire damage at the start of each of its turns until it uses an action to extinguish the flames.",
       "91-95": "Inferno: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn and takes 2d6 fire damage at the start of each of its turns until it uses an action to extinguish the flames.",
-      "96-100": "Cremation: Deal maximum critical damage twice (do not roll). The target is Unconscious until the end of its next turn, wakes Prone, and continues to burn for 2d8 fire damage at the start of each of its turns until it uses an action to extinguish the flames."
+      "96-100": "Cremation: Deal maximum critical damage twice (do not roll). The target is Unconscious until the beginning of its next turn, wakes Prone, and continues to burn for 2d8 fire damage at the start of each of its turns until it uses an action to extinguish the flames."
     },
     "lightning": {
       "1-15": "Crackling Hit: Resolve critical damage as normal. Roll one additional damage die.",
@@ -461,7 +461,7 @@
       "56-75": "Nervous Shock: Deal maximum critical damage (do not roll). The target is Grappled by spasming muscles until the end of its next turn; one creature within 10 feet of the target takes 1d6 lightning damage.",
       "76-90": "Muscle Lock: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn; one creature within 10 feet of the target takes 1d8 lightning damage.",
       "91-95": "Overload: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn; up to two creatures within 10 feet of the target take 1d8 lightning damage each.",
-      "96-100": "Thunderbolt: Deal maximum critical damage twice (do not roll). The target is Paralyzed until the end of its next turn; up to three creatures within 10 feet of the target take 2d6 lightning damage each."
+      "96-100": "Thunderbolt: Deal maximum critical damage twice (do not roll). The target is Paralyzed until the beginning of its next turn; up to three creatures within 10 feet of the target take 2d6 lightning damage each."
     },
     "thunder": {
       "1-15": "Booming Hit: Resolve critical damage as normal. Roll one additional damage die.",
@@ -501,12 +501,12 @@
     },
     "psychic": {
       "1-15": "Mind Spike: Resolve critical damage as normal. Roll one additional damage die.",
-      "16-35": "Vertigo: Resolve critical damage as normal. The target is Blinded until the end of its next turn; on its next turn, the target staggers 10 feet in a random direction of the DM\u2019s choosing.",
-      "36-55": "Intrusive Thought: Resolve critical damage as normal. The target is Frightened until the end of its next turn; on its next turn, it must attack an ally within 15 feet, if able.",
-      "56-75": "Panic: Deal maximum critical damage (do not roll). The target is Grappled in mental anguish until the end of its next turn; it attacks with disadvantage on its next turn.",
-      "76-90": "Overwhelmed: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn; the attacker controls its first action on the subsequent turn.",
-      "91-95": "Mind Snare: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The attacker controls the target\u2019s movement on its next turn.",
-      "96-100": "Ego Shatter: Deal maximum critical damage twice (do not roll). The attacker controls the target\u2019s next turn (action and movement)."
+      "16-35": "Reeling Mind: Resolve critical damage as normal. The target is Frightened until the end of its next turn and has disadvantage on Intelligence, Wisdom, and Charisma saving throws until the end of its next turn.",
+      "36-55": "Intrusive Thoughts: Resolve critical damage as normal. The target is Frightened until the end of its next turn and has disadvantage on attack rolls and ability checks until the end of its next turn; it takes 1d4 psychic damage at the start of its next turn as the assault echoes.",
+      "56-75": "Mind Fracture: Deal maximum critical damage (do not roll). The target is Grappled by mental anguish until the end of its next turn and has disadvantage on Intelligence, Wisdom, and Charisma saving throws for 1 minute.",
+      "76-90": "Overwhelmed: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and has disadvantage on attack rolls and on Intelligence, Wisdom, and Charisma saving throws for 1 minute.",
+      "91-95": "Mind Snare: Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn and has disadvantage on Intelligence, Wisdom, and Charisma saving throws for 1 minute.",
+      "96-100": "Ego Shatter: Deal maximum critical damage twice (do not roll). The target is struck catatonic\u2014Paralyzed until the end of its next turn\u2014and has disadvantage on all Intelligence, Wisdom, and Charisma saving throws for the next 24 hours."
     },
     "radiant": {
       "1-15": "Searing Light: Resolve critical damage as normal. Roll one additional damage die.",
