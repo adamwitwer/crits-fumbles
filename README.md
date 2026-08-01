@@ -47,6 +47,10 @@ flask run
 
 The app runs at `http://127.0.0.1:5000`.
 
+See [AGENTS.md](AGENTS.md) for development notes: how to exercise the app without a test
+suite, the invariants worth preserving, and the footguns (notably that the CSP pins a
+hash of the inline script in `index.html`).
+
 ## Tech Stack
 
 - **Backend**: Flask, Gunicorn, Python 3.13
