@@ -5,7 +5,6 @@ Handles IP address redaction, rate limiting, and other security concerns.
 
 import ipaddress
 import requests
-import secrets
 import threading
 import time
 from datetime import datetime, timedelta
@@ -235,49 +234,6 @@ class RateLimiter:
                 del self.requests[client_id]
 
 
-class CSRFProtection:
-    """Simple CSRF protection for form submissions."""
-    
-    def __init__(self):
-        self.tokens = {}  # In production, use Redis or database
-        self.token_lifetime = timedelta(hours=1)
-    
-    def generate_token(self, session_id: str) -> str:
-        """Generate a new CSRF token for the session."""
-        token = secrets.token_urlsafe(32)
-        self.tokens[session_id] = {
-            'token': token,
-            'created': datetime.now()
-        }
-        return token
-    
-    def validate_token(self, session_id: str, submitted_token: str) -> bool:
-        """Validate a submitted CSRF token."""
-        if session_id not in self.tokens:
-            return False
-        
-        token_data = self.tokens[session_id]
-        
-        # Check if token has expired
-        if datetime.now() - token_data['created'] > self.token_lifetime:
-            del self.tokens[session_id]
-            return False
-        
-        # Compare tokens securely
-        return secrets.compare_digest(token_data['token'], submitted_token)
-    
-    def cleanup_expired_tokens(self):
-        """Remove expired tokens from memory."""
-        now = datetime.now()
-        expired_sessions = [
-            session_id for session_id, token_data in self.tokens.items()
-            if now - token_data['created'] > self.token_lifetime
-        ]
-        
-        for session_id in expired_sessions:
-            del self.tokens[session_id]
-
-
 class ErrorHandler:
     """Standardized error response handling."""
     
@@ -303,5 +259,4 @@ class ErrorHandler:
 
 # Global instances
 rate_limiter = RateLimiter()
-csrf_protection = CSRFProtection()
 error_handler = ErrorHandler()

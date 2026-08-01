@@ -10,7 +10,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 import datetime
 import sys
 sys.path.append(os.path.dirname(__file__))
-from security_utils import IPRedactor, rate_limiter, csrf_protection, error_handler
+from security_utils import IPRedactor, rate_limiter, error_handler
 
 app = Flask(__name__)
 

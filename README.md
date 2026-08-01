@@ -59,7 +59,7 @@ The app runs at `http://127.0.0.1:5000`.
 ```
 app/
   app.py                    # Flask routes and roll logic
-  security_utils.py         # Rate limiting, IP redaction, CSRF
+  security_utils.py         # Rate limiting, IP redaction, geolocation caching
   critical_hits_master.json # All crit tables (keyed by source)
   fumbles_master.json       # All fumble tables (keyed by source)
   templates/
