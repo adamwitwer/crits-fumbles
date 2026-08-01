@@ -420,7 +420,7 @@ async function shareResultToDiscord() {
               }
           }, 2000);
       } else {
-          alert(`Failed to share result: ${responseData?.error || response.statusText}`);
+          alert(`Failed to share result: ${responseData?.error || responseData?.errorMessage || response.statusText}`);
           shareButton.innerHTML = originalButtonHTML;
           shareButton.disabled = false;
       }

@@ -206,6 +206,11 @@ def get_roll_result_and_log(payload, client_ip=None):
                         response.update({"status": "error", "errorMessage": f"Fumble logic not defined for source: {fumble_source_from_payload}"})
                     # END BUG FIX MODIFICATION for fumble key selection
 
+                    # No usable table key (missing/unrecognized attack type) must surface as an
+                    # error, otherwise the roll reports success with an empty result.
+                    if not key_to_use and response["status"] != "error":
+                        response.update({"status": "error", "errorMessage": f"Invalid attack type '{attack_type or 'missing'}' for {fumble_source_from_payload} fumbles."})
+
                     if key_to_use:
                         f_list = fumble_src_tables.get(key_to_use, [])
                         
@@ -300,18 +305,20 @@ def roll_ajax():
     if not app.config.get('DISABLE_RATE_LIMITING', False):
         if not rate_limiter.is_allowed(client_ip, limit=20, window_minutes=1):
             app.logger.warning(f"Rate limit exceeded for {IPRedactor.REDACTED_PLACEHOLDER}")
-            return jsonify(*error_handler.create_error_response(
-                "Rate limit exceeded. Please wait before making more requests.", 
-                429, 
+            body, code = error_handler.create_error_response(
+                "Rate limit exceeded. Please wait before making more requests.",
+                429,
                 "rate_limit"
-            ))
+            )
+            return jsonify(body), code
     
     # Validate request data
     p = request.get_json()
     app.logger.info(f"Roll request from {IPRedactor.REDACTED_PLACEHOLDER}: {p}")
     
-    if not p: 
-        return jsonify(*error_handler.create_error_response("Invalid request data.", 400, "validation"))
+    if not p:
+        body, code = error_handler.create_error_response("Invalid request data.", 400, "validation")
+        return jsonify(body), code
     
     # Process the roll request
     return jsonify(get_roll_result_and_log(p, client_ip))
@@ -326,11 +333,12 @@ def share_discord():
     if not app.config.get('DISABLE_RATE_LIMITING', False):
         if not rate_limiter.is_allowed(client_ip, limit=5, window_minutes=1):
             app.logger.warning(f"Discord share rate limit exceeded for {IPRedactor.REDACTED_PLACEHOLDER}")
-            return jsonify(*error_handler.create_error_response(
-                "Rate limit exceeded. Please wait before sharing again.", 
-                429, 
+            body, code = error_handler.create_error_response(
+                "Rate limit exceeded. Please wait before sharing again.",
+                429,
                 "rate_limit"
-            ))
+            )
+            return jsonify(body), code
     
     # Validate request data
     payload = request.get_json()
