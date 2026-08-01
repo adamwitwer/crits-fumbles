@@ -67,7 +67,10 @@ export async function fetchAndDisplayHistory() {
       logs.forEach(log => {
         const li = document.createElement('li');
         const time = log.timestamp ? new Date(log.timestamp).toLocaleString() : 'Timestamp unavailable';
-        li.innerHTML = `<strong>${time}</strong> ${log.narrative || 'No narrative.'}`;
+        // Narratives are built from logged roll data, so they are never treated as markup.
+        const timeEl = document.createElement('strong');
+        timeEl.textContent = time;
+        li.append(timeEl, ` ${log.narrative || 'No narrative.'}`);
         ul.appendChild(li);
       });
       historyContent.appendChild(ul);

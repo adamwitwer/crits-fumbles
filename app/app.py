@@ -61,6 +61,15 @@ RANDOM_DESCRIPTORS = [
     "a forgotten deity", "a mischievous sprite", "a stoic guardian"
 ]
 
+# --- Accepted attack types per fumble source, mapped to their table key ---
+# Lookup is case-insensitive; anything not listed here is rejected rather than
+# being echoed back into the response and the Chronicles.
+FUMBLE_ATTACK_KEYS = {
+    'Questionable Arcana': {'weapon': 'Weapon Attack', 'magic': 'Spell Attack'},
+    'BCoydog': {'melee': 'melee', 'ranged': 'ranged', 'magic': 'magic'},
+    'Fury & Folly': {'physical': 'physical', 'elemental': 'elemental', 'magical': 'magical'},
+}
+
 # --- Load Data ---
 def load_json(filename):
     json_path = os.path.join(os.path.dirname(__file__), filename)
@@ -141,6 +150,7 @@ def get_roll_result_and_log(payload, client_ip=None):
             if roll_type_from_payload == 'crit':
                 crit_source_from_payload = payload.get('critSource', 'Sterling Vermin')
                 response["selectedCritSource"] = crit_source_from_payload
+                response["selectedAttackType"] = None  # not meaningful for crits; never echo the raw value back
 
                 if crit_source_from_payload in ["Questionable Arcana", "BCoydog", "Fury & Folly"]:
                     response["dieType"], response["numDice"], roll_value = "d100", 1, random.randint(1, 100)
@@ -183,33 +193,23 @@ def get_roll_result_and_log(payload, client_ip=None):
                 if not fumble_src_tables: 
                     response.update({"status": "error", "errorMessage": f"Invalid fumble source: {fumble_source_from_payload}"})
                 else:
-                    # START BUG FIX MODIFICATION for fumble key selection
+                    # Resolve the attack type against the source's whitelist. Only a value
+                    # that maps to a real table key is accepted back into the response.
+                    attack_key_map = FUMBLE_ATTACK_KEYS.get(fumble_source_from_payload)
                     key_to_use = None
-                    if fumble_source_from_payload == 'Questionable Arcana':
-                        # QA expects 'Weapon' or 'Magic' from frontend for attack_type
-                        key_to_use = "Weapon Attack" if attack_type == 'Weapon' else "Spell Attack"
-                    elif fumble_source_from_payload == 'BCoydog':
-                        # BCoydog will receive 'melee', 'ranged', or 'magic' (lowercase) from frontend for attack_type
-                        # These directly map to keys in fumbles_master.json for BCoydog
-                        key_to_use = attack_type.lower() if attack_type else None
-                        if key_to_use not in ['melee', 'ranged', 'magic']: # Basic validation
-                            app.logger.warning(f"Received unexpected attack_type '{attack_type}' for BCoydog fumble. Defaulting to general or error.")
-                            # key_to_use might become None or rely on fallback logic if attack_type is invalid
-                            # For robustness, if it's invalid, perhaps force an error or a specific fallback.
-                            # For now, if it's not one of these, f_list might be empty and trigger error below.
-                            pass # Let the existing fallback or error handling catch invalid keys
-                    elif fumble_source_from_payload == 'Fury & Folly':
-                        key_to_use = attack_type.lower() if attack_type else None
-                        if key_to_use not in ['physical', 'elemental', 'magical']:
-                            key_to_use = None
-                    else:
+                    if attack_key_map is None:
                         response.update({"status": "error", "errorMessage": f"Fumble logic not defined for source: {fumble_source_from_payload}"})
-                    # END BUG FIX MODIFICATION for fumble key selection
+                    elif isinstance(attack_type, str):
+                        normalized_attack = attack_type.strip().lower()
+                        key_to_use = attack_key_map.get(normalized_attack)
+                        if key_to_use:
+                            response["selectedAttackType"] = normalized_attack
 
                     # No usable table key (missing/unrecognized attack type) must surface as an
                     # error, otherwise the roll reports success with an empty result.
                     if not key_to_use and response["status"] != "error":
-                        response.update({"status": "error", "errorMessage": f"Invalid attack type '{attack_type or 'missing'}' for {fumble_source_from_payload} fumbles."})
+                        app.logger.warning(f"Rejected attack_type {attack_type!r} for {fumble_source_from_payload} fumble.")
+                        response.update({"status": "error", "errorMessage": f"Invalid attack type for {fumble_source_from_payload} fumbles."})
 
                     if key_to_use:
                         f_list = fumble_src_tables.get(key_to_use, [])
