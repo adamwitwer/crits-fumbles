@@ -6,17 +6,62 @@ Handles IP address redaction, rate limiting, and other security concerns.
 import ipaddress
 import requests
 import secrets
+import threading
+import time
 from datetime import datetime, timedelta
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 from typing import Dict, Optional, Tuple
 import json
 
 
+class TTLCache:
+    """Small thread-safe cache with per-entry expiry and a bounded size.
+
+    Bounded because the keys are client IPs: an unbounded dict would grow with
+    every distinct visitor. Least-recently-used entries are dropped first.
+    """
+
+    def __init__(self, max_entries: int = 2048):
+        self.max_entries = max_entries
+        self._data = OrderedDict()
+        self._lock = threading.Lock()
+
+    def get(self, key):
+        with self._lock:
+            entry = self._data.get(key)
+            if entry is None:
+                return None
+            value, expires_at = entry
+            if expires_at <= time.monotonic():
+                del self._data[key]
+                return None
+            self._data.move_to_end(key)
+            return value
+
+    def set(self, key, value, ttl_seconds: float):
+        with self._lock:
+            self._data[key] = (value, time.monotonic() + ttl_seconds)
+            self._data.move_to_end(key)
+            while len(self._data) > self.max_entries:
+                self._data.popitem(last=False)
+
+    def __len__(self):
+        with self._lock:
+            return len(self._data)
+
+
 class IPRedactor:
     """Handles IP address privacy and geolocation with consistent redaction."""
-    
+
     REDACTED_PLACEHOLDER = "[IP REDACTED]"
-    
+
+    # A location is stable for a given IP, so results are cached rather than
+    # re-fetched on every roll. Failures are cached briefly too, so an ip-api
+    # outage costs one slow request per IP per interval instead of one per roll.
+    _geo_cache = TTLCache()
+    GEO_SUCCESS_TTL = 24 * 60 * 60
+    GEO_FAILURE_TTL = 5 * 60
+
     @classmethod
     def classify_ip(cls, ip_address: str) -> Tuple[bool, Dict[str, str]]:
         """
@@ -66,10 +111,21 @@ class IPRedactor:
             Dictionary with 'city' and 'regionName' keys
         """
         is_external, location_info = cls.classify_ip(ip_address)
-        
+
         if not is_external:
             return location_info
-        
+
+        cached = cls._geo_cache.get(ip_address)
+        if cached is not None:
+            return cached
+
+        location, ttl = cls._lookup_geolocation(ip_address, logger)
+        cls._geo_cache.set(ip_address, location, ttl)
+        return location
+
+    @classmethod
+    def _lookup_geolocation(cls, ip_address: str, logger=None) -> Tuple[Dict[str, str], float]:
+        """Fetch a location from ip-api, returning it with how long to cache it."""
         # For external IPs, make API call but redact in logs
         try:
             url = f"http://ip-api.com/json/{ip_address}?fields=status,message,city,regionName,query"
@@ -79,9 +135,9 @@ class IPRedactor:
             
             if data.get("status") == "success":
                 return {
-                    "city": data.get("city", "unknown city"), 
+                    "city": data.get("city", "unknown city"),
                     "regionName": data.get("regionName", "uncharted territory")
-                }
+                }, cls.GEO_SUCCESS_TTL
             
             # Log error with redacted IP
             api_message = cls._redact_ip_from_message(
@@ -91,29 +147,29 @@ class IPRedactor:
             if logger:
                 logger.warning(f"Geo API error for {cls.REDACTED_PLACEHOLDER}: {api_message}")
             
-            return {"city": "parts unknown", "regionName": "mysterious land"}
+            return {"city": "parts unknown", "regionName": "mysterious land"}, cls.GEO_FAILURE_TTL
             
         except requests.exceptions.Timeout:
             if logger:
                 logger.warning(f"Geo request timed out for {cls.REDACTED_PLACEHOLDER}")
-            return {"city": "realm beyond reach", "regionName": "mists of time"}
+            return {"city": "realm beyond reach", "regionName": "mists of time"}, cls.GEO_FAILURE_TTL
             
         except requests.exceptions.RequestException as e:
             error_message = cls._redact_ip_from_message(str(e), ip_address)
             if logger:
                 logger.warning(f"Error fetching geo for {cls.REDACTED_PLACEHOLDER}: {error_message}")
-            return {"city": "digital realm", "regionName": "boundless interwebs"}
+            return {"city": "digital realm", "regionName": "boundless interwebs"}, cls.GEO_FAILURE_TTL
             
         except json.JSONDecodeError:
             if logger:
                 logger.warning(f"Failed to decode geo JSON for {cls.REDACTED_PLACEHOLDER}")
-            return {"city": "garbled signal", "regionName": "static void"}
+            return {"city": "garbled signal", "regionName": "static void"}, cls.GEO_FAILURE_TTL
             
         except Exception as e:
             error_message = cls._redact_ip_from_message(str(e), ip_address)
             if logger:
                 logger.error(f"Generic geo error for {cls.REDACTED_PLACEHOLDER}: {error_message}", exc_info=True)
-            return {"city": "place beyond perception", "regionName": "the void"}
+            return {"city": "place beyond perception", "regionName": "the void"}, cls.GEO_FAILURE_TTL
     
     @classmethod
     def _redact_ip_from_message(cls, message: str, ip_address: str) -> str:
