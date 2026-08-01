@@ -5,7 +5,6 @@ import requests
 import os
 import json
 import random
-from collections import deque
 from flask import Flask, render_template, request, jsonify, url_for
 from werkzeug.middleware.proxy_fix import ProxyFix
 import datetime
@@ -14,6 +13,10 @@ sys.path.append(os.path.dirname(__file__))
 from security_utils import IPRedactor, rate_limiter, csrf_protection, error_handler
 
 app = Flask(__name__)
+
+# Roll payloads are a handful of short fields; anything larger is not a real request.
+# Without this, an oversized body was accepted and written straight to the narrative log.
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024
 
 # --- Trust only the proxies actually in front of us ---
 # Render's proxy appends to X-Forwarded-For without stripping what the client
@@ -147,6 +150,35 @@ if not FUMBLE_DATA:
     app.logger.warning("FUMBLE_DATA is empty or failed to load.")
 
 
+def read_last_log_lines(path, max_lines, chunk_size=64 * 1024):
+    """Return up to `max_lines` trailing lines, reading only the end of the file.
+
+    The log is append-only and grows without bound, so walking it front to back
+    to keep the last handful of entries made every history request cost more as
+    the file aged.
+    """
+    with open(path, "rb") as log_file:
+        log_file.seek(0, os.SEEK_END)
+        unread = log_file.tell()
+        block = b""
+        # Read backwards a chunk at a time until enough newlines are in hand.
+        while unread > 0 and block.count(b"\n") <= max_lines:
+            read_size = min(chunk_size, unread)
+            unread -= read_size
+            log_file.seek(unread)
+            block = log_file.read(read_size) + block
+
+    lines = block.split(b"\n")
+    if lines and lines[-1] == b"":
+        # A trailing newline terminates the last line; it does not begin a new one.
+        lines.pop()
+    if unread > 0:
+        # The first line is whatever the chunk boundary cut through, including a
+        # possible partial multi-byte character, so it is never decoded.
+        lines = lines[1:]
+    return [line.decode("utf-8", "replace") for line in lines[-max_lines:] if line.strip()]
+
+
 # --- Geolocation Helper (refactored to use security utilities) ---
 def get_geolocation(ip_address):
     """Get geolocation using the secure IPRedactor utility."""
@@ -212,7 +244,10 @@ def get_roll_result_and_log(payload, client_ip=None):
                 response["rollValue"] = roll_value
                 
                 crit_damage_key = (damage_type.lower().strip() if damage_type else 'slashing')
-                
+                # Echo back the normalized key, never the raw value: padding survives the
+                # table lookup ("slashing" + whitespace) but must not reach the UI or the log.
+                response["original_damageType"] = crit_damage_key
+
                 source_tables = CRIT_DATA.get(crit_source_from_payload, {})
                 if not source_tables: response.update({"status": "error", "errorMessage": f"Invalid Crit source: {crit_source_from_payload}"})
                 else:
@@ -319,7 +354,7 @@ def get_roll_result_and_log(payload, client_ip=None):
         rval = response.get("rollValue"); t_name = "Unknown Table"; res_log = "N/A"
         if roll_context == 'primary':
             if roll_type_from_payload == 'crit':
-                src = response.get("selectedCritSource", "?"); dmg_key = (payload.get('damageType') or "?").lower()
+                src = response.get("selectedCritSource", "?"); dmg_key = response.get("original_damageType") or "?"
                 t_name = f"{src} Crit ({dmg_key.title()})"
                 res_log = response.get("description") + " Effect: " + response.get("effect") if response.get("description") and response.get("effect") else response.get("resultText", "N/A")
             elif roll_type_from_payload == 'fumble':
@@ -334,7 +369,20 @@ def get_roll_result_and_log(payload, client_ip=None):
         log_entry = f"{art} {d_noun} from {city}, {region} rolled {rval} on {t_name}, resulting in: \u201c{str(res_log).strip()}\u201d"
         if response.get("isSecondaryPrompt") and not response.get("secondaryResultText"): log_entry += " (Bonus roll pending...)"
         try:
-            log_data = {"timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),"narrative": log_entry,"raw_payload": payload,"raw_response": response}
+            # Only validated, bounded fields are persisted. The raw request payload used to be
+            # stored verbatim, which let any client write arbitrary bytes to this file, and the
+            # full response duplicated the narrative that was already rendered above.
+            log_data = {
+                "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                "narrative": log_entry,
+                "roll": {
+                    "context": roll_context,
+                    "type": roll_type_from_payload,
+                    "source": response.get("selectedCritSource") or response.get("selectedFumbleType"),
+                    "variant": response.get("original_damageType") or response.get("selectedAttackType"),
+                    "value": rval,
+                },
+            }
             with open(NARRATIVE_LOG_FILE_PATH, "a", encoding="utf-8") as lf: lf.write(json.dumps(log_data) + "\n")
             print(f"NARRATIVE LOG: {log_entry}")
         except Exception as e: app.logger.error(f"Log write error: {e}", exc_info=True); print(f"CRITICAL: Log write fail: {e}")
@@ -455,8 +503,7 @@ def get_roll_history():
     
     try:
         logs = []
-        with open(NARRATIVE_LOG_FILE_PATH, "r", encoding="utf-8") as log_file:
-            lines = deque(log_file, maxlen=50)
+        lines = read_last_log_lines(NARRATIVE_LOG_FILE_PATH, 50)
 
         for line in lines:
             line = line.strip()
