@@ -7,12 +7,65 @@ import json
 import random
 from collections import deque
 from flask import Flask, render_template, request, jsonify, url_for
+from werkzeug.middleware.proxy_fix import ProxyFix
 import datetime
 import sys
 sys.path.append(os.path.dirname(__file__))
 from security_utils import IPRedactor, rate_limiter, csrf_protection, error_handler
 
 app = Flask(__name__)
+
+# --- Trust only the proxies actually in front of us ---
+# Render's proxy appends to X-Forwarded-For without stripping what the client
+# sent, so the leftmost entry is attacker-controlled and must never be trusted.
+# Only the rightmost entries — added by infrastructure we control — are reliable,
+# and ProxyFix resolves remote_addr from that trusted tail.
+#
+# The number of appending hops is not documented consistently by Render, so it is
+# configurable: raise TRUSTED_PROXY_HOPS if every visitor resolves to the same
+# address, and set it to 0 when serving with no proxy at all.
+try:
+    TRUSTED_PROXY_HOPS = int(os.environ.get('TRUSTED_PROXY_HOPS', '1'))
+except ValueError:
+    app.logger.warning("TRUSTED_PROXY_HOPS is not an integer; defaulting to 1.")
+    TRUSTED_PROXY_HOPS = 1
+
+if TRUSTED_PROXY_HOPS > 0:
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=TRUSTED_PROXY_HOPS)
+
+# Cloudflare fronts Render and overwrites CF-Connecting-IP on every request, so
+# when present it is the client IP regardless of how long the XFF chain is.
+TRUST_CF_CONNECTING_IP = os.environ.get('TRUST_CF_CONNECTING_IP', '1') != '0'
+
+_logged_proxy_shape = False
+
+
+def get_client_ip():
+    """Client identity used for rate limiting and geolocation.
+
+    Never reads the leftmost X-Forwarded-For entry: that is whatever the client
+    chose to send. Prefers Cloudflare's spoof-resistant header, otherwise falls
+    back to remote_addr as resolved by ProxyFix above. Keeping this in one place
+    means the trust decision is made once rather than in each route.
+    """
+    global _logged_proxy_shape
+    if not _logged_proxy_shape:
+        # One line, once per worker, to make the deployed proxy shape verifiable
+        # without logging any address: it says how to set TRUSTED_PROXY_HOPS.
+        xff = request.headers.get('X-Forwarded-For', '')
+        app.logger.info(
+            f"Proxy shape: {len([p for p in xff.split(',') if p.strip()])} X-Forwarded-For entries, "
+            f"CF-Connecting-IP {'present' if request.headers.get('CF-Connecting-IP') else 'absent'}, "
+            f"TRUSTED_PROXY_HOPS={TRUSTED_PROXY_HOPS}"
+        )
+        _logged_proxy_shape = True
+
+    if TRUST_CF_CONNECTING_IP:
+        cf_ip = request.headers.get('CF-Connecting-IP')
+        if cf_ip:
+            return cf_ip.strip()
+
+    return request.remote_addr
 
 @app.after_request
 def add_security_headers(response):
@@ -297,10 +350,8 @@ def index():
 
 @app.route('/roll', methods=['POST'])
 def roll_ajax():
-    # Extract client IP for rate limiting and geolocation
-    xff = request.headers.get('X-Forwarded-For')
-    client_ip = xff.split(',')[0].strip() if xff else request.remote_addr
-    
+    client_ip = get_client_ip()
+
     # Apply rate limiting: 20 rolls per minute per IP (skip in development)
     if not app.config.get('DISABLE_RATE_LIMITING', False):
         if not rate_limiter.is_allowed(client_ip, limit=20, window_minutes=1):
@@ -325,10 +376,8 @@ def roll_ajax():
 
 @app.route('/share_discord', methods=['POST'])
 def share_discord():
-    # Extract client IP for rate limiting
-    xff = request.headers.get('X-Forwarded-For')
-    client_ip = xff.split(',')[0].strip() if xff else request.remote_addr
-    
+    client_ip = get_client_ip()
+
     # Apply rate limiting: 5 Discord shares per minute per IP (skip in development)
     if not app.config.get('DISABLE_RATE_LIMITING', False):
         if not rate_limiter.is_allowed(client_ip, limit=5, window_minutes=1):
@@ -392,10 +441,8 @@ def share_discord():
 @app.route('/get_roll_history', methods=['GET'])
 def get_roll_history():
     """Get recent roll history with proper error handling and logging."""
-    # Extract client IP for rate limiting
-    xff = request.headers.get('X-Forwarded-For')
-    client_ip = xff.split(',')[0].strip() if xff else request.remote_addr
-    
+    client_ip = get_client_ip()
+
     # Apply rate limiting: 10 history requests per minute per IP (skip in development)
     if not app.config.get('DISABLE_RATE_LIMITING', False):
         if not rate_limiter.is_allowed(client_ip, limit=10, window_minutes=1):
