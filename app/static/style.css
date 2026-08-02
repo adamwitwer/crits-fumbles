@@ -25,10 +25,18 @@
   --clr-card-border: #d4c5a9;
   --clr-form-border: #bbb;
   /* Buttons */
-  --clr-button-bg: #a67b5b;
+  /* Darkened from #a67b5b / #875f46: same hue and saturation, lower lightness,
+     so white text clears WCAG AA (4.5:1) on the toggle and on every button. */
+  --clr-button-bg: #88644a;
   --clr-button-text: #fff;
-  --clr-button-hover-bg: #875f46;
-  --clr-button-outline: #a67b5b;
+  --clr-button-hover-bg: #6d503b;
+  --clr-button-outline: #88644a;
+  /* Used where the button colour becomes text/border on a light surface
+     (.secondary-button). Dark mode needs its own value; --clr-button-bg is a
+     background there and far too dark to read as text. */
+  --clr-button-accent: #88644a;
+  /* Text colour when --clr-button-accent is used AS a background (hover). */
+  --clr-button-accent-text: #fff;
   /* Result Boxes */
   --clr-result-bg: rgba(220, 240, 210, 0.8); /* changed for dragon */
   --clr-result-border: #4caf50;
@@ -247,7 +255,8 @@ select {
   padding: 0.55em 0.6em;
   font-size: var(--font-size-form-elements);
   font-family: inherit;
-  color: color-mix(in srgb, var(--clr-text) 55%, transparent);
+  /* 55% resolved to #8f8f8f on white (3.23:1); 70% clears AA on every surface. */
+  color: color-mix(in srgb, var(--clr-text) 70%, transparent);
   background: transparent;
   cursor: pointer;
   user-select: none;
@@ -958,13 +967,13 @@ footer.app-footer {
 
 .secondary-button {
   background-color: transparent;
-  color: var(--clr-button-bg);
-  border: 2px solid var(--clr-button-bg);
+  color: var(--clr-button-accent);
+  border: 2px solid var(--clr-button-accent);
 }
 
 .secondary-button:hover {
-  background-color: var(--clr-button-bg);
-  color: var(--clr-button-text);
+  background-color: var(--clr-button-accent);
+  color: var(--clr-button-accent-text);
   transform: translateY(-2px);
 }
 
@@ -1380,6 +1389,11 @@ footer.app-footer {
     --clr-button-text: #eee;
     --clr-button-hover-bg: #6b6b6b;
     --clr-button-outline: #888;
+    /* #5a5a5a is a background here; as .secondary-button text on the dark card
+       it was 2.11:1. Lighthouse missed this because that button lives in the
+       webhook modal, which is closed during an audit. */
+    --clr-button-accent: #a8a8a8;
+    --clr-button-accent-text: #1e1e1e;
     /* Result Boxes */
     --clr-result-bg: rgba(35, 60, 50, 0.8); /* changed for dragon */
     --clr-result-heading: #8ff0a4;

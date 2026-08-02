@@ -117,7 +117,9 @@
     data-tooltip="Mute dice rolling"
     >🔊</button>
 
-    <button type="button" id="primary-roll-button" aria-label="Roll dice for result">⚡️ Roll ⚡️</button>
+    {# Emoji are aria-hidden so the accessible name is exactly the visible word
+       "Roll" — voice control users say "click Roll" (WCAG 2.5.3). #}
+    <button type="button" id="primary-roll-button"><span aria-hidden="true">⚡️</span> Roll <span aria-hidden="true">⚡️</span></button>
 
     <div class="source-footer">
       <p class="source-summary" id="crit-source-summary">
@@ -141,7 +143,9 @@
       <input type="hidden" id="secondary-damage-type-hidden">
       <input type="hidden" id="secondary-primary-result-hidden">
       <input type="hidden" id="secondary-primary-roll-hidden">
-      <button type="button" id="secondary-roll-button" aria-label="Roll dice for bonus effect">⚡️ Roll Bonus ⚡️</button>
+      {# Same treatment as the primary roll button; hidden until a bonus roll is
+         offered, which is why the audit never saw it. #}
+      <button type="button" id="secondary-roll-button"><span aria-hidden="true">⚡️</span> Roll Bonus <span aria-hidden="true">⚡️</span></button>
   </div>
   <div id="secondary-result-area" style="display: none;" aria-live="polite"></div>
 
@@ -171,7 +175,8 @@
         id="show-history-button"
         class="chronicles-button"
         type="button"
-        aria-label="View Crits & Fumbles Chronicles"
+        {# The accessible name must contain the visible text (WCAG 2.5.3). #}
+        aria-label="C&amp;F Chronicles: view your roll history"
         data-tooltip="View the Chronicles"
         >
         C&F Chronicles
