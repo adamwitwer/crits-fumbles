@@ -82,3 +82,9 @@ nosetests.xml
 narrative_dice_log.jsonl
 pi-notes
 staticfiles/
+
+# Lighthouse reports embed the audited URL, and the Discord webhook travels in
+# the URL fragment — so these files can contain a live credential.
+*.report.html
+crits-fumbles.app-*.html
+lighthouse*.html
