@@ -93,7 +93,15 @@ def add_security_headers(response):
     return response
 
 # --- Determine log file path ---
-LOG_STORAGE_DIR = os.environ.get('LOG_STORAGE_DIR', '.')
+LOG_STORAGE_DIR = os.environ.get('LOG_STORAGE_DIR')
+if not LOG_STORAGE_DIR:
+    # Silently defaulting here once meant a deploy could look healthy while
+    # writing history to an ephemeral disk. Say so loudly instead.
+    app.logger.warning(
+        "LOG_STORAGE_DIR is not set; falling back to '.'. Roll history will NOT "
+        "survive a restart unless this points at a mounted disk (see render.yaml)."
+    )
+    LOG_STORAGE_DIR = '.'
 LOG_FILENAME = "narrative_dice_log.jsonl"
 NARRATIVE_LOG_FILE_PATH = os.path.join(LOG_STORAGE_DIR, LOG_FILENAME)
 

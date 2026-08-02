@@ -1,9 +1,21 @@
+# Mirrors the deployed `crits-fumbles` service (srv-d03dba6uk2gs73fko0d0).
+# Render does not push dashboard changes back into this file, so keep it in
+# sync by hand. See AGENTS.md.
 services:
   - type: web
-    name: crits-and-fumbles
+    name: crits-fumbles
     runtime: python
-    buildCommand: ""
+    region: oregon
+    plan: starter
+    branch: main
+    buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn app.app:app"
     envVars:
-      - key: FLASK_ENV
-        value: production
+      # The Chronicles log lives on the disk below. Without this the app falls
+      # back to '.', which is ephemeral, and roll history resets every deploy.
+      - key: LOG_STORAGE_DIR
+        value: /var/data
+    disk:
+      name: crits-fumbles-data
+      mountPath: /var/data
+      sizeGB: 1

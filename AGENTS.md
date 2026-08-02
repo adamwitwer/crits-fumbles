@@ -57,12 +57,21 @@ print(base64.b64encode(hashlib.sha256(body.encode()).digest()).decode())
 "
 ```
 
-**`render.yaml` does not describe the deployed service.** It declares no disk and no
-`LOG_STORAGE_DIR`, yet production clearly has persistent storage — the live Chronicles
-returns entries spanning months across many deploys. Real config lives in the Render
-dashboard. `app.py` falls back to `LOG_STORAGE_DIR=.` silently, so a service recreated
-from this blueprint would look healthy while quietly resetting history on every deploy.
-Tracked in issue #13.
+**`render.yaml` drifts from the deployed service unless you maintain it by hand.** Render
+never writes dashboard changes back into the blueprint, and nothing in CI compares them.
+As of 2026-08-02 the file was reconciled against the live service (`crits-fumbles`,
+`srv-d03dba6uk2gs73fko0d0`): it had the wrong service name, an empty `buildCommand`, no
+disk, no `LOG_STORAGE_DIR`, and a `FLASK_ENV` that production does not set and no code
+reads. Change anything in the dashboard — instance type, region, build command, disk
+size — and update this file in the same breath.
+
+The Chronicles log lives on a 1 GB disk at `/var/data`. `LOG_STORAGE_DIR` must point
+there; the app now logs a warning at startup if the variable is unset, because the `.`
+fallback is ephemeral and an amnesiac deploy otherwise looks perfectly healthy.
+
+One deliberate omission: production also sets `DISCORD_WEBHOOK_URL`, which nothing in the
+repo reads — the Discord flow is entirely client-side, with the webhook carried in the URL
+fragment. It is left out of the blueprint rather than enshrined as dead config.
 
 **Rate limiter and geolocation cache are per-process.** Both are module-level singletons,
 so each gunicorn worker keeps its own. Effective rate limit is `configured x workers`, and
