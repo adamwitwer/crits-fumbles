@@ -1010,7 +1010,7 @@
       {
         "roll": "96-100",
         "description": "Total Disaster",
-        "effect": "The attacker loses control completely. Their weapon flies 2d6 \u00d7 5 feet away in a random direction; they fall Prone and cannot stand until they spend an action to regain their footing. They take 2d6 damage of the weapon\u2019s type. Then roll on the Minor Injury chart."
+        "effect": "The attacker loses control completely. Their weapon flies 2d6 \u00d7 5 feet away in a random direction; they fall Prone and cannot stand until they spend an action to regain their footing. They take 2d6 damage of the weapon\u2019s type."
       }
     ],
     "elemental": [
@@ -1094,7 +1094,7 @@
       {
         "roll": "96-100",
         "description": "Reality Snaps",
-        "effect": "The magic tears violently around the caster. They take 2d6 force damage and are Stunned until the end of their next turn. The spell slot is expended and they lose concentration on any spell they are maintaining. Then roll on the Minor Injury chart."
+        "effect": "The magic tears violently around the caster. They take 2d6 force damage and are Stunned until the end of their next turn. The spell slot is expended and they lose concentration on any spell they are maintaining."
       }
     ]
   }
