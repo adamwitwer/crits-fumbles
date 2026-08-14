@@ -134,6 +134,20 @@ FUMBLE_ATTACK_KEYS = {
     'Fury & Folly': {'physical': 'physical', 'elemental': 'elemental', 'magical': 'magical'},
 }
 
+# --- Sources that own the follow-up injury/insanity tables ---
+# The bonus-roll tables in CRIT_DATA['effects_tables'] are Sterling Vermin content, so only
+# Sterling Vermin results may offer them. Other sources mention injuries in flavour text
+# ("Deafened permanently (curable as a minor injury)") without having the mechanic, and an
+# unscoped match served a rule from the wrong table set.
+SOURCES_WITH_SECONDARY_TABLES = {'Sterling Vermin'}
+
+# Ordered: the first phrase found wins, matching the original precedence.
+SECONDARY_PROMPTS = (
+    ('minor injury', 'Minor Injury!', 'minor'),
+    ('major injury', 'Major Injury!', 'major'),
+    ('insanity', 'Insanity!', 'insanity'),
+)
+
 # --- Load Data ---
 def load_json(filename):
     json_path = os.path.join(os.path.dirname(__file__), filename)
@@ -219,6 +233,27 @@ def resolve_roll(roll_value, table):
     return "No result found for this roll in the table."
 
 
+def secondary_prompt_for(source, text):
+    """Return the bonus-roll prompt a result triggers, or None if it triggers none.
+
+    Scoped to sources that actually own the tables. A source without them can still
+    mention an injury in flavour text, and offering the roll there resolved against
+    another source's table without saying so.
+    """
+    if source not in SOURCES_WITH_SECONDARY_TABLES or not isinstance(text, str):
+        return None
+
+    lowered = text.lower()
+    for phrase, prompt_text, secondary_type in SECONDARY_PROMPTS:
+        if phrase in lowered:
+            return {
+                "isSecondaryPrompt": True,
+                "secondaryPromptText": prompt_text,
+                "secondaryType": secondary_type,
+            }
+    return None
+
+
 # --- Main Roll Logic & Narrative Logging ---
 def get_roll_result_and_log(payload, client_ip=None):
     geo_info = get_geolocation(client_ip)
@@ -274,10 +309,8 @@ def get_roll_result_and_log(payload, client_ip=None):
                             else: response["description"], response["effect"], response["resultText"] = res_text, "Details not separated.", None
                         else: response["resultText"] = res_text
 
-                        if isinstance(text_for_injury_check, str):
-                            if "minor injury" in text_for_injury_check.lower(): response.update({"isSecondaryPrompt": True, "secondaryPromptText": "Minor Injury!", "secondaryType": "minor"})
-                            elif "major injury" in text_for_injury_check.lower(): response.update({"isSecondaryPrompt": True, "secondaryPromptText": "Major Injury!", "secondaryType": "major"})
-                            elif "insanity" in text_for_injury_check.lower(): response.update({"isSecondaryPrompt": True, "secondaryPromptText": "Insanity!", "secondaryType": "insanity"})
+                        prompt = secondary_prompt_for(crit_source_from_payload, text_for_injury_check)
+                        if prompt: response.update(prompt)
                     else: response.update({"status": "error", "errorMessage": f"Invalid damage type '{crit_damage_key}' for {crit_source_from_payload} Crits."})
 
             elif roll_type_from_payload == 'fumble':
@@ -334,11 +367,8 @@ def get_roll_result_and_log(payload, client_ip=None):
                             if not found: response.update({"description": f"No matching {fumble_source_from_payload} fumble for {roll_value} in {key_to_use}.", "effect": "No additional effect."})
 
                             # Detect references to follow-up injury/insanity tables in the fumble effect.
-                            fumble_effect_text = response.get("effect", "")
-                            if isinstance(fumble_effect_text, str):
-                                if "minor injury" in fumble_effect_text.lower(): response.update({"isSecondaryPrompt": True, "secondaryPromptText": "Minor Injury!", "secondaryType": "minor"})
-                                elif "major injury" in fumble_effect_text.lower(): response.update({"isSecondaryPrompt": True, "secondaryPromptText": "Major Injury!", "secondaryType": "major"})
-                                elif "insanity" in fumble_effect_text.lower(): response.update({"isSecondaryPrompt": True, "secondaryPromptText": "Insanity!", "secondaryType": "insanity"})
+                            prompt = secondary_prompt_for(fumble_source_from_payload, response.get("effect", ""))
+                            if prompt: response.update(prompt)
                     # If key_to_use was None (e.g. from undefined fumble source), error is already set.
             else: response.update({"status": "error", "errorMessage": f"Invalid primary roll type: {roll_type_from_payload}"})
 
