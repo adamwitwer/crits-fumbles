@@ -13,10 +13,9 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 MODULE_DIR="$REPO_ROOT/foundry/crits-fumbles"
-# Committed on purpose: this directory *is* the distribution channel. The Foundry
-# server is web-admin only, so the module must install from a URL, and serving the
-# manifest and zip from raw.githubusercontent needs them in the tree. Move to GitHub
-# release assets once that is an option and this can go back to being ignored.
+# Build output. Also committed, because raw.githubusercontent served this directory
+# while GitHub's release API was down, and an install pointed at those URLs still
+# checks them for updates. Release assets are the real channel now.
 DIST_DIR="$REPO_ROOT/foundry/releases"
 ZIP_PATH="$DIST_DIR/module.zip"
 
