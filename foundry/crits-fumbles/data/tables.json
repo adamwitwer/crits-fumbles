@@ -1,0 +1,729 @@
+{
+  "die": 100,
+  "crits": {
+    "bludgeoning": [
+      {
+        "min": 1,
+        "max": 15,
+        "title": "Solid Hit",
+        "effect": "Resolve critical damage as normal. Roll one additional damage die."
+      },
+      {
+        "min": 16,
+        "max": 35,
+        "title": "Off-Balance",
+        "effect": "Resolve critical damage as normal. The target is knocked Prone and pushed 5 feet."
+      },
+      {
+        "min": 36,
+        "max": 55,
+        "title": "Driving Impact",
+        "effect": "Resolve critical damage as normal, plus one additional damage die. The target is Deafened and has disadvantage on attack rolls until the end of its next turn."
+      },
+      {
+        "min": 56,
+        "max": 75,
+        "title": "Knockdown",
+        "effect": "Deal maximum critical damage (do not roll). The target is Grappled until the end of its next turn and pushed 10 feet if not anchored."
+      },
+      {
+        "min": 76,
+        "max": 90,
+        "title": "Bone-Shaker",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and knocked back 10 feet."
+      },
+      {
+        "min": 91,
+        "max": 95,
+        "title": "Concussive Blast",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn; if wearing a helmet, it is dented or knocked off."
+      },
+      {
+        "min": 96,
+        "max": 100,
+        "title": "Head-Ringer",
+        "effect": "Deal maximum critical damage twice (do not roll). The target is Unconscious until the beginning of its next turn, pushed 15 feet, and wakes Prone."
+      }
+    ],
+    "slashing": [
+      {
+        "min": 1,
+        "max": 15,
+        "title": "Clean Strike",
+        "effect": "Resolve critical damage as normal. Roll one additional damage die."
+      },
+      {
+        "min": 16,
+        "max": 35,
+        "title": "Painful Cut",
+        "effect": "Resolve critical damage as normal. The target is Frightened until the end of its next turn and bleeds 1d4 at the start of its next turn."
+      },
+      {
+        "min": 36,
+        "max": 55,
+        "title": "Opening Wound",
+        "effect": "Resolve critical damage as normal. The target is knocked Prone and bleeds 1d4 at the start of each of its turns until it uses an action to staunch the wound."
+      },
+      {
+        "min": 56,
+        "max": 75,
+        "title": "Sweeping Slash",
+        "effect": "Deal maximum critical damage (do not roll). The target is Grappled until the end of its next turn and bleeds 1d6 at the start of each of its turns until it uses an action to staunch the wound."
+      },
+      {
+        "min": 76,
+        "max": 90,
+        "title": "Deep Rend",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and bleeds 1d8 at the start of each of its turns until it uses an action to staunch the wound."
+      },
+      {
+        "min": 91,
+        "max": 95,
+        "title": "Bloodletting",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn and bleeds 2d6 at the start of each of its turns until it uses an action to staunch the wound."
+      },
+      {
+        "min": 96,
+        "max": 100,
+        "title": "Executioner’s Arc",
+        "effect": "Deal maximum critical damage twice (do not roll). The target is Unconscious until the beginning of its next turn, wakes Prone, and bleeds 2d8 at the start of each turn until it uses an action to staunch the wound."
+      }
+    ],
+    "piercing": [
+      {
+        "min": 1,
+        "max": 15,
+        "title": "Clean Puncture",
+        "effect": "Resolve critical damage as normal. Roll one additional damage die."
+      },
+      {
+        "min": 16,
+        "max": 35,
+        "title": "Driving Thrust",
+        "effect": "Resolve critical damage as normal. The target is knocked Prone."
+      },
+      {
+        "min": 36,
+        "max": 55,
+        "title": "Pierced Guard",
+        "effect": "Resolve critical damage as normal. The target is Frightened until the end of its next turn; if wearing armor, its AC is reduced by 1 until repaired."
+      },
+      {
+        "min": 56,
+        "max": 75,
+        "title": "Winded",
+        "effect": "Deal maximum critical damage (do not roll). The target is Grappled until the end of its next turn."
+      },
+      {
+        "min": 76,
+        "max": 90,
+        "title": "Pinning Strike",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn; if your weapon is left in the wound, the target’s movement is 0 until it spends an action removing it."
+      },
+      {
+        "min": 91,
+        "max": 95,
+        "title": "Vital Strike",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn; if wearing armor, its AC is reduced by 2 until repaired."
+      },
+      {
+        "min": 96,
+        "max": 100,
+        "title": "Heartseeker",
+        "effect": "Deal maximum critical damage twice (do not roll). The target is Unconscious until the beginning of its next turn and wakes Prone; if wearing armor, its AC is reduced by 2 until repaired."
+      }
+    ],
+    "acid": [
+      {
+        "min": 1,
+        "max": 15,
+        "title": "Corrosive Hit",
+        "effect": "Resolve critical damage as normal. Roll one additional damage die."
+      },
+      {
+        "min": 16,
+        "max": 35,
+        "title": "Sizzling Splash",
+        "effect": "Resolve critical damage as normal. The target is Poisoned until the end of its next turn."
+      },
+      {
+        "min": 36,
+        "max": 55,
+        "title": "Fuming Burn",
+        "effect": "Resolve critical damage as normal. The target is Blinded until the end of its next turn; if wearing armor, its AC is reduced by 1 until repaired or cleaned."
+      },
+      {
+        "min": 56,
+        "max": 75,
+        "title": "Blistering Spray",
+        "effect": "Deal maximum critical damage (do not roll). The target is Frightened until the end of its next turn; if wearing armor, its AC is reduced by 1 until repaired or cleaned."
+      },
+      {
+        "min": 76,
+        "max": 90,
+        "title": "Caustic Wash",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn; if wearing armor, its AC is reduced by 2 until repaired or cleaned."
+      },
+      {
+        "min": 91,
+        "max": 95,
+        "title": "Melting Pain",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn; if wearing armor, its AC is reduced by 2 until repaired or cleaned."
+      },
+      {
+        "min": 96,
+        "max": 100,
+        "title": "Dissolution",
+        "effect": "Deal maximum critical damage twice (do not roll). The target is Unconscious until the beginning of its next turn and wakes Prone; if wearing non-magical armor, it is destroyed; magical armor is rendered useless until cleaned during a long rest."
+      }
+    ],
+    "cold": [
+      {
+        "min": 1,
+        "max": 15,
+        "title": "Chilled",
+        "effect": "Resolve critical damage as normal. Roll one additional damage die."
+      },
+      {
+        "min": 16,
+        "max": 35,
+        "title": "Numbing Frost",
+        "effect": "Resolve critical damage as normal. The target is knocked Prone and its speed is halved until the end of its next turn."
+      },
+      {
+        "min": 36,
+        "max": 55,
+        "title": "Ice Bite",
+        "effect": "Resolve critical damage as normal. The target is Grappled by ice until the end of its next turn and its speed is halved until the end of its next turn."
+      },
+      {
+        "min": 56,
+        "max": 75,
+        "title": "Frozen Step",
+        "effect": "Deal maximum critical damage (do not roll). The target is Restrained until the end of its next turn and its speed is halved until the end of its next turn."
+      },
+      {
+        "min": 76,
+        "max": 90,
+        "title": "Deep Freeze",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the beginning of its next turn."
+      },
+      {
+        "min": 91,
+        "max": 95,
+        "title": "Flash-Frozen",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. Extreme cold has Stunned the target until the beginning of its next turn."
+      },
+      {
+        "min": 96,
+        "max": 100,
+        "title": "Icebound",
+        "effect": "Deal maximum critical damage twice (do not roll). The target is Paralyzed, encased in a thin layer of ice; on its next turn it must use its action to break free or remain Paralyzed."
+      }
+    ],
+    "fire": [
+      {
+        "min": 1,
+        "max": 15,
+        "title": "Scorched",
+        "effect": "Resolve critical damage as normal. Roll one additional damage die."
+      },
+      {
+        "min": 16,
+        "max": 35,
+        "title": "Searing Flash",
+        "effect": "Resolve critical damage as normal. The target is Blinded until the end of its next turn and takes 1d4 fire damage at the start of its next turn."
+      },
+      {
+        "min": 36,
+        "max": 55,
+        "title": "Kindled",
+        "effect": "Resolve critical damage as normal. The target is Frightened until the end of its next turn and ignites: it takes 1d4 fire damage at the start of each of its turns until it uses an action to extinguish the flames."
+      },
+      {
+        "min": 56,
+        "max": 75,
+        "title": "Blazing Strike",
+        "effect": "Deal maximum critical damage (do not roll). The target ignites: it takes 1d6 fire damage at the start of each of its turns until it uses an action to extinguish the flames."
+      },
+      {
+        "min": 76,
+        "max": 90,
+        "title": "Flashover",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and takes 1d8 fire damage at the start of each of its turns until it uses an action to extinguish the flames."
+      },
+      {
+        "min": 91,
+        "max": 95,
+        "title": "Inferno",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn and takes 2d6 fire damage at the start of each of its turns until it uses an action to extinguish the flames."
+      },
+      {
+        "min": 96,
+        "max": 100,
+        "title": "Cremation",
+        "effect": "Deal maximum critical damage twice (do not roll). The target is Unconscious until the beginning of its next turn, wakes Prone, and continues to burn for 2d8 fire damage at the start of each of its turns until it uses an action to extinguish the flames."
+      }
+    ],
+    "lightning": [
+      {
+        "min": 1,
+        "max": 15,
+        "title": "Crackling Hit",
+        "effect": "Resolve critical damage as normal. Roll one additional damage die."
+      },
+      {
+        "min": 16,
+        "max": 35,
+        "title": "Static Jolt",
+        "effect": "Resolve critical damage as normal. The target is Frightened until the end of its next turn; one creature within 10 feet of the target takes 1d4 lightning damage."
+      },
+      {
+        "min": 36,
+        "max": 55,
+        "title": "Arc Flash",
+        "effect": "Resolve critical damage as normal. The target is knocked Prone; one creature within 10 feet of the target takes 1d4 lightning damage."
+      },
+      {
+        "min": 56,
+        "max": 75,
+        "title": "Nervous Shock",
+        "effect": "Deal maximum critical damage (do not roll). The target is Grappled by spasming muscles until the end of its next turn; one creature within 10 feet of the target takes 1d6 lightning damage."
+      },
+      {
+        "min": 76,
+        "max": 90,
+        "title": "Muscle Lock",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn; one creature within 10 feet of the target takes 1d8 lightning damage."
+      },
+      {
+        "min": 91,
+        "max": 95,
+        "title": "Overload",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn; up to two creatures within 10 feet of the target take 1d8 lightning damage each."
+      },
+      {
+        "min": 96,
+        "max": 100,
+        "title": "Thunderbolt",
+        "effect": "Deal maximum critical damage twice (do not roll). The target is Paralyzed until the beginning of its next turn; up to three creatures within 10 feet of the target take 2d6 lightning damage each."
+      }
+    ],
+    "thunder": [
+      {
+        "min": 1,
+        "max": 15,
+        "title": "Booming Hit",
+        "effect": "Resolve critical damage as normal. Roll one additional damage die."
+      },
+      {
+        "min": 16,
+        "max": 35,
+        "title": "Ringing Ears",
+        "effect": "Resolve critical damage as normal. Roll one additional damage die. The target is Deafened until the end of its next turn and pushed 5 feet."
+      },
+      {
+        "min": 36,
+        "max": 55,
+        "title": "Shockwave",
+        "effect": "Resolve critical damage as normal. The target is knocked Prone, pushed 5 feet, and Deafened until the end of its next turn."
+      },
+      {
+        "min": 56,
+        "max": 75,
+        "title": "Floor-Rattle",
+        "effect": "Deal maximum critical damage (do not roll). The target is Frightened until the end of its next turn, pushed 10 feet, and Deafened for 1 minute."
+      },
+      {
+        "min": 76,
+        "max": 90,
+        "title": "Concussed",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn, pushed 10 feet, and Deafened for 1 minute."
+      },
+      {
+        "min": 91,
+        "max": 95,
+        "title": "Brain-Rattle",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn, pushed 10 feet, and Deafened for 1 hour."
+      },
+      {
+        "min": 96,
+        "max": 100,
+        "title": "Cataclysmic Boom",
+        "effect": "Deal maximum critical damage twice (do not roll). The target is Unconscious until the end of its next turn, wakes Prone, pushed 15 feet, and Deafened permanently (curable as a minor injury)."
+      }
+    ],
+    "force": [
+      {
+        "min": 1,
+        "max": 15,
+        "title": "Arcane Impact",
+        "effect": "Resolve critical damage as normal. Roll one additional damage die."
+      },
+      {
+        "min": 16,
+        "max": 35,
+        "title": "Spellshock",
+        "effect": "Resolve critical damage as normal. The target is Frightened until the end of its next turn and has disadvantage on its next saving throw against a spell."
+      },
+      {
+        "min": 36,
+        "max": 55,
+        "title": "Magical Distortion",
+        "effect": "Resolve critical damage as normal. The target is knocked Prone and has disadvantage on saving throws against spells until the end of its next turn."
+      },
+      {
+        "min": 56,
+        "max": 75,
+        "title": "Arcane Disruption",
+        "effect": "Deal maximum critical damage (do not roll). The target is Grappled by arcane force until the end of its next turn; if concentrating on a spell, concentration ends."
+      },
+      {
+        "min": 76,
+        "max": 90,
+        "title": "Planar Buckle",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and has disadvantage on saves against spells for 1 minute."
+      },
+      {
+        "min": 91,
+        "max": 95,
+        "title": "Spell Rend",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn; if concentrating on a spell, concentration ends and that spell slot is expended uselessly."
+      },
+      {
+        "min": 96,
+        "max": 100,
+        "title": "Reality Fracture",
+        "effect": "Deal maximum critical damage twice (do not roll). The target is Paralyzed until the end of its next turn and has disadvantage on all saves against spells for the next 24 hours."
+      }
+    ],
+    "necrotic": [
+      {
+        "min": 1,
+        "max": 15,
+        "title": "Withering Hit",
+        "effect": "Resolve critical damage as normal. Roll one additional damage die."
+      },
+      {
+        "min": 16,
+        "max": 35,
+        "title": "Life Leech",
+        "effect": "Resolve critical damage as normal. The target is Poisoned until the end of its next turn; you regain hit points equal to one damage die rolled."
+      },
+      {
+        "min": 36,
+        "max": 55,
+        "title": "Grave Chill",
+        "effect": "Resolve critical damage as normal. The target is Frightened until the end of its next turn; the target’s hit point maximum is reduced by the damage dealt by this attack until it completes a long rest."
+      },
+      {
+        "min": 56,
+        "max": 75,
+        "title": "Soul Taint",
+        "effect": "Deal maximum critical damage (do not roll). The target is Blinded until the end of its next turn; the target’s hit point maximum is reduced by the damage dealt until it completes a long rest."
+      },
+      {
+        "min": 76,
+        "max": 90,
+        "title": "Wither",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn; the target’s hit point maximum is reduced by the damage dealt until it completes a long rest."
+      },
+      {
+        "min": 91,
+        "max": 95,
+        "title": "Black Veil",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn; the target’s hit point maximum is reduced by the damage dealt until it is restored by Greater Restoration."
+      },
+      {
+        "min": 96,
+        "max": 100,
+        "title": "Death Spiral",
+        "effect": "Deal maximum critical damage twice (do not roll). The target is Unconscious until the end of its next turn and wakes Prone; the target’s hit point maximum is reduced by the damage dealt until it is restored by Greater Restoration."
+      }
+    ],
+    "poison": [
+      {
+        "min": 1,
+        "max": 15,
+        "title": "Toxic Hit",
+        "effect": "Resolve critical damage as normal. Roll one additional damage die."
+      },
+      {
+        "min": 16,
+        "max": 35,
+        "title": "Sickening Sting",
+        "effect": "Resolve critical damage as normal. The target is Poisoned until it succeeds on a Constitution saving throw (DC 12) at the start of each of its turns."
+      },
+      {
+        "min": 36,
+        "max": 55,
+        "title": "Venom Rush",
+        "effect": "Resolve critical damage as normal. The target is knocked Prone and takes 1d4 poison damage at the start of each of its turns until it succeeds on a Constitution saving throw (DC 12)."
+      },
+      {
+        "min": 56,
+        "max": 75,
+        "title": "Nauseated",
+        "effect": "Deal maximum critical damage (do not roll). The target is Poisoned and takes 1d6 poison damage at the start of each of its turns until it succeeds on a Constitution saving throw (DC 14)."
+      },
+      {
+        "min": 76,
+        "max": 90,
+        "title": "Toxic Shock",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and takes 1d8 poison damage at the start of each of its turns until it succeeds on a Constitution saving throw (DC 14)."
+      },
+      {
+        "min": 91,
+        "max": 95,
+        "title": "System Crash",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn and takes 2d6 poison damage at the start of each of its turns until it succeeds on a Constitution saving throw (DC 16)."
+      },
+      {
+        "min": 96,
+        "max": 100,
+        "title": "Blackout",
+        "effect": "Deal maximum critical damage twice (do not roll). The target is Unconscious until the end of its next turn, wakes Prone and Poisoned, and takes 2d8 poison damage at the start of each of its turns until it succeeds on a Constitution saving throw (DC 16)."
+      }
+    ],
+    "psychic": [
+      {
+        "min": 1,
+        "max": 15,
+        "title": "Mind Spike",
+        "effect": "Resolve critical damage as normal. Roll one additional damage die."
+      },
+      {
+        "min": 16,
+        "max": 35,
+        "title": "Reeling Mind",
+        "effect": "Resolve critical damage as normal. The target is Frightened until the end of its next turn and has disadvantage on Intelligence, Wisdom, and Charisma saving throws until the end of its next turn."
+      },
+      {
+        "min": 36,
+        "max": 55,
+        "title": "Intrusive Thoughts",
+        "effect": "Resolve critical damage as normal. The target is Frightened until the end of its next turn and has disadvantage on attack rolls and ability checks until the end of its next turn; it takes 1d4 psychic damage at the start of its next turn as the assault echoes."
+      },
+      {
+        "min": 56,
+        "max": 75,
+        "title": "Mind Fracture",
+        "effect": "Deal maximum critical damage (do not roll). The target is Grappled by mental anguish until the end of its next turn and has disadvantage on Intelligence, Wisdom, and Charisma saving throws for 1 minute."
+      },
+      {
+        "min": 76,
+        "max": 90,
+        "title": "Overwhelmed",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and has disadvantage on attack rolls and on Intelligence, Wisdom, and Charisma saving throws for 1 minute."
+      },
+      {
+        "min": 91,
+        "max": 95,
+        "title": "Mind Snare",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn and has disadvantage on Intelligence, Wisdom, and Charisma saving throws for 1 minute."
+      },
+      {
+        "min": 96,
+        "max": 100,
+        "title": "Ego Shatter",
+        "effect": "Deal maximum critical damage twice (do not roll). The target is struck catatonic—Paralyzed until the end of its next turn—and has disadvantage on all Intelligence, Wisdom, and Charisma saving throws for the next 24 hours."
+      }
+    ],
+    "radiant": [
+      {
+        "min": 1,
+        "max": 15,
+        "title": "Searing Light",
+        "effect": "Resolve critical damage as normal. Roll one additional damage die."
+      },
+      {
+        "min": 16,
+        "max": 35,
+        "title": "Dazzle",
+        "effect": "Resolve critical damage as normal. Roll one additional damage die. The target is Blinded until the end of its next turn."
+      },
+      {
+        "min": 36,
+        "max": 55,
+        "title": "Revealing Glow",
+        "effect": "Resolve critical damage as normal. The target is Frightened until the end of its next turn and glows with dim light in a 10-foot radius until the end of its next turn; attacks against it have advantage during this time."
+      },
+      {
+        "min": 56,
+        "max": 75,
+        "title": "Holy Terror",
+        "effect": "Deal maximum critical damage (do not roll). The target is Grappled by divine radiance until the end of its next turn and glows for 1 minute (dim light, 10-foot radius); attacks against it have advantage while glowing."
+      },
+      {
+        "min": 76,
+        "max": 90,
+        "title": "Sunburst",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Incapacitated until the end of its next turn and glows for 1 minute; attacks against it have advantage while glowing."
+      },
+      {
+        "min": 91,
+        "max": 95,
+        "title": "Judgment",
+        "effect": "Deal maximum critical damage (do not roll), then roll the damage dice once and add the result. The target is Stunned until the end of its next turn and glows for 1 minute; attacks against it have advantage and deal an additional 1d4 radiant damage while glowing."
+      },
+      {
+        "min": 96,
+        "max": 100,
+        "title": "Apotheosis",
+        "effect": "Deal maximum critical damage twice (do not roll). The target is Petrified until the end of its next turn and glows for 1 hour (dim light, 30-foot radius); attacks against it have advantage and deal an additional 1d6 radiant damage while glowing."
+      }
+    ]
+  },
+  "fumbles": {
+    "physical": [
+      {
+        "min": 1,
+        "max": 20,
+        "title": "Overextended",
+        "effect": "The attacker overcommits to the strike. They lose any additional attacks this turn, and their attacks have disadvantage until the end of their next turn."
+      },
+      {
+        "min": 21,
+        "max": 35,
+        "title": "Off Balance",
+        "effect": "The attacker loses their footing and falls Prone."
+      },
+      {
+        "min": 36,
+        "max": 50,
+        "title": "Wide Open",
+        "effect": "The attacker leaves themselves exposed. Attacks against them before the start of their next turn have advantage."
+      },
+      {
+        "min": 51,
+        "max": 65,
+        "title": "Drop It",
+        "effect": "The attacker’s weapon slips from their grasp and clatters 1d4 × 5 feet away in a random direction. Retrieving it costs an action."
+      },
+      {
+        "min": 66,
+        "max": 80,
+        "title": "Friend or Foe?",
+        "effect": "The attacker hits an ally of the DM’s choosing within 15 feet and must roll for full damage."
+      },
+      {
+        "min": 81,
+        "max": 90,
+        "title": "Strained",
+        "effect": "The attacker pulls something during the strike. They are Restrained until the end of their next turn as their own body locks against them."
+      },
+      {
+        "min": 91,
+        "max": 95,
+        "title": "Self-Inflicted",
+        "effect": "In the chaos, the attacker strikes themselves. They take 2d6 damage of the weapon’s type."
+      },
+      {
+        "min": 96,
+        "max": 100,
+        "title": "Total Disaster",
+        "effect": "The attacker loses control completely. Their weapon flies 2d6 × 5 feet away in a random direction; they fall Prone and cannot stand until they spend an action to regain their footing. They take 2d6 damage of the weapon’s type."
+      }
+    ],
+    "elemental": [
+      {
+        "min": 1,
+        "max": 20,
+        "title": "Flare-Up",
+        "effect": "The energy surges unpredictably. The caster loses any additional attacks this turn, and attack rolls have disadvantage until the end of their next turn."
+      },
+      {
+        "min": 21,
+        "max": 35,
+        "title": "Backdraft",
+        "effect": "The blast partially rebounds. The caster takes 1d4 damage of the spell’s type and loses all remaining actions this turn."
+      },
+      {
+        "min": 36,
+        "max": 50,
+        "title": "Blinding Flash",
+        "effect": "A sudden flash obscures the caster’s vision. The caster is Blinded until the end of their next turn."
+      },
+      {
+        "min": 51,
+        "max": 65,
+        "title": "Unstable Ground",
+        "effect": "The energy disturbs the area around the caster. The caster falls Prone and cannot stand until they spend an action to regain their footing."
+      },
+      {
+        "min": 66,
+        "max": 80,
+        "title": "Wild Surge",
+        "effect": "The effect veers off course. If another creature is within 10 feet of the original target, the DM selects one of them as the new target."
+      },
+      {
+        "min": 81,
+        "max": 90,
+        "title": "Elemental Feedback",
+        "effect": "The energy lashes back. The caster takes 1d6 damage of the spell’s type and is Restrained until the end of their next turn as the element coils around them."
+      },
+      {
+        "min": 91,
+        "max": 95,
+        "title": "Overload",
+        "effect": "The surge overwhelms the caster’s senses. They can’t take reactions and attack rolls against them have advantage until the end of their next turn."
+      },
+      {
+        "min": 96,
+        "max": 100,
+        "title": "Elemental Burst",
+        "effect": "The power detonates at the caster’s position. They take 2d8 damage of the spell’s type, fall Prone, and cannot stand until they spend an action to regain their footing, and the spell slot is expended. Every other creature within 10 feet (allies included) takes 1d6 damage of the spell’s type (Dexterity save, half on success)."
+      }
+    ],
+    "magical": [
+      {
+        "min": 1,
+        "max": 20,
+        "title": "Arcane Static",
+        "effect": "The caster’s spell sputters. They have disadvantage on any attack roll they make before the end of their next turn."
+      },
+      {
+        "min": 21,
+        "max": 35,
+        "title": "Mental Slip",
+        "effect": "The caster’s concentration falters briefly. They can’t take reactions, and they have disadvantage on attack rolls until the end of their next turn."
+      },
+      {
+        "min": 36,
+        "max": 50,
+        "title": "Weave Distortion",
+        "effect": "Magic bends unpredictably, and the weave betrays the caster. The next two attacks against the caster have advantage."
+      },
+      {
+        "min": 51,
+        "max": 65,
+        "title": "Psychic Recoil",
+        "effect": "Arcane feedback rattles the caster’s mind. They take 2d4 psychic damage and lose all remaining actions this turn. If concentrating on a spell, they must make a Constitution saving throw (DC 10) or lose concentration."
+      },
+      {
+        "min": 66,
+        "max": 80,
+        "title": "Spell Lock",
+        "effect": "The weave resists the caster. They are Restrained until the end of their next turn as shimmering energy binds them."
+      },
+      {
+        "min": 81,
+        "max": 90,
+        "title": "Mind Fracture",
+        "effect": "The caster’s thoughts splinter under the strain. They are Frightened until the end of their next turn and the spell slot is expended."
+      },
+      {
+        "min": 91,
+        "max": 95,
+        "title": "Arcane Collapse",
+        "effect": "The caster’s control shatters. They are Incapacitated until the end of their next turn and the spell slot is expended."
+      },
+      {
+        "min": 96,
+        "max": 100,
+        "title": "Reality Snaps",
+        "effect": "The magic tears violently around the caster. They take 2d6 force damage and are Stunned until the end of their next turn. The spell slot is expended and they lose concentration on any spell they are maintaining."
+      }
+    ]
+  }
+}
