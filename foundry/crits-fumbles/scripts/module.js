@@ -1,8 +1,9 @@
 import { promptForDamageType } from "./apps/damage-prompt.js";
+import { registerAnnouncementListeners } from "./announce.js";
 import { MODULE_ID } from "./constants.js";
 import { runProbe, watchAttacks } from "./probe.js";
 import { rollTable } from "./roller.js";
-import { forceCrits, simulate } from "./testing.js";
+import { announceTest, forceCrits, simulate } from "./testing.js";
 import { registerTrigger } from "./trigger.js";
 import { categoryFor, damageTypes, loadTables, resolveRoll } from "./tables.js";
 import { resetWindow } from "./turn-gate.js";
@@ -77,6 +78,7 @@ Hooks.once("ready", async () => {
     roll: rollTable,
     resetTurn: resetWindow,
     simulate,
+    announceTest,
     forceCrits,
     damageTypes,
     categoryFor,
@@ -86,6 +88,7 @@ Hooks.once("ready", async () => {
 
   // Registered here rather than in init so game.socket is definitely connected.
   registerTrigger();
+  registerAnnouncementListeners();
 
   if (game.settings.get(MODULE_ID, "debugAttacks")) watchAttacks();
 

@@ -1,7 +1,8 @@
-import { promptForDamageType } from "./apps/damage-prompt.js";
+import { announce } from "./announce.js";
 import { MODULE_ID } from "./constants.js";
 import { damageTypeFor, logMiss } from "./damage-type.js";
 import { rollTable } from "./roller.js";
+import { categoryFor } from "./tables.js";
 import { evaluateWindow, markWindowSpent } from "./turn-gate.js";
 
 const SOCKET = `module.${MODULE_ID}`;
@@ -47,37 +48,39 @@ export async function onAttack(rolls, data) {
   if (!eligible) return say(`no roll — ${reason}`);
 
   const kind = roll.isCritical ? "crit" : "fumble";
-  const { damageType, known, seen } = damageTypeFor(activity);
+  const { known, seen } = damageTypeFor(activity);
 
-  const chosen = shouldPrompt(known)
-    ? await askForDamageType({ kind, known, actorName: actor.name })
-    : damageType;
+  // Fumbles are chosen from three categories, so ambiguity is measured there: an
+  // attack that is both bludgeoning and piercing is unambiguously Physical.
+  const choices = kind === "fumble"
+    ? [...new Set(known.map(categoryFor).filter(Boolean))]
+    : known;
 
-  if (!chosen) {
-    if (!known.length && !shouldPrompt(known)) logMiss(activity, seen);
-    return say(known.length || shouldPrompt(known)
-      ? "no roll — damage type not chosen"
-      : "no roll — could not determine a damage type");
+  // Ask in chat rather than rolling on a guess: the card stays visible to the table
+  // and does not interrupt whoever is mid-turn.
+  if (shouldAsk(choices)) {
+    say(`announcing in chat — ${reason}`);
+    return announce({ actor, kind, detected: known });
   }
 
-  say(`rolling the ${chosen} table — ${reason}`);
-  await rollTable({ kind, damageType: chosen, actor, flavorPrefix: actor.name });
+  if (!choices.length) {
+    logMiss(activity, seen);
+    return say("no roll — could not determine a damage type");
+  }
+
+  say(`rolling the ${choices[0]} table — ${reason}`);
+  await rollTable({ kind, damageType: choices[0], actor, flavorPrefix: actor.name });
 }
 
 /**
  * The system often cannot know the damage type — a monk's unarmed strike carries both
  * bludgeoning and force, and the player chooses per strike — so asking is the default.
  */
-function shouldPrompt(known) {
+function shouldAsk(choices) {
   const mode = game.settings.get(MODULE_ID, "promptDamageType");
   if (mode === "never") return false;
   if (mode === "always") return true;
-  return known.length !== 1; // "ambiguous": ask unless exactly one type is certain
-}
-
-async function askForDamageType({ kind, known, actorName }) {
-  const result = await promptForDamageType({ kind, detected: known, actorName, lockKind: true });
-  return result?.damageType ?? null;
+  return choices.length !== 1; // "ambiguous": ask unless exactly one option is certain
 }
 
 /** Marking the window spent needs GM rights; do it locally or hand it to a GM. */

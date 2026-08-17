@@ -9,13 +9,13 @@
   {{/unless}}
 
   <p class="cf-hint">
-    Choose the damage type to roll on.
+    {{#if isCrit}}Choose the damage type to roll on.{{else}}Choose the fumble category.{{/if}}
     {{#if anyDetected}}Highlighted types were detected on the attack.{{/if}}
   </p>
 
   {{#each groups}}
   <section class="cf-group">
-    <h4>{{this.label}}</h4>
+    {{#if this.label}}<h4>{{this.label}}</h4>{{/if}}
     <div class="cf-types">
       {{#each this.types}}
       <button type="button" data-action="pick" data-type="{{this.type}}"

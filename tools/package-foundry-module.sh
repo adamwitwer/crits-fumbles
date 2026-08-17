@@ -33,6 +33,11 @@ mkdir -p "$DIST_DIR"
 (cd "$MODULE_DIR" && zip -rq "$ZIP_PATH" . -x '*.DS_Store')
 cp "$MODULE_DIR/module.json" "$DIST_DIR/module.json"
 
+if [[ ! -s "$ZIP_PATH" ]]; then
+  echo "zip step produced nothing at $ZIP_PATH" >&2
+  exit 1
+fi
+
 # Guard the packaging mistake that silently produces Data/modules/<id>/<id>/.
 if ! unzip -Z1 "$ZIP_PATH" | grep -qx 'module.json'; then
   echo "module.json is not at the zip root — Foundry would install this one level too deep." >&2

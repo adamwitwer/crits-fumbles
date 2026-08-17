@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants.js";
+import { announce } from "./announce.js";
 import { onAttack } from "./trigger.js";
 
 /**
@@ -68,6 +69,11 @@ export async function forceCrits(enabled = true) {
   console.log(message);
   ui.notifications.info(message);
   return now;
+}
+
+/** Post an announcement card directly, without an attack or the turn rule. */
+export async function announceTest({ kind = "crit", detected = [] } = {}) {
+  return announce({ actor: pickActor(), kind, detected });
 }
 
 function pickActor() {

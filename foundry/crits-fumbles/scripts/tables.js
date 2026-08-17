@@ -52,6 +52,27 @@ export function categoryFor(damageType) {
 }
 
 /**
+ * The fumble tables are deliberately coarser than the crit tables: three categories
+ * rather than thirteen damage types, matching the web app.
+ */
+export function fumbleCategories() {
+  return Object.keys(getTables().fumbles).map(key => ({
+    key,
+    label: key.charAt(0).toUpperCase() + key.slice(1)
+  }));
+}
+
+export function isFumbleCategory(value) {
+  return Object.hasOwn(getTables().fumbles, value);
+}
+
+/** Resolve a user or detected selection to the table key for `kind`. */
+export function tableKeyFor(kind, selection) {
+  if (kind !== "fumble") return selection;
+  return isFumbleCategory(selection) ? selection : categoryFor(selection);
+}
+
+/**
  * Look up a roll on one of the tables.
  * `kind` is "crit" or "fumble"; `key` is a damage type or a fumble category.
  */

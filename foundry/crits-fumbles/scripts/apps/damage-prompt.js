@@ -1,5 +1,5 @@
 import { MODULE_ID } from "../constants.js";
-import { damageTypeGroups } from "../tables.js";
+import { categoryFor, damageTypeGroups, fumbleCategories } from "../tables.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -46,20 +46,36 @@ class DamagePrompt extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   async _prepareContext() {
+    const isCrit = this.#kind === "crit";
     const detected = new Set(this.options.detected ?? []);
+
+    // Fumble tables are deliberately coarser: three categories, not thirteen types.
+    // Detected damage types are mapped through so a bludgeoning/force strike
+    // highlights Physical and Magical.
+    const groups = isCrit
+      ? damageTypeGroups().map(group => ({
+          label: group.label,
+          types: group.types.map(type => ({
+            type,
+            label: type.charAt(0).toUpperCase() + type.slice(1),
+            detected: detected.has(type)
+          }))
+        }))
+      : [{
+          label: null,
+          types: fumbleCategories().map(({ key, label }) => ({
+            type: key,
+            label,
+            detected: [...detected].some(type => categoryFor(type) === key)
+          }))
+        }];
+
     return {
       kind: this.#kind,
-      isCrit: this.#kind === "crit",
+      isCrit,
       lockedKind: !!this.options.lockKind,
-      anyDetected: detected.size > 0,
-      groups: damageTypeGroups().map(group => ({
-        ...group,
-        types: group.types.map(type => ({
-          type,
-          label: type.charAt(0).toUpperCase() + type.slice(1),
-          detected: detected.has(type)
-        }))
-      }))
+      anyDetected: groups.some(group => group.types.some(type => type.detected)),
+      groups
     };
   }
 

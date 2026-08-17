@@ -1,5 +1,5 @@
 import { MODULE_ID } from "./constants.js";
-import { categoryFor, getTables, resolveRoll } from "./tables.js";
+import { getTables, resolveRoll, tableKeyFor } from "./tables.js";
 
 /**
  * Roll on a table and post the result to chat.
@@ -11,27 +11,28 @@ import { categoryFor, getTables, resolveRoll } from "./tables.js";
 export async function rollTable({ kind, damageType, actor = null, flavorPrefix = null } = {}) {
   if (kind !== "crit" && kind !== "fumble") throw new Error(`${MODULE_ID}: kind must be "crit" or "fumble"`);
 
-  // Crits index by damage type; fumbles index by the category it falls in.
-  const key = kind === "crit" ? damageType : categoryFor(damageType);
-  if (!key) throw new Error(`${MODULE_ID}: no ${kind} table for damage type "${damageType}"`);
+  // Crits index by damage type. Fumbles index by category, and accept either a
+  // category chosen directly or a damage type to bucket.
+  const key = tableKeyFor(kind, damageType);
+  if (!key) throw new Error(`${MODULE_ID}: no ${kind} table for "${damageType}"`);
 
   const roll = await new Roll(`1d${getTables().die}`).evaluate();
   const entry = resolveRoll(roll.total, kind, key);
 
   const label = game.i18n.localize(kind === "crit" ? "CRITSFUMBLES.CriticalHit" : "CRITSFUMBLES.Fumble");
-  const flavor = [flavorPrefix, `${label} — ${damageType}`].filter(Boolean).join(" ");
+  const flavor = [flavorPrefix, `${label} — ${key}`].filter(Boolean).join(" ");
 
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker(actor ? { actor } : {}),
     flavor,
     rolls: [roll],
-    content: renderCard({ kind, damageType, roll, entry })
+    content: renderCard({ kind, key, roll, entry })
   });
 
   return { roll, entry };
 }
 
-function renderCard({ kind, damageType, roll, entry }) {
+function renderCard({ kind, key, roll, entry }) {
   const title = entry ? entry.title : game.i18n.localize("CRITSFUMBLES.NoResult");
   const effect = entry ? entry.effect : `No table entry matched ${roll.total}.`;
 
@@ -39,7 +40,7 @@ function renderCard({ kind, damageType, roll, entry }) {
   // on no template-loading API; swap for a .hbs once the UI settles.
   return `
     <div class="crits-fumbles-card" data-kind="${kind}">
-      <header><span class="cf-roll">${roll.total}</span> <span class="cf-type">${escapeHtml(damageType)}</span></header>
+      <header><span class="cf-roll">${roll.total}</span> <span class="cf-type">${escapeHtml(key)}</span></header>
       <h4>${escapeHtml(title)}</h4>
       <p>${escapeHtml(effect)}</p>
     </div>

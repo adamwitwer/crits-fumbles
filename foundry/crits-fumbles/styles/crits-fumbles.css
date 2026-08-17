@@ -118,3 +118,82 @@
 .theme-dark .crits-fumbles-prompt .cf-type-button.cf-detected {
   border-color: #e0685f;
 }
+
+/* Chat announcement: the crit is called out in the log, and resolved from there. */
+
+.crits-fumbles-announce {
+  --cf-accent: #7a1f1f;
+  text-align: center;
+  padding: 0.25rem 0 0.4rem;
+}
+
+.crits-fumbles-announce[data-kind="fumble"] {
+  --cf-accent: #4a4a57;
+}
+
+.crits-fumbles-announce .cf-headline {
+  margin: 0 0 0.1rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--cf-accent);
+  border: none;
+}
+
+.crits-fumbles-announce .cf-who {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.crits-fumbles-announce .cf-choose {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.crits-fumbles-announce .cf-choose label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  flex: 1;
+  text-align: left;
+}
+
+.crits-fumbles-announce .cf-choose label span {
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.65;
+}
+
+.crits-fumbles-announce .cf-select {
+  width: 100%;
+}
+
+.crits-fumbles-announce .cf-roll-button {
+  flex: 0 0 auto;
+  width: auto;
+  padding: 0 0.9rem;
+  font-weight: 600;
+}
+
+.crits-fumbles-announce .cf-note {
+  margin: 0.35rem 0 0;
+  font-size: 0.72rem;
+  opacity: 0.6;
+}
+
+.crits-fumbles-announce.cf-resolved .cf-headline {
+  opacity: 0.55;
+}
+
+.theme-dark .crits-fumbles-announce {
+  --cf-accent: #e0685f;
+}
+
+.theme-dark .crits-fumbles-announce[data-kind="fumble"] {
+  --cf-accent: #9aa0b0;
+}

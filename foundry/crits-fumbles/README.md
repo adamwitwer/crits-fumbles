@@ -99,8 +99,21 @@ picks the right table.
 
 ## Automatic rolling
 
-On by default. When an attack rolls a natural critical hit or fumble, the matching
-table is rolled and posted to chat.
+On by default. When an attack rolls a natural critical hit or fumble, the module posts
+an announcement to chat — a headline, and a dropdown to choose what to roll on:
+
+```
+💥 Critical Hit 💥
+Rahib
+Damage Type [ Bludgeoning ● ▾ ]  [Roll]
+● detected on the attack
+```
+
+Choosing and rolling posts the result card. Only the player who made the attack, or a
+GM, can resolve it, and once resolved the card stops offering the controls.
+
+Announcing in chat rather than opening a dialog keeps the moment visible to the whole
+table, leaves a record in the log, and does not steal focus from whoever is mid-turn.
 
 ### The house rule
 
@@ -119,14 +132,19 @@ To re-open the current turn's window after an undone roll:
 game.modules.get("crits-fumbles").api.resetTurn();
 ```
 
-### Choosing the damage type
+### Choosing what to roll on
 
-The module asks which damage type to roll on, with the types it detected on the attack
-highlighted. Picking one rolls immediately.
+Crits offer the thirteen damage types. **Fumbles offer three categories** — Physical,
+Elemental, Magical — which is the coarser split the fumble tables actually use, and
+matches the web app.
 
-It asks rather than deciding because the system frequently cannot know. A monk's
-unarmed strike carries both `bludgeoning` and `force` and the player picks per strike,
-and that pattern repeats across classes. Guessing would quietly roll the wrong table.
+The module asks rather than deciding because the system frequently cannot know. A
+monk's unarmed strike carries both `bludgeoning` and `force` and the player picks per
+strike, and that pattern repeats across classes. Guessing would quietly roll the wrong
+table. Detected options are marked with ●.
+
+For fumbles, ambiguity is measured in categories: an attack that is both bludgeoning
+and piercing is unambiguously Physical, so there is nothing to ask.
 
 Set **Ask for the damage type** to "Only when the attack has more than one damage
 type" to skip the prompt for unambiguous weapons, or to "Never ask" to always take the
@@ -178,6 +196,7 @@ Both are also on the console alias, which is quicker than making a macro:
 ```js
 CritsFumbles.simulate({ kind: "crit" });
 CritsFumbles.forceCrits(true);
+CritsFumbles.announceTest({ kind: "fumble" });   // post an announcement card directly
 ```
 
 To take the turn rule out of the picture entirely while working on something else,
