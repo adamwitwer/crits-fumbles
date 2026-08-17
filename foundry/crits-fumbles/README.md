@@ -3,8 +3,8 @@
 Rolls a critical hit or fumble result on the Crits & Fumbles house tables. For the
 `dnd5e` system.
 
-Status: **early prototype.** Manual rolling works; the automatic trigger on a natural
-crit/fumble is not built yet (see below).
+Status: **prototype.** Automatic rolling and manual rolling both work. No dialog yet —
+on-demand rolls go through a macro.
 
 ## Install
 
@@ -65,16 +65,49 @@ Crits index by damage type directly. Fumbles bucket the same damage types into
 `physical` / `elemental` / `magical`, so pass a damage type either way and the module
 picks the right table.
 
+## Automatic rolling
+
+On by default. When an attack rolls a natural critical hit or fumble, the matching
+table is rolled and posted to chat.
+
+### The house rule
+
+Only a combatant's **first attack of their own turn** is eligible:
+
+- The window is spent by that first attack whether or not it crits. If the first
+  attack misses and a second one crits, nothing fires.
+- Reactions, opportunity attacks and legendary actions never trigger, since they
+  happen on someone else's turn.
+- Outside combat there are no turns to track, so everything is eligible. Turn this
+  off with the "Trigger outside combat" setting.
+
+To re-open the current turn's window after an undone roll:
+
+```js
+game.modules.get("crits-fumbles").api.resetTurn();
+```
+
+### How it decides
+
+dnd5e fires its roll hooks only on the client that made the roll, so a player's attack
+never reaches the GM's client, and players cannot write the Combat flag the turn gate
+uses. The rolling client therefore reports the attack over a socket and a single GM
+client decides and posts, which keeps the gate authoritative and produces exactly one
+card.
+
+## Settings
+
+| Setting | Default | Effect |
+|---|---|---|
+| Roll automatically on a natural crit or fumble | on | Turn off for manual-only rolling |
+| Trigger outside combat | on | Whether crits fire with no active encounter |
+| Log attack rolls to the console | off | Diagnostic; prints each attack's shape |
+
 ## What is not built yet
 
-- **Auto-trigger on a natural crit/fumble.** Reading the damage type off an attack in
-  dnd5e 5.x is the one piece that could not be confirmed from documentation, so the
-  module currently only *observes* attacks: with the "Log attack rolls" setting on, each
-  attack prints its shape to the console. That output is what the trigger will be built
-  from.
-- **The house rule** limiting auto-rolls to a combatant's first attack per turn.
-- **A roll dialog**, scene-control button, and keybinding.
-- **Styling** for the chat card.
+- **A roll dialog**, scene-control button, and keybinding. On-demand rolling works
+  through the macro above.
+- **Condition links** into the rules compendium.
 
 ## Regenerating the tables
 

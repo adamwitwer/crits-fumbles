@@ -1,0 +1,56 @@
+/* Chat card. Dice So Nice is not installed on the target server, so the roll result
+   has to read clearly here rather than relying on a dice animation. */
+
+.crits-fumbles-card {
+  --cf-accent: #7a1f1f;
+  border-left: 3px solid var(--cf-accent);
+  padding: 0.35rem 0 0.35rem 0.6rem;
+}
+
+.crits-fumbles-card[data-kind="fumble"] {
+  --cf-accent: #4a4a57;
+}
+
+.crits-fumbles-card header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.15rem;
+}
+
+.crits-fumbles-card .cf-roll {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--cf-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.crits-fumbles-card .cf-type {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.crits-fumbles-card h4 {
+  margin: 0 0 0.15rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+}
+
+.crits-fumbles-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Foundry v13+ exposes an explicit theme on the root element. */
+.theme-dark .crits-fumbles-card {
+  --cf-accent: #e0685f;
+}
+
+.theme-dark .crits-fumbles-card[data-kind="fumble"] {
+  --cf-accent: #9aa0b0;
+}
