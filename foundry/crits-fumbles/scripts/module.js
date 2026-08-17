@@ -89,8 +89,17 @@ Hooks.once("ready", async () => {
 
   if (game.settings.get(MODULE_ID, "debugAttacks")) watchAttacks();
 
+  // Console alias. Typing the full game.modules.get(...) chain to test something is
+  // tedious, and a missing name here is the quickest way to spot a stale build.
+  globalThis.CritsFumbles = game.modules.get(MODULE_ID).api;
+
   const version = game.modules.get(MODULE_ID)?.version ?? "unknown";
-  console.log(`${MODULE_ID} | ready — v${version}, ${tableStatus}`);
+  console.log(
+    `%c${MODULE_ID} v${version}%c — ${tableStatus}\n` +
+    `Console: CritsFumbles.simulate({ kind: "crit" }) · CritsFumbles.open() · CritsFumbles.forceCrits(true)\n` +
+    `Settings: Game Settings → Configure Settings → Module Settings → Crits & Fumbles`,
+    "font-weight:bold", "font-weight:normal"
+  );
 });
 
 /**

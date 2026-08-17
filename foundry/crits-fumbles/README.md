@@ -40,12 +40,32 @@ The folder must be named `crits-fumbles`, matching the `id` in `module.json`.
 Open the browser console (F12) and look for:
 
 ```
-crits-fumbles | init
-crits-fumbles | ready — v0.4.0, 13 damage types loaded
+crits-fumbles v0.5.1 — 13 damage types loaded
+Console: CritsFumbles.simulate({ kind: "crit" }) · CritsFumbles.open() · ...
+Settings: Game Settings → Configure Settings → Module Settings → Crits & Fumbles
 ```
 
-Check the version in that line matches what you installed — two builds are otherwise
-indistinguishable in the console.
+**Check that version matches what you expect.** A stale build is the most common cause
+of "that function does not exist" or "I cannot find that setting" — both mean the
+browser or Foundry is still running an older copy.
+
+After updating the module, **hard-reload the page** (Cmd/Ctrl + Shift + R). Foundry
+serves module scripts without cache-busting, so an ordinary refresh can keep running
+the previous build.
+
+To check what the running build offers:
+
+```js
+game.modules.get("crits-fumbles").version   // installed version
+Object.keys(CritsFumbles)                   // available API functions
+```
+
+## Where the settings live
+
+**Game Settings** (the gear icon in the sidebar) **→ Configure Settings → Module
+Settings → Crits & Fumbles**.
+
+Not under Manage Modules — that page only enables and disables modules.
 
 For a report of which APIs this Foundry build offers, run
 `game.modules.get("crits-fumbles").api.probe()`. It exists because Foundry v14 and
@@ -152,6 +172,13 @@ game.modules.get("crits-fumbles").api.forceCrits(false);   // restore
 `forceCrits` sets `flags.dnd5e.weaponCriticalThreshold` to 1 — the same flag class
 features like Improved Critical use. It modifies the actor, so restore it afterwards
 and prefer a test character.
+
+Both are also on the console alias, which is quicker than making a macro:
+
+```js
+CritsFumbles.simulate({ kind: "crit" });
+CritsFumbles.forceCrits(true);
+```
 
 To take the turn rule out of the picture entirely while working on something else,
 turn off **Only the first attack of a turn can trigger** in the module settings.
