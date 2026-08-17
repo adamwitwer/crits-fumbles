@@ -1,5 +1,5 @@
 import { MODULE_ID } from "./constants.js";
-import { getTables, resolveRoll, tableKeyFor } from "./tables.js";
+import { getTables, labelFor, resolveRoll, tableKeyFor } from "./tables.js";
 
 /**
  * Roll on a table and post the result to chat.
@@ -20,7 +20,7 @@ export async function rollTable({ kind, damageType, actor = null, flavorPrefix =
   const entry = resolveRoll(roll.total, kind, key);
 
   const label = game.i18n.localize(kind === "crit" ? "CRITSFUMBLES.CriticalHit" : "CRITSFUMBLES.Fumble");
-  const flavor = [flavorPrefix, `${label} — ${key}`].filter(Boolean).join(" ");
+  const flavor = [flavorPrefix, `${label} — ${labelFor(key)}`].filter(Boolean).join(" ");
 
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker(actor ? { actor } : {}),

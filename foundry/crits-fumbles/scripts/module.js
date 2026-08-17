@@ -22,7 +22,6 @@ Hooks.once("init", () => {
 
   game.settings.register(MODULE_ID, "promptDamageType", {
     name: "Ask for the damage type",
-    hint: "The system often cannot tell: a monk's unarmed strike is both bludgeoning and force, and the player chooses per strike.",
     scope: "world",
     config: true,
     type: String,

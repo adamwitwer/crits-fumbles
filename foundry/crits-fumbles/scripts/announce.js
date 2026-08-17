@@ -1,6 +1,6 @@
 import { MODULE_ID } from "./constants.js";
 import { rollTable } from "./roller.js";
-import { categoryFor, damageTypeGroups, fumbleCategories } from "./tables.js";
+import { categoryFor, damageTypeGroups, fumbleCategories, labelFor } from "./tables.js";
 
 const FLAG = "announcement";
 
@@ -21,7 +21,7 @@ export async function announce({ actor, kind, detected = [] }) {
 
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker(actor ? { actor } : {}),
-    content: renderAnnouncement({ kind, options, actorName: actor?.name ?? null }),
+    content: renderAnnouncement({ kind, options }),
     flags: {
       [MODULE_ID]: {
         [FLAG]: {
@@ -57,13 +57,13 @@ function optionsFor(kind, detected) {
     label: group.label,
     items: group.types.map(type => ({
       value: type,
-      label: type.charAt(0).toUpperCase() + type.slice(1),
+      label: labelFor(type),
       detected: found.has(type)
     }))
   }));
 }
 
-function renderAnnouncement({ kind, options, actorName }) {
+function renderAnnouncement({ kind, options }) {
   const { emoji, label } = STYLE[kind] ?? STYLE.crit;
   const preselected = options.flatMap(g => g.items).find(item => item.detected);
   const fieldLabel = kind === "fumble" ? "Fumble Category" : "Damage Type";
@@ -79,7 +79,6 @@ function renderAnnouncement({ kind, options, actorName }) {
   return `
     <div class="crits-fumbles-announce" data-kind="${kind}">
       <h3 class="cf-headline">${emoji} ${label} ${emoji}</h3>
-      ${actorName ? `<p class="cf-who">${escapeHtml(actorName)}</p>` : ""}
       <div class="cf-choose">
         <label>
           <span>${fieldLabel}</span>
@@ -127,7 +126,7 @@ async function onResolve(button) {
 
   // Mark resolved before rolling so a double click cannot roll twice.
   await message.setFlag(MODULE_ID, FLAG, { ...state, resolved: true, selection });
-  await message.update({ content: renderResolved({ kind: state.kind, selection, card }) });
+  await message.update({ content: renderResolved({ kind: state.kind, selection }) });
 
   const actor = state.actorUuid ? await fromUuid(state.actorUuid) : null;
   await rollTable({
@@ -143,14 +142,12 @@ function canResolve(message) {
   return game.user.isGM || message.isAuthor;
 }
 
-function renderResolved({ kind, selection, card }) {
+function renderResolved({ kind, selection }) {
   const { emoji, label } = STYLE[kind] ?? STYLE.crit;
-  const who = card.querySelector(".cf-who")?.textContent ?? "";
   return `
     <div class="crits-fumbles-announce cf-resolved" data-kind="${kind}">
       <h3 class="cf-headline">${emoji} ${label} ${emoji}</h3>
-      ${who ? `<p class="cf-who">${escapeHtml(who)}</p>` : ""}
-      <p class="cf-note">Rolled on the ${escapeHtml(selection)} table.</p>
+      <p class="cf-note">Rolled on the ${escapeHtml(labelFor(selection))} table.</p>
     </div>
   `.trim();
 }

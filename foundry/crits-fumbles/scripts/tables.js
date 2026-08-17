@@ -46,6 +46,14 @@ export function damageTypeGroups() {
   }));
 }
 
+/**
+ * Display form of a table key. Keys are single lowercase words — damage types and
+ * fumble categories alike — so capitalising the first letter is the whole job.
+ */
+export function labelFor(key) {
+  return String(key).charAt(0).toUpperCase() + String(key).slice(1);
+}
+
 /** Damage type -> fumble category. Returns null for anything not on the tables. */
 export function categoryFor(damageType) {
   return CATEGORY_OF[damageType] ?? null;
@@ -56,10 +64,7 @@ export function categoryFor(damageType) {
  * rather than thirteen damage types, matching the web app.
  */
 export function fumbleCategories() {
-  return Object.keys(getTables().fumbles).map(key => ({
-    key,
-    label: key.charAt(0).toUpperCase() + key.slice(1)
-  }));
+  return Object.keys(getTables().fumbles).map(key => ({ key, label: labelFor(key) }));
 }
 
 export function isFumbleCategory(value) {

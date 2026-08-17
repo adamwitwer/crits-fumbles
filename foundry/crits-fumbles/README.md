@@ -15,7 +15,7 @@ On the Foundry **Setup** screen: **Add-on Modules → Install Module**, then pas
 into the *Manifest URL* field at the bottom of the dialog and click Install:
 
 ```
-https://raw.githubusercontent.com/adamwitwer/crits-fumbles/main/foundry/releases/module.json
+https://github.com/adamwitwer/crits-fumbles/releases/latest/download/module.json
 ```
 
 Foundry downloads and unpacks it itself, so no server restart is needed. Then open a
@@ -41,7 +41,7 @@ The folder must be named `crits-fumbles`, matching the `id` in `module.json`.
 Open the browser console (F12) and look for:
 
 ```
-crits-fumbles v0.6.0 — 13 damage types loaded
+crits-fumbles v0.6.1 — 13 damage types loaded
 Console: CritsFumbles.simulate({ kind: "crit" }) · CritsFumbles.open() · ...
 Settings: Game Settings → Configure Settings → Module Settings → Crits & Fumbles
 ```
@@ -105,10 +105,12 @@ an announcement to chat — a headline, and a dropdown to choose what to roll on
 
 ```
 💥 Critical Hit 💥
-Rahib
 Damage Type [ Bludgeoning ● ▾ ]  [Roll]
 ● detected on the attack
 ```
+
+The attacker's name comes from the chat message's own speaker line above the card,
+so the card does not repeat it.
 
 Choosing and rolling posts the result card. Only the player who made the attack, or a
 GM, can resolve it, and once resolved the card stops offering the controls.
