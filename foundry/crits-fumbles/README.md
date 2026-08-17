@@ -3,8 +3,9 @@
 Rolls a critical hit or fumble result on the Crits & Fumbles house tables. For the
 `dnd5e` system.
 
-Status: **prototype.** Automatic rolling, the damage type picker and on-demand rolling
-all work. Not yet wired to a scene-control button or keybinding.
+Status: **working prototype**, tested on Foundry 14.366 with dnd5e 5.3.3. Automatic
+rolling, the chat announcement, the picker and on-demand rolling all work. Not yet
+wired to a UI button, and the wording has not had a proper pass.
 
 ## Install
 
@@ -40,7 +41,7 @@ The folder must be named `crits-fumbles`, matching the `id` in `module.json`.
 Open the browser console (F12) and look for:
 
 ```
-crits-fumbles v0.5.1 — 13 damage types loaded
+crits-fumbles v0.6.0 — 13 damage types loaded
 Console: CritsFumbles.simulate({ kind: "crit" }) · CritsFumbles.open() · ...
 Settings: Game Settings → Configure Settings → Module Settings → Crits & Fumbles
 ```
@@ -204,9 +205,13 @@ turn off **Only the first attack of a turn can trigger** in the module settings.
 
 ## What is not built yet
 
-- **A scene-control button and keybinding.** On-demand rolling works through the macro
-  above.
-- **Condition links** into the rules compendium.
+- **A UI entry point** — a button or keybinding to open the picker, rather than a macro
+  or the console (#20).
+- **A language pass.** Strings are hardcoded rather than localized, terminology drifts
+  between "damage type" and "fumble category", and the emoji are placeholders (#21).
+- **Condition links** into the rules compendium, so results link to the rules glossary
+  the way the web app does.
+- **Removing `probe.js`**, once the remaining UI is written against a confirmed API.
 
 ## Regenerating the tables
 

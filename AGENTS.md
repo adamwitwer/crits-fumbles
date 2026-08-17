@@ -118,3 +118,95 @@ new implementation against the old across the real `narrative_dice_log.jsonl` pl
 blank-line, CRLF, no-trailing-newline, and multi-byte-boundary cases. That comparison
 caught an off-by-one where a trailing newline consumed a slot and 49 entries came back
 instead of 50.
+
+## The Foundry module
+
+`foundry/crits-fumbles/` is a Foundry VTT module for the `dnd5e` system, sharing this
+repo's tables. It ships only the house tables and does not name them — it is the one
+table set, so naming it added nothing.
+
+### Build and release
+
+```bash
+python3 tools/build-foundry-tables.py        # app/*.json -> module data
+./tools/package-foundry-module.sh            # build foundry/releases/
+./tools/package-foundry-module.sh --release  # build, then publish a GitHub release
+```
+
+`data/tables.json` is **generated — never hand-edit it**. The converter normalizes the
+two source shapes (crits are `{"1-15": "Title: Effect"}`, fumbles are
+`[{roll, description, effect}]`) into one pre-parsed file, so the module's resolver is a
+single `find()`. It refuses to write unless every table covers 1-100 with no gaps or
+overlapping bands.
+
+Installs come from a manifest URL, because the Foundry server is administered through
+the web UI with no filesystem access:
+
+```
+https://github.com/adamwitwer/crits-fumbles/releases/latest/download/module.json
+```
+
+### Footguns
+
+**A stale build is the most likely explanation for anything "missing".** Foundry serves
+module scripts without cache-busting, so an ordinary refresh can keep running the
+previous copy after an update — hard-reload with Cmd/Ctrl + Shift + R. The ready line
+prints the version for exactly this reason, and `Object.keys(CritsFumbles)` shows what
+the running build actually exposes. A missing API function and a missing setting that
+shipped together are one symptom, not two.
+
+**`raw.githubusercontent` branch URLs are CDN-cached.** They served the module while
+GitHub's release API was down; a push took over two minutes to become installable. The
+files stay in `foundry/releases/` so old installs keep resolving, but release assets are
+the channel now. `--release` refuses to publish unless the manifest points at a
+version-pinned release URL, so the two cannot be mixed up.
+
+**`module.json` must be at the zip root.** Nesting it installs to
+`Data/modules/crits-fumbles/crits-fumbles/` and fails silently. The packaging script
+asserts this.
+
+**dnd5e fires its roll hooks only on the client that made the roll**, not on every
+client. A `game.user.isGM` guard on `dnd5e.rollAttack` therefore drops every player
+attack — this was in the original design and was wrong. The rolling client does the
+work; the one thing it cannot do is write the Combat flag behind the turn rule, so that
+goes to a GM over the module socket (`"socket": true` in the manifest).
+
+**The system often cannot tell you the damage type.** A monk's unarmed strike reports
+`types: Set(2) {'bludgeoning', 'force'}` and the player picks per strike. Never infer it
+— ask. Where damage *is* read, `includeBase: true` means the weapon's base damage is the
+attack's primary type and `damage.parts` are riders on top, so base must outrank them or
+a flame tongue rolls fire instead of slashing.
+
+**Do not bind to `renderChatMessage`.** It was renamed in v13 (`renderChatMessageHTML`)
+and its jQuery signature deprecated. The announcement card uses a delegated `document`
+listener, which behaves the same across versions and survives re-renders.
+
+**Foundry v14 and dnd5e 5.x are newer than the published docs.** `scripts/probe.js`
+reports what the running build actually offers; check it rather than trusting a
+tutorial. Confirmed present on 14.366: `ApplicationV2`, `DialogV2`,
+`HandlebarsApplicationMixin`, `foundry.applications.handlebars.renderTemplate`,
+`game.keybindings`, `ui.controls`. Dice So Nice is **not** installed, so cards must show
+the roll result themselves.
+
+### Testing the module
+
+Waiting for a natural 20 is a slow way to test. From the console:
+
+```js
+CritsFumbles.simulate({ kind: "crit" })      // full trigger path, real weapon, no dice
+CritsFumbles.announceTest({ kind: "fumble" }) // post an announcement card directly
+CritsFumbles.open()                           // the on-demand picker alone
+CritsFumbles.forceCrits(true)                 // every attack crits, then (false)
+```
+
+`simulate` works because only `total`, `isCritical` and `isFumble` are read off a roll,
+so a plain object substitutes and everything downstream stays the production path.
+
+Settings live under **Game Settings → Configure Settings → Module Settings**, not
+Manage Modules. Turning off "Only the first attack of a turn can trigger" takes the
+house rule out of the way while working on something else.
+
+The logic that does not need Foundry is testable in Node by stubbing `fetch` and
+`game`: `tables.js`, `damage-type.js` and `turn-gate.js` have no other globals. The turn
+rule, damage-type extraction across dnd5e schema shapes, and fumble category resolution
+are all covered that way, and every schema change so far was caught there first.

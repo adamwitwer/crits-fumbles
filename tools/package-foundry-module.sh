@@ -37,14 +37,19 @@ if [[ ! -s "$ZIP_PATH" ]]; then
   exit 1
 fi
 
+# Listed once into a variable rather than piped per check: `grep -q` exits on its first
+# match, and the SIGPIPE that gives the still-writing `unzip` fails the whole pipeline
+# under `set -o pipefail` even though the match succeeded.
+entries="$(unzip -Z1 "$ZIP_PATH")"
+
 # Guard the packaging mistake that silently produces Data/modules/<id>/<id>/.
-if ! unzip -Z1 "$ZIP_PATH" | grep -qx 'module.json'; then
+if ! grep -qx 'module.json' <<<"$entries"; then
   echo "module.json is not at the zip root — Foundry would install this one level too deep." >&2
   exit 1
 fi
 
 echo "Built $TAG:"
-unzip -Z1 "$ZIP_PATH" | sed 's/^/  /'
+sed 's/^/  /' <<<"$entries"
 
 if [[ "${1:-}" == "--release" ]]; then
   # Release assets are version-pinned, so the manifest must point at this tag.
