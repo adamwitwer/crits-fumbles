@@ -25,7 +25,7 @@ export function registerTrigger() {
   });
 }
 
-async function onAttack(rolls, data) {
+export async function onAttack(rolls, data) {
   if (!game.settings.get(MODULE_ID, "autoTrigger")) return;
 
   const roll = rolls?.[0];

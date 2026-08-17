@@ -16,6 +16,10 @@ import { MODULE_ID } from "./constants.js";
  * asks a GM to record the spend.
  */
 export function evaluateWindow(actor) {
+  if (!game.settings.get(MODULE_ID, "firstAttackOnly")) {
+    return { eligible: true, reason: "first-attack rule is off", turnKey: null };
+  }
+
   const combat = game.combat;
 
   if (!combat?.started) {

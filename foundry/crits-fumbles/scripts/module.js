@@ -2,6 +2,7 @@ import { promptForDamageType } from "./apps/damage-prompt.js";
 import { MODULE_ID } from "./constants.js";
 import { runProbe, watchAttacks } from "./probe.js";
 import { rollTable } from "./roller.js";
+import { forceCrits, simulate } from "./testing.js";
 import { registerTrigger } from "./trigger.js";
 import { categoryFor, damageTypes, loadTables, resolveRoll } from "./tables.js";
 import { resetWindow } from "./turn-gate.js";
@@ -30,6 +31,15 @@ Hooks.once("init", () => {
       never: "Never ask — use the first type found"
     },
     default: "always"
+  });
+
+  game.settings.register(MODULE_ID, "firstAttackOnly", {
+    name: "Only the first attack of a turn can trigger",
+    hint: "The house rule. The window is spent by that first attack whether or not it crits, and reactions never trigger. Turn off to let every crit and fumble roll.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
   });
 
   game.settings.register(MODULE_ID, "outsideCombat", {
@@ -66,6 +76,8 @@ Hooks.once("ready", async () => {
     open: openPrompt,
     roll: rollTable,
     resetTurn: resetWindow,
+    simulate,
+    forceCrits,
     damageTypes,
     categoryFor,
     resolveRoll,

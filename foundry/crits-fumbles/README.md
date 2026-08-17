@@ -124,9 +124,37 @@ Combat flag behind the turn rule, so it asks a GM to record that over a socket.
 | Setting | Default | Effect |
 |---|---|---|
 | Roll automatically on a natural crit or fumble | on | Turn off for manual-only rolling |
+| Only the first attack of a turn can trigger | on | The house rule. Off = every crit and fumble rolls |
 | Ask for the damage type | Always ask | Always / only when ambiguous / never |
 | Trigger outside combat | on | Whether crits fire with no active encounter |
 | Log attack rolls to the console | off | Diagnostic; prints each attack's shape |
+
+## Testing
+
+Waiting for a natural 20 is a slow way to check a change. Two shortcuts, both as
+**Script** macros:
+
+```js
+// Run the whole auto-trigger path — turn rule, damage type prompt, chat card —
+// against a real weapon on the selected token, without touching the dice.
+game.modules.get("crits-fumbles").api.simulate({ kind: "crit" });
+game.modules.get("crits-fumbles").api.simulate({ kind: "fumble" });
+game.modules.get("crits-fumbles").api.simulate({ kind: "crit", itemName: "Longsword" });
+```
+
+```js
+// Make every weapon attack by the selected token a critical hit, to exercise the
+// genuine dnd5e roll path. Reports whether the flag applied.
+game.modules.get("crits-fumbles").api.forceCrits(true);
+game.modules.get("crits-fumbles").api.forceCrits(false);   // restore
+```
+
+`forceCrits` sets `flags.dnd5e.weaponCriticalThreshold` to 1 — the same flag class
+features like Improved Critical use. It modifies the actor, so restore it afterwards
+and prefer a test character.
+
+To take the turn rule out of the picture entirely while working on something else,
+turn off **Only the first attack of a turn can trigger** in the module settings.
 
 ## What is not built yet
 
