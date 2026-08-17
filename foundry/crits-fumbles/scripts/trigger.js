@@ -27,6 +27,7 @@ export function registerTrigger() {
 
     const report = {
       actorUuid: actor.uuid,
+      activityName: activity?.name ?? activity?.item?.name ?? null,
       isCritical: !!roll.isCritical,
       isFumble: !!roll.isFumble,
       damageType
@@ -52,15 +53,29 @@ function isActingGM() {
   return game.user.isGM;
 }
 
-async function handleAttack({ actorUuid, isCritical, isFumble, damageType }) {
+async function handleAttack({ actorUuid, activityName, isCritical, isFumble, damageType }) {
   const actor = await fromUuid(actorUuid);
-  if (!actor) return;
+  if (!actor) {
+    console.warn(`${MODULE_ID} | could not resolve actor ${actorUuid}`);
+    return;
+  }
 
   // Runs for every attack, not just crits: the first attack of the turn spends the
   // window whether or not it crits.
-  const eligible = await consumeWindow(actor);
+  const { eligible, reason } = await consumeWindow(actor);
+
+  // Only a crit or fumble would have produced a card, so only those are worth
+  // reporting. Says why nothing happened, which is otherwise invisible.
+  const outcome = isCritical ? "critical hit" : isFumble ? "fumble" : null;
+  if (outcome) {
+    const verdict = !eligible ? `no roll — ${reason}`
+      : !damageType ? "no roll — could not determine a damage type (see warning above)"
+      : `rolling ${damageType} table — ${reason}`;
+    console.log(`${MODULE_ID} | ${actor.name} ${outcome} on "${activityName ?? "attack"}": ${verdict}`);
+  }
+
   if (!eligible) return;
-  if (!isCritical && !isFumble) return;
+  if (!outcome) return;
   if (!damageType) return; // already logged on the rolling client
 
   await rollTable({

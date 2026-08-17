@@ -18,21 +18,30 @@ export async function consumeWindow(actor) {
   const combat = game.combat;
 
   if (!combat?.started) {
-    return game.settings.get(MODULE_ID, "outsideCombat");
+    return game.settings.get(MODULE_ID, "outsideCombat")
+      ? { eligible: true, reason: "no active combat" }
+      : { eligible: false, reason: "no active combat, and out-of-combat triggering is off" };
   }
 
   const current = combat.combatant;
-  if (!current) return false;
+  if (!current) return { eligible: false, reason: "combat has no current combatant" };
 
   // Not their turn: a reaction, opportunity attack or legendary action.
-  if (!sameActor(current.actor, actor)) return false;
+  if (!sameActor(current.actor, actor)) {
+    return {
+      eligible: false,
+      reason: `not their turn (it is ${current.actor?.name ?? "someone else"}'s) — reaction or legendary action`
+    };
+  }
 
   const turnKey = `${combat.round}:${combat.turn}`;
   const state = combat.getFlag(MODULE_ID, "turn");
-  if (state?.key === turnKey) return false; // already spent this turn
+  if (state?.key === turnKey) {
+    return { eligible: false, reason: "window already spent by an earlier attack this turn" };
+  }
 
   await combat.setFlag(MODULE_ID, "turn", { key: turnKey });
-  return true;
+  return { eligible: true, reason: "first attack of their turn" };
 }
 
 /** Clear the current turn's window so it can be rolled again. */

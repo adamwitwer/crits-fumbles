@@ -2,8 +2,12 @@
   "id": "crits-fumbles",
   "title": "Crits & Fumbles",
   "description": "Rolls a critical hit or fumble result when an attack crits or fumbles, using the Crits & Fumbles house tables.",
-  "version": "0.2.0",
-  "authors": [{ "name": "Adam Witwer" }],
+  "version": "0.3.0",
+  "authors": [
+    {
+      "name": "Adam Witwer"
+    }
+  ],
   "compatibility": {
     "minimum": "13",
     "verified": "14"
@@ -20,11 +24,19 @@
       }
     ]
   },
-  "esmodules": ["scripts/module.js"],
-  "styles": ["styles/crits-fumbles.css"],
+  "esmodules": [
+    "scripts/module.js"
+  ],
+  "styles": [
+    "styles/crits-fumbles.css"
+  ],
   "socket": true,
   "languages": [
-    { "lang": "en", "name": "English", "path": "lang/en.json" }
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
   ],
   "url": "https://github.com/adamwitwer/crits-fumbles",
   "manifest": "https://raw.githubusercontent.com/adamwitwer/crits-fumbles/main/foundry/releases/module.json",

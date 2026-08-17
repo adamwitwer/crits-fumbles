@@ -61,5 +61,6 @@ Hooks.once("ready", async () => {
 
   if (game.settings.get(MODULE_ID, "debugAttacks")) watchAttacks();
 
-  console.log(`${MODULE_ID} | ready — ${tableStatus}`);
+  const version = game.modules.get(MODULE_ID)?.version ?? "unknown";
+  console.log(`${MODULE_ID} | ready — v${version}, ${tableStatus}`);
 });

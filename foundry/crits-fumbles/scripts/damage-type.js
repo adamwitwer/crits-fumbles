@@ -17,35 +17,49 @@ export function damageTypeFor(activity) {
 }
 
 function collect(activity) {
-  const found = [];
-
-  const push = value => {
-    if (typeof value === "string" && value) found.push(value.toLowerCase());
-  };
-  const pushAll = value => {
-    if (!value) return;
-    if (value instanceof Set || Array.isArray(value)) value.forEach(push);
-    else push(value);
+  const into = target => {
+    const push = value => {
+      if (typeof value === "string" && value) target.push(value.toLowerCase());
+    };
+    return value => {
+      if (!value) return;
+      if (value instanceof Set || Array.isArray(value)) value.forEach(push);
+      else push(value);
+    };
   };
 
   // Activity damage parts (dnd5e 4.x / 5.x): each part carries a `types` Set.
+  const fromParts = [];
+  const addPart = into(fromParts);
   for (const part of activity?.damage?.parts ?? []) {
-    pushAll(part?.types);
-    push(part?.type);
+    addPart(part?.types);
+    addPart(part?.type);
   }
 
-  // A weapon's base damage, which an attack activity folds in rather than repeating.
+  // The weapon's own base damage, which an attack folds in rather than repeating.
+  const fromBase = [];
+  const addBase = into(fromBase);
   const base = activity?.item?.system?.damage?.base;
-  pushAll(base?.types);
-  push(base?.type);
+  addBase(base?.types);
+  addBase(base?.type);
 
   // Legacy (dnd5e 3.x) shape: system.damage.parts is [[formula, type], ...].
+  const fromLegacy = [];
+  const addLegacy = into(fromLegacy);
   const legacy = activity?.item?.system?.damage?.parts;
   if (Array.isArray(legacy)) {
-    for (const part of legacy) if (Array.isArray(part)) push(part[1]);
+    for (const part of legacy) if (Array.isArray(part)) addLegacy(part[1]);
   }
 
-  return [...new Set(found)];
+  // includeBase means the activity deals the weapon's base damage plus its own parts,
+  // so the base is the attack's primary type and the parts are riders on top of it —
+  // a flame tongue's fire rider must not outrank its slashing base. Without it the
+  // activity defines the damage outright and its parts lead.
+  const ordered = activity?.damage?.includeBase === true
+    ? [...fromBase, ...fromParts]
+    : [...fromParts, ...fromBase];
+
+  return [...new Set([...ordered, ...fromLegacy])];
 }
 
 export function logMiss(activity, seen) {
