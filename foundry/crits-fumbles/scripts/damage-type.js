@@ -10,10 +10,10 @@ import { damageTypes } from "./tables.js";
  * miss can be diagnosed from the log rather than guessed at.
  */
 export function damageTypeFor(activity) {
-  const known = new Set(damageTypes());
+  const tableTypes = new Set(damageTypes());
   const seen = collect(activity);
-  const match = seen.find(type => known.has(type)) ?? null;
-  return { damageType: match, seen };
+  const known = seen.filter(type => tableTypes.has(type));
+  return { damageType: known[0] ?? null, known, seen };
 }
 
 function collect(activity) {

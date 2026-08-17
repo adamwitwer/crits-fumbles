@@ -8,43 +8,51 @@ import { MODULE_ID } from "./constants.js";
  *    creature whose turn it is can ever be eligible. That means the state is one flag
  *    per turn rather than a per-actor set.
  *  - The window is spent by the first attack roll whether or not it crits, so this is
- *    called on every attack, before the crit check.
+ *    consulted on every attack, before the crit check.
  *  - Outside combat there are no turns to track, so everything is eligible.
  *
- * State lives on the Combat document so it survives a reload, and encodes the turn it
- * belongs to so a new turn invalidates it without needing an updateCombat listener.
+ * Split into a read and a write because they need different permissions: any client
+ * may read the Combat flag, but only a GM may set it. The rolling client decides, then
+ * asks a GM to record the spend.
  */
-export async function consumeWindow(actor) {
+export function evaluateWindow(actor) {
   const combat = game.combat;
 
   if (!combat?.started) {
     return game.settings.get(MODULE_ID, "outsideCombat")
-      ? { eligible: true, reason: "no active combat" }
-      : { eligible: false, reason: "no active combat, and out-of-combat triggering is off" };
+      ? { eligible: true, reason: "no active combat", turnKey: null }
+      : { eligible: false, reason: "no active combat, and out-of-combat triggering is off", turnKey: null };
   }
 
   const current = combat.combatant;
-  if (!current) return { eligible: false, reason: "combat has no current combatant" };
+  if (!current) return { eligible: false, reason: "combat has no current combatant", turnKey: null };
 
   // Not their turn: a reaction, opportunity attack or legendary action.
   if (!sameActor(current.actor, actor)) {
     return {
       eligible: false,
-      reason: `not their turn (it is ${current.actor?.name ?? "someone else"}'s) — reaction or legendary action`
+      reason: `not their turn (it is ${current.actor?.name ?? "someone else"}'s) — reaction or legendary action`,
+      turnKey: null
     };
   }
 
   const turnKey = `${combat.round}:${combat.turn}`;
   const state = combat.getFlag(MODULE_ID, "turn");
   if (state?.key === turnKey) {
-    return { eligible: false, reason: "window already spent by an earlier attack this turn" };
+    return { eligible: false, reason: "window already spent by an earlier attack this turn", turnKey };
   }
 
-  await combat.setFlag(MODULE_ID, "turn", { key: turnKey });
-  return { eligible: true, reason: "first attack of their turn" };
+  return { eligible: true, reason: "first attack of their turn", turnKey };
 }
 
-/** Clear the current turn's window so it can be rolled again. */
+/** Record that this turn's window is spent. GM only. */
+export async function markWindowSpent(turnKey) {
+  const combat = game.combat;
+  if (!combat?.started || !turnKey) return;
+  await combat.setFlag(MODULE_ID, "turn", { key: turnKey });
+}
+
+/** Clear the current turn's window so it can be rolled again. GM only. */
 export async function resetWindow() {
   const combat = game.combat;
   if (!combat?.started) return false;

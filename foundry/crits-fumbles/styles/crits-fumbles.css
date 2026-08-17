@@ -54,3 +54,67 @@
 .theme-dark .crits-fumbles-card[data-kind="fumble"] {
   --cf-accent: #9aa0b0;
 }
+
+/* Damage type prompt. Appears mid-combat, so picking a type rolls immediately
+   rather than requiring a separate confirm. */
+
+.crits-fumbles-prompt .cf-prompt {
+  padding: 0.5rem 0.75rem 0.75rem;
+}
+
+.crits-fumbles-prompt .cf-hint {
+  margin: 0 0 0.6rem;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.crits-fumbles-prompt .cf-kind {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.crits-fumbles-prompt .cf-kind button {
+  flex: 1;
+}
+
+.crits-fumbles-prompt .cf-kind button.active {
+  border-color: currentColor;
+  font-weight: 600;
+}
+
+.crits-fumbles-prompt .cf-group {
+  margin-bottom: 0.5rem;
+}
+
+.crits-fumbles-prompt .cf-group h4 {
+  margin: 0 0 0.25rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  border: none;
+}
+
+.crits-fumbles-prompt .cf-types {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+  gap: 0.3rem;
+}
+
+.crits-fumbles-prompt .cf-type-button {
+  width: 100%;
+  padding: 0.3rem 0.4rem;
+  font-size: 0.85rem;
+  line-height: 1.2;
+}
+
+/* Detected on the attack — still a choice, just the likely one. */
+.crits-fumbles-prompt .cf-type-button.cf-detected {
+  border-color: #7a1f1f;
+  font-weight: 600;
+}
+
+.theme-dark .crits-fumbles-prompt .cf-type-button.cf-detected {
+  border-color: #e0685f;
+}

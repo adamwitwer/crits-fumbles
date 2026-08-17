@@ -33,6 +33,19 @@ export function damageTypes() {
   return Object.keys(getTables().crits);
 }
 
+/** The fumble buckets double as the display grouping, in table order. */
+export function damageTypeGroups() {
+  const known = new Set(damageTypes());
+  return [
+    { key: "physical", label: "Physical" },
+    { key: "elemental", label: "Elemental" },
+    { key: "magical", label: "Magic" }
+  ].map(group => ({
+    ...group,
+    types: CATEGORIES[group.key].filter(type => known.has(type))
+  }));
+}
+
 /** Damage type -> fumble category. Returns null for anything not on the tables. */
 export function categoryFor(damageType) {
   return CATEGORY_OF[damageType] ?? null;

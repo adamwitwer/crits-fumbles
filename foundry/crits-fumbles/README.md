@@ -49,9 +49,19 @@ The probe prints a table of which APIs this Foundry build offers. It exists beca
 Foundry v14 and dnd5e 5.x are newer than the documentation this was written against;
 it will be removed once the remaining features are written.
 
-## Rolling manually
+## Rolling on demand
 
 Create a **Script** macro with:
+
+```js
+game.modules.get("crits-fumbles").api.open();
+```
+
+That opens the picker with a crit/fumble toggle and the thirteen damage types. It
+ignores the turn rule entirely, so it works regardless of whose turn it is or whether
+an attack was made at all. Give this one to players.
+
+To skip the dialog and roll a known type directly:
 
 ```js
 game.modules.get("crits-fumbles").api.roll({ kind: "crit", damageType: "fire" });
@@ -87,26 +97,39 @@ To re-open the current turn's window after an undone roll:
 game.modules.get("crits-fumbles").api.resetTurn();
 ```
 
+### Choosing the damage type
+
+The module asks which damage type to roll on, with the types it detected on the attack
+highlighted. Picking one rolls immediately.
+
+It asks rather than deciding because the system frequently cannot know. A monk's
+unarmed strike carries both `bludgeoning` and `force` and the player picks per strike,
+and that pattern repeats across classes. Guessing would quietly roll the wrong table.
+
+Set **Ask for the damage type** to "Only when the attack has more than one damage
+type" to skip the prompt for unambiguous weapons, or to "Never ask" to always take the
+first type found.
+
 ### How it decides
 
-dnd5e fires its roll hooks only on the client that made the roll, so a player's attack
-never reaches the GM's client, and players cannot write the Combat flag the turn gate
-uses. The rolling client therefore reports the attack over a socket and a single GM
-client decides and posts, which keeps the gate authoritative and produces exactly one
-card.
+Everything happens on the client that rolled the attack: dnd5e fires its roll hooks
+only there, that is where the player who chose the damage type is sitting, and it means
+exactly one client posts a card. The one thing that client may not do is write the
+Combat flag behind the turn rule, so it asks a GM to record that over a socket.
 
 ## Settings
 
 | Setting | Default | Effect |
 |---|---|---|
 | Roll automatically on a natural crit or fumble | on | Turn off for manual-only rolling |
+| Ask for the damage type | Always ask | Always / only when ambiguous / never |
 | Trigger outside combat | on | Whether crits fire with no active encounter |
 | Log attack rolls to the console | off | Diagnostic; prints each attack's shape |
 
 ## What is not built yet
 
-- **A roll dialog**, scene-control button, and keybinding. On-demand rolling works
-  through the macro above.
+- **A scene-control button and keybinding.** On-demand rolling works through the macro
+  above.
 - **Condition links** into the rules compendium.
 
 ## Regenerating the tables

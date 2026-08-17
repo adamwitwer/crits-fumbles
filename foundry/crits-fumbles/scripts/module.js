@@ -1,3 +1,4 @@
+import { promptForDamageType } from "./apps/damage-prompt.js";
 import { MODULE_ID } from "./constants.js";
 import { runProbe, watchAttacks } from "./probe.js";
 import { rollTable } from "./roller.js";
@@ -15,6 +16,20 @@ Hooks.once("init", () => {
     config: true,
     type: Boolean,
     default: true
+  });
+
+  game.settings.register(MODULE_ID, "promptDamageType", {
+    name: "Ask for the damage type",
+    hint: "The system often cannot tell: a monk's unarmed strike is both bludgeoning and force, and the player chooses per strike.",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      always: "Always ask",
+      ambiguous: "Only when the attack has more than one damage type",
+      never: "Never ask — use the first type found"
+    },
+    default: "always"
   });
 
   game.settings.register(MODULE_ID, "outsideCombat", {
@@ -46,8 +61,9 @@ Hooks.once("ready", async () => {
     console.error(`${MODULE_ID} |`, error);
   }
 
-  // The public surface. Macros and, later, the dialog all go through this.
+  // The public surface. Macros and the trigger both go through this.
   game.modules.get(MODULE_ID).api = {
+    open: openPrompt,
     roll: rollTable,
     resetTurn: resetWindow,
     damageTypes,
@@ -64,3 +80,13 @@ Hooks.once("ready", async () => {
   const version = game.modules.get(MODULE_ID)?.version ?? "unknown";
   console.log(`${MODULE_ID} | ready — v${version}, ${tableStatus}`);
 });
+
+/**
+ * On-demand roll. Unlike the trigger this ignores the turn gate entirely, so it works
+ * regardless of whose turn it is or whether an attack was made at all.
+ */
+async function openPrompt({ kind = "crit", actor = null, lockKind = false } = {}) {
+  const choice = await promptForDamageType({ kind, actorName: actor?.name ?? null, lockKind });
+  if (!choice?.damageType) return null;
+  return rollTable({ kind: choice.kind, damageType: choice.damageType, actor });
+}

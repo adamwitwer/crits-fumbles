@@ -1,0 +1,27 @@
+<div class="cf-prompt">
+  {{#unless lockedKind}}
+  <div class="cf-kind" role="group" aria-label="Roll type">
+    <button type="button" data-action="kind" data-kind="crit"
+            class="{{#if isCrit}}active{{/if}}">Critical Hit</button>
+    <button type="button" data-action="kind" data-kind="fumble"
+            class="{{#unless isCrit}}active{{/unless}}">Fumble</button>
+  </div>
+  {{/unless}}
+
+  <p class="cf-hint">
+    Choose the damage type to roll on.
+    {{#if anyDetected}}Highlighted types were detected on the attack.{{/if}}
+  </p>
+
+  {{#each groups}}
+  <section class="cf-group">
+    <h4>{{this.label}}</h4>
+    <div class="cf-types">
+      {{#each this.types}}
+      <button type="button" data-action="pick" data-type="{{this.type}}"
+              class="cf-type-button {{#if this.detected}}cf-detected{{/if}}">{{this.label}}</button>
+      {{/each}}
+    </div>
+  </section>
+  {{/each}}
+</div>
