@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants.js";
+import { enrich, linkConditions } from "./conditions.js";
 import { getTables, labelFor, resolveRoll, tableKeyFor } from "./tables.js";
 
 /**
@@ -26,7 +27,7 @@ export async function rollTable({ kind, damageType, actor = null, flavorPrefix =
     speaker: ChatMessage.getSpeaker(actor ? { actor } : {}),
     flavor,
     rolls: [roll],
-    content: renderCard({ kind, key, roll, entry })
+    content: await enrich(renderCard({ kind, key, roll, entry }))
   });
 
   return { roll, entry };
@@ -42,7 +43,7 @@ function renderCard({ kind, key, roll, entry }) {
     <div class="crits-fumbles-card" data-kind="${kind}">
       <header><span class="cf-roll">${roll.total}</span> <span class="cf-type">${escapeHtml(key)}</span></header>
       <h4>${escapeHtml(title)}</h4>
-      <p>${escapeHtml(effect)}</p>
+      <p>${linkConditions(escapeHtml(effect))}</p>
     </div>
   `.trim();
 }

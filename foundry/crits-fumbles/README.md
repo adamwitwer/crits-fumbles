@@ -41,7 +41,7 @@ The folder must be named `crits-fumbles`, matching the `id` in `module.json`.
 Open the browser console (F12) and look for:
 
 ```
-crits-fumbles v0.6.1 — 13 damage types loaded
+crits-fumbles v0.6.2 — 13 damage types loaded
 Console: CritsFumbles.simulate({ kind: "crit" }) · CritsFumbles.open() · ...
 Settings: Game Settings → Configure Settings → Module Settings → Crits & Fumbles
 ```
@@ -153,6 +153,28 @@ Set **Ask for the damage type** to "Only when the attack has more than one damag
 type" to skip the prompt for unambiguous weapons, or to "Never ask" to always take the
 first type found.
 
+### Condition links
+
+Conditions named in a result — Prone, Stunned, Frightened and nine others — are linked
+into the system's own rules compendium, so clicking one opens the rules page beside the
+game. The web app sends these to the D&D Beyond glossary in a browser tab; in Foundry
+the same rules are already in the world.
+
+The UUIDs are not stored in this module. They are read from
+`CONFIG.DND5E.conditionTypes[key].reference` when a card is built, so a system update
+cannot leave them pointing at nothing. If the system offers no reference, or the text
+enricher is unavailable, the condition stays the plain word it was — the card never
+shows raw `@UUID[...]` syntax.
+
+To check the links resolve in your world:
+
+```js
+CritsFumbles.checkConditions();
+```
+
+That prints a table of each condition, its UUID, and whether it resolves. All twelve
+should say true; any false means the rules compendium is missing or not visible to you.
+
 ### How it decides
 
 Everything happens on the client that rolled the attack: dnd5e fires its roll hooks
@@ -211,8 +233,6 @@ turn off **Only the first attack of a turn can trigger** in the module settings.
   or the console (#20).
 - **A language pass.** Strings are hardcoded rather than localized, terminology drifts
   between "damage type" and "fumble category", and the emoji are placeholders (#21).
-- **Condition links** into the rules compendium, so results link to the rules glossary
-  the way the web app does.
 - **Removing `probe.js`**, once the remaining UI is written against a confirmed API.
 
 ## Regenerating the tables

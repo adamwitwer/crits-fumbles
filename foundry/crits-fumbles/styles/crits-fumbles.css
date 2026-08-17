@@ -46,6 +46,23 @@
   line-height: 1.4;
 }
 
+/* Condition links. Foundry's own content-link styling is a boxed chip, which at three
+   or four per sentence turns the effect text into a row of buttons; this keeps the
+   sentence readable and marks the words with the accent instead. */
+.crits-fumbles-card .content-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--cf-accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.crits-fumbles-card .content-link i {
+  display: none;
+}
+
 /* Foundry v13+ exposes an explicit theme on the root element. */
 .theme-dark .crits-fumbles-card {
   --cf-accent: #e0685f;

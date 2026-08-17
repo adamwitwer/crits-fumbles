@@ -2,7 +2,7 @@
   "id": "crits-fumbles",
   "title": "Crits & Fumbles",
   "description": "Rolls a critical hit or fumble result when an attack crits or fumbles, using the Crits & Fumbles house tables.",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "authors": [
     {
       "name": "Adam Witwer"
@@ -40,5 +40,5 @@
   ],
   "url": "https://github.com/adamwitwer/crits-fumbles",
   "manifest": "https://github.com/adamwitwer/crits-fumbles/releases/latest/download/module.json",
-  "download": "https://github.com/adamwitwer/crits-fumbles/releases/download/v0.6.1/module.zip"
+  "download": "https://github.com/adamwitwer/crits-fumbles/releases/download/v0.6.2/module.zip"
 }
