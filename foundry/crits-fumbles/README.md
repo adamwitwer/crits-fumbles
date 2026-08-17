@@ -8,14 +8,32 @@ crit/fumble is not built yet (see below).
 
 ## Install
 
-The module folder must be named `crits-fumbles` — it has to match the `id` in
-`module.json` or Foundry ignores it.
+### From a manifest URL (no filesystem access needed)
 
-1. Copy the `crits-fumbles` folder into your Foundry data directory under
-   `Data/modules/`, so you end up with `Data/modules/crits-fumbles/module.json`.
-2. Restart the Foundry server process. (Foundry reads `module.json` once at startup;
-   a browser refresh is not enough for a new module or a manifest change.)
-3. In a `dnd5e` world: **Game Settings → Manage Modules → enable Crits & Fumbles**.
+On the Foundry **Setup** screen: **Add-on Modules → Install Module**, then paste this
+into the *Manifest URL* field at the bottom of the dialog and click Install:
+
+```
+https://raw.githubusercontent.com/adamwitwer/crits-fumbles/main/foundry/releases/module.json
+```
+
+Foundry downloads and unpacks it itself, so no server restart is needed. Then open a
+`dnd5e` world and enable it in **Game Settings → Manage Modules**.
+
+Note this is *Install Module*, not *Create Module*. Create Module scaffolds a new
+empty module on the server and will not fetch this one.
+
+To update later, use Install Module with the same URL again, or Foundry's update
+check on the Add-on Modules list.
+
+### By copying files
+
+If you do have filesystem access, copy the `crits-fumbles` folder into `Data/modules/`
+so you end up with `Data/modules/crits-fumbles/module.json`, then restart the Foundry
+server process — Foundry reads manifests once at startup, so a browser refresh is not
+enough for a newly added module.
+
+The folder must be named `crits-fumbles`, matching the `id` in `module.json`.
 
 ## Verifying it loaded
 
