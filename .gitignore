@@ -88,3 +88,5 @@ staticfiles/
 *.report.html
 crits-fumbles.app-*.html
 lighthouse*.html
+# Foundry module release artifacts
+dist/
