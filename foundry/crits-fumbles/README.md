@@ -3,8 +3,8 @@
 Rolls a critical hit or fumble result on the Crits & Fumbles house tables. For the
 `dnd5e` system.
 
-Status: **prototype.** Automatic rolling and manual rolling both work. No dialog yet —
-on-demand rolls go through a macro.
+Status: **prototype.** Automatic rolling, the damage type picker and on-demand rolling
+all work. Not yet wired to a scene-control button or keybinding.
 
 ## Install
 
@@ -41,13 +41,15 @@ Open the browser console (F12) and look for:
 
 ```
 crits-fumbles | init
-crits-fumbles | ready — 13 damage types loaded
-crits-fumbles | environment probe
+crits-fumbles | ready — v0.4.0, 13 damage types loaded
 ```
 
-The probe prints a table of which APIs this Foundry build offers. It exists because
-Foundry v14 and dnd5e 5.x are newer than the documentation this was written against;
-it will be removed once the remaining features are written.
+Check the version in that line matches what you installed — two builds are otherwise
+indistinguishable in the console.
+
+For a report of which APIs this Foundry build offers, run
+`game.modules.get("crits-fumbles").api.probe()`. It exists because Foundry v14 and
+dnd5e 5.x are newer than the documentation this was written against.
 
 ## Rolling on demand
 
