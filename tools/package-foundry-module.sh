@@ -13,26 +13,20 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 MODULE_DIR="$REPO_ROOT/foundry/crits-fumbles"
-DIST_DIR="$REPO_ROOT/dist"
+# Committed on purpose: this directory *is* the distribution channel. The Foundry
+# server is web-admin only, so the module must install from a URL, and serving the
+# manifest and zip from raw.githubusercontent needs them in the tree. Move to GitHub
+# release assets once that is an option and this can go back to being ignored.
+DIST_DIR="$REPO_ROOT/foundry/releases"
 ZIP_PATH="$DIST_DIR/module.zip"
 
 cd "$REPO_ROOT"
 
-# Regenerate the data file so a release can never ship stale tables.
+# Regenerate the data file so a build can never ship stale tables.
 python3 tools/build-foundry-tables.py
 
 VERSION="$(python3 -c "import json;print(json.load(open('$MODULE_DIR/module.json'))['version'])")"
 TAG="v$VERSION"
-
-# The download URL is version-pinned, so it must match the tag we are about to create.
-EXPECTED_DOWNLOAD="https://github.com/adamwitwer/crits-fumbles/releases/download/$TAG/module.zip"
-ACTUAL_DOWNLOAD="$(python3 -c "import json;print(json.load(open('$MODULE_DIR/module.json'))['download'])")"
-if [[ "$ACTUAL_DOWNLOAD" != "$EXPECTED_DOWNLOAD" ]]; then
-  echo "module.json download URL does not match version $VERSION:" >&2
-  echo "  expected: $EXPECTED_DOWNLOAD" >&2
-  echo "  actual:   $ACTUAL_DOWNLOAD" >&2
-  exit 1
-fi
 
 rm -rf "$DIST_DIR"
 mkdir -p "$DIST_DIR"
@@ -49,6 +43,16 @@ echo "Built $TAG:"
 unzip -Z1 "$ZIP_PATH" | sed 's/^/  /'
 
 if [[ "${1:-}" == "--release" ]]; then
+  # Release assets are version-pinned, so the manifest must point at this tag.
+  ACTUAL_DOWNLOAD="$(python3 -c "import json;print(json.load(open('$MODULE_DIR/module.json'))['download'])")"
+  EXPECTED_DOWNLOAD="https://github.com/adamwitwer/crits-fumbles/releases/download/$TAG/module.zip"
+  if [[ "$ACTUAL_DOWNLOAD" != "$EXPECTED_DOWNLOAD" ]]; then
+    echo "Manifest still points at the raw.githubusercontent fallback, not release $TAG:" >&2
+    echo "  expected: $EXPECTED_DOWNLOAD" >&2
+    echo "  actual:   $ACTUAL_DOWNLOAD" >&2
+    exit 1
+  fi
+
   gh release create "$TAG" "$ZIP_PATH" "$DIST_DIR/module.json" \
     --title "Crits & Fumbles $TAG" \
     --notes "Install in Foundry with this manifest URL:
