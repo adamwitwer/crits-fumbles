@@ -197,6 +197,13 @@
   opacity: 0.6;
 }
 
+/* The note explaining the ● belongs to the dropdown above it, so it lines up with the
+   dropdown's left edge rather than floating centred under the card. The resolved
+   card reuses .cf-note for its own line, where there is no field to line up with. */
+.crits-fumbles-announce .cf-choose + .cf-note {
+  text-align: left;
+}
+
 .crits-fumbles-announce.cf-resolved .cf-headline {
   opacity: 0.55;
 }

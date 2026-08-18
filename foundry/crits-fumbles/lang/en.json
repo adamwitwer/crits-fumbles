@@ -10,7 +10,7 @@
   "CRITSFUMBLES.DamageType": "Damage Type",
   "CRITSFUMBLES.FumbleCategory": "Fumble Category",
   "CRITSFUMBLES.Roll": "Roll",
-  "CRITSFUMBLES.DetectedNote": "● detected on the attack",
+  "CRITSFUMBLES.DetectedNote": "● Detected on the attack",
   "CRITSFUMBLES.RolledOn": "Rolled on the {table} table.",
   "CRITSFUMBLES.NotYours": "Only the player who made the attack, or a GM, can roll this.",
 
