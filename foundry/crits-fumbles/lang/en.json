@@ -29,7 +29,7 @@
   "CRITSFUMBLES.Settings.Prompt.Ambiguous": "Only when more than one type applies",
   "CRITSFUMBLES.Settings.Prompt.Never": "Never — use the first type found",
   "CRITSFUMBLES.Settings.FirstAttack.Name": "Only the first attack of a turn can trigger",
-  "CRITSFUMBLES.Settings.FirstAttack.Hint": "The house rule. A missed first attack still spends the turn.",
+  "CRITSFUMBLES.Settings.FirstAttack.Hint": "The house rule. The turn's first attack roll spends it, whatever that roll was.",
   "CRITSFUMBLES.Settings.OutsideCombat.Name": "Trigger outside combat",
   "CRITSFUMBLES.Settings.OutsideCombat.Hint": "With no encounter running there are no turns to track.",
   "CRITSFUMBLES.Settings.Debug.Name": "Log attack rolls to the console",

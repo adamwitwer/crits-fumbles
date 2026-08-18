@@ -41,7 +41,7 @@ The folder must be named `crits-fumbles`, matching the `id` in `module.json`.
 Open the browser console (F12) and look for:
 
 ```
-crits-fumbles v0.7.2 — 13 damage types loaded
+crits-fumbles v0.7.3 — 13 damage types loaded
 Console: CritsFumbles.simulate({ kind: "crit" }) · CritsFumbles.open() · ...
 Settings: Game Settings → Configure Settings → Module Settings → Crits & Fumbles
 ```
@@ -127,8 +127,9 @@ table, leaves a record in the log, and does not steal focus from whoever is mid-
 
 Only a combatant's **first attack of their own turn** is eligible:
 
-- The window is spent by that first attack whether or not it crits. If the first
-  attack misses and a second one crits, nothing fires.
+- The window is spent by the turn's first attack **roll**, whatever it rolled. If that
+  first attack is an ordinary 12 and the second is a natural 20, nothing fires. Hitting
+  or missing does not come into it — the module reads the die, not the target's AC.
 - Reactions, opportunity attacks and legendary actions never trigger, since they
   happen on someone else's turn.
 - Outside combat there are no turns to track, so everything is eligible. Turn this
