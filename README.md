@@ -124,15 +124,17 @@ zipping.
 node tools/check-foundry-module.mjs
 ```
 
-Six suites over the parts that decide things — table lookups, damage type detection,
-the turn rule, condition linking, the toolbar registration, and localization coverage —
-with a stub standing in for `game` and `CONFIG`.
+Eight suites over the parts that decide things — table lookups, damage type detection,
+the turn rule, what actually fires and what spends the turn, condition linking, the
+toolbar registration, the forced-crit sweep, and localization coverage — with a stub
+standing in for `game` and `CONFIG`.
 
 This is not full coverage and is not meant to be. Anything needing a real canvas,
 socket, chat log or document is verified by hand in a world, and the module's
 [README](foundry/crits-fumbles/README.md) says which parts those are. What these do
 cover is the logic that has actually held bugs: a damage type priority that rolled fire
-for a flame tongue's slash, and two names for the same three fumble categories.
+for a flame tongue's slash, two names for the same three fumble categories, and a
+testing sweep that must never strip a Champion's Improved Critical.
 
 ## Project structure
 

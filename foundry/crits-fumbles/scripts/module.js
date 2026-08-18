@@ -4,7 +4,7 @@ import { registerSceneControl } from "./controls.js";
 import { registerAnnouncementListeners } from "./announce.js";
 import { MODULE_ID } from "./constants.js";
 import { rollTable } from "./roller.js";
-import { announceTest, forceCrits, simulate, watchAttacks } from "./testing.js";
+import { announceTest, clearForcedCrits, forceCrits, simulate, turnStatus, watchAttacks } from "./testing.js";
 import { registerTrigger } from "./trigger.js";
 import { categoryFor, damageTypes, loadTables, resolveRoll } from "./tables.js";
 import { resetWindow } from "./turn-gate.js";
@@ -86,6 +86,8 @@ Hooks.once("ready", async () => {
     simulate,
     announceTest,
     forceCrits,
+    clearForcedCrits,
+    turnStatus,
     damageTypes,
     categoryFor,
     resolveRoll,
@@ -105,7 +107,7 @@ Hooks.once("ready", async () => {
   const version = game.modules.get(MODULE_ID)?.version ?? "unknown";
   console.log(
     `%c${MODULE_ID} v${version}%c — ${tableStatus}\n` +
-    `Console: CritsFumbles.simulate({ kind: "crit" }) · CritsFumbles.open() · CritsFumbles.forceCrits(true)\n` +
+    `Console: CritsFumbles.simulate({ kind: "crit" }) · CritsFumbles.open() · CritsFumbles.turnStatus()\n` +
     `Settings: Game Settings → Configure Settings → Module Settings → Crits & Fumbles`,
     "font-weight:bold", "font-weight:normal"
   );

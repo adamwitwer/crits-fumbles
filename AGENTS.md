@@ -177,6 +177,13 @@ goes to a GM over the module socket (`"socket": true` in the manifest).
 attack's primary type and `damage.parts` are riders on top, so base must outrank them or
 a flame tongue rolls fire instead of slashing.
 
+**`forceCrits` writes to the world database, not the browser.** It sets
+`flags.dnd5e.weaponCriticalThreshold = 1` on the actor document, so it survives a
+refresh, another browser and another machine — a character that "kept critting days
+later" was this, not a bug. `clearForcedCrits()` sweeps for it, and clears **only the
+value 1**: a Champion's Improved Critical uses the same flag with 19 or 18, and a
+blunt sweep would break a real sheet. `tools/checks/forced-crits.mjs` guards that.
+
 **Do not bind to `renderChatMessage`.** It was renamed in v13 (`renderChatMessageHTML`)
 and its jQuery signature deprecated. The announcement card uses a delegated `document`
 listener, which behaves the same across versions and survives re-renders.
@@ -211,7 +218,7 @@ and `tools/check-foundry-module.mjs` fails if any creeps back in.
 node tools/check-foundry-module.mjs
 ```
 
-Seven suites over the module's pure logic, with a stub for `game` and `CONFIG`. They are
+Eight suites over the module's pure logic, with a stub for `game` and `CONFIG`. They are
 deliberately not full coverage — rendering, the socket handoff, and the dnd5e hook
 signature itself can only be proved in a world. When reporting on a change, say which
 side of that line it was verified on.
@@ -225,6 +232,8 @@ CritsFumbles.simulate({ kind: "crit" })      // full trigger path, real weapon, 
 CritsFumbles.announceTest({ kind: "fumble" }) // post an announcement card directly
 CritsFumbles.open()                           // the on-demand picker alone
 CritsFumbles.forceCrits(true)                 // every attack crits, then (false)
+CritsFumbles.turnStatus()                     // why the turn gate would allow or refuse
+CritsFumbles.clearForcedCrits()               // find and undo every forceCrits left on
 ```
 
 `simulate` works because only `total`, `isCritical` and `isFumble` are read off a roll,

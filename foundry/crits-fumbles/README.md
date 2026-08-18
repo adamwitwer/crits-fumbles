@@ -227,19 +227,82 @@ game.modules.get("crits-fumbles").api.forceCrits(false);   // restore
 ```
 
 `forceCrits` sets `flags.dnd5e.weaponCriticalThreshold` to 1 — the same flag class
-features like Improved Critical use. It modifies the actor, so restore it afterwards
-and prefer a test character.
+features like Improved Critical use. That flag lives on the actor in the **world
+database on the server**, not in the browser, so it survives a refresh and follows the
+character to any machine. A test flag left on overnight looks exactly like a module
+bug the next day, which is why setting it raises a warning you have to dismiss.
 
-Both are also on the console alias, which is quicker than making a macro:
+The way back, when you no longer remember which character you used:
+
+```js
+CritsFumbles.clearForcedCrits({ dryRun: true });   // look first
+CritsFumbles.clearForcedCrits();                   // then clear
+```
+
+It sweeps every actor and every unlinked scene token, and prints a table of everything
+carrying a crit threshold with what it did about each. **It only clears the value 1.**
+A Champion Fighter stores 19 or 18 in the same flag for Improved Critical, and those
+are reported as left alone rather than stripped.
+
+Everything is also on the console alias, which is quicker than making a macro:
 
 ```js
 CritsFumbles.simulate({ kind: "crit" });
 CritsFumbles.forceCrits(true);
 CritsFumbles.announceTest({ kind: "fumble" });   // post an announcement card directly
+CritsFumbles.turnStatus();                       // would the selected token trigger now?
 ```
 
 To take the turn rule out of the picture entirely while working on something else, set
 **When a crit or fumble can trigger** to "Every crit and fumble".
+
+### Walking an encounter
+
+The turn rule is the one part that only behaves like itself inside a running combat,
+so it is worth walking an encounter deliberately once.
+
+Building one, from the Actors sidebar:
+
+1. Drag the actors onto a scene to place tokens.
+2. Select them all — drag a marquee, or shift-click each one.
+3. Right-click any selected token and click the crossed swords on the token HUD. That
+   adds every selected token to the Combat Tracker at once.
+4. Open the Combat Tracker (crossed swords in the sidebar tabs) and click **Roll All**.
+5. Click **Begin Combat**. The arrows at the top step through turns and rounds.
+
+Then, at each turn, select the token whose turn it is and ask:
+
+```js
+CritsFumbles.turnStatus();
+```
+
+It prints the round and turn, whose turn it actually is, the three settings that feed
+the decision, whether this turn's window has already been spent, and an ELIGIBLE or
+NOT ELIGIBLE verdict with the reason in plain English. No dice needed — the question
+"should this have triggered?" is answerable before rolling anything.
+
+What to look for, with the default "Only on the turn's first attack roll":
+
+| Do this | Expect |
+|---|---|
+| Select the current combatant, `turnStatus()` | ELIGIBLE — "first attack of their turn" |
+| Make any attack, then `turnStatus()` again | NOT ELIGIBLE — "window already spent by an earlier attack this turn" |
+| `simulate({ kind: "crit" })` now | Nothing rolls; the console logs the decline and why |
+| Select a *different* token, `turnStatus()` | NOT ELIGIBLE — "not their turn (it is X's)" |
+| Advance to the next turn, `turnStatus()` | ELIGIBLE again — the window is keyed to `round:turn` |
+| `CritsFumbles.resetTurn()` mid-turn | ELIGIBLE again without advancing |
+
+Switch the setting to "Once each turn, on any attack" and the second row changes: a
+first attack that does not crit leaves the window open, and only something that
+actually fires spends it. That difference between the two limited modes is the whole
+reason there are two.
+
+Two things that will look like bugs and are not:
+
+- **A halfling cannot fumble.** Halfling Lucky rerolls a natural 1 inside dnd5e before
+  this module ever sees the roll. Use `simulate({ kind: "fumble" })` or a non-halfling.
+- **Reactions and opportunity attacks never trigger** under either limited mode. They
+  land on someone else's turn, which the gate reports as exactly that.
 
 ### Checks that run outside Foundry
 
@@ -249,8 +312,8 @@ node tools/check-foundry-module.mjs
 
 Covers the parts that decide things — table lookups, damage type detection, the
 per-turn limits, what actually fires and what spends the turn, condition linking, the
-toolbar registration and localization coverage — against a stub for `game` and
-`CONFIG`. `package-foundry-module.sh` runs them before it zips.
+toolbar registration, the forced-crit sweep and localization coverage — against a stub
+for `game` and `CONFIG`. `package-foundry-module.sh` runs them before it zips.
 
 **What they do not cover**, and what therefore has to be looked at in a world:
 
