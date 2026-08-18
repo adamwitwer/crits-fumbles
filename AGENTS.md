@@ -202,7 +202,19 @@ because core builds the tool list before `getSceneControlButtons` fires.
 `Compendium.dnd5e.content24...` on 14.366, which no amount of guessing would have
 produced. Only the three fumble categories are this module's own.
 
-**All user-facing text lives in `lang/en.json`.** The render paths carry no English.
+**All user-facing text lives in `lang/en.json`.** The render paths carry no English,
+and `tools/check-foundry-module.mjs` fails if any creeps back in.
+
+**Run the checks before shipping**, which `package-foundry-module.sh` does for you:
+
+```bash
+node tools/check-foundry-module.mjs
+```
+
+Six suites over the module's pure logic, with a stub for `game` and `CONFIG`. They are
+deliberately not full coverage — rendering, the socket handoff, and the dnd5e hook
+signature itself can only be proved in a world. When reporting on a change, say which
+side of that line it was verified on.
 
 ### Testing the module
 

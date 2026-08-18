@@ -41,7 +41,7 @@ The folder must be named `crits-fumbles`, matching the `id` in `module.json`.
 Open the browser console (F12) and look for:
 
 ```
-crits-fumbles v0.7.1 — 13 damage types loaded
+crits-fumbles v0.7.2 — 13 damage types loaded
 Console: CritsFumbles.simulate({ kind: "crit" }) · CritsFumbles.open() · ...
 Settings: Game Settings → Configure Settings → Module Settings → Crits & Fumbles
 ```
@@ -231,6 +231,25 @@ CritsFumbles.announceTest({ kind: "fumble" });   // post an announcement card di
 
 To take the turn rule out of the picture entirely while working on something else,
 turn off **Only the first attack of a turn can trigger** in the module settings.
+
+### Checks that run outside Foundry
+
+```bash
+node tools/check-foundry-module.mjs
+```
+
+Covers the parts that decide things — table lookups, damage type detection, the turn
+rule, condition linking, the toolbar registration and localization coverage — against a
+stub for `game` and `CONFIG`. `package-foundry-module.sh` runs them before it zips.
+
+**What they do not cover**, and what therefore has to be looked at in a world:
+
+- Whether anything renders. Cards, the picker and the settings panel are only ever
+  verified by eye.
+- The socket handoff to a GM for the Combat flag write, which needs two clients.
+- Whether condition UUIDs resolve here — that is `CritsFumbles.checkConditions()`.
+- The dnd5e hook itself. The suites call `onAttack` directly; that dnd5e still fires
+  `dnd5e.rollAttack` with this signature is only ever proved by making an attack.
 
 ## Wording
 

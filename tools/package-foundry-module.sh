@@ -24,6 +24,10 @@ cd "$REPO_ROOT"
 # Regenerate the data file so a build can never ship stale tables.
 python3 tools/build-foundry-tables.py
 
+# Then check the logic against it, so a release cannot ship a module whose tables,
+# labels, turn rule or localization keys are broken in a way Node can see.
+node tools/check-foundry-module.mjs
+
 VERSION="$(python3 -c "import json;print(json.load(open('$MODULE_DIR/module.json'))['version'])")"
 TAG="v$VERSION"
 
