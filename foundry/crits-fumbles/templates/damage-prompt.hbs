@@ -1,16 +1,16 @@
 <div class="cf-prompt">
   {{#unless lockedKind}}
-  <div class="cf-kind" role="group" aria-label="Roll type">
+  <div class="cf-kind" role="group" aria-label="{{localize "CRITSFUMBLES.RollType"}}">
     <button type="button" data-action="kind" data-kind="crit"
-            class="{{#if isCrit}}active{{/if}}">Critical Hit</button>
+            class="{{#if isCrit}}active{{/if}}">{{localize "CRITSFUMBLES.CriticalHit"}}</button>
     <button type="button" data-action="kind" data-kind="fumble"
-            class="{{#unless isCrit}}active{{/unless}}">Fumble</button>
+            class="{{#unless isCrit}}active{{/unless}}">{{localize "CRITSFUMBLES.Fumble"}}</button>
   </div>
   {{/unless}}
 
   <p class="cf-hint">
-    {{#if isCrit}}Choose the damage type to roll on.{{else}}Choose the fumble category.{{/if}}
-    {{#if anyDetected}}Highlighted types were detected on the attack.{{/if}}
+    {{#if isCrit}}{{localize "CRITSFUMBLES.ChooseDamageType"}}{{else}}{{localize "CRITSFUMBLES.ChooseCategory"}}{{/if}}
+    {{#if anyDetected}}{{localize "CRITSFUMBLES.DetectedHint"}}{{/if}}
   </p>
 
   {{#each groups}}

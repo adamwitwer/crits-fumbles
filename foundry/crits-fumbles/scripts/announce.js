@@ -1,12 +1,12 @@
-import { MODULE_ID } from "./constants.js";
+import { MODULE_ID, t } from "./constants.js";
 import { rollTable } from "./roller.js";
 import { categoryFor, damageTypeGroups, fumbleCategories, labelFor } from "./tables.js";
 
 const FLAG = "announcement";
 
 const STYLE = {
-  crit: { emoji: "💥", label: "Critical Hit" },
-  fumble: { emoji: "💀", label: "Fumble" }
+  crit: { emoji: "💥", key: "CRITSFUMBLES.CriticalHit" },
+  fumble: { emoji: "💀", key: "CRITSFUMBLES.Fumble" }
 };
 
 /**
@@ -64,9 +64,10 @@ function optionsFor(kind, detected) {
 }
 
 function renderAnnouncement({ kind, options }) {
-  const { emoji, label } = STYLE[kind] ?? STYLE.crit;
+  const { emoji, key } = STYLE[kind] ?? STYLE.crit;
   const preselected = options.flatMap(g => g.items).find(item => item.detected);
-  const fieldLabel = kind === "fumble" ? "Fumble Category" : "Damage Type";
+  // A fumble is rolled by category, not by damage type; the label must not claim otherwise.
+  const fieldLabel = t(kind === "fumble" ? "CRITSFUMBLES.FumbleCategory" : "CRITSFUMBLES.DamageType");
 
   const optionGroups = options.map(group => {
     const items = group.items.map(item =>
@@ -78,15 +79,15 @@ function renderAnnouncement({ kind, options }) {
 
   return `
     <div class="crits-fumbles-announce" data-kind="${kind}">
-      <h3 class="cf-headline">${emoji} ${label} ${emoji}</h3>
+      <h3 class="cf-headline">${emoji} ${escapeHtml(t(key))} ${emoji}</h3>
       <div class="cf-choose">
         <label>
-          <span>${fieldLabel}</span>
+          <span>${escapeHtml(fieldLabel)}</span>
           <select class="cf-select" name="selection">${optionGroups}</select>
         </label>
-        <button type="button" class="cf-roll-button">Roll</button>
+        <button type="button" class="cf-roll-button">${escapeHtml(t("CRITSFUMBLES.Roll"))}</button>
       </div>
-      ${preselected ? `<p class="cf-note">● detected on the attack</p>` : ""}
+      ${preselected ? `<p class="cf-note">${escapeHtml(t("CRITSFUMBLES.DetectedNote"))}</p>` : ""}
     </div>
   `.trim();
 }
@@ -117,7 +118,7 @@ async function onResolve(button) {
   if (!state || state.resolved) return;
 
   if (!canResolve(message)) {
-    ui.notifications.warn("Only the player who made the attack, or a GM, can roll this.");
+    ui.notifications.warn(t("CRITSFUMBLES.NotYours"));
     return;
   }
 
@@ -143,11 +144,12 @@ function canResolve(message) {
 }
 
 function renderResolved({ kind, selection }) {
-  const { emoji, label } = STYLE[kind] ?? STYLE.crit;
+  const { emoji, key } = STYLE[kind] ?? STYLE.crit;
+  const rolled = t("CRITSFUMBLES.RolledOn", { table: labelFor(selection) });
   return `
     <div class="crits-fumbles-announce cf-resolved" data-kind="${kind}">
-      <h3 class="cf-headline">${emoji} ${label} ${emoji}</h3>
-      <p class="cf-note">Rolled on the ${escapeHtml(labelFor(selection))} table.</p>
+      <h3 class="cf-headline">${emoji} ${escapeHtml(t(key))} ${emoji}</h3>
+      <p class="cf-note">${escapeHtml(rolled)}</p>
     </div>
   `.trim();
 }

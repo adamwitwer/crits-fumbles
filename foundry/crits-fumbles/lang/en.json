@@ -1,6 +1,37 @@
 {
+  "CRITSFUMBLES.Title": "Crits & Fumbles",
   "CRITSFUMBLES.CriticalHit": "Critical Hit",
   "CRITSFUMBLES.Fumble": "Fumble",
+
+  "CRITSFUMBLES.Category.physical": "Physical",
+  "CRITSFUMBLES.Category.elemental": "Elemental",
+  "CRITSFUMBLES.Category.magical": "Magical",
+
+  "CRITSFUMBLES.DamageType": "Damage Type",
+  "CRITSFUMBLES.FumbleCategory": "Fumble Category",
+  "CRITSFUMBLES.Roll": "Roll",
+  "CRITSFUMBLES.DetectedNote": "● detected on the attack",
+  "CRITSFUMBLES.RolledOn": "Rolled on the {table} table.",
+  "CRITSFUMBLES.NotYours": "Only the player who made the attack, or a GM, can roll this.",
+
+  "CRITSFUMBLES.ChooseDamageType": "Choose the damage type to roll on.",
+  "CRITSFUMBLES.ChooseCategory": "Choose the fumble category.",
+  "CRITSFUMBLES.DetectedHint": "Highlighted options were detected on the attack.",
+  "CRITSFUMBLES.RollType": "Roll type",
+
   "CRITSFUMBLES.NoResult": "No result",
-  "CRITSFUMBLES.ToolTitle": "Crits & Fumbles"
+  "CRITSFUMBLES.NoEntry": "No table entry matched {roll}.",
+
+  "CRITSFUMBLES.Settings.AutoTrigger.Name": "Roll automatically on a natural crit or fumble",
+  "CRITSFUMBLES.Settings.AutoTrigger.Hint": "When off, roll only from the toolbar button or a macro.",
+  "CRITSFUMBLES.Settings.Prompt.Name": "Ask for the damage type",
+  "CRITSFUMBLES.Settings.Prompt.Always": "Always ask",
+  "CRITSFUMBLES.Settings.Prompt.Ambiguous": "Only when more than one type applies",
+  "CRITSFUMBLES.Settings.Prompt.Never": "Never — use the first type found",
+  "CRITSFUMBLES.Settings.FirstAttack.Name": "Only the first attack of a turn can trigger",
+  "CRITSFUMBLES.Settings.FirstAttack.Hint": "The house rule. A missed first attack still spends the turn.",
+  "CRITSFUMBLES.Settings.OutsideCombat.Name": "Trigger outside combat",
+  "CRITSFUMBLES.Settings.OutsideCombat.Hint": "With no encounter running there are no turns to track.",
+  "CRITSFUMBLES.Settings.Debug.Name": "Log attack rolls to the console",
+  "CRITSFUMBLES.Settings.Debug.Hint": "Diagnostic. Prints the shape of every attack roll."
 }

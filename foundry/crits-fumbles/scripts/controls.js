@@ -30,7 +30,7 @@ export function registerSceneControl(open) {
 
     tools[TOOL] = {
       name: TOOL,
-      title: "CRITSFUMBLES.ToolTitle",
+      title: "CRITSFUMBLES.Title",
       icon: "fa-solid fa-burst",
       order: nextOrder(tools),
       button: true,

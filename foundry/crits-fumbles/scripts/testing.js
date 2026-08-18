@@ -97,3 +97,26 @@ function findAttackActivity(actor, itemName) {
   }
   return null;
 }
+
+/**
+ * Passive listener: logs the shape of an attack roll without acting on it.
+ *
+ * Turn on "Log attack rolls to the console" and make one attack: the console shows
+ * the roll's crit flags and the activity's damage shape, which is where the answer
+ * lives whenever an attack does not trigger what you expected.
+ */
+export function watchAttacks() {
+  Hooks.on("dnd5e.rollAttack", (rolls, data) => {
+    const roll = rolls?.[0];
+    const activity = data?.subject;
+
+    console.group(`${MODULE_ID} | dnd5e.rollAttack observed`);
+    console.log("roll.total:", roll?.total, "| isCritical:", roll?.isCritical, "| isFumble:", roll?.isFumble);
+    console.log("activity type:", activity?.type, "| name:", activity?.name);
+    console.log("activity.damage:", activity?.damage);
+    console.log("activity.item?.system?.damage:", activity?.item?.system?.damage);
+    console.log("actor:", activity?.actor?.name, "| id:", activity?.actor?.id);
+    console.log("full activity (expand to explore):", activity);
+    console.groupEnd();
+  });
+}

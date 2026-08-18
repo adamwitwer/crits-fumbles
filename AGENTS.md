@@ -181,12 +181,28 @@ a flame tongue rolls fire instead of slashing.
 and its jQuery signature deprecated. The announcement card uses a delegated `document`
 listener, which behaves the same across versions and survives re-renders.
 
-**Foundry v14 and dnd5e 5.x are newer than the published docs.** `scripts/probe.js`
-reports what the running build actually offers; check it rather than trusting a
-tutorial. Confirmed present on 14.366: `ApplicationV2`, `DialogV2`,
-`HandlebarsApplicationMixin`, `foundry.applications.handlebars.renderTemplate`,
-`game.keybindings`, `ui.controls`. Dice So Nice is **not** installed, so cards must show
-the roll result themselves.
+**Foundry v14 and dnd5e 5.x are newer than the published docs**, so check the running
+build rather than trusting a tutorial. Confirmed present on 14.366: `ApplicationV2`,
+`DialogV2`, `HandlebarsApplicationMixin`,
+`foundry.applications.handlebars.renderTemplate`, `game.keybindings`, `ui.controls`.
+Dice So Nice is **not** installed, so cards must show the roll result themselves.
+(`scripts/probe.js` reported all of this and was deleted once the UI was written
+against it; `git show 3200af6:foundry/crits-fumbles/scripts/probe.js` if it is wanted
+again.)
+
+**Scene controls are a record, not an array, since v13.** Tools go to
+`controls.tokens.tools.<name>` — `tokens` plural, `token` in v12 — and a `button: true`
+tool **must** carry `onChange` or core throws on click (foundryvtt#12761). Do not
+register a new control category: foundryvtt#12258 leaves its `activeTool` unset,
+because core builds the tool list before `getSceneControlButtons` fires.
+
+**Take names from the system where it has them.** Damage type labels come from
+`CONFIG.DND5E.damageTypes[key].label` and condition rule links from
+`CONFIG.DND5E.conditionTypes[key].reference` — the latter resolved to
+`Compendium.dnd5e.content24...` on 14.366, which no amount of guessing would have
+produced. Only the three fumble categories are this module's own.
+
+**All user-facing text lives in `lang/en.json`.** The render paths carry no English.
 
 ### Testing the module
 

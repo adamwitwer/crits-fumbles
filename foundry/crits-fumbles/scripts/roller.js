@@ -1,4 +1,4 @@
-import { MODULE_ID } from "./constants.js";
+import { MODULE_ID, t } from "./constants.js";
 import { enrich, linkConditions } from "./conditions.js";
 import { getTables, labelFor, resolveRoll, tableKeyFor } from "./tables.js";
 
@@ -20,7 +20,7 @@ export async function rollTable({ kind, damageType, actor = null, flavorPrefix =
   const roll = await new Roll(`1d${getTables().die}`).evaluate();
   const entry = resolveRoll(roll.total, kind, key);
 
-  const label = game.i18n.localize(kind === "crit" ? "CRITSFUMBLES.CriticalHit" : "CRITSFUMBLES.Fumble");
+  const label = t(kind === "crit" ? "CRITSFUMBLES.CriticalHit" : "CRITSFUMBLES.Fumble");
   const flavor = [flavorPrefix, `${label} — ${labelFor(key)}`].filter(Boolean).join(" ");
 
   await ChatMessage.create({
@@ -34,8 +34,8 @@ export async function rollTable({ kind, damageType, actor = null, flavorPrefix =
 }
 
 function renderCard({ kind, key, roll, entry }) {
-  const title = entry ? entry.title : game.i18n.localize("CRITSFUMBLES.NoResult");
-  const effect = entry ? entry.effect : `No table entry matched ${roll.total}.`;
+  const title = entry ? entry.title : t("CRITSFUMBLES.NoResult");
+  const effect = entry ? entry.effect : t("CRITSFUMBLES.NoEntry", { roll: roll.total });
 
   // Built as a string rather than a Handlebars template so this milestone depends
   // on no template-loading API; swap for a .hbs once the UI settles.

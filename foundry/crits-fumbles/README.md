@@ -4,8 +4,8 @@ Rolls a critical hit or fumble result on the Crits & Fumbles house tables. For t
 `dnd5e` system.
 
 Status: **working prototype**, tested on Foundry 14.366 with dnd5e 5.3.3. Automatic
-rolling, the chat announcement, the toolbar button, the picker and on-demand rolling
-all work. The wording has not had a proper pass.
+rolling, the chat announcement, the toolbar button, the picker, condition links and
+on-demand rolling all work.
 
 ## Install
 
@@ -41,7 +41,7 @@ The folder must be named `crits-fumbles`, matching the `id` in `module.json`.
 Open the browser console (F12) and look for:
 
 ```
-crits-fumbles v0.7.0 — 13 damage types loaded
+crits-fumbles v0.7.1 — 13 damage types loaded
 Console: CritsFumbles.simulate({ kind: "crit" }) · CritsFumbles.open() · ...
 Settings: Game Settings → Configure Settings → Module Settings → Crits & Fumbles
 ```
@@ -67,10 +67,6 @@ Object.keys(CritsFumbles)                   // available API functions
 Settings → Crits & Fumbles**.
 
 Not under Manage Modules — that page only enables and disables modules.
-
-For a report of which APIs this Foundry build offers, run
-`game.modules.get("crits-fumbles").api.probe()`. It exists because Foundry v14 and
-dnd5e 5.x are newer than the documentation this was written against.
 
 ## Rolling on demand
 
@@ -236,11 +232,20 @@ CritsFumbles.announceTest({ kind: "fumble" });   // post an announcement card di
 To take the turn rule out of the picture entirely while working on something else,
 turn off **Only the first attack of a turn can trigger** in the module settings.
 
-## What is not built yet
+## Wording
 
-- **A language pass.** Strings are hardcoded rather than localized, terminology drifts
-  between "damage type" and "fumble category", and the emoji are placeholders (#21).
-- **Removing `probe.js`**, once the remaining UI is written against a confirmed API.
+User-facing text lives in `lang/en.json`, not in the scripts. Changing what a card,
+button or setting says is an edit to that one file — there is no English hardcoded in
+the render paths, which is enforced by a check rather than by discipline.
+
+Two names are not this module's to choose. Damage types come from
+`CONFIG.DND5E.damageTypes[key].label`, so "Bludgeoning" matches the character sheet
+rather than being spelled twice, and condition links come from
+`CONFIG.DND5E.conditionTypes[key].reference`. The three fumble categories — Physical,
+Elemental, Magical — are ours, under `CRITSFUMBLES.Category.*`.
+
+A fumble is rolled by **category**, never by damage type. Any label that says "damage
+type" on a fumble is a bug.
 
 ## Regenerating the tables
 

@@ -1,4 +1,4 @@
-import { MODULE_ID } from "./constants.js";
+import { MODULE_ID, t } from "./constants.js";
 
 /** Fumble tables bucket the 13 damage types into three categories. */
 const CATEGORIES = {
@@ -36,21 +36,34 @@ export function damageTypes() {
 /** The fumble buckets double as the display grouping, in table order. */
 export function damageTypeGroups() {
   const known = new Set(damageTypes());
-  return [
-    { key: "physical", label: "Physical" },
-    { key: "elemental", label: "Elemental" },
-    { key: "magical", label: "Magic" }
-  ].map(group => ({
-    ...group,
-    types: CATEGORIES[group.key].filter(type => known.has(type))
+  return Object.keys(CATEGORIES).map(key => ({
+    key,
+    label: categoryLabel(key),
+    types: CATEGORIES[key].filter(type => known.has(type))
   }));
 }
 
 /**
- * Display form of a table key. Keys are single lowercase words — damage types and
- * fumble categories alike — so capitalising the first letter is the whole job.
+ * One name per bucket. The crit picker groups its thirteen types under these and the
+ * fumble list is these, so they have to agree — they used to read "Magic" in one place
+ * and "Magical" in the other.
+ */
+function categoryLabel(key) {
+  return t(`CRITSFUMBLES.Category.${key}`);
+}
+
+/**
+ * Display form of a table key, which may be a damage type or a fumble category.
+ *
+ * dnd5e already names and localizes the damage types, so take its label rather than
+ * inventing a second spelling of "Bludgeoning" that could drift from the character
+ * sheet. The categories are this module's own, and the plain capitalisation is the
+ * last resort for a key the system has never heard of.
  */
 export function labelFor(key) {
+  const system = globalThis.CONFIG?.DND5E?.damageTypes?.[key]?.label;
+  if (system) return system;
+  if (Object.hasOwn(CATEGORIES, key)) return categoryLabel(key);
   return String(key).charAt(0).toUpperCase() + String(key).slice(1);
 }
 
@@ -64,7 +77,7 @@ export function categoryFor(damageType) {
  * rather than thirteen damage types, matching the web app.
  */
 export function fumbleCategories() {
-  return Object.keys(getTables().fumbles).map(key => ({ key, label: labelFor(key) }));
+  return Object.keys(getTables().fumbles).map(key => ({ key, label: categoryLabel(key) }));
 }
 
 export function isFumbleCategory(value) {

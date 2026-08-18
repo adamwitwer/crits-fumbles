@@ -3,19 +3,16 @@ import { checkConditions } from "./conditions.js";
 import { registerSceneControl } from "./controls.js";
 import { registerAnnouncementListeners } from "./announce.js";
 import { MODULE_ID } from "./constants.js";
-import { runProbe, watchAttacks } from "./probe.js";
 import { rollTable } from "./roller.js";
-import { announceTest, forceCrits, simulate } from "./testing.js";
+import { announceTest, forceCrits, simulate, watchAttacks } from "./testing.js";
 import { registerTrigger } from "./trigger.js";
 import { categoryFor, damageTypes, loadTables, resolveRoll } from "./tables.js";
 import { resetWindow } from "./turn-gate.js";
 
 Hooks.once("init", () => {
-  console.log(`${MODULE_ID} | init`);
-
   game.settings.register(MODULE_ID, "autoTrigger", {
-    name: "Roll automatically on a natural crit or fumble",
-    hint: "When off, the tables are only rolled on demand.",
+    name: "CRITSFUMBLES.Settings.AutoTrigger.Name",
+    hint: "CRITSFUMBLES.Settings.AutoTrigger.Hint",
     scope: "world",
     config: true,
     type: Boolean,
@@ -23,21 +20,21 @@ Hooks.once("init", () => {
   });
 
   game.settings.register(MODULE_ID, "promptDamageType", {
-    name: "Ask for the damage type",
+    name: "CRITSFUMBLES.Settings.Prompt.Name",
     scope: "world",
     config: true,
     type: String,
     choices: {
-      always: "Always ask",
-      ambiguous: "Only when the attack has more than one damage type",
-      never: "Never ask — use the first type found"
+      always: "CRITSFUMBLES.Settings.Prompt.Always",
+      ambiguous: "CRITSFUMBLES.Settings.Prompt.Ambiguous",
+      never: "CRITSFUMBLES.Settings.Prompt.Never"
     },
     default: "always"
   });
 
   game.settings.register(MODULE_ID, "firstAttackOnly", {
-    name: "Only the first attack of a turn can trigger",
-    hint: "The house rule. The window is spent by that first attack whether or not it crits, and reactions never trigger. Turn off to let every crit and fumble roll.",
+    name: "CRITSFUMBLES.Settings.FirstAttack.Name",
+    hint: "CRITSFUMBLES.Settings.FirstAttack.Hint",
     scope: "world",
     config: true,
     type: Boolean,
@@ -45,8 +42,8 @@ Hooks.once("init", () => {
   });
 
   game.settings.register(MODULE_ID, "outsideCombat", {
-    name: "Trigger outside combat",
-    hint: "With no active encounter there are no turns to track, so every crit or fumble is eligible.",
+    name: "CRITSFUMBLES.Settings.OutsideCombat.Name",
+    hint: "CRITSFUMBLES.Settings.OutsideCombat.Hint",
     scope: "world",
     config: true,
     type: Boolean,
@@ -54,8 +51,8 @@ Hooks.once("init", () => {
   });
 
   game.settings.register(MODULE_ID, "debugAttacks", {
-    name: "Log attack rolls to the console",
-    hint: "Diagnostic only. Prints the shape of each attack roll.",
+    name: "CRITSFUMBLES.Settings.Debug.Name",
+    hint: "CRITSFUMBLES.Settings.Debug.Hint",
     scope: "world",
     config: true,
     type: Boolean,
@@ -87,8 +84,7 @@ Hooks.once("ready", async () => {
     damageTypes,
     categoryFor,
     resolveRoll,
-    checkConditions,
-    probe: runProbe
+    checkConditions
   };
 
   // Registered here rather than in init so game.socket is definitely connected.

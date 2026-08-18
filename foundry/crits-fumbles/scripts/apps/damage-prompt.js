@@ -1,5 +1,5 @@
-import { MODULE_ID } from "../constants.js";
-import { categoryFor, damageTypeGroups, fumbleCategories } from "../tables.js";
+import { MODULE_ID, t } from "../constants.js";
+import { categoryFor, damageTypeGroups, fumbleCategories, labelFor } from "../tables.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -17,7 +17,7 @@ class DamagePrompt extends HandlebarsApplicationMixin(ApplicationV2) {
     id: "crits-fumbles-damage-prompt",
     classes: ["crits-fumbles", "crits-fumbles-prompt"],
     tag: "div",
-    window: { title: "Crits & Fumbles", icon: "fa-solid fa-dice-d20" },
+    window: { title: "CRITSFUMBLES.Title", icon: "fa-solid fa-burst" },
     position: { width: 460, height: "auto" },
     actions: {
       pick: DamagePrompt.#onPick,
@@ -40,7 +40,7 @@ class DamagePrompt extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   get title() {
-    const what = this.#kind === "crit" ? "Critical Hit" : "Fumble";
+    const what = t(this.#kind === "crit" ? "CRITSFUMBLES.CriticalHit" : "CRITSFUMBLES.Fumble");
     const who = this.options.actorName;
     return who ? `${what} — ${who}` : what;
   }
@@ -57,7 +57,7 @@ class DamagePrompt extends HandlebarsApplicationMixin(ApplicationV2) {
           label: group.label,
           types: group.types.map(type => ({
             type,
-            label: type.charAt(0).toUpperCase() + type.slice(1),
+            label: labelFor(type),
             detected: detected.has(type)
           }))
         }))

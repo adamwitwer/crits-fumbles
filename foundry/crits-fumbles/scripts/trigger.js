@@ -42,10 +42,12 @@ export async function onAttack(rolls, data) {
   const outcome = roll.isCritical ? "critical hit" : roll.isFumble ? "fumble" : null;
   if (!outcome) return;
 
+  // Logged only when the module declines to act. A card appearing is its own
+  // feedback; a card *not* appearing is the thing that needs explaining.
   const name = activity?.name ?? activity?.item?.name ?? "attack";
-  const say = verdict => console.log(`${MODULE_ID} | ${actor.name} ${outcome} on "${name}": ${verdict}`);
+  const decline = why => console.log(`${MODULE_ID} | ${actor.name} ${outcome} on "${name}" — no roll: ${why}`);
 
-  if (!eligible) return say(`no roll — ${reason}`);
+  if (!eligible) return decline(reason);
 
   const kind = roll.isCritical ? "crit" : "fumble";
   const { known, seen } = damageTypeFor(activity);
@@ -58,17 +60,13 @@ export async function onAttack(rolls, data) {
 
   // Ask in chat rather than rolling on a guess: the card stays visible to the table
   // and does not interrupt whoever is mid-turn.
-  if (shouldAsk(choices)) {
-    say(`announcing in chat — ${reason}`);
-    return announce({ actor, kind, detected: known });
-  }
+  if (shouldAsk(choices)) return announce({ actor, kind, detected: known });
 
   if (!choices.length) {
     logMiss(activity, seen);
-    return say("no roll — could not determine a damage type");
+    return decline("could not determine a damage type");
   }
 
-  say(`rolling the ${choices[0]} table — ${reason}`);
   await rollTable({ kind, damageType: choices[0], actor, flavorPrefix: actor.name });
 }
 
