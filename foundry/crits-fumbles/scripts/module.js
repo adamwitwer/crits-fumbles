@@ -1,5 +1,6 @@
 import { promptForDamageType } from "./apps/damage-prompt.js";
 import { checkConditions } from "./conditions.js";
+import { registerSceneControl } from "./controls.js";
 import { registerAnnouncementListeners } from "./announce.js";
 import { MODULE_ID } from "./constants.js";
 import { runProbe, watchAttacks } from "./probe.js";
@@ -60,6 +61,9 @@ Hooks.once("init", () => {
     type: Boolean,
     default: false
   });
+
+  // Registered in init so the hook exists before the controls first render.
+  registerSceneControl(() => openPrompt());
 });
 
 Hooks.once("ready", async () => {

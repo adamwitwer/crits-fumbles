@@ -4,8 +4,8 @@ Rolls a critical hit or fumble result on the Crits & Fumbles house tables. For t
 `dnd5e` system.
 
 Status: **working prototype**, tested on Foundry 14.366 with dnd5e 5.3.3. Automatic
-rolling, the chat announcement, the picker and on-demand rolling all work. Not yet
-wired to a UI button, and the wording has not had a proper pass.
+rolling, the chat announcement, the toolbar button, the picker and on-demand rolling
+all work. The wording has not had a proper pass.
 
 ## Install
 
@@ -41,7 +41,7 @@ The folder must be named `crits-fumbles`, matching the `id` in `module.json`.
 Open the browser console (F12) and look for:
 
 ```
-crits-fumbles v0.6.2 — 13 damage types loaded
+crits-fumbles v0.7.0 — 13 damage types loaded
 Console: CritsFumbles.simulate({ kind: "crit" }) · CritsFumbles.open() · ...
 Settings: Game Settings → Configure Settings → Module Settings → Crits & Fumbles
 ```
@@ -74,15 +74,24 @@ dnd5e 5.x are newer than the documentation this was written against.
 
 ## Rolling on demand
 
+Click the **burst icon** in the scene control toolbar, up the left-hand side under the
+Token tools. It opens the picker with a crit/fumble toggle and the thirteen damage
+types, ignoring the turn rule entirely — so it works regardless of whose turn it is, or
+whether an attack was made at all. Players see it too; it is the on-demand roll.
+
+If the button is missing, the console says why. Foundry changed the scene control API
+in v13, and this module needs the Token control group to exist under that name; the
+macro below always works regardless.
+
+### From a macro
+
 Create a **Script** macro with:
 
 ```js
 game.modules.get("crits-fumbles").api.open();
 ```
 
-That opens the picker with a crit/fumble toggle and the thirteen damage types. It
-ignores the turn rule entirely, so it works regardless of whose turn it is or whether
-an attack was made at all. Give this one to players.
+That is the same picker the toolbar button opens.
 
 To skip the dialog and roll a known type directly:
 
@@ -229,8 +238,6 @@ turn off **Only the first attack of a turn can trigger** in the module settings.
 
 ## What is not built yet
 
-- **A UI entry point** — a button or keybinding to open the picker, rather than a macro
-  or the console (#20).
 - **A language pass.** Strings are hardcoded rather than localized, terminology drifts
   between "damage type" and "fumble category", and the emoji are placeholders (#21).
 - **Removing `probe.js`**, once the remaining UI is written against a confirmed API.
