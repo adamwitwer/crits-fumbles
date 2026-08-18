@@ -1,52 +1,75 @@
 import { MODULE_ID } from "./constants.js";
 
 /**
- * House rule: only a combatant's first attack of their own turn can roll on a table.
+ * House rule: how often a crit or fumble may roll on a table.
  *
- * Three rulings shape this:
- *  - Reactions, opportunity attacks and legendary actions never trigger, so only the
- *    creature whose turn it is can ever be eligible. That means the state is one flag
- *    per turn rather than a per-actor set.
- *  - The window is spent by the first attack roll whether or not it crits, so this is
- *    consulted on every attack, before the crit check.
- *  - Outside combat there are no turns to track, so everything is eligible.
+ * Four rulings shape this:
+ *  - Whether anything triggers with no encounter running is a separate question, asked
+ *    first and in every mode. An out-of-combat attack rolls initiative and starts a
+ *    combat, so there is no turn there to limit in the first place.
+ *  - Reactions, opportunity attacks and legendary actions happen on someone else's
+ *    turn, so under a limit only the creature whose turn it is can ever be eligible.
+ *    That is why the state is one flag per turn rather than a set per actor.
+ *  - What spends the turn differs by mode, and `spendOn` tells the caller which:
+ *    "attack" means the opening attack roll spends it whatever it rolled, "trigger"
+ *    means only something that actually fires does.
+ *  - With no limit at all, nothing is recorded and every crit and fumble rolls.
  *
  * Split into a read and a write because they need different permissions: any client
  * may read the Combat flag, but only a GM may set it. The rolling client decides, then
  * asks a GM to record the spend.
  */
 export function evaluateWindow(actor) {
-  if (!game.settings.get(MODULE_ID, "firstAttackOnly")) {
-    return { eligible: true, reason: "first-attack rule is off", turnKey: null };
-  }
-
   const combat = game.combat;
 
+  // Asked before the limit, and whichever limit is set.
   if (!combat?.started) {
     return game.settings.get(MODULE_ID, "outsideCombat")
-      ? { eligible: true, reason: "no active combat", turnKey: null }
-      : { eligible: false, reason: "no active combat, and out-of-combat triggering is off", turnKey: null };
+      ? unlimited("no active combat")
+      : blocked("no active combat, and out-of-combat triggering is off");
   }
 
+  const limit = game.settings.get(MODULE_ID, "turnLimit");
+  if (limit === "every") return unlimited("no per-turn limit set");
+
   const current = combat.combatant;
-  if (!current) return { eligible: false, reason: "combat has no current combatant", turnKey: null };
+  if (!current) return blocked("combat has no current combatant");
 
   // Not their turn: a reaction, opportunity attack or legendary action.
   if (!sameActor(current.actor, actor)) {
-    return {
-      eligible: false,
-      reason: `not their turn (it is ${current.actor?.name ?? "someone else"}'s) — reaction or legendary action`,
-      turnKey: null
-    };
+    return blocked(`not their turn (it is ${current.actor?.name ?? "someone else"}'s) — reaction or legendary action`);
   }
 
   const turnKey = `${combat.round}:${combat.turn}`;
-  const state = combat.getFlag(MODULE_ID, "turn");
-  if (state?.key === turnKey) {
-    return { eligible: false, reason: "window already spent by an earlier attack this turn", turnKey };
+  const spendOn = limit === "once" ? "trigger" : "attack";
+  const spent = combat.getFlag(MODULE_ID, "turn")?.key === turnKey;
+
+  if (spent) {
+    return {
+      eligible: false,
+      reason: spendOn === "trigger"
+        ? "something already triggered this turn"
+        : "window already spent by an earlier attack this turn",
+      turnKey,
+      spendOn
+    };
   }
 
-  return { eligible: true, reason: "first attack of their turn", turnKey };
+  return {
+    eligible: true,
+    reason: spendOn === "trigger" ? "nothing has triggered yet this turn" : "first attack of their turn",
+    turnKey,
+    spendOn
+  };
+}
+
+/** Eligible with nothing to record — no turn is being tracked. */
+function unlimited(reason) {
+  return { eligible: true, reason, turnKey: null, spendOn: null };
+}
+
+function blocked(reason) {
+  return { eligible: false, reason, turnKey: null, spendOn: null };
 }
 
 /** Record that this turn's window is spent. GM only. */

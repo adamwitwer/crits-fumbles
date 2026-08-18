@@ -28,10 +28,13 @@
   "CRITSFUMBLES.Settings.Prompt.Always": "Always ask",
   "CRITSFUMBLES.Settings.Prompt.Ambiguous": "Only when more than one type applies",
   "CRITSFUMBLES.Settings.Prompt.Never": "Never — use the first type found",
-  "CRITSFUMBLES.Settings.FirstAttack.Name": "Only the first attack of a turn can trigger",
-  "CRITSFUMBLES.Settings.FirstAttack.Hint": "The house rule. The turn's first attack roll spends it, whatever that roll was.",
+  "CRITSFUMBLES.Settings.TurnLimit.Name": "When a crit or fumble can trigger",
+  "CRITSFUMBLES.Settings.TurnLimit.Hint": "Reactions, opportunity attacks and legendary actions land on someone else's turn, so the two limited settings never fire on them.",
+  "CRITSFUMBLES.Settings.TurnLimit.First": "Only on the turn's first attack roll",
+  "CRITSFUMBLES.Settings.TurnLimit.Once": "Once each turn, on any attack",
+  "CRITSFUMBLES.Settings.TurnLimit.Every": "Every crit and fumble",
   "CRITSFUMBLES.Settings.OutsideCombat.Name": "Trigger outside combat",
-  "CRITSFUMBLES.Settings.OutsideCombat.Hint": "With no encounter running there are no turns to track.",
+  "CRITSFUMBLES.Settings.OutsideCombat.Hint": "Applies whichever limit is set above. An attack out of combat rolls initiative anyway, so there is no turn to limit.",
   "CRITSFUMBLES.Settings.Debug.Name": "Log attack rolls to the console",
   "CRITSFUMBLES.Settings.Debug.Hint": "Diagnostic. Prints the shape of every attack roll."
 }

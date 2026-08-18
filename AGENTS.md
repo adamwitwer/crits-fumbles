@@ -211,7 +211,7 @@ and `tools/check-foundry-module.mjs` fails if any creeps back in.
 node tools/check-foundry-module.mjs
 ```
 
-Six suites over the module's pure logic, with a stub for `game` and `CONFIG`. They are
+Seven suites over the module's pure logic, with a stub for `game` and `CONFIG`. They are
 deliberately not full coverage — rendering, the socket handoff, and the dnd5e hook
 signature itself can only be proved in a world. When reporting on a change, say which
 side of that line it was verified on.

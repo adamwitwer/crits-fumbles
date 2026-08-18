@@ -12,7 +12,7 @@
  *
  * Every suite runs even if an earlier one fails, so one run shows everything at once.
  */
-const SUITES = ["tables", "damage-type", "turn-gate", "conditions", "controls", "i18n"];
+const SUITES = ["tables", "damage-type", "turn-gate", "trigger", "conditions", "controls", "i18n"];
 
 let failed = 0;
 for (const file of SUITES) {

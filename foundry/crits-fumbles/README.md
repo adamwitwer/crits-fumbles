@@ -41,7 +41,7 @@ The folder must be named `crits-fumbles`, matching the `id` in `module.json`.
 Open the browser console (F12) and look for:
 
 ```
-crits-fumbles v0.7.3 — 13 damage types loaded
+crits-fumbles v0.8.0 — 13 damage types loaded
 Console: CritsFumbles.simulate({ kind: "crit" }) · CritsFumbles.open() · ...
 Settings: Game Settings → Configure Settings → Module Settings → Crits & Fumbles
 ```
@@ -123,19 +123,27 @@ GM, can resolve it, and once resolved the card stops offering the controls.
 Announcing in chat rather than opening a dialog keeps the moment visible to the whole
 table, leaves a record in the log, and does not steal focus from whoever is mid-turn.
 
-### The house rule
+### How often it can trigger
 
-Only a combatant's **first attack of their own turn** is eligible:
+**When a crit or fumble can trigger** offers three rules:
 
-- The window is spent by the turn's first attack **roll**, whatever it rolled. If that
-  first attack is an ordinary 12 and the second is a natural 20, nothing fires. Hitting
-  or missing does not come into it — the module reads the die, not the target's AC.
-- Reactions, opportunity attacks and legendary actions never trigger, since they
-  happen on someone else's turn.
-- Outside combat there are no turns to track, so everything is eligible. Turn this
-  off with the "Trigger outside combat" setting.
+| Setting | Behaviour |
+|---|---|
+| **Only on the turn's first attack roll** | The original house rule, and the default. The turn's opening attack spends it whatever that roll was — an ordinary 12 on the first swing means a natural 20 on the second does nothing. |
+| **Once each turn, on any attack** | Still one per turn, but the turn is spent by whatever actually fires. Miss with the first attack, crit with the third, and it rolls. |
+| **Every crit and fumble** | No limit. Several in one turn all fire, and so do reactions, opportunity attacks and legendary actions. |
 
-To re-open the current turn's window after an undone roll:
+Under the two limited rules, reactions and legendary actions never trigger: they land on
+someone else's turn, and only the creature whose turn it is is ever eligible.
+
+The module reads the die, not the target's AC, so it never knows whether an attack hit.
+"First attack roll" means exactly that.
+
+**Trigger outside combat** is a separate question, asked first and whichever limit is
+set. With no encounter running there are no turns to track — and an attack out of
+combat rolls initiative anyway, which starts one.
+
+To re-open the current turn after an undone roll:
 
 ```js
 game.modules.get("crits-fumbles").api.resetTurn();
@@ -193,9 +201,9 @@ Combat flag behind the turn rule, so it asks a GM to record that over a socket.
 | Setting | Default | Effect |
 |---|---|---|
 | Roll automatically on a natural crit or fumble | on | Turn off for manual-only rolling |
-| Only the first attack of a turn can trigger | on | The house rule. Off = every crit and fumble rolls |
+| When a crit or fumble can trigger | Turn's first attack | First attack / once each turn / every one |
 | Ask for the damage type | Always ask | Always / only when ambiguous / never |
-| Trigger outside combat | on | Whether crits fire with no active encounter |
+| Trigger outside combat | on | Applies whichever limit is set |
 | Log attack rolls to the console | off | Diagnostic; prints each attack's shape |
 
 ## Testing
@@ -230,8 +238,8 @@ CritsFumbles.forceCrits(true);
 CritsFumbles.announceTest({ kind: "fumble" });   // post an announcement card directly
 ```
 
-To take the turn rule out of the picture entirely while working on something else,
-turn off **Only the first attack of a turn can trigger** in the module settings.
+To take the turn rule out of the picture entirely while working on something else, set
+**When a crit or fumble can trigger** to "Every crit and fumble".
 
 ### Checks that run outside Foundry
 
@@ -239,9 +247,10 @@ turn off **Only the first attack of a turn can trigger** in the module settings.
 node tools/check-foundry-module.mjs
 ```
 
-Covers the parts that decide things — table lookups, damage type detection, the turn
-rule, condition linking, the toolbar registration and localization coverage — against a
-stub for `game` and `CONFIG`. `package-foundry-module.sh` runs them before it zips.
+Covers the parts that decide things — table lookups, damage type detection, the
+per-turn limits, what actually fires and what spends the turn, condition linking, the
+toolbar registration and localization coverage — against a stub for `game` and
+`CONFIG`. `package-foundry-module.sh` runs them before it zips.
 
 **What they do not cover**, and what therefore has to be looked at in a world:
 

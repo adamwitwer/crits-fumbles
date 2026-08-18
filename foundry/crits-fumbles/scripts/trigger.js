@@ -34,10 +34,10 @@ export async function onAttack(rolls, data) {
   const actor = activity?.actor;
   if (!roll || !actor) return;
 
-  // Consulted for every attack, not just crits: the first attack of the turn spends
-  // the window whether or not it crits.
-  const { eligible, reason, turnKey } = evaluateWindow(actor);
-  if (eligible && turnKey) requestSpend(turnKey);
+  // Consulted for every attack, not just crits: under the "first attack" limit the
+  // opening roll spends the turn whatever it rolled.
+  const { eligible, reason, turnKey, spendOn } = evaluateWindow(actor);
+  if (eligible && turnKey && spendOn === "attack") requestSpend(turnKey);
 
   const outcome = roll.isCritical ? "critical hit" : roll.isFumble ? "fumble" : null;
   if (!outcome) return;
@@ -58,15 +58,24 @@ export async function onAttack(rolls, data) {
     ? [...new Set(known.map(categoryFor).filter(Boolean))]
     : known;
 
+  // Under the "once each turn" limit the turn is spent by whatever actually fires, so
+  // an attack that cannot be resolved to a table leaves the turn open.
+  const spend = () => { if (turnKey && spendOn === "trigger") requestSpend(turnKey); };
+
   // Ask in chat rather than rolling on a guess: the card stays visible to the table
-  // and does not interrupt whoever is mid-turn.
-  if (shouldAsk(choices)) return announce({ actor, kind, detected: known });
+  // and does not interrupt whoever is mid-turn. Spent at announce time, not at roll
+  // time, or a second crit could post a card while the first is still unresolved.
+  if (shouldAsk(choices)) {
+    spend();
+    return announce({ actor, kind, detected: known });
+  }
 
   if (!choices.length) {
     logMiss(activity, seen);
     return decline("could not determine a damage type");
   }
 
+  spend();
   await rollTable({ kind, damageType: choices[0], actor, flavorPrefix: actor.name });
 }
 

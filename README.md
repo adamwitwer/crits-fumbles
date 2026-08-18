@@ -88,9 +88,9 @@ ones we play with — so the module does not name them. It is just Crits & Fumbl
   dropdown, and the player picks what to roll on. It asks rather than guessing, because
   the system frequently cannot know: a monk's unarmed strike carries both bludgeoning
   and force, and the player chooses per strike.
-- **Knows the house rule.** Only a combatant's first attack of their own turn can
-  trigger, and that first attack spends the window whether or not it hits. Reactions and
-  legendary actions never fire. All of it is a setting.
+- **Knows the house rule.** How often a crit can trigger is a setting: only on a turn's
+  first attack roll, once each turn on any attack, or every one. Under either limit,
+  reactions and legendary actions never fire — they land on someone else's turn.
 - **Links the conditions.** Prone, Stunned and ten others resolve into the system's own
   rules compendium, so a click opens the rules beside the game rather than a browser tab.
 - **Rolls on demand.** A burst icon in the scene control toolbar opens the picker for

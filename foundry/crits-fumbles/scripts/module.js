@@ -32,13 +32,18 @@ Hooks.once("init", () => {
     default: "always"
   });
 
-  game.settings.register(MODULE_ID, "firstAttackOnly", {
-    name: "CRITSFUMBLES.Settings.FirstAttack.Name",
-    hint: "CRITSFUMBLES.Settings.FirstAttack.Hint",
+  game.settings.register(MODULE_ID, "turnLimit", {
+    name: "CRITSFUMBLES.Settings.TurnLimit.Name",
+    hint: "CRITSFUMBLES.Settings.TurnLimit.Hint",
     scope: "world",
     config: true,
-    type: Boolean,
-    default: true
+    type: String,
+    choices: {
+      first: "CRITSFUMBLES.Settings.TurnLimit.First",
+      once: "CRITSFUMBLES.Settings.TurnLimit.Once",
+      every: "CRITSFUMBLES.Settings.TurnLimit.Every"
+    },
+    default: "first"
   });
 
   game.settings.register(MODULE_ID, "outsideCombat", {
