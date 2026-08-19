@@ -3,9 +3,16 @@
 Rolls a critical hit or fumble result on the Crits & Fumbles house tables. For the
 `dnd5e` system.
 
-Status: **working prototype**, tested on Foundry 14.366 with dnd5e 5.3.3. Automatic
-rolling, the chat announcement, the toolbar button, the picker, condition links and
-on-demand rolling all work.
+Status: **feature-complete, not yet played**. Running on Foundry 14.366 with dnd5e
+5.3.3: automatic rolling, the chat announcement, the toolbar button, the picker,
+condition links and on-demand rolling all work, and the house rule has been walked
+through a combat encounter turn by turn.
+
+What has not happened is a real session. Everything so far has been verified in a test
+world by one person, which is the wrong shape for finding the things that matter here —
+whether the card interrupts the moment or lands with it, whether players understand what
+they are being asked, and whether the turn rule feels right when it is someone's actual
+critical hit. Expect the first game to produce a list.
 
 ## Install
 

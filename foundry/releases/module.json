@@ -2,7 +2,7 @@
   "id": "crits-fumbles",
   "title": "Crits & Fumbles",
   "description": "Critical hit and fumble tables for 5e. Rolls automatically on a natural 20 or 1, and links conditions to the rules compendium.",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "authors": [
     {
       "name": "Adam Witwer"
@@ -40,5 +40,5 @@
   ],
   "url": "https://github.com/adamwitwer/crits-fumbles",
   "manifest": "https://github.com/adamwitwer/crits-fumbles/releases/latest/download/module.json",
-  "download": "https://github.com/adamwitwer/crits-fumbles/releases/download/v0.10.1/module.zip"
+  "download": "https://github.com/adamwitwer/crits-fumbles/releases/download/v0.10.2/module.zip"
 }
