@@ -6,8 +6,10 @@ export default async function run() {
   await stubFoundry();
   const r = reporter();
 
-  let handler = null;
-  globalThis.Hooks = { on: (event, fn) => { if (event === "getSceneControlButtons") handler = fn; } };
+  const hooks = {};
+  globalThis.Hooks = { on: (event, fn) => { hooks[event] = fn; } };
+  const handler = (...args) => hooks.getSceneControlButtons(...args);
+  const render = (...args) => hooks.renderSceneControls(...args);
 
   const { registerSceneControl } = await load("controls.js", "controls");
   let opened = 0;
@@ -56,6 +58,42 @@ export default async function run() {
   r.equal(missing.warn.length, 3, "a missing control group warns once per render, and never throws");
   r.check(missing.warn.every(line => line.includes("CritsFumbles.open()")),
     "the warning points at the macro that still works", JSON.stringify(missing.warn));
+
+  // --- the hover tooltip ---
+  // Which attribute a build honours can only be settled in Foundry, so both are set.
+  // What is checkable here is that both carry the same words, and that neither throws.
+  const button = { dataset: {} };
+  const root = { querySelector: selector => (selector.includes("critsFumbles") ? button : null) };
+  render({}, root);
+
+  r.check(button.dataset.tooltipHtml?.startsWith("<h1>Crits &amp; Fumbles</h1>"),
+    "the markup tooltip leads with the headline, ampersand escaped", button.dataset.tooltipHtml);
+  r.check(button.dataset.tooltipHtml?.includes("<p>A critical hit and fumble table tied to the 5e conditions.</p>"),
+    "and carries the description");
+  r.check(button.dataset.tooltipHtml?.includes("<p>See Game Settings for options.</p>"),
+    "and points at the settings");
+  r.check(!button.dataset.tooltipHtml?.includes("CRITSFUMBLES."),
+    "no unlocalized key leaked into it", button.dataset.tooltipHtml);
+  r.check(button.dataset.tooltip?.includes("A critical hit and fumble table")
+    && button.dataset.tooltip?.includes("See Game Settings"),
+    "the plain fallback says the same thing on one line", button.dataset.tooltip);
+  r.check(!/[<>]/.test(button.dataset.tooltip ?? "<"),
+    "and carries no markup, for a build that escapes it", button.dataset.tooltip);
+  r.equal(button.dataset.tooltipClass, "crits-fumbles-tooltip", "it is styled by our own class");
+  r.equal(button.dataset.tooltipDirection, "RIGHT", "and opens away from the left-hand toolbar");
+
+  // jQuery in older versions, a bare element in v13+.
+  const wrapped = { dataset: {} };
+  render({}, [{ querySelector: () => wrapped }]);
+  r.check(!!wrapped.dataset.tooltipHtml, "a jQuery-wrapped render argument is unwrapped");
+
+  // Tools render only for the open control group, so an absent button is routine.
+  const quiet = await captureConsole(async () => {
+    render({}, { querySelector: () => null });
+    render({}, undefined);
+  });
+  r.check(!quiet.warn.length && !quiet.error.length,
+    "a button that is not on screen is skipped silently, and never throws", JSON.stringify(quiet));
 
   delete globalThis.Hooks;
   return r.failures;

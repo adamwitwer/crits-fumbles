@@ -321,6 +321,9 @@ for `game` and `CONFIG`. `package-foundry-module.sh` runs them before it zips.
   verified by eye.
 - The socket handoff to a GM for the Combat flag write, which needs two clients.
 - Whether condition UUIDs resolve here — that is `CritsFumbles.checkConditions()`.
+- Which tooltip attribute this Foundry build honours on the toolbar button — that is
+  `CritsFumbles.checkTooltip()`. Both `data-tooltip-html` and `data-tooltip` are set,
+  so the button reads sensibly either way, but only a hover shows which one won.
 - The dnd5e hook itself. The suites call `onAttack` directly; that dnd5e still fires
   `dnd5e.rollAttack` with this signature is only ever proved by making an attack.
 

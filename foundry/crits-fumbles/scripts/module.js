@@ -1,6 +1,6 @@
 import { promptForDamageType } from "./apps/damage-prompt.js";
 import { checkConditions } from "./conditions.js";
-import { registerSceneControl } from "./controls.js";
+import { checkTooltip, registerSceneControl } from "./controls.js";
 import { registerAnnouncementListeners } from "./announce.js";
 import { MODULE_ID } from "./constants.js";
 import { rollTable } from "./roller.js";
@@ -91,7 +91,8 @@ Hooks.once("ready", async () => {
     damageTypes,
     categoryFor,
     resolveRoll,
-    checkConditions
+    checkConditions,
+    checkTooltip
   };
 
   // Registered here rather than in init so game.socket is definitely connected.

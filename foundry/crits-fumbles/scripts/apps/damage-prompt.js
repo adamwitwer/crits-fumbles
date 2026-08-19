@@ -40,6 +40,12 @@ class DamagePrompt extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   get title() {
+    // Opened on demand, nothing has happened yet and the kind is still the user's to
+    // choose — naming one here would contradict the toggle sitting under it. Opened
+    // for a specific attack, the kind and the actor are the one thing the title says
+    // that the body does not repeat, and mid-combat that is worth the header.
+    if (!this.options.lockKind) return t("CRITSFUMBLES.Title");
+
     const what = t(this.#kind === "crit" ? "CRITSFUMBLES.CriticalHit" : "CRITSFUMBLES.Fumble");
     const who = this.options.actorName;
     return who ? `${what} — ${who}` : what;

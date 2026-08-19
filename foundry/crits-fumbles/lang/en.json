@@ -1,5 +1,7 @@
 {
   "CRITSFUMBLES.Title": "Crits & Fumbles",
+  "CRITSFUMBLES.Tooltip.Description": "A critical hit and fumble table tied to the 5e conditions.",
+  "CRITSFUMBLES.Tooltip.Settings": "See Game Settings for options.",
   "CRITSFUMBLES.CriticalHit": "Critical Hit",
   "CRITSFUMBLES.Fumble": "Fumble",
 

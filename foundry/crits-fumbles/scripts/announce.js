@@ -1,4 +1,4 @@
-import { MODULE_ID, t } from "./constants.js";
+import { escapeHtml, MODULE_ID, t } from "./constants.js";
 import { rollTable } from "./roller.js";
 import { categoryFor, damageTypeGroups, fumbleCategories, labelFor } from "./tables.js";
 
@@ -152,10 +152,4 @@ function renderResolved({ kind, selection }) {
       <p class="cf-note">${escapeHtml(rolled)}</p>
     </div>
   `.trim();
-}
-
-function escapeHtml(text) {
-  return String(text).replace(/[&<>"']/g, ch => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-  }[ch]));
 }

@@ -203,6 +203,20 @@ tool **must** carry `onChange` or core throws on click (foundryvtt#12761). Do no
 register a new control category: foundryvtt#12258 leaves its `activeTool` unset,
 because core builds the tool list before `getSceneControlButtons` fires.
 
+A tool's `title` is one localized string, so the headline tooltip is applied to the
+rendered button in a `renderSceneControls` hook instead. **Set both
+`data-tooltip-html` and `data-tooltip`**: v13 began treating `data-tooltip` as plain
+text and added the `-html` variant for markup, and that split is unconfirmed on
+14.366, so the plain attribute is the fallback rather than an oversight.
+`CritsFumbles.checkTooltip()` reports which one the running build used. Do not warn
+when the button is absent — tools render only for the open control group, so that is
+the normal case.
+
+**`HTMLElement` is not a global in every context this code loads in.** `element
+instanceof HTMLElement` throws a ReferenceError under Node, and `instanceof
+globalThis.HTMLElement` throws a TypeError when it is undefined. Duck-type instead:
+`typeof element?.querySelector === "function"`.
+
 **Take names from the system where it has them.** Damage type labels come from
 `CONFIG.DND5E.damageTypes[key].label` and condition rule links from
 `CONFIG.DND5E.conditionTypes[key].reference` — the latter resolved to

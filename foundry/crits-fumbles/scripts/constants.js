@@ -13,3 +13,10 @@ export function t(key, data = null) {
   if (!i18n) return key;
   return data ? i18n.format(key, data) : i18n.localize(key);
 }
+
+/** Escape text destined for a string-built HTML fragment. */
+export function escapeHtml(text) {
+  return String(text).replace(/[&<>"']/g, ch => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[ch]));
+}
