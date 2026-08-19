@@ -204,13 +204,19 @@ register a new control category: foundryvtt#12258 leaves its `activeTool` unset,
 because core builds the tool list before `getSceneControlButtons` fires.
 
 A tool's `title` is one localized string, so the headline tooltip is applied to the
-rendered button in a `renderSceneControls` hook instead. **Set both
-`data-tooltip-html` and `data-tooltip`**: v13 began treating `data-tooltip` as plain
-text and added the `-html` variant for markup, and that split is unconfirmed on
-14.366, so the plain attribute is the fallback rather than an oversight.
-`CritsFumbles.checkTooltip()` reports which one the running build used. Do not warn
-when the button is absent — tools render only for the open control group, so that is
-the normal case.
+rendered button in a `renderSceneControls` hook instead. **`data-tooltip-html` is
+honoured on 14.366** and is the path that actually renders; `data-tooltip` is kept as
+the plain fallback for a build that escapes markup. `data-tooltip-class` lands on the
+`#tooltip` element itself, next to core's `themed`/`theme-dark`/`text-right`.
+`CritsFumbles.checkTooltip()` reports what the running build did. Do not warn when the
+button is absent — tools render only for the open control group, so that is the normal
+case.
+
+**dnd5e's heading font leaks into anything we render with an `h1`–`h3` inside core
+UI.** A headline in a tooltip came out in Modesto Condensed while the container stayed
+Signika, because core's own tooltips are plain text and never hit the system's heading
+rule. Set `font-family: inherit` on headings in our own chrome, and outrank the system
+rule with `#tooltip.<our-class> h1` — a bare class selector loses.
 
 **`HTMLElement` is not a global in every context this code loads in.** `element
 instanceof HTMLElement` throws a ReferenceError under Node, and `instanceof

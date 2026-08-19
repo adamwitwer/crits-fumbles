@@ -224,11 +224,20 @@
   text-align: left;
 }
 
-.crits-fumbles-tooltip h1 {
+/* dnd5e styles headings with Modesto Condensed, and our h1 is the first heading in
+   this world to appear inside a tooltip — core's are plain text, so they never pick it
+   up. Confirmed on 14.366: the container is Signika either way, only the heading
+   diverges. Inherit the container's face so the button reads like every other tool.
+   The id selector is there to outrank the system's heading rule, not for decoration. */
+.crits-fumbles-tooltip h1,
+#tooltip.crits-fumbles-tooltip h1 {
   margin: 0 0 0.25rem;
+  font-family: inherit;
   font-size: 0.95rem;
   font-weight: 700;
   line-height: 1.2;
+  letter-spacing: normal;
+  text-transform: none;
   border: none;
 }
 
