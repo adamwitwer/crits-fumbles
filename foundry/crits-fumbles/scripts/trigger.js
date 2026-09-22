@@ -3,7 +3,7 @@ import { MODULE_ID } from "./constants.js";
 import { damageTypeFor, logMiss } from "./damage-type.js";
 import { rollTable } from "./roller.js";
 import { categoryFor } from "./tables.js";
-import { evaluateWindow, markWindowSpent } from "./turn-gate.js";
+import { evaluateWindow, markWindowSpent, triggerMode } from "./turn-gate.js";
 
 const SOCKET = `module.${MODULE_ID}`;
 
@@ -27,7 +27,9 @@ export function registerTrigger() {
 }
 
 export async function onAttack(rolls, data) {
-  if (!game.settings.get(MODULE_ID, "autoTrigger")) return;
+  // Silent, unlike the declines below: with the dice switched off, not rolling is
+  // the expected outcome and needs no explaining.
+  if (triggerMode() === "manual") return;
 
   const roll = rolls?.[0];
   const activity = data?.subject;

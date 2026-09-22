@@ -3,7 +3,9 @@ import { MODULE_ID } from "./constants.js";
 /**
  * House rule: how often a crit or fumble may roll on a table.
  *
- * Four rulings shape this:
+ * Five rulings shape this:
+ *  - "manual" turns the dice off entirely: rolls come only from the toolbar button or a
+ *    macro, which never consult this gate. Asked before anything else.
  *  - Whether anything triggers with no encounter running is a separate question, asked
  *    first and in every mode. An out-of-combat attack rolls initiative and starts a
  *    combat, so there is no turn there to limit in the first place.
@@ -21,6 +23,9 @@ import { MODULE_ID } from "./constants.js";
  */
 export function evaluateWindow(actor) {
   const combat = game.combat;
+  const limit = triggerMode();
+
+  if (limit === "manual") return blocked("rolling only from the toolbar button");
 
   // Asked before the limit, and whichever limit is set.
   if (!combat?.started) {
@@ -29,7 +34,6 @@ export function evaluateWindow(actor) {
       : blocked("no active combat, and out-of-combat triggering is off");
   }
 
-  const limit = game.settings.get(MODULE_ID, "turnLimit");
   if (limit === "every") return unlimited("no per-turn limit set");
 
   const current = combat.combatant;
@@ -61,6 +65,16 @@ export function evaluateWindow(actor) {
     turnKey,
     spendOn
   };
+}
+
+/**
+ * The "When a crit or fumble can trigger" choice. The retired "Roll automatically"
+ * checkbox still counts as "manual" when off, so a client that loads before a GM has
+ * migrated the world does not start rolling on its own.
+ */
+export function triggerMode() {
+  if (game.settings.get(MODULE_ID, "autoTrigger") === false) return "manual";
+  return game.settings.get(MODULE_ID, "turnLimit");
 }
 
 /** Eligible with nothing to record — no turn is being tracked. */

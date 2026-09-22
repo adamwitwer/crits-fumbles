@@ -260,8 +260,14 @@ CritsFumbles.clearForcedCrits()               // find and undo every forceCrits 
 so a plain object substitutes and everything downstream stays the production path.
 
 Settings live under **Game Settings → Configure Settings → Module Settings**, not
-Manage Modules. Turning off "Only the first attack of a turn can trigger" takes the
-house rule out of the way while working on something else.
+Manage Modules. Setting "When a crit or fumble can trigger" to "Every crit and fumble"
+takes the house rule out of the way while working on something else.
+
+**`autoTrigger` is retired but still registered** (`config: false`). Its "off" became the
+dropdown's "Only from the toolbar button" in 0.11.0; a GM's client migrates it on
+`ready`, and `triggerMode()` keeps honouring it until then. Read the mode through
+`triggerMode()`, never `turnLimit` directly, or a world saved with the checkbox off
+starts auto-rolling on a player's client.
 
 The logic that does not need Foundry is testable in Node by stubbing `fetch` and
 `game`: `tables.js`, `damage-type.js` and `turn-gate.js` have no other globals. The turn

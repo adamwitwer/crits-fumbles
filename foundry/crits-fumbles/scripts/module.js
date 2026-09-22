@@ -10,15 +10,6 @@ import { categoryFor, damageTypes, loadTables, resolveRoll } from "./tables.js";
 import { resetWindow } from "./turn-gate.js";
 
 Hooks.once("init", () => {
-  game.settings.register(MODULE_ID, "autoTrigger", {
-    name: "CRITSFUMBLES.Settings.AutoTrigger.Name",
-    hint: "CRITSFUMBLES.Settings.AutoTrigger.Hint",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: true
-  });
-
   game.settings.register(MODULE_ID, "promptDamageType", {
     name: "CRITSFUMBLES.Settings.Prompt.Name",
     scope: "world",
@@ -39,6 +30,7 @@ Hooks.once("init", () => {
     config: true,
     type: String,
     choices: {
+      manual: "CRITSFUMBLES.Settings.TurnLimit.Manual",
       first: "CRITSFUMBLES.Settings.TurnLimit.First",
       once: "CRITSFUMBLES.Settings.TurnLimit.Once",
       every: "CRITSFUMBLES.Settings.TurnLimit.Every"
@@ -51,6 +43,15 @@ Hooks.once("init", () => {
     hint: "CRITSFUMBLES.Settings.OutsideCombat.Hint",
     scope: "world",
     config: true,
+    type: Boolean,
+    default: true
+  });
+
+  // Retired: "off" is now the "manual" choice above. Still registered, hidden, so a
+  // world saved with it off can be read once and moved across.
+  game.settings.register(MODULE_ID, "autoTrigger", {
+    scope: "world",
+    config: false,
     type: Boolean,
     default: true
   });
@@ -95,6 +96,8 @@ Hooks.once("ready", async () => {
     checkTooltip
   };
 
+  await migrateAutoTrigger();
+
   // Registered here rather than in init so game.socket is definitely connected.
   registerTrigger();
   registerAnnouncementListeners();
@@ -122,4 +125,19 @@ async function openPrompt({ kind = "crit", actor = null, lockKind = false } = {}
   const choice = await promptForDamageType({ kind, actorName: actor?.name ?? null, lockKind });
   if (!choice?.damageType) return null;
   return rollTable({ kind: choice.kind, damageType: choice.damageType, actor });
+}
+
+/**
+ * Carry the retired "Roll automatically" checkbox over to the dropdown that replaced it.
+ * World settings are GM-writable only, so one GM does it; until then `triggerMode()`
+ * still reads the old checkbox, so no client behaves differently in the meantime.
+ */
+async function migrateAutoTrigger() {
+  if (game.settings.get(MODULE_ID, "autoTrigger")) return;
+  const active = game.users?.activeGM;
+  if (active ? active.id !== game.user.id : !game.user.isGM) return;
+
+  await game.settings.set(MODULE_ID, "turnLimit", "manual");
+  await game.settings.set(MODULE_ID, "autoTrigger", true);
+  console.log(`${MODULE_ID} | "Roll automatically" was off; "When a crit or fumble can trigger" is now "Only from the toolbar button".`);
 }

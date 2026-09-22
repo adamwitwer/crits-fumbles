@@ -112,7 +112,8 @@ picks the right table.
 
 ## Automatic rolling
 
-On by default. When an attack rolls a natural critical hit or fumble, the module posts
+On by default; set **When a crit or fumble can trigger** to "Only from the toolbar
+button" to turn it off. When an attack rolls a natural critical hit or fumble, the module posts
 an announcement to chat — a headline, and a dropdown to choose what to roll on:
 
 ```
@@ -132,10 +133,11 @@ table, leaves a record in the log, and does not steal focus from whoever is mid-
 
 ### How often it can trigger
 
-**When a crit or fumble can trigger** offers three rules:
+**When a crit or fumble can trigger** offers four rules:
 
 | Setting | Behaviour |
 |---|---|
+| **Only from the toolbar button** | Nothing rolls on its own. Players click Crits & Fumbles in the token controls when they want a result. Suits a table that rarely runs the combat tracker. |
 | **Only on the turn's first attack roll** | The original house rule, and the default. The turn's opening attack spends it whatever that roll was — an ordinary 12 on the first swing means a natural 20 on the second does nothing. |
 | **Once each turn, on any attack** | Still one per turn, but the turn is spent by whatever actually fires. Miss with the first attack, crit with the third, and it rolls. |
 | **Every crit and fumble** | No limit. Several in one turn all fire, and so do reactions, opportunity attacks and legendary actions. |
@@ -207,10 +209,9 @@ Combat flag behind the turn rule, so it asks a GM to record that over a socket.
 
 | Setting | Default | Effect |
 |---|---|---|
-| Roll automatically on a natural crit or fumble | on | Turn off for manual-only rolling |
-| When a crit or fumble can trigger | Turn's first attack | First attack / once each turn / every one |
+| When a crit or fumble can trigger | Turn's first attack | Toolbar button only / first attack / once each turn / every one |
 | Ask for the damage type | Always ask | Always / only when ambiguous / never |
-| Trigger outside combat | on | Applies whichever limit is set |
+| Trigger outside combat | on | Applies whichever limit is set, except the toolbar button, which never rolls on its own |
 | Log attack rolls to the console | off | Diagnostic; prints each attack's shape |
 
 ## Testing
@@ -283,7 +284,7 @@ Then, at each turn, select the token whose turn it is and ask:
 CritsFumbles.turnStatus();
 ```
 
-It prints the round and turn, whose turn it actually is, the three settings that feed
+It prints the round and turn, whose turn it actually is, the two settings that feed
 the decision, whether this turn's window has already been spent, and an ELIGIBLE or
 NOT ELIGIBLE verdict with the reason in plain English. No dice needed — the question
 "should this have triggered?" is answerable before rolling anything.

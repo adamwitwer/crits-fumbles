@@ -95,6 +95,26 @@ export default async function run() {
   }
   settings.outsideCombat = true;
 
+  // --- "Only from the toolbar button": the dice never roll, in or out of combat ---
+  settings.turnLimit = "manual";
+  result = evaluate(hero, combat({ current: hero }));
+  r.check(!result.eligible && /toolbar button/.test(result.reason),
+    "manual: the current combatant's opening attack is not eligible", result.reason);
+  r.equal(result.turnKey, null, "manual: ...and claims no turn key, so nothing is recorded");
+  r.check(!evaluate(hero, combat({ started: false })).eligible,
+    "manual: out of combat is not eligible either, with out-of-combat triggering on");
+  r.check(!evaluate(hero, null).eligible, "manual: nor with no combat object at all");
+
+  // The retired checkbox, off, reads as manual until a GM migrates the world.
+  settings.turnLimit = "every";
+  settings.autoTrigger = false;
+  r.equal(gate.triggerMode(), "manual", "the retired checkbox, off, reads as manual");
+  r.check(!evaluate(hero, combat({ current: hero })).eligible,
+    "...and blocks the gate even with the dropdown on every crit");
+  settings.autoTrigger = true;
+  r.equal(gate.triggerMode(), "every", "the retired checkbox, on, defers to the dropdown");
+  delete settings.autoTrigger;
+
   // --- The write half ---
   settings.turnLimit = "first";
   const live = combat({ current: hero });

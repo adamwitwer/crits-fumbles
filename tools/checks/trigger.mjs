@@ -10,7 +10,7 @@ export const name = "what triggers, and what spends the turn";
  * spends at the wrong moment would pass every gate check and still be wrong at the
  * table.
  */
-function world({ limit = "first", outsideCombat = true, prompt = "never", inCombat = true } = {}) {
+function world({ limit = "first", outsideCombat = true, prompt = "never", inCombat = true, autoTrigger = true } = {}) {
   const hero = { id: "hero", name: "Rahib", uuid: "Actor.hero" };
   const flags = {};
   const posted = [];
@@ -25,7 +25,7 @@ function world({ limit = "first", outsideCombat = true, prompt = "never", inComb
 
   Object.assign(globalThis.game, {
     combat: inCombat ? combat : null,
-    settings: { get: (_, key) => ({ autoTrigger: true, promptDamageType: prompt, turnLimit: limit, outsideCombat })[key] },
+    settings: { get: (_, key) => ({ autoTrigger, promptDamageType: prompt, turnLimit: limit, outsideCombat })[key] },
     user: { id: "gm", isGM: true },
     users: { activeGM: { id: "gm" } },
     socket: { on: () => {}, emit: () => {} }
@@ -133,6 +133,30 @@ export default async function run() {
     trigger = await load("trigger.js", `ooc-off-${limit}`);
     await quiet(trigger.onAttack)(roll("crit"), { subject: off.activity });
     r.equal(off.posted.length, 0, `${limit}: out of combat with triggering off, it does not`);
+  }
+
+  // --- "Only from the toolbar button" ---
+  for (const inCombat of [true, false]) {
+    const w = world({ limit: "manual", inCombat });
+    const { onAttack } = await load("trigger.js", `manual-${inCombat}`);
+    const where = inCombat ? "in combat" : "out of combat";
+    const logged = [];
+    console.log = line => logged.push(line);
+    try {
+      await onAttack(roll(), { subject: w.activity });
+      for (const kind of ["crit", "fumble"]) await onAttack(roll(kind), { subject: w.activity });
+    } finally { console.log = chatter; }
+    r.equal(w.posted.length, 0, `manual, ${where}: a crit and a fumble post nothing`);
+    r.equal(w.spent(), null, `manual, ${where}: ...and nothing is recorded on the combat`);
+    r.equal(logged.length, 0, `manual, ${where}: ...and nothing is logged as a decline`);
+  }
+
+  // Still honoured by a client that loads before a GM has migrated the world.
+  {
+    const w = world({ limit: "every", autoTrigger: false });
+    const { onAttack } = await load("trigger.js", "retired-checkbox");
+    await quiet(onAttack)(roll("crit"), { subject: w.activity });
+    r.equal(w.posted.length, 0, "the retired checkbox, off, still stops a crit before migration");
   }
 
   // A crit whose damage type cannot be worked out must not quietly eat the turn.

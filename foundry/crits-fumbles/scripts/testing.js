@@ -1,7 +1,7 @@
 import { MODULE_ID } from "./constants.js";
 import { announce } from "./announce.js";
 import { onAttack } from "./trigger.js";
-import { evaluateWindow } from "./turn-gate.js";
+import { evaluateWindow, triggerMode } from "./turn-gate.js";
 
 /**
  * Testing helpers.
@@ -40,6 +40,10 @@ export async function simulate({ kind = "crit", itemName = null } = {}) {
     const what = itemName ? `an attack activity on "${itemName}"` : "any attack activity";
     ui.notifications.warn(`${MODULE_ID}: could not find ${what} on ${actor.name}.`);
     return null;
+  }
+
+  if (triggerMode() === "manual") {
+    console.log(`${MODULE_ID} | "When a crit or fumble can trigger" is set to the toolbar button only, so the trigger will not roll.`);
   }
 
   const isCritical = kind !== "fumble";
@@ -177,8 +181,7 @@ export function turnStatus() {
   const combat = game.combat;
   const state = evaluateWindow(actor);
   const settings = {
-    autoTrigger: game.settings.get(MODULE_ID, "autoTrigger"),
-    turnLimit: game.settings.get(MODULE_ID, "turnLimit"),
+    turnLimit: triggerMode(),
     outsideCombat: game.settings.get(MODULE_ID, "outsideCombat")
   };
   const spentKey = combat?.started ? (combat.getFlag(MODULE_ID, "turn")?.key ?? null) : null;
@@ -187,7 +190,7 @@ export function turnStatus() {
   console.log(combat?.started
     ? `combat: round ${combat.round}, turn ${combat.turn} — currently ${combat.combatant?.actor?.name ?? "nobody"}`
     : "combat: none running");
-  console.log(`settings: limit=${settings.turnLimit}, outsideCombat=${settings.outsideCombat}, autoTrigger=${settings.autoTrigger}`);
+  console.log(`settings: limit=${settings.turnLimit}, outsideCombat=${settings.outsideCombat}`);
   console.log(`this turn's window: ${spentKey ? `spent (${spentKey})` : "unspent"}`);
   console.log(
     `%c${state.eligible ? "ELIGIBLE" : "NOT ELIGIBLE"}%c — ${state.reason}`,
@@ -196,9 +199,6 @@ export function turnStatus() {
   );
   if (state.eligible && state.spendOn) {
     console.log(`spends the turn on: ${state.spendOn === "attack" ? "the attack roll itself, whatever it rolls" : "a crit or fumble actually firing"}`);
-  }
-  if (!settings.autoTrigger) {
-    console.log("note: automatic rolling is off, so the dice trigger nothing regardless of the above.");
   }
   console.groupEnd();
 
