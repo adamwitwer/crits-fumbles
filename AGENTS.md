@@ -125,6 +125,11 @@ instead of 50.
 repo's tables. It ships only the house tables and does not name them — it is the one
 table set, so naming it added nothing.
 
+It is in play at one table, which runs it on "Only from the toolbar button". The
+automatic path — the attack hook, announcement card and turn rule — therefore gets the
+least real use, so a regression there is the one least likely to be reported. Weigh
+the checks and a world test accordingly.
+
 ### Build and release
 
 ```bash

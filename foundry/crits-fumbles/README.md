@@ -3,16 +3,21 @@
 Rolls a critical hit or fumble result on the Crits & Fumbles house tables. For the
 `dnd5e` system.
 
-Status: **feature-complete, not yet played**. Running on Foundry 14.366 with dnd5e
-5.3.3: automatic rolling, the chat announcement, the toolbar button, the picker,
-condition links and on-demand rolling all work, and the house rule has been walked
-through a combat encounter turn by turn.
+Status: **in use at one table**. Running on Foundry 14.366 with dnd5e 5.3.3: automatic
+rolling, the chat announcement, the toolbar button, the picker, condition links and
+on-demand rolling all work, and the house rule has been walked through a combat
+encounter turn by turn.
 
-What has not happened is a real session. Everything so far has been verified in a test
-world by one person, which is the wrong shape for finding the things that matter here —
-whether the card interrupts the moment or lands with it, whether players understand what
-they are being asked, and whether the turn rule feels right when it is someone's actual
-critical hit. Expect the first game to produce a list.
+The first real session produced one change. That table's GM rarely runs turns, and the
+players would rather roll when they ask for a result than have the dice decide, so
+0.11.0 made **Only from the toolbar button** a choice in "When a crit or fumble can
+trigger", replacing a separate checkbox that was easy to miss. That is how the table plays
+now, and the settings panel has been checked in that world.
+
+What this leaves least proven is the automatic path at a table: whether the chat card
+interrupts the moment or lands with it, and whether the turn rule feels right on
+someone's actual critical hit. Those were verified in a test world by one person, and
+the one table playing it has since switched them off.
 
 ## Install
 
